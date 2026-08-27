@@ -1,0 +1,134 @@
+ok   토큰 일치 · tokens.css 선언 수  115개
+ok   토큰 일치 · HTML 에 빠진 선언
+ok   토큰 일치 · 값이 다른 선언
+ok   토큰 일치 · HTML 에만 있는 선언  tokens.css 115 / HTML 115
+ok   1280x960 스테이지 폭 1920  실측 1920
+ok   1280x960 렌더 배율  실측 0.667 / 기대 0.667
+ok   1280x960 뷰포트 맞춤  렌더 1280x720 / 뷰포트 1280x960
+ok   1280x960 가운데 정렬
+ok   1920x1080 스테이지 폭 1920  실측 1920
+ok   1920x1080 렌더 배율  실측 1.000 / 기대 1.000
+ok   1920x1080 뷰포트 맞춤  렌더 1920x1080 / 뷰포트 1920x1080
+ok   1920x1080 가운데 정렬
+ok   2560x1080 스테이지 폭 2560  실측 2560
+ok   2560x1080 렌더 배율  실측 1.000 / 기대 1.000
+ok   2560x1080 뷰포트 맞춤  렌더 2560x1080 / 뷰포트 2560x1080
+ok   2560x1080 가운데 정렬
+ok   3440x1440 스테이지 폭 2560  실측 2560
+ok   3440x1440 렌더 배율  실측 1.333 / 기대 1.333
+ok   3440x1440 뷰포트 맞춤  렌더 3413x1440 / 뷰포트 3440x1440
+ok   3440x1440 가운데 정렬
+ok   1920 p01 rest 네 변 넘침 없음
+ok   1920 p01 rest 세로 1080 이내  scrollHeight 1080
+ok   1920 p02 rest 왼쪽 여백 80  실측 80.0
+ok   1920 p02 rest 오른쪽 여백 80  실측 80.0
+ok   1920 p02 rest 본문 판 좌우 여백 전수
+ok   1920 p02 rest 네 변 넘침 없음
+ok   1920 p02 rest 세로 1080 이내  scrollHeight 1080
+ok   1920 p03 rest 왼쪽 여백 80  실측 80.0
+ok   1920 p03 rest 오른쪽 여백 80  실측 80.0
+ok   1920 p03 rest 본문 판 좌우 여백 전수
+ok   1920 p03 rest 네 변 넘침 없음
+ok   1920 p03 rest 세로 1080 이내  scrollHeight 1080
+ok   1920 p04 rest 왼쪽 여백 80  실측 80.0
+ok   1920 p04 rest 오른쪽 여백 80  실측 80.0
+ok   1920 p04 rest 본문 판 좌우 여백 전수
+ok   1920 p04 rest 네 변 넘침 없음
+ok   1920 p04 rest 세로 1080 이내  scrollHeight 1080
+ok   1920 p05 rest 왼쪽 여백 80  실측 80.0
+ok   1920 p05 rest 오른쪽 여백 80  실측 80.0
+ok   1920 p05 rest 본문 판 좌우 여백 전수
+ok   1920 p05 rest 네 변 넘침 없음
+ok   1920 p05 rest 세로 1080 이내  scrollHeight 1080
+ok   1920 p06 rest 왼쪽 여백 80  실측 80.0
+ok   1920 p06 rest 오른쪽 여백 80  실측 80.0
+ok   1920 p06 rest 본문 판 좌우 여백 전수
+ok   1920 p06 rest 네 변 넘침 없음
+ok   1920 p06 rest 세로 1080 이내  scrollHeight 1080
+ok   1920 p01 done 네 변 넘침 없음
+ok   1920 p01 done 세로 1080 이내  scrollHeight 1080
+ok   1920 p02 done 왼쪽 여백 80  실측 80.0
+ok   1920 p02 done 오른쪽 여백 80  실측 80.0
+ok   1920 p02 done 본문 판 좌우 여백 전수
+ok   1920 p02 done 네 변 넘침 없음
+ok   1920 p02 done 세로 1080 이내  scrollHeight 1080
+ok   1920 p03 done 왼쪽 여백 80  실측 80.0
+ok   1920 p03 done 오른쪽 여백 80  실측 80.0
+ok   1920 p03 done 본문 판 좌우 여백 전수
+ok   1920 p03 done 네 변 넘침 없음
+ok   1920 p03 done 세로 1080 이내  scrollHeight 1080
+ok   1920 p04 done 왼쪽 여백 80  실측 80.0
+ok   1920 p04 done 오른쪽 여백 80  실측 80.0
+ok   1920 p04 done 본문 판 좌우 여백 전수
+ok   1920 p04 done 네 변 넘침 없음
+ok   1920 p04 done 세로 1080 이내  scrollHeight 1080
+ok   1920 p05 done 왼쪽 여백 80  실측 80.0
+ok   1920 p05 done 오른쪽 여백 80  실측 80.0
+ok   1920 p05 done 본문 판 좌우 여백 전수
+ok   1920 p05 done 네 변 넘침 없음
+ok   1920 p05 done 세로 1080 이내  scrollHeight 1080
+ok   1920 p06 done 왼쪽 여백 80  실측 80.0
+ok   1920 p06 done 오른쪽 여백 80  실측 80.0
+ok   1920 p06 done 본문 판 좌우 여백 전수
+ok   1920 p06 done 네 변 넘침 없음
+ok   1920 p06 done 세로 1080 이내  scrollHeight 1080
+ok   2560 p01 rest 네 변 넘침 없음
+ok   2560 p01 rest 세로 1080 이내  scrollHeight 1080
+ok   2560 p02 rest 왼쪽 여백 80  실측 80.0
+ok   2560 p02 rest 오른쪽 여백 80  실측 80.0
+ok   2560 p02 rest 본문 판 좌우 여백 전수
+ok   2560 p02 rest 네 변 넘침 없음
+ok   2560 p02 rest 세로 1080 이내  scrollHeight 1080
+ok   2560 p03 rest 왼쪽 여백 80  실측 80.0
+ok   2560 p03 rest 오른쪽 여백 80  실측 80.0
+ok   2560 p03 rest 본문 판 좌우 여백 전수
+ok   2560 p03 rest 네 변 넘침 없음
+ok   2560 p03 rest 세로 1080 이내  scrollHeight 1080
+ok   2560 p04 rest 왼쪽 여백 80  실측 80.0
+ok   2560 p04 rest 오른쪽 여백 80  실측 80.0
+ok   2560 p04 rest 본문 판 좌우 여백 전수
+ok   2560 p04 rest 네 변 넘침 없음
+ok   2560 p04 rest 세로 1080 이내  scrollHeight 1080
+ok   2560 p05 rest 왼쪽 여백 80  실측 80.0
+ok   2560 p05 rest 오른쪽 여백 80  실측 80.0
+ok   2560 p05 rest 본문 판 좌우 여백 전수
+ok   2560 p05 rest 네 변 넘침 없음
+ok   2560 p05 rest 세로 1080 이내  scrollHeight 1080
+ok   2560 p06 rest 왼쪽 여백 80  실측 80.0
+ok   2560 p06 rest 오른쪽 여백 80  실측 80.0
+ok   2560 p06 rest 본문 판 좌우 여백 전수
+ok   2560 p06 rest 네 변 넘침 없음
+ok   2560 p06 rest 세로 1080 이내  scrollHeight 1080
+ok   2560 p01 done 네 변 넘침 없음
+ok   2560 p01 done 세로 1080 이내  scrollHeight 1080
+ok   2560 p02 done 왼쪽 여백 80  실측 80.0
+ok   2560 p02 done 오른쪽 여백 80  실측 80.0
+ok   2560 p02 done 본문 판 좌우 여백 전수
+ok   2560 p02 done 네 변 넘침 없음
+ok   2560 p02 done 세로 1080 이내  scrollHeight 1080
+ok   2560 p03 done 왼쪽 여백 80  실측 80.0
+ok   2560 p03 done 오른쪽 여백 80  실측 80.0
+ok   2560 p03 done 본문 판 좌우 여백 전수
+ok   2560 p03 done 네 변 넘침 없음
+ok   2560 p03 done 세로 1080 이내  scrollHeight 1080
+ok   2560 p04 done 왼쪽 여백 80  실측 80.0
+ok   2560 p04 done 오른쪽 여백 80  실측 80.0
+ok   2560 p04 done 본문 판 좌우 여백 전수
+ok   2560 p04 done 네 변 넘침 없음
+ok   2560 p04 done 세로 1080 이내  scrollHeight 1080
+ok   2560 p05 done 왼쪽 여백 80  실측 80.0
+ok   2560 p05 done 오른쪽 여백 80  실측 80.0
+ok   2560 p05 done 본문 판 좌우 여백 전수
+ok   2560 p05 done 네 변 넘침 없음
+ok   2560 p05 done 세로 1080 이내  scrollHeight 1080
+ok   2560 p06 done 왼쪽 여백 80  실측 80.0
+ok   2560 p06 done 오른쪽 여백 80  실측 80.0
+ok   2560 p06 done 본문 판 좌우 여백 전수
+ok   2560 p06 done 네 변 넘침 없음
+ok   2560 p06 done 세로 1080 이내  scrollHeight 1080
+ok   호버 반응 · pointer 요소 34개 전수  실패 0건
+ok   호버 반응 · 검사 대상이 비어 있지 않다  34개
+ok   콘솔 오류 0건
+ok   원격 요청 0건
+
+132건 중 실패 0건

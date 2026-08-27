@@ -127,7 +127,10 @@ for (const DECK of DECKS) {
       const activeIdx = all.indexOf(sec);
       const kicker = sec ? sec.querySelector('[class*="kick"]') : null;
       const pageno = sec ? sec.querySelector('[class*="pageno"], [class*="pgno"]') : null;
-      let bad = '';
+      let bad = '', margin = '';
+      /* 여백 전수는 slide 의 자손만 잰다. slide 자신과 전역 레이어 컨테이너는 전면 요소라
+         넘침 검사에만 넣고 여백 검사에서는 뺀다 */
+      const marginSet = new Set(sec ? sec.querySelectorAll('*') : []);
       const scanSet = [];
       if (sec) { scanSet.push(sec); scanSet.push.apply(scanSet, sec.querySelectorAll('*')); }
       /* 슬라이드 밖의 스테이지 전역 요소(팝업, 덮개)도 넘침 검사에 넣는다 */
@@ -137,6 +140,13 @@ for (const DECK of DECKS) {
       for (const el of scanSet) {
         const st = getComputedStyle(el);
         if (st.visibility === 'hidden' || st.display === 'none' || st.opacity === '0') continue;
+        /* 조상이 숨겨 둔 자식은 화면에 없다. 닫힌 팝업의 머리글이 여기 걸린다 */
+        let hid = false;
+        for (let a = el.parentElement; a && a !== stage.parentElement; a = a.parentElement) {
+          const ac = getComputedStyle(a);
+          if (ac.opacity === '0' || ac.visibility === 'hidden' || ac.display === 'none') { hid = true; break; }
+        }
+        if (hid) continue;
         let r = el.getBoundingClientRect();
         if (!r.width && !r.height) continue;
         /* overflow 를 자르는 조상이 있으면 실제로 보이는 교집합만 잰다.
@@ -155,16 +165,17 @@ for (const DECK of DECKS) {
         if (R2 <= L2 || B2 <= T2) continue;
         const L = (L2 - sr.left) / s, T = (T2 - sr.top) / s;
         const R = (R2 - sr.left) / s, B = (B2 - sr.top) / s;
-        if (L < -2 || T < -2 || R > stage.offsetWidth + 2 || B > 1082) {
-          bad = (el.className || el.tagName) + ' L' + Math.round(L) + ' T' + Math.round(T) + ' R' + Math.round(R) + ' B' + Math.round(B);
-          break;
-        }
+        const tagName = (el.className || el.tagName) + ' L' + Math.round(L) + ' T' + Math.round(T) + ' R' + Math.round(R) + ' B' + Math.round(B);
+        if (!bad && (L < -2 || T < -2 || R > stage.offsetWidth + 2 || B > 1082)) bad = tagName;
+        /* 본문 판의 좌우 여백은 kicker 만이 아니라 보이는 요소 전수로 잰다 */
+        if (!margin && marginSet.has(el) && (L < 79 || R > stage.offsetWidth - 79)) margin = tagName;
+        if (bad && margin) break;
       }
       return {
         stageW: stage.offsetWidth, active: !!sec, activeIdx,
         kickerLeft: kicker ? (kicker.getBoundingClientRect().left - sr.left) / s : null,
         pagenoRight: pageno ? (pageno.getBoundingClientRect().right - sr.left) / s : null,
-        bad,
+        bad, margin,
       };
     })()`;
 
@@ -180,11 +191,13 @@ for (const DECK of DECKS) {
       if (p > 1 && m.pagenoRight !== null)
         check(`${tag} p${p} 오른쪽 여백 80`, Math.abs(m.stageW - 80 - m.pagenoRight) <= 1, `쪽 번호 오른쪽 끝 ${m.pagenoRight.toFixed(1)} / 기대 ${m.stageW - 80}`);
       check(`${tag} p${p} 정지 넘침 없음`, !m.bad, m.bad);
+      if (p > 1) check(`${tag} p${p} 좌우 여백 전수`, !m.margin, m.margin);
       /* 완료 상태에서도 넘치지 않아야 한다. overflow-containment 는 정지 상태만 재고 통과시키지 않는다 */
       await page.keyboard.press('End');
       await page.waitForTimeout(350);
       const me = await page.evaluate(probe);
       check(`${tag} p${p} End 넘침 없음`, !me.bad, me.bad);
+      if (p > 1) check(`${tag} p${p} End 좌우 여백 전수`, !me.margin, me.margin);
     }
     /* 여백 검사가 한 쪽도 안 걸렸으면 통과가 아니라 검사 무효다 */
     check(`${tag} 여백 검사 대상`, pageCount <= 1 || marginChecked > 0, `${marginChecked}쪽`);
@@ -232,7 +245,7 @@ for (const DECK of DECKS) {
         const el = document.querySelector('[data-hx="' + k + '"]');
         const cs = getComputedStyle(el);
         const txt = el.querySelector('*') || el;
-        return [cs.boxShadow, cs.backgroundColor, cs.color, cs.borderBottomColor,
+        return [cs.boxShadow, cs.backgroundColor, cs.color, cs.borderBottomColor, cs.filter, cs.opacity,
           getComputedStyle(txt).color, getComputedStyle(txt).backgroundColor].join('|');
       }, i);
       const hoverDead = [];
