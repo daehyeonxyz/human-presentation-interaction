@@ -727,7 +727,13 @@ function on(el, fn) {
   if (!el) return;
   el.dataset.click = '1';
   el.tabIndex = 0;
-  el.addEventListener('click', function (e) { e.stopPropagation(); fn(e); });
+  el.addEventListener('click', function (e) {
+    e.stopPropagation();
+    /* 쪽이 넘어간 뒤 도착한 클릭은 비활성 쪽을 바꾸므로 버린다 */
+    var s = el.closest('section');
+    if (s && !s.classList.contains('active')) return;
+    fn(e);
+  });
 }
 function hov(el, enter, leave) {
   if (!el) return;
@@ -779,11 +785,16 @@ function release() {
 }
 var PAGE = {};
 window.PAGE = PAGE;
+/* 쪽마다 아직 실행 안 된 되돌림 예약이 있는지 적는다 */
+var PENDING = {};
 function go(n) {
   var prev = cur;
   var next = Math.max(0, Math.min(slides.length - 1, n));
   if (next === prev) return;
   cur = next;
+  /* 되돌아온 쪽에 아직 실행 안 된 되돌림이 있으면 지금 즉시 되돌린다.
+     420ms 안에 되돌아오면 예약이 건너뛰어져 반쯤 진행된 상태가 남기 때문이다 */
+  if (PENDING[next]) { var rp = PAGE[next + 1]; if (rp && rp.reset) rp.reset(); PENDING[next] = false; }
   viewport.dataset.canvas = slides[cur].dataset.canvas;
   armSeq(slides[cur]);
   slides.forEach(function (s, i) { s.classList.toggle('active', i === cur); });
@@ -792,7 +803,10 @@ function go(n) {
   clearLater(prev + 1);
   /* 되돌림은 떠난 쪽이 여전히 비활성일 때만 실행한다. 420ms 안에 그 쪽으로
      되돌아오면 예약된 되돌림이 활성 쪽을 초기화하므로 조건으로 막는다 */
-  if (p && p.reset) setTimeout(function () { if (cur !== prev) p.reset(); }, 420);
+  if (p && p.reset) {
+    PENDING[prev] = true;
+    setTimeout(function () { if (cur !== prev && PENDING[prev]) { p.reset(); PENDING[prev] = false; } }, 420);
+  }
 }
 window.go = go;
 slides[0].classList.add('active');
@@ -801,17 +815,23 @@ armSeq(slides[0]);
 /* 키 배치는 발표 전체에서 하나다.
    좌우는 쪽 넘김, Space 는 그 쪽의 다음 조작, End 는 그 쪽의 완료 상태다 */
 addEventListener('keydown', function (e) {
+  /* 키를 누르고 있는 동안의 자동 반복은 쪽 넘김만 허용한다.
+     Space·Enter·End 가 반복되면 상태 기계가 한 번의 의도를 여러 번 실행한다 */
+  if (e.repeat && e.key !== 'ArrowRight' && e.key !== 'ArrowLeft' && e.key !== 'PageDown' && e.key !== 'PageUp') { e.preventDefault(); return; }
   if (e.key === 'ArrowRight' || e.key === 'PageDown') { go(cur + 1); e.preventDefault(); }
   else if (e.key === ' ') {
     /* 완료된 쪽에서 Space 는 처음 상태로 되돌린다. 쪽마다 다르면 발표자가 외울 수 없다 */
     var a = PAGE[cur + 1];
-    var done = slides[cur].querySelector('.close.on, .decl.on');
+    /* 완료 판정은 쪽이 자기 기준(spaceDone)을 주면 그것을 따른다. 맺음이 조작 도중에
+       켜지는 쪽(문턱형 슬라이더)은 맺음만으로 재시작을 판정하면 끝 값에 못 간다 */
+    var done = a && a.spaceDone ? a.spaceDone() : slides[cur].querySelector('.close.on, .decl.on');
     if (done && a && a.reset) a.reset();
     else if (a && a.step) a.step();
+    release();
     e.preventDefault();
   }
   else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { go(cur - 1); e.preventDefault(); }
-  else if (e.key === 'End') { var b = PAGE[cur + 1]; if (b && b.finish) b.finish(); e.preventDefault(); }
+  else if (e.key === 'End') { var b = PAGE[cur + 1]; if (b && b.finish) b.finish(); release(); e.preventDefault(); }
   else if (e.key === 'Enter') {
     /* Tab 으로 잡은 요소를 Enter 가 누른다. 마우스 없이도 항목이 열린다 */
     var el = document.activeElement;
