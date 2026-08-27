@@ -1,7 +1,7 @@
 # 로컬 도구 로그와 로컬 설정은 추적하지 않는다
 .gstack/
 **/.gstack/
-.claude/settings.local.json
+.claude/
 node_modules/
 
 # 삼성 전용 폰트 원본 TTF 는 재배포 라이선스 문제로 공개 레포에 올리지 않는다

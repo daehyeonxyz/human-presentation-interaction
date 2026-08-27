@@ -219,18 +219,18 @@
   /* ============================================================
      격자와 페이지
      ============================================================ */
-  --page-w: 1920px;
+  --page-w: 1920px;         /* 기본값. fit() 이 뷰포트에 맞춰 1920~2560 사이로 갱신한다 */
   --page-h: 1080px;
   --margin-x: 80px;
-  --margin-y: 80px;         /* 본문 판은 네 변 여백이 모두 80 이다 */
+  --margin-y: 80px;         /* 본문 판은 네 변 여백이 모두 80 이다. 폭이 변해도 여백은 변하지 않는다 */
   --cover-margin-y: 60px;   /* 표지와 교시 표지만 60 을 쓴다. 통과한 액자 구성이라 건드리지 않는다 */
-  --content-w: 1760px;
+  --content-w: calc(var(--page-w) - 2 * var(--margin-x));
   --content-h: 920px;       /* y 80 에서 1000 까지 */
   --gap: 40px;
-  --col-2: 860px;
-  --col-3: 560px;
-  --col-4: 410px;
-  --col-wide: 1160px;   /* 두 창 무대의 넓은 쪽. 짝은 --col-3 */
+  --col-2: calc((var(--content-w) - var(--gap)) / 2);
+  --col-3: calc((var(--content-w) - 2 * var(--gap)) / 3);
+  --col-4: calc((var(--content-w) - 3 * var(--gap)) / 4);
+  --col-wide: calc(var(--content-w) - var(--gap) - var(--col-3));   /* 두 창 무대의 넓은 쪽. 짝은 --col-3 */
   --measure: 700px;     /* 문장 한 줄의 최대 폭. 24/500 로 47자.
                            1160 에 24px 문장을 깔면 한 줄이 78자가 되어 눈이 되돌아올 자리를 잃는다.
                            남는 가로는 무대가 채우지 문장이 늘어나서 채우지 않는다 */
@@ -245,8 +245,8 @@
   /* 머리 오른쪽 칸. 제목 폭 1160 오른쪽에 남는 600 을 격자에 맞춰 560 으로 쓴다.
      x 1280 은 3열 격자의 오른쪽 열과 같은 자리라 아래 무대의 오른쪽 열과 축이 맞는다.
      그 쪽을 여는 한국어 리드 문장이 여기 선다. 무대 안에 두면 무대의 세로를 먹는다 */
-  --head-right-x: 1280px;
-  --head-right-w: 560px;
+  --head-right-x: calc(var(--margin-x) + var(--col-wide) + var(--gap)); /* 아래 무대 오른쪽 열과 같은 축 */
+  --head-right-w: var(--col-3);
   --stage-y: 284px;    /* 무대 상단 */
   --stage-h: 540px;    /* 무대 높이. y 284~824 */
   --stage-y-nosub: 240px; /* 부제가 없는 쪽의 무대 상단 */
@@ -1289,11 +1289,11 @@ w.lit { animation: seqin var(--dur-base) var(--ease-enter) both; }
       <!-- 명명 세 줄이 본문에서 팝업 카드로 내려갔다. 빠진 세로를 다른 글로 채우지 않는다.
            팝업 낱말이 있는 문단에는 인라인 강조를 두지 않는다. 둘 다 --blue-accent 라
            한 문단에 같이 있으면 어느 것이 눌리는지 갈리지 않는다 -->
-      <div style="width:860px">
+      <div style="width:var(--col-2)">
         <p class="t-claim ln"><span class="popword" data-pop="pop-llm">LLM</span>은 답을 한 단어씩 만들면서<br>다음에 올 단어를 확률적으로 고르는 모델입니다.</p>
         <p class="t-body ln" style="margin-top:64px">가장 확률이 높은 단어가 늘 뽑히지는 않아서<br><span class="acc">같은 질문에도 답이 조금씩 달라집니다.</span></p>
       </div>
-      <div class="dev" style="width:860px;height:540px">
+      <div class="dev" style="width:var(--col-2);height:540px">
         <div class="bub ai bub--lg wsent" id="wsent"><b>이 회사는</b><span id="wwords"></span> <u id="wslot"></u></div>
         <div class="wprev" id="wprev">직전 문장 · <span id="wprevtext"></span></div>
         <div class="cands" id="cands"></div>
@@ -1438,7 +1438,7 @@ w.lit { animation: seqin var(--dur-base) var(--ease-enter) both; }
   <div style="position:absolute;right:80px;top:124px"><span class="pill pill--blue">실습 · 10분</span></div>
   <div class="area nosub">
     <div class="two">
-      <div style="width:860px">
+      <div style="width:var(--col-2)">
         <div class="subhead ln">실습 자료 폴더 · 미리내로보틱스 회사 소개문 (가상)</div>
         <div class="tray traysteps" style="margin-top:12px">
         <div class="steps" id="steps">
@@ -1448,7 +1448,7 @@ w.lit { animation: seqin var(--dur-base) var(--ease-enter) both; }
         </div>
         </div>
       </div>
-      <div style="width:860px">
+      <div style="width:var(--col-2)">
         <div class="subhead ln">참가자 화면</div>
         <div class="talk pscreen">
           <div class="pstate" id="pt10">
@@ -1716,14 +1716,14 @@ w.lit { animation: seqin var(--dur-base) var(--ease-enter) both; }
    세로로 먼저 읽히도록 열 방향으로 흘려서 앞 넷과 뒤 셋이 각각 한 줄기가 된다 */
 /* 소제목이 32 로 서면서 그 아래 격자의 y 를 다시 잡았다.
    소제목 396~440, 아래 12 를 띄워 452 에서 시작하고 4행 64 에 행 사이 20 으로 768 에서 끝난다 */
-.recap { position: absolute; left: 80px; top: 452px; width: 1760px;
+.recap { position: absolute; left: var(--margin-x); top: 452px; width: var(--content-w);
   display: grid; grid-auto-flow: column; grid-template-rows: repeat(4, 64px);
   grid-template-columns: repeat(2, var(--col-2)); gap: var(--sp-20) var(--gap); }
 .recap div { display: flex; align-items: center; font-size: var(--fs-claim);
   font-weight: var(--fw-bold); letter-spacing: var(--ls-claim); color: var(--ink-muted);
   transition: color var(--dur-base) var(--ease-out); }
 .recap div.on { color: var(--ink); }
-.decl { position: absolute; left: 80px; top: 140px; width: 1760px; font-size: var(--fs-decl);
+.decl { position: absolute; left: var(--margin-x); top: 140px; width: var(--content-w); font-size: var(--fs-decl);
   font-weight: var(--fw-heavy); line-height: var(--lh-decl); letter-spacing: var(--ls-display);
   color: var(--ink); }
 .decl span { opacity: 0; transition: opacity var(--dur-base) var(--ease-out); }
@@ -1742,7 +1742,7 @@ w.lit { animation: seqin var(--dur-base) var(--ease-enter) both; }
   <h1 class="ptitle">컨텍스트 : AI가 읽는 것과 읽지 못하는 것</h1>
   <div class="area nosub">
     <div class="two">
-      <div style="width:860px">
+      <div style="width:var(--col-2)">
         <p class="t-claim ln">컨텍스트는 AI가 답을 만들 때<br>한 번에 놓고 읽는 글 전체입니다.<br>컨텍스트 윈도우라고도 부릅니다.</p>
         <div class="tray trayblock" style="margin-top:48px"><div class="doc outrow" id="blockitem"><span class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg></span><span class="dtxt"><span class="dn ln">우리 회사 문서함 전체</span></span></div></div>
         <div class="verdict no ln" id="blocknote" style="margin-top:8px">넣지 않았으므로 AI에게는 보이지 않습니다.</div>
@@ -1777,7 +1777,7 @@ w.lit { animation: seqin var(--dur-base) var(--ease-enter) both; }
   <div class="psub">Token</div>
   <div class="area">
     <div class="two">
-      <div style="width:1160px;height:var(--stage-h);display:flex;flex-direction:column">
+      <div style="width:var(--col-wide);height:var(--stage-h);display:flex;flex-direction:column">
       <p class="t-claim ln">AI는 글을 토큰이라는 조각으로<br>나눠서 읽고 씁니다.</p>
       <div class="dev" style="margin-top:24px;flex:1;display:flex;flex-direction:column">
         <div class="tokstack">
@@ -1802,7 +1802,7 @@ w.lit { animation: seqin var(--dur-base) var(--ease-enter) both; }
         </div>
       </div>
       </div>
-      <div style="width:560px">
+      <div style="width:var(--col-3)">
         <div class="chunk"><div class="subhead ln">세는 방식</div><div class="bd ln">자주 쓰이는 말은 통째로 한 조각이 되고<br>드문 말은 여러 조각으로 나뉩니다.<br>조각을 나누는 규칙은 모델마다 다릅니다.</div></div>
         <div class="chunk" style="margin-top:64px"><div class="subhead ln">한도와 요금</div><div class="bd ln">컨텍스트 한도는 토큰 수로 정해져 있고<br>모델마다 다르며 계속 커지는 중입니다.<br>지금 주력 모델은 백만 토큰 규모입니다.<br>요금도 입력 토큰과 출력 토큰에 매겨집니다.</div></div>
       </div>
@@ -1928,7 +1928,7 @@ w.lit { animation: seqin var(--dur-base) var(--ease-enter) both; }
 <section class="slide" data-canvas="light" data-page="14">
   <div class="head"><span class="kicker">Lesson 1</span><span class="pageno">14 / 14</span></div>
   <p class="decl ln">AI가 어떤 답을 내놓을지는<br><span class="acc" id="declb">내가 무엇을 넣어 줬는지로 갈립니다.</span></p>
-  <div class="subhead ln" style="position:absolute;left:80px;top:396px">오늘 확인한 것</div>
+  <div class="subhead ln" style="position:absolute;left:var(--margin-x);top:396px">오늘 확인한 것</div>
   <div class="recap" id="recap">
     <div><span>확률로 하나씩 골라 만드는 답</span></div>
     <div><span>그럴싸하게 나오는 할루시네이션</span></div>
@@ -1947,11 +1947,18 @@ w.lit { animation: seqin var(--dur-base) var(--ease-enter) both; }
 </div></div>
 
 <script>
-/* ===== 스테이지를 뷰포트에 균일 축소한다. transform 금지의 유일한 예외다 ===== */
+/* ===== 스테이지를 뷰포트에 맞춘다. transform 금지의 유일한 예외다.
+   세로는 1080 기준 배율로 고정하고 가로는 네 변 여백을 유지한 채 무대 폭이 뷰포트를 채운다.
+   폭의 하한은 1920 이고 상한은 2560 이다. 하한 아래에서는 가로 기준으로 축소한다 ===== */
 const stage = document.getElementById('stage');
 const viewport = document.getElementById('viewport');
+const PAGE_H = 1080, PAGE_W_MIN = 1920, PAGE_W_MAX = 2560;
 function fit() {
-  const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+  let s = innerHeight / PAGE_H;
+  let w = Math.round(innerWidth / s);
+  if (w < PAGE_W_MIN) { s = innerWidth / PAGE_W_MIN; w = PAGE_W_MIN; }
+  if (w > PAGE_W_MAX) { w = PAGE_W_MAX; }
+  document.documentElement.style.setProperty('--page-w', w + 'px');
   stage.style.transform = 'translate(-50%, -50%) scale(' + s + ')';
 }
 addEventListener('resize', fit);
@@ -2033,11 +2040,12 @@ function go(n) {
 /* ===== 팝업 카드 =====
    본문 안의 개념어 하나를 눌러 그 뜻을 연다. 모달이 아니라 그 낱말 아래에 서는 카드다.
    한 번에 하나만 열리고 쪽을 떠나면 닫힌다.
-   좌표는 반드시 스테이지 1920x1080 기준으로 잡는다. 스테이지에는 뷰포트 맞춤 배율이
-   걸려 있어서 화면 좌표를 그대로 쓰면 창 크기가 달라질 때마다 카드가 엉뚱한 곳에 선다 */
+   좌표는 반드시 스테이지 내부 좌표(세로 1080, 가로 offsetWidth) 기준으로 잡는다.
+   스테이지에는 뷰포트 맞춤 배율이 걸려 있어서 화면 좌표를 그대로 쓰면
+   창 크기가 달라질 때마다 카드가 엉뚱한 곳에 선다 */
 window.POP = (function () {
   let word = null, card = null;
-  function scale() { const r = stage.getBoundingClientRect(); return (r.width / 1920) || 1; }
+  function scale() { const r = stage.getBoundingClientRect(); return (r.width / stage.offsetWidth) || 1; }
   function gap() {
     return parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--pop-gap')) || 12;
   }
@@ -2069,9 +2077,11 @@ window.POP = (function () {
     const wbot = (wr.bottom - sr.top) / s;
     const pr = popEl.getBoundingClientRect();
     const pw = pr.width / s, ph = pr.height / s;
-    /* 덩이 왼쪽 끝에 왼쪽을 맞추고, 오른쪽이 x 1840 을 넘으면 오른쪽 끝을 1840 에 맞춘다 */
+    /* 기준 블록의 왼쪽 끝에 카드 왼쪽을 맞춘다. 스테이지 폭이 가변이라
+       오른쪽 한계는 상수가 아니라 offsetWidth 에서 오른쪽 여백 80 을 뺀 값이다 */
+    const rightEdge = stage.offsetWidth - 80;
     let x = wx;
-    if (x + pw > 1840) x = 1840 - pw;
+    if (x + pw > rightEdge) x = rightEdge - pw;
     if (x < 80) x = 80;
     /* 덩이 아래로 --pop-gap 을 띄운다. 아래가 y 1000 을 넘으면 덩이 위로 같은 값을 띄운다 */
     let y = wbot + g;
@@ -2115,7 +2125,7 @@ window.__popDemo = function (x, y) {
   host.appendChild(w); host.appendChild(p);
   POP.open(w, p);
   const box = p.getBoundingClientRect(), sb = stage.getBoundingClientRect();
-  const s = (sb.width / 1920) || 1;
+  const s = (sb.width / stage.offsetWidth) || 1;
   const opened = {
     on: p.classList.contains('on'),
     wordOpen: w.classList.contains('open'),
