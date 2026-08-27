@@ -9,3 +9,6 @@ node_modules/
 ax-education/assets/fonts/
 
 *.legacy
+
+# Pretendard 원본 가변 폰트는 2MB 짜리 빌드 재료다. qa/subset-font.py 가 필요할 때 내려받는다
+ax-education/assets/webfonts/PretendardVariable.woff2

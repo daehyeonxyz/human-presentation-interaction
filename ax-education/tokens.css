@@ -7,34 +7,52 @@
    deliverables/1교시.html -> ../assets/... 가 맞다.
    tokens.css 를 <link> 로 직접 걸면 경로가 한 단계 어긋난다. 복사해 쓰는 것이 기본이다.
 
-   외부 의존은 Pretendard CDN 한 줄뿐이다. SamsungSharpSans 와 로고와 표지 배경은 로컬 파일이다. */
+   자산은 배포본에서 base64 로 파일 안에 들어간다. 외부 의존이 0 이다.
+   `asset:` 주석이 붙은 url() 이 그 대상이고 qa/inline-assets.mjs 가 바꿔 넣는다.
+   이 파일에는 상대 경로를 남겨 두어 어느 자산을 싣는지 읽을 수 있게 한다.
 
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+   순서는 셋이다. tokens.css 를 고친다 -> 교시 HTML 에 복사한다 -> qa/inline-assets.mjs 를 돌린다. */
 
 /* ===== 서체 배선 =====
+   서체를 CDN 에서 받으면 발표장에 네트워크가 없을 때 Pretendard 가 시스템 서체로 내려가고,
+   서체가 바뀌면 원고의 줄 나눔 규격이 전부 무효가 된다. 그래서 파일 안에 싣는다.
+   그대로 실으면 2MB 라 덱이 쓰는 글자 766 자로 서브셋한다 (qa/subset-font.py).
+   가변 축 45~920 을 유지한다. 인스턴스로 굳히면 500 과 700 과 800 이 한 굵기가 된다.
+
    SamsungSharpSans 는 영문 전용 서체다. 한글 글리프가 없다.
    그래서 --font-sans 의 폴백 사슬에 넣지 않는다. 넣으면 한글이 섞인 줄에서
    라틴만 SharpSans, 한글만 Pretendard 로 갈려 한 줄 안에서 서체가 두 개로 보인다.
    SharpSans 는 --font-display 로만 부르고, 그 자리에는 한글을 넣지 않는다.
    italic 과 합성 굵기도 쓰지 않는다. 실제로 가진 굵기는 400 / 500 / 700 셋뿐이다. */
 
+/* asset: pretendard */
+@font-face {
+  font-family: "Pretendard Variable";
+  src: url("../assets/webfonts/PretendardVariable-subset.woff2") format("woff2");
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: block;
+}
+/* asset: sharp-regular */
 @font-face {
   font-family: "Samsung Sharp Sans";
-  src: url("../assets/webfonts/SamsungSharpSans-Regular.woff2") format("woff2");
+  src: url("../assets/webfonts/SamsungSharpSans-Regular-subset.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: block;
 }
+/* asset: sharp-medium */
 @font-face {
   font-family: "Samsung Sharp Sans";
-  src: url("../assets/webfonts/SamsungSharpSans-Medium.woff2") format("woff2");
+  src: url("../assets/webfonts/SamsungSharpSans-Medium-subset.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: block;
 }
+/* asset: sharp-bold */
 @font-face {
   font-family: "Samsung Sharp Sans";
-  src: url("../assets/webfonts/SamsungSharpSans-Bold.woff2") format("woff2");
+  src: url("../assets/webfonts/SamsungSharpSans-Bold-subset.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: block;
@@ -407,6 +425,9 @@
   background-size: calc(var(--wm-ink-h) * 1600 / 214) calc(var(--wm-ink-h) * 425 / 214);
   background-position: calc(var(--wm-ink-h) * -104 / 214) calc(var(--wm-ink-h) * -104 / 214);
 }
+/* asset: wordmark-white */
 .samsung-wordmark--white { background-image: url("../assets/lettermark/White/Samsung_Orig_Wordmark_WHITE_RGB.png"); }
+/* asset: wordmark-blue */
 .samsung-wordmark--blue  { background-image: url("../assets/lettermark/Blue/Samsung_Orig_Wordmark_BLUE_RGB.png"); }
+/* asset: wordmark-black */
 .samsung-wordmark--black { background-image: url("../assets/lettermark/Black/Samsung_Orig_Wordmark_BLACK_RGB.png"); }
