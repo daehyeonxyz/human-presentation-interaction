@@ -1,0 +1,2755 @@
+<!doctype html>
+<!--
+  AX 101 · 1교시 AI란 무엇인가 (15쪽)
+  화면에 인쇄되는 글자는 전부 ../슬라이드원고.md 에서 왔다. 구현자가 문장을 발명하지 않는다.
+  아래 <style> 의 앞부분은 ../tokens.css 를 그대로 복사한 것이다. 복사본을 따로 고치지 않는다.
+  좌우 화살표로 쪽을 넘긴다. Space 는 그 쪽의 본 조작 한 번이고 End 는 그 쪽의 완료 상태다.
+-->
+<meta charset="utf-8">
+<title>AX 101 · 1교시 AI란 무엇인가</title>
+<style>
+/* ===================== tokens.css 복사본 시작 ===================== */
+/* AX 101 tokens.css
+   디자인시스템.md 의 값 구현이자 값의 단일 원본.
+   각 교시 HTML 이 이 파일 내용을 <style> 안에 그대로 복사해 쓴다. 복사본을 따로 고치지 않는다.
+   고칠 때는 이 파일을 고치고 여섯 교시에 다시 복사한다.
+
+   경로 기준: 아래 url() 상대 경로는 deliverables/ 안의 HTML 파일 기준이다.
+   deliverables/1교시.html -> ../assets/... 가 맞다.
+   tokens.css 를 <link> 로 직접 걸면 경로가 한 단계 어긋난다. 복사해 쓰는 것이 기본이다.
+
+   외부 의존은 Pretendard CDN 한 줄뿐이다. SamsungSharpSans 와 로고와 표지 배경은 로컬 파일이다. */
+
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+
+/* ===== 서체 배선 =====
+   SamsungSharpSans 는 영문 전용 서체다. 한글 글리프가 없다.
+   그래서 --font-sans 의 폴백 사슬에 넣지 않는다. 넣으면 한글이 섞인 줄에서
+   라틴만 SharpSans, 한글만 Pretendard 로 갈려 한 줄 안에서 서체가 두 개로 보인다.
+   SharpSans 는 --font-display 로만 부르고, 그 자리에는 한글을 넣지 않는다.
+   italic 과 합성 굵기도 쓰지 않는다. 실제로 가진 굵기는 400 / 500 / 700 셋뿐이다. */
+
+@font-face {
+  font-family: "Samsung Sharp Sans";
+  src: url("../assets/webfonts/SamsungSharpSans-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "Samsung Sharp Sans";
+  src: url("../assets/webfonts/SamsungSharpSans-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "Samsung Sharp Sans";
+  src: url("../assets/webfonts/SamsungSharpSans-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: block;
+}
+
+:root {
+  /* ============================================================
+     면 · 세 층이 역할을 말한다
+
+     이 시스템의 첫째 규칙이다. 면의 밝기가 그 덩이를 어떻게 대하는지를 말한다.
+
+       --surface  흰 면    만지는 것   조작 가능한 항목, 버튼 바탕, 입력창, 자료 카드, 도구 재현
+       --bg       배경     읽는 것     제목, 본문. 면을 주지 않는다
+       --sunken   우물 면  보는 곳     결과 창, 잠긴 덩이, AI 말풍선, 입력 바, 맺음 판
+
+     그래서 화면에 조작 안내를 적지 않는다. 흰 면이 곧 "여기를 누른다"는 말이다.
+
+     값의 근거: 2026-07-25 렌더 비교. 종전 배경 #F4F5F9 는 흰 카드와의
+     상대 휘도 차이가 0.086 뿐이라 층이 명도로 서지 못했고, 그 부족분을
+     16px 흐림 6% 그림자가 대신 메우면서 카드가 접지가 아니라 뿌연 후광으로 보였다.
+     배경을 #E5E9F1 로 내리면 차이가 0.187 로 벌어져 그림자 없이도 층이 선다.
+     프로젝터 워시(대비 70% · 밝기 110%) 모사에서 종전 값은 세 층이 한 층으로
+     뭉개졌고 이 값은 세 층이 모두 남았다. 그림자는 프로젝터에서 어차피 사라지므로
+     층을 그림자에 맡기지 않는다. 삼성벤처투자 화면이 4열 격자를 카드도 그림자도 없이
+     여백만으로 나누는 것과 같은 방향이다.
+     ============================================================ */
+  --surface: #FFFFFF;      /* 만지는 것. 상대 휘도 1.000 */
+  --bg: #E5E9F1;           /* 읽는 것. 상대 휘도 0.813. 푸른끼 도는 옅은 회색 */
+  --sunken: #D7DDE8;       /* 보는 곳. 상대 휘도 0.720 */
+  --terminal-bg: #0B1226;  /* 터미널과 코드 재현 블록 전용 */
+  --terminal-fg: #D9E2F0;
+
+  /* 레터박스 · 전체화면
+     스테이지를 뷰포트에 맞춰 축소하면 위아래나 좌우에 남는 띠가 생긴다.
+     그 띠는 반드시 지금 쪽의 캔버스 색이어야 한다.
+     종전에는 띠를 배경색으로 고정해 두어서 표지처럼 어두운 쪽에서
+     위아래에 밝은 띠가 남았고 그것이 "전체화면에서 깨진다"의 원인이었다. */
+  --canvas-light: #E5E9F1; /* 본문 판의 캔버스. --bg 와 같다 */
+  --canvas-dark: #020820;  /* 표지와 교시 표지의 캔버스 */
+
+  /* ============================================================
+     색 · 파랑 층
+     삼성 공식 2025 제안서 템플릿 슬라이드 XML 실측값이다 (reference/브랜드자산.md).
+     파랑은 하나가 아니라 명도 층이다. 종류 구분이 필요하면 색상을 늘리지 않고
+     이 층 안에서 단계를 옮긴다.
+     ============================================================ */
+  --blue-mark: #1428A0;    /* 실측. 상징색. 워드마크, 표지 계열, 데이터 최심단, 버튼 hover */
+  --blue-accent: #0361E4;  /* 실측. 유일한 강조색. kicker, 인라인 강조, 버튼 면, 고른 것의 링, 수치 */
+  --blue-soft: #3A8FFF;    /* 실측. 보조. 면과 링 전용. 이 색 위에도 아래에도 글자를 두지 않는다 */
+  --blue-line: #CFD9E5;    /* 실측. 게이지 트랙, 잠긴 버튼 면, 가장 옅은 데이터 단 */
+  --blue-tint: #DCE8FB;    /* 파생. 배지 면, 되돌림 버튼 면. 새 배경보다 어두워야 면으로 읽힌다 */
+  --blue-hl: #C1D8F8;      /* 파생. 밑줄 하이라이트 전용. 올릴 수 있는 낱말의 표식이기도 하다 */
+
+  /* ============================================================
+     색 · 글자
+     본문의 기본은 회색이 아니라 검정이다.
+     얇고 흐린 본문이 프로젝터에서 반려된 원인이다.
+     ============================================================ */
+  --ink: #000000;          /* 실측. 제목, 본문, 맺음, 항목 이름 */
+  --ink-support: #5B5B5B;  /* 실측. 부연, 캡션, 영문 부제, 범례 이름, 잠김 기호 */
+  --ink-meta: #737373;     /* 실측. 쪽 번호 전용 */
+  --ink-muted: #B2B2B2;    /* 실측. 소진된 항목과 아직 켜지지 않은 항목 전용. 본문 콘텐츠 금지 */
+  --ink-invert: #FFFFFF;   /* 어두운 면과 파란 면 위 글자 */
+
+  /* 어두운 면(표지, 교시 표지, 터미널) 위의 글자 위계.
+     밝은 면의 회색 사다리는 어두운 면에서 뒤집히므로 별도로 둔다 */
+  --on-dark: #FFFFFF;
+  --on-dark-sub: rgba(255, 255, 255, 0.78);
+  --on-dark-muted: rgba(255, 255, 255, 0.55);
+
+  /* ============================================================
+     색 · 데이터 층
+     종류 구분은 색상(hue)을 늘리지 않고 파랑 명도 다섯 단으로 한다.
+     1~3, 5 는 실측값이고 4 만 3 과 5 사이를 메운 파생값이다.
+     흰 글자를 얹어도 되는 단은 1 과 2 뿐이다.
+     ============================================================ */
+  --data-1: #1428A0;       /* 가장 진함. 이야기의 중심 종류 */
+  --data-2: #0361E4;
+  --data-3: #3A8FFF;
+  --data-4: #89BCFF;       /* 파생 */
+  --data-5: #CFD9E5;       /* 가장 옅음. 인접 비교로만 읽힌다 */
+
+  /* ============================================================
+     색 · 판정 표시
+     조작해서 확인한 결과를 표시할 때만 쓴다.
+     맞음과 있음은 초록이 아니라 강조 파랑으로 표시한다. 색을 늘리지 않기 위해서다.
+     ============================================================ */
+  --alert: #C9352B;        /* 어긋남, 없음, 지어냄 */
+  --alert-tint: #FBEFEE;   /* 그 항목의 면. 흰 면 위에만 얹는다 */
+
+  /* 구분선. 새 배경이 어두워졌으므로 선도 함께 내렸다. 카드 둘레 금지 */
+  --divider: #CBD3E0;
+  --divider-strong: #AEB9CB;
+
+  /* ============================================================
+     서체
+     ============================================================ */
+  --font-sans: "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-display: "Samsung Sharp Sans", "Pretendard Variable", Pretendard, sans-serif; /* 라틴 전용 자리에만 */
+  --font-mono: "Cascadia Mono", "SF Mono", Consolas, "D2Coding", monospace; /* 터미널 블록 전용 */
+
+  /* ============================================================
+     타입 · 크기
+     역할 하나에 크기 하나다. 구현자가 고를 여지를 두지 않는다.
+
+       선언 밴드  200 / 128 / 88   그 쪽에 제목이 없을 때만
+       제목 밴드  64               본문 판마다 하나
+       내용 밴드  32 / 24 / 20     그 밖의 전부
+
+     제목 64 와 내용 최대 32 사이의 두 배 차이가 위계의 안전장치다.
+     그 사이(40, 48, 56)는 비어 있다. 중간을 하나라도 만들면 위계가 무너진다.
+     한 쪽에 64 이상인 글자는 정확히 하나다. 제목과 선언은 같은 쪽에 오지 않는다.
+     ============================================================ */
+  --fs-cover: 200px;    /* 표지 제목 전용 (라틴) */
+  --fs-question: 128px; /* 교시 표지 질문 전용 */
+  --fs-decl: 88px;      /* 정리 판 맺음 선언 전용 */
+  --fs-title: 64px;     /* 페이지 제목. 본문 판의 최대 크기 */
+  --fs-claim: 32px;     /* 맺음 문장, 무대 항목 이름, 결과 수치 */
+  --fs-body: 24px;      /* 본문 문장, 버튼, 말풍선 */
+  --fs-note: 20px;      /* kicker, 쪽 번호, 영문 부제, 판정 표기, 범례, 배지, 표 셀, 터미널 */
+  /* 딸림(무대 항목 부연)의 크기는 놓이는 칸의 폭이 정한다.
+     칸 폭 560 이상이면 --fs-body(24) 에 --ink-support 이고, 칸 폭 410 이면 --fs-note(20) 이다.
+     경계 근거: 410 칸에 24 를 깔면 한 줄이 17 자라 부연이 두 줄 세 줄로 흘러
+     덩치가 항목 이름을 넘는다. 560 에서는 같은 크기가 23 자라 한 줄에 담긴다.
+     1교시 실측으로도 확인했다. 20 으로 찍히는 산문 42 곳을 24 로 올리면 4 곳만 칸을 넘치고
+     나머지 38 곳은 그대로 올라간다. 넘치는 4 곳은 칸을 넓혀 풀고 글자는 고치지 않는다 */
+  /* 20 이 최소다. 쪽 번호가 머리 행으로 올라오면서 16 을 쓰던 곳이 사라졌다.
+     쪽 번호는 kicker 와 같은 행, 같은 크기이고 굵기와 색으로만 갈린다.
+     kicker 는 "Lesson 1" 하나뿐이라 라틴 전용이고, 쪽 번호도 숫자와 빗금뿐이다.
+     그래서 머리 행 전체를 --font-display 로 찍어 영문 부제와 서체를 맞춘다.
+     주의: SamsungSharpSans 는 숫자 폭이 제각각이라 tabular-nums 가 듣지 않는다.
+     쪽 번호를 오른쪽 끝에 붙여 오른쪽 가장자리를 고정하는 것으로 해결한다 */
+
+  /* ============================================================
+     타입 · 굵기
+     화면에 인쇄되는 한글의 하한은 500 이고 400 은 터미널 블록에만 남는다.
+     600 은 쓰지 않는다. 800 은 64 이상에만 쓴다.
+     ============================================================ */
+  --fw-terminal: 400;   /* 터미널 블록 전용 */
+  --fw-medium: 500;     /* 본문 하한 */
+  --fw-bold: 700;       /* 주장, 강조, 항목 이름, 버튼, kicker */
+  --fw-heavy: 800;      /* 제목과 선언 전용. 32 이하에 쓰지 않는다 */
+
+  /* 타입 · 행간 */
+  --lh-cover: 1.0;
+  --lh-question: 1.12;
+  --lh-decl: 1.18;
+  --lh-title: 1.12;
+  --lh-claim: 1.35;
+  --lh-body: 1.5;
+  --lh-note: 1.45;
+  --lh-terminal: 1.6;
+
+  /* 타입 · 자간 */
+  --ls-display: -0.02em; /* 64 이상 */
+  --ls-claim: -0.015em;  /* 32 */
+  --ls-body: -0.01em;    /* 20~24 */
+  --ls-none: 0;
+  --ls-wide: 0.18em;     /* 표지 오른쪽 위 영문 대문자 한 줄 전용. 다른 어디에도 쓰지 않는다 */
+
+  /* ============================================================
+     격자와 페이지
+     ============================================================ */
+  --page-w: 1920px;
+  --page-h: 1080px;
+  --margin-x: 80px;
+  --margin-y: 80px;         /* 본문 판은 네 변 여백이 모두 80 이다 */
+  --cover-margin-y: 60px;   /* 표지와 교시 표지만 60 을 쓴다. 통과한 액자 구성이라 건드리지 않는다 */
+  --content-w: 1760px;
+  --content-h: 920px;       /* y 80 에서 1000 까지 */
+  --gap: 40px;
+  --col-2: 860px;
+  --col-3: 560px;
+  --col-4: 410px;
+  --col-wide: 1160px;   /* 두 창 무대의 넓은 쪽. 짝은 --col-3 */
+  --measure: 700px;     /* 문장 한 줄의 최대 폭. 24/500 로 47자.
+                           1160 에 24px 문장을 깔면 한 줄이 78자가 되어 눈이 되돌아올 자리를 잃는다.
+                           남는 가로는 무대가 채우지 문장이 늘어나서 채우지 않는다 */
+  --close-w: 1040px;    /* 맺음 문장 폭. 32/700 로 53자 */
+
+  /* 본문 판 공통 기준선. 판이 바뀌어도 이 y 는 흔들리지 않는다.
+     머리 덩이가 (80, 80) 에서 시작한다. 네 변 여백을 모두 80 으로 맞춘 값이다 */
+  --head-y: 80px;      /* 머리 행 상단. 높이 24. 왼쪽 끝에 kicker, 오른쪽 끝에 쪽 번호 */
+  --head-h: 24px;
+  --title-y: 120px;    /* 제목 상단. 높이 72. 폭은 --col-wide 로 제한해 짧은 제목을 강제한다 */
+  --sub-y: 208px;      /* 영문 부제 상단. 높이 28 */
+  /* 머리 오른쪽 칸. 제목 폭 1160 오른쪽에 남는 600 을 격자에 맞춰 560 으로 쓴다.
+     x 1280 은 3열 격자의 오른쪽 열과 같은 자리라 아래 무대의 오른쪽 열과 축이 맞는다.
+     그 쪽을 여는 한국어 리드 문장이 여기 선다. 무대 안에 두면 무대의 세로를 먹는다 */
+  --head-right-x: 1280px;
+  --head-right-w: 560px;
+  --stage-y: 284px;    /* 무대 상단 */
+  --stage-h: 540px;    /* 무대 높이. y 284~824 */
+  --stage-y-nosub: 240px; /* 부제가 없는 쪽의 무대 상단 */
+  --stage-h-nosub: 584px; /* 아래 끝은 824 로 같다 */
+  --stage-bottom: 824px;  /* 무대 아래 끝. 부제가 있든 없든 이 y 다.
+                             무대 아래는 맺음 판이 확정으로 쓴다. 무대와 맺음의 자리가 갈렸으므로
+                             무대는 자기 높이를 다 써야 하고, 남기면 빈 곳 검사가 잡는다.
+                             종전에는 맺음이 무대 안에서 아래로 자라 상한을 쪽마다 계산해야 했고
+                             그래서 구현이 무대 아래를 늘 비워 두었다 */
+  --close-bottom: 80px;   /* 맺음 판의 아래 여백. 판 아래 끝이 y 1000 이 되어 네 변 여백 80 과 맞는다.
+                             열다섯 쪽 어디서나 같은 곳이라 발표자도 청중도 한 번만 배운다 */
+
+  /* 간격 스케일 (이 밖 임의 간격 금지) */
+  --sp-8: 8px;
+  --sp-12: 12px;
+  --sp-16: 16px;
+  --sp-20: 20px;
+  --sp-24: 24px;
+  --sp-32: 32px;
+  --sp-40: 40px;
+  --sp-48: 48px;
+  --sp-56: 56px;
+  --sp-64: 64px;
+  --sp-80: 80px;
+
+  /* 글 덩이의 간격. 값은 위 스케일 안에 있고 이름만 준 것이라 스케일이 늘어난 것이 아니다.
+     덩이 사이 48 이 층 사이 12 의 네 배다. 이 비율이 덩이를 덩이로 읽히게 한다.
+     간격이 고르게 깔리면 여러 덩이가 한 줄기로 흘러 어디서 말이 갈리는지 보이지 않는다 */
+  --gap-layer: 12px;   /* 층 사이. 한 덩이 안의 머리와 몸과 딸림 사이 */
+  --gap-block: 48px;   /* 덩이 사이 */
+  --gap-group: 64px;   /* 덩이 묶음 사이 */
+
+  /* radius (이 다섯 값 밖 금지) */
+  --radius-xl: 56px;     /* 이미지와 전면 도해를 담는 큰 면 전용 */
+  --radius-lg: 32px;     /* 높이 300 이상 판형 면, 결과 창 */
+  --radius-md: 24px;     /* 항목, 버튼, 입력, 말풍선, 내부 패널, 터미널, 조건 전환기 */
+  --radius-sm: 14px;     /* 하이라이트, 작은 조각, 자료 카드, 문서 판. 종이 계열을 한 값으로 묶는다 */
+  --radius-round: 999px; /* 알약 배지, 게이지, 점, 핸들 */
+
+  /* ============================================================
+     링 · 상호작용
+     그림자는 이 시스템에 없다. 층은 면의 밝기가 만든다.
+     상호작용은 그림자가 아니라 링으로 표시한다.
+     링은 border 가 아니라 box-shadow 다. border 는 1px 밀림을 만들고 그 밀림이 이동으로 보인다.
+     2px 이상만 쓴다. 확대된 화면에서 1px 은 흐려진다.
+     링은 안쪽(inset)으로 넣는다. 바깥 링은 옆 항목의 자리를 침범한다.
+
+     조작 가능함은 세 가지로만 알린다. 면(배경 위에 뜬 흰 면), 커서, 마우스를 올렸을 때의 링.
+     항목 왼쪽에 세우는 상태 막대는 쓰지 않는다. 못처럼 붙는 장식이고 면이 할 일을 뺏는다.
+     ============================================================ */
+  --ring-hover: inset 0 0 0 2px var(--blue-soft);
+  --ring-selected: inset 0 0 0 3px var(--blue-accent);
+  --ring-focus: 0 0 0 3px var(--blue-accent);
+  --surface-hover: rgba(255, 255, 255, 0.58); /* 면이 없는 항목에 마우스를 올렸을 때 */
+  /* 잠긴 조작부의 정지 상태 링. 잠긴 전송 버튼 면(--blue-line)과 그것이 놓인 입력 바
+     면(--sunken)의 휘도 차이가 3% 뿐이라 잠긴 버튼이 바에 묻힌다. 색을 새로 만들지 않고
+     이미 있는 --divider-strong 으로 테두리만 세워 원의 윤곽을 되살린다.
+     잠긴 것에만 걸고 열린 것에는 걸지 않는다. 링의 유무가 잠김과 열림을 한 번 더 가른다 */
+  --ring-locked: inset 0 0 0 2px var(--divider-strong);
+
+  /* 모션 (transform 금지. 뷰포트 스케일 한 곳만 예외) */
+  --dur-fast: 120ms;
+  --dur-base: 240ms;
+  --dur-step: 480ms;
+  --dur-page: 360ms;     /* 쪽 넘김 */
+  --dur-enter: 560ms;    /* 글자 덩이 등장 */
+  --stagger: 70ms;       /* 덩이 사이 간격 */
+  --ease-out: cubic-bezier(0.2, 0, 0, 1);
+  --ease-inout: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-enter: cubic-bezier(0.16, 1, 0.3, 1); /* 뒤가 길게 풀리는 곡선. 등장 전용 */
+
+  /* 컴포넌트 치수 */
+  --hit-h: 72px;         /* 누르는 항목의 최소 높이 */
+  --btn-h: 56px;         /* 버튼 높이 */
+  --btn-min-w: 160px;    /* 버튼 최소 폭. 6자(87px) + 좌우 padding 56 을 담는다 */
+  --btn-pad-x: 28px;
+  /* 조건 전환기는 새 치수를 만들지 않는다. 칸은 --btn-h(56) 높이에 --btn-min-w(160) 최소 폭이고,
+     담는 트랙은 --hit-h(72) 높이의 우물 면에 padding 8, 칸 사이 8 이다.
+     칸과 트랙 모두 radius 는 --radius-md(24) 다. 고른 칸만 흰 면에 --ring-selected 를 얻는다.
+     트랙이 있어야 "이 중 하나" 가 형태로 보인다. 트랙 없이 칸만 늘어놓으면 버튼 여러 개로 읽힌다 */
+  --pill-h: 36px;        /* 알약 배지 */
+  --input-h: 56px;
+  --inputbar-h: 88px;
+  /* 원형 전송 버튼. 글자가 없는 버튼이라 최소 폭 160 이 적용되지 않는다.
+     그 하한은 글자를 담는 버튼의 규격이다. 대신 지름을 버튼 높이와 같은 56 으로 못박아
+     무대에서 겨냥할 면적을 지킨다. 안에는 --icon(24) 위쪽 화살표 하나만 있고 이름표가 없다 */
+  --send-d: 56px;
+  --doc-h-1: 72px;       /* 파일 칩 한 행. 누르는 것의 최소 높이 72 를 그대로 지킨다 */
+  --doc-h-2: 92px;       /* 파일 칩 두 행. 이름 아래 8 을 띄우고 파일 종류 한 줄이 더 붙는다 */
+  --chip-tile: 48px;     /* 파일 칩 왼쪽 타일 한 변. 한 행 칩 72 에 위아래 12 를 남긴다 */
+  --attrow-h: 92px;      /* 첨부 행. 입력 바 위에 미리 잡아 두는 높이라 두 행 카드가 그대로 들어간다.
+                            정지 상태에서는 면도 글자도 없이 비어 있다. 빈 상자가 아니라 빈 곳이라
+                            "정지 상태에 빈 상자를 두지 않는다" 에 걸리지 않고,
+                            자리를 미리 잡아 두므로 카드가 나타날 때 아무것도 밀지 않는다 */
+  --docpanel-min-h: 200px; /* 문서 판 최소 높이. 자료 카드를 누르면 그 아래에 펼쳐지는 판이다.
+                              카드는 그대로 남고 판만 열린다. 200 미만으로 접지 않는다.
+                              radius 는 --radius-sm(14) 로 자료 카드와 묶는다. 둘이 한 종류로 읽힌다 */
+  /* 우물 트레이. 정지 상태에서 "누를 수 있음" 을 말하는 유일한 담는 그릇이다.
+     배경(0.813) 위에 우물(0.720) 을 깔고 그 위에 흰 판(1.000) 을 올리면 층이 셋이 되어,
+     흰 판이 배경 위에 홀로 있을 때와 달리 "고르는 것" 으로 읽힌다.
+     조건 전환기의 트랙을 목록 전체로 넓힌 것이라 새 부품이 아니다.
+     안쪽 여백 8 은 조건 전환기 트랙과 같은 값이고, 담긴 판과 트레이 모서리의 차이가 24 - 8 = 16 이다 */
+  --tray-pad: 8px;
+  --tray-r: var(--radius-lg);  /* 트레이는 담는 그릇이라 담기는 판(24) 보다 한 단 크다 */
+
+  /* 팝업 카드. 본문 안 밑줄 낱말을 누르면 그 낱말 아래에 뜬다.
+     폭은 3열 격자 한 칸(560) 이고 높이 상한 320 은 무대(1760x540) 의 19% 다.
+     맺음을 팝업으로 만드는 안을 기각한 근거가 "팝업이 무대를 덮어 근거가 사라진다" 였는데,
+     낱말 뜻풀이 팝업은 근거가 그 낱말 자체이고 낱말을 덮지 않으므로 그 판단과 어긋나지 않는다 */
+  --pop-w: 560px;
+  --pop-max-h: 320px;
+  --pop-gap: 12px;       /* 낱말과 팝업 사이 */
+
+  --bubble-max: 560px;   /* 말풍선. 24/500 로 한 줄 37자 */
+  --gauge-h: 14px;
+  --dot: 10px;           /* 단계 점 */
+  --dot-gap: 12px;
+  --icon: 24px;          /* 단색 SVG 기호. 이 크기 하나만 쓴다 */
+
+  /* ============================================================
+     표지 전용
+     배경 사진(assets/cover-bg.jpg)은 1280x720 이다. 1920 스테이지에서 이미 1.5배로
+     늘어나 있고 2560 화면에서는 2배가 된다. 더 큰 원본이 필요하다 (디자인시스템.md 해상도 절).
+     빛 리본이 화면 오른쪽에 몰려 있어서 글자는 왼쪽 축에 세우고,
+     스크림으로 왼쪽을 눌러 흰 글자의 대비를 만든다.
+     ============================================================ */
+  --cover-scrim: linear-gradient(96deg,
+      rgba(2, 8, 32, 0.88) 0%,
+      rgba(2, 8, 32, 0.76) 28%,
+      rgba(2, 8, 32, 0.46) 56%,
+      rgba(2, 8, 32, 0.24) 100%);
+  --cover-scrim-bottom: linear-gradient(0deg,
+      rgba(2, 8, 32, 0.60) 0%,
+      rgba(2, 8, 32, 0.00) 34%);
+  /* 교시 표지는 같은 사진을 쓰되 스크림을 거의 균일하게 덮어 사진을 질감으로 내린다.
+     표지가 주인공이고 교시 표지는 그 아래 층이라는 관계를 스크림 세기로 만든다 */
+  --chapter-scrim: linear-gradient(96deg,
+      rgba(2, 8, 32, 0.95) 0%,
+      rgba(2, 8, 32, 0.91) 40%,
+      rgba(2, 8, 32, 0.84) 100%);
+  --cover-title-y: 402px;   /* 표지 제목 상단. 제목+태그라인 덩이가 세로 가운데에 온다 */
+  --cover-tag-y: 634px;     /* 표지 태그라인 상단 */
+  --cover-foot-bottom: 60px;/* 오른쪽 아래 영문 줄의 아래 여백 */
+
+  /* 교시 표지 기준선. 질문 두 줄(128 x 1.12 x 2 = 287)을 전제로 잡은 값이다 */
+  --chapter-label-y: 288px; /* SESSION 라벨 상단 */
+  --chapter-q-y: 340px;     /* 질문 상단. 최대 2줄 */
+  --chapter-lead-y: 668px;  /* 리드 상단. 최대 2줄 */
+  --chapter-strip-bottom: 80px;
+
+  --wm-ink-h: 44px;         /* 표지 워드마크 글자 높이. 교시 표지에서는 32 로 내린다 */
+}
+
+/* 모션 축소 환경에서는 전환을 끈다 */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0ms;
+    --dur-base: 0ms;
+    --dur-step: 0ms;
+    --dur-page: 0ms;
+    --dur-enter: 0ms;
+    --stagger: 0ms;
+  }
+}
+
+/* ============================================================
+   브랜드 자산 · 삼성 워드마크
+   받은 PNG 는 1600x425 이고 글자는 그 안의 (104,104)-(1493,318) 에만 있다.
+   둘레 104px 는 삼성 규정의 여백이라 이미지를 그대로 놓으면 글자가 80px 기준선에서
+   안쪽으로 밀린다. 아래 클래스는 글자 높이 하나(--wm-ink-h)만 정하면
+   글자 상자가 기준선에 정확히 맞도록 배경 위치를 계산한다.
+   로고를 직접 그리거나 서체로 "SAMSUNG" 을 치지 않는다. 이 세 파일만 쓴다.
+   ============================================================ */
+.samsung-wordmark {
+  display: block;
+  height: var(--wm-ink-h);
+  width: calc(var(--wm-ink-h) * 1389 / 214);
+  background-repeat: no-repeat;
+  background-size: calc(var(--wm-ink-h) * 1600 / 214) calc(var(--wm-ink-h) * 425 / 214);
+  background-position: calc(var(--wm-ink-h) * -104 / 214) calc(var(--wm-ink-h) * -104 / 214);
+}
+.samsung-wordmark--white { background-image: url("../assets/lettermark/White/Samsung_Orig_Wordmark_WHITE_RGB.png"); }
+.samsung-wordmark--blue  { background-image: url("../assets/lettermark/Blue/Samsung_Orig_Wordmark_BLUE_RGB.png"); }
+.samsung-wordmark--black { background-image: url("../assets/lettermark/Black/Samsung_Orig_Wordmark_BLACK_RGB.png"); }
+/* ===================== tokens.css 복사본 끝 ===================== */
+
+
+/* ===================== 골격 ===================== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; overflow: hidden; background: var(--canvas-light); }
+body { font-family: var(--font-sans); color: var(--ink); -webkit-font-smoothing: antialiased; }
+ul, ol { list-style: none; }
+button { font-family: inherit; border: 0; background: none; color: inherit; }
+
+/* 레터박스는 지금 쪽의 캔버스 색이다 */
+.viewport { position: fixed; inset: 0; overflow: hidden;
+  background: var(--canvas-light); transition: background-color var(--dur-page) var(--ease-out); }
+.viewport[data-canvas="dark"] { background: var(--canvas-dark); }
+
+.stage { width: var(--page-w); height: var(--page-h); position: absolute; left: 50%; top: 50%;
+  transform-origin: center center; overflow: hidden; }
+.stage, .stage * { word-break: keep-all; overflow-wrap: normal; line-break: strict; }
+
+/* 쪽 넘김. 나가는 쪽은 자리를 지킨 채 옅어지고 들어오는 쪽이 그 위에서 선명해진다.
+   자리는 움직이지 않는다. 흐림은 keyframe 끝에서 none 으로 돌아가 잔류하지 않는다 */
+.slide { position: absolute; inset: 0; visibility: hidden; opacity: 0; background: var(--bg);
+  transition: opacity var(--dur-page) var(--ease-out), visibility 0s linear var(--dur-page); }
+.slide.active { visibility: visible; opacity: 1; transition: none;
+  animation: pagein var(--dur-page) var(--ease-enter) both; }
+.slide[data-canvas="dark"] { background: var(--canvas-dark); }
+@keyframes pagein { from { opacity: 0; filter: blur(10px); } to { opacity: 1; filter: none; } }
+
+/* 등장. 덩이가 순서대로 또렷해진다. 자리는 처음부터 끝까지 그대로다 (위치 이동 금지).
+   reactbits 의 blur-in 계열에서 y 이동만 걷어낸 형태다 */
+.seq { opacity: 0; }
+.slide.active .seq { animation: seqin var(--dur-enter) var(--ease-enter) both; animation-delay: var(--d, 0s); }
+.seq.seq-done { animation: none; opacity: 1; filter: none; }
+@keyframes seqin { from { opacity: 0; filter: blur(12px); } to { opacity: 1; filter: none; } }
+/* 검사용 정지 모드. 애니메이션 중간 상태에서 자로 재지 않는다 */
+.still .slide.active, .still .seq { animation: none !important; opacity: 1 !important; filter: none !important; }
+
+/* 줄 고정. 자동 줄바꿈이 물리적으로 일어나지 않도록 블록 폭을 최장 줄에 맞춘다 */
+.ln { width: max-content; }
+
+/* 머리 행 · 왼쪽 끝 kicker, 오른쪽 끝 쪽 번호. 둘 다 display 서체 */
+.head { position: absolute; left: var(--margin-x); top: var(--head-y);
+  width: var(--content-w); height: var(--head-h);
+  display: flex; align-items: baseline; justify-content: space-between;
+  font-family: var(--font-display); line-height: var(--head-h); }
+.head .kicker { font-size: var(--fs-note); font-weight: var(--fw-bold); color: var(--blue-accent); }
+.head .pageno { font-size: var(--fs-note); font-weight: var(--fw-medium); color: var(--ink-meta); }
+
+.ptitle { position: absolute; left: var(--margin-x); top: var(--title-y);
+  width: var(--col-wide); height: 72px; font-size: var(--fs-title); font-weight: var(--fw-heavy);
+  line-height: var(--lh-title); letter-spacing: var(--ls-display); color: var(--ink); white-space: nowrap; }
+.psub { position: absolute; left: var(--margin-x); top: var(--sub-y); height: 28px;
+  font-family: var(--font-display); font-size: var(--fs-note); font-weight: var(--fw-medium);
+  color: var(--ink-support); line-height: 28px; }
+
+/* 무대 */
+.area { position: absolute; left: var(--margin-x); top: var(--stage-y);
+  width: var(--content-w); height: var(--stage-h); }
+.area.nosub { top: var(--stage-y-nosub); height: var(--stage-h-nosub); }
+
+/* 맺음 판 · 우물 면. 왼쪽 아래 구석에 못박고 아래 끝이 언제나 y 1000 이다.
+   조작이 끝나야 면과 글자가 함께 든다 */
+.close { position: absolute; left: var(--margin-x); bottom: var(--close-bottom);
+  width: max-content; max-width: calc(var(--close-w) + 64px);
+  background: var(--sunken); border-radius: var(--radius-md);
+  padding: var(--sp-24) var(--sp-32);
+  font-size: var(--fs-claim); font-weight: var(--fw-bold); line-height: var(--lh-claim);
+  letter-spacing: var(--ls-claim); color: var(--ink); text-align: left;
+  opacity: 0; transition: opacity var(--dur-base) var(--ease-out); }
+.close.on { opacity: 1; }
+
+/* 타입 유틸 */
+.t-claim { font-size: var(--fs-claim); font-weight: var(--fw-bold);
+  line-height: var(--lh-claim); letter-spacing: var(--ls-claim); }
+.t-body { font-size: var(--fs-body); font-weight: var(--fw-medium);
+  line-height: var(--lh-body); letter-spacing: var(--ls-body); }
+/* 3층 딸림. 크기가 아니라 색이 한 단 내려간다 */
+.t-note { font-size: var(--fs-body); font-weight: var(--fw-medium);
+  line-height: var(--lh-note); letter-spacing: var(--ls-body); color: var(--ink-support); }
+.t-num { font-size: var(--fs-claim); font-weight: var(--fw-heavy); color: var(--blue-accent);
+  font-variant-numeric: tabular-nums; letter-spacing: var(--ls-claim); }
+.acc { color: var(--blue-accent); font-weight: var(--fw-bold); }
+.hl { background: var(--ink); color: var(--ink-invert); padding: 0 0.08em;
+  border-radius: var(--radius-sm); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.hlu { background: linear-gradient(to top, var(--blue-hl) 0 34%, transparent 34%); }
+.en { font-family: var(--font-display); }
+
+/* 누르는 항목 · 흰 면이 곧 만지는 것이다.
+   왼쪽 상태 막대는 없앴다. 조작 가능함은 면과 커서와 마우스를 올렸을 때의 링이 알린다.
+   .cur = 지금 고른 것(링). .on = 이미 열어 본 것(내용이 남는다)
+
+   링은 항상 깔려 있고 색만 바뀐다. none 과 inset 2px 사이는 보간되지 않아 전환이 걸리지 않는다.
+   그래서 투명한 2px 을 기본값으로 깔고 색만 준다.
+   호버에 반응하는 것은 누를 수 있는 것뿐이다. 소진된 것과 잠긴 것은 선택자에서 빠진다 */
+.item { position: relative; background: var(--surface); border-radius: var(--radius-md);
+  min-height: var(--hit-h); cursor: pointer; overflow: hidden;
+  --ring-c: transparent; --ring-w: 2px;
+  box-shadow: inset 0 0 0 var(--ring-w) var(--ring-c);
+  transition: box-shadow var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out); }
+.item:not(.spent):not(.locked):hover { --ring-c: var(--blue-soft); }
+.item.cur, .item.cur:not(.spent):not(.locked):hover { --ring-c: var(--blue-accent); --ring-w: 3px; }
+/* 이름 글자가 파랑으로 도는 것이 호버의 핵심이다. 링 2px 은 프로젝터에서 사라진다 */
+.item:not(.spent):not(.locked):hover .qn,
+.item:not(.spent):not(.locked):hover .kn,
+.item:not(.spent):not(.locked):hover .nm,
+.item:not(.spent):not(.locked):hover .sh,
+.item:not(.spent):not(.locked):hover .dn,
+.item:not(.spent):not(.locked):hover .readlabel { color: var(--blue-accent); }
+/* 고른 하나만 면을 갖는 목록. 나머지는 배경 위의 글줄로 남는다 */
+.item--flat { background: transparent; }
+.item--flat:not(.spent):not(.locked):hover { background: var(--surface-hover); }
+.item--flat.cur { background: var(--surface); }
+.item.spent { cursor: default; }
+.item.locked { background: var(--sunken); cursor: not-allowed; }
+
+/* 우물 면 · 보는 곳 */
+.well { background: var(--sunken); border-radius: var(--radius-md); }
+.well.r-lg { border-radius: var(--radius-lg); }
+
+/* 버튼 · 호버는 누를 수 있는 버튼에만 걸린다. 잠긴 것과 소진된 것은 선택자에서 빠진다 */
+.btn { height: var(--btn-h); min-width: var(--btn-min-w); padding: 0 var(--btn-pad-x);
+  border-radius: var(--radius-md); background: var(--blue-accent); color: var(--ink-invert);
+  font-size: var(--fs-body); font-weight: var(--fw-bold); letter-spacing: var(--ls-body);
+  cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+  transition: background-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out); }
+.btn:not([disabled]):not(.done):hover { background: var(--blue-mark); }
+.btn:focus-visible { outline: none; box-shadow: var(--ring-focus); }
+.btn--sec { background: var(--blue-tint); color: var(--blue-accent); }
+.btn--sec:not([disabled]):not(.done):hover { background: var(--blue-hl); }
+
+/* 알약 배지 */
+.pill { display: inline-flex; align-items: center; height: var(--pill-h); padding: 0 var(--sp-20);
+  border-radius: var(--radius-round); font-size: var(--fs-note); font-weight: var(--fw-bold);
+  white-space: nowrap; }
+.pill--ink { background: var(--ink); color: var(--ink-invert); }
+.pill--blue { background: var(--blue-tint); color: var(--blue-accent); }
+
+/* 판정 표기 · 칸은 정지 상태에서 이미 잡혀 있고 글자만 없다 */
+.verdict { font-size: var(--fs-note); font-weight: var(--fw-medium); line-height: var(--lh-note);
+  color: var(--blue-accent); opacity: 0; transition: opacity var(--dur-base) var(--ease-out); }
+.verdict.no { color: var(--alert); }
+.verdict.on { opacity: 1; }
+
+/* 단계 점 */
+.dots { display: flex; align-items: center; gap: var(--dot-gap); }
+.dots i { width: var(--dot); height: var(--dot); border-radius: var(--radius-round);
+  background: var(--blue-line); transition: background-color var(--dur-base) var(--ease-out); }
+.dots i.on { background: var(--blue-accent); }
+
+/* 게이지 */
+.gauge { height: var(--gauge-h); border-radius: var(--radius-round); background: var(--blue-line);
+  overflow: hidden; display: flex; }
+.gauge.on-sunken { background: var(--divider-strong); }
+.gauge span { height: 100%; transition: width var(--dur-step) var(--ease-out); }
+
+/* 터미널 재현 */
+.term { background: var(--terminal-bg); color: var(--terminal-fg); border-radius: var(--radius-md);
+  padding: var(--sp-24) var(--sp-24); font-family: var(--font-mono); font-size: var(--fs-note);
+  font-weight: var(--fw-terminal); line-height: var(--lh-terminal); }
+.term b { color: #fff; font-weight: 700; }
+
+/* ===================== 대화창 부품 한 벌 =====================
+   청중이 실제로 마주할 화면이라 설명을 붙이지 않아도 무엇을 보는지 안다.
+   그래서 부품은 한 벌만 정의하고, 쪽마다 그중 필요한 것만 꺼내 크기와 배치를 달리 잡는다.
+   3쪽 작은 판 셋 · 6쪽 말풍선 하나를 확대 · 7쪽 첨부와 답 둘 · 8쪽 묻고 답받기 ·
+   9쪽 입력 바 모양만 · 10쪽 참가자 화면 복제 · 11쪽 접힌 컨텍스트 ·
+   13쪽 대화 전체 · 14쪽 답 안의 각주.
+   부품은 공유하고 화면은 공유하지 않는다 */
+
+/* 창 껍데기 */
+.talk { position: relative; background: var(--surface); border-radius: var(--radius-lg);
+  display: flex; flex-direction: column; overflow: hidden; }
+.talk--md { border-radius: var(--radius-md); }
+.talkhead { padding: var(--sp-24) var(--sp-24) 0; }
+.talkhead .cap { display: block; font-family: var(--font-display); font-size: var(--fs-note);
+  font-weight: var(--fw-medium); color: var(--ink-support); line-height: 28px; }
+.talkhead .nm { display: block; margin-top: var(--sp-8); font-size: var(--fs-claim);
+  font-weight: var(--fw-bold); line-height: 44px; letter-spacing: var(--ls-claim); }
+
+/* 말이 쌓이는 칸. 실제 대화가 그렇듯 아래에서부터 쌓인다 */
+.stream { flex: 1; min-height: 0; padding: var(--sp-24); display: flex; flex-direction: column;
+  gap: var(--sp-16); }
+.stream > :first-child { margin-top: auto; }
+.stream--tight { padding: var(--sp-20); gap: var(--sp-12); }
+
+/* 말풍선. 보냄과 받음은 정렬과 면이 가른다. 꼬리 장식은 없다 */
+.bub { max-width: var(--bubble-max); padding: var(--sp-16) var(--sp-24);
+  border-radius: var(--radius-md); font-size: var(--fs-body); font-weight: var(--fw-medium);
+  line-height: var(--lh-body); letter-spacing: var(--ls-body);
+  box-shadow: inset 0 0 0 2px transparent;
+  transition: box-shadow var(--dur-fast) var(--ease-out); }
+.bub.me { background: var(--blue-accent); color: var(--ink-invert); align-self: flex-end; }
+.bub.ai { background: var(--sunken); color: var(--ink); align-self: flex-start; }
+.bub.fold { background: var(--blue-tint); color: var(--blue-accent); font-weight: var(--fw-bold);
+  align-self: center; }
+.bub.sys { align-self: center; background: var(--sunken); color: var(--ink-support);
+  font-size: var(--fs-note); font-weight: var(--fw-bold); padding: var(--sp-8) var(--sp-20);
+  border-radius: var(--radius-round); }
+.bub.lit { box-shadow: var(--ring-hover); }
+.bub.in { animation: seqin 440ms var(--ease-enter) both; }
+/* 축소한 대화의 말풍선. 크기를 새로 만들지 않고 이미 있는 20을 쓴다 */
+.bub--sm { max-width: 100%; padding: var(--sp-12) var(--sp-16);
+  font-size: var(--fs-note); line-height: var(--lh-note); }
+/* 확대한 말풍선. 안에서 무슨 일이 벌어지는지 보이는 쪽에만 쓴다 */
+.bub--lg { max-width: 100%; padding: var(--sp-24) var(--sp-32); font-size: var(--fs-claim);
+  font-weight: var(--fw-bold); line-height: var(--lh-claim); letter-spacing: var(--ls-claim); }
+/* 문장 한 줄의 폭 상한 700 안에서 말풍선을 넓힌다 */
+.bub--wide { max-width: 748px; }
+
+/* 말풍선 안에 붙는 자료. 규격은 자료 카드를 따른다 */
+.bub .docs { display: block; margin-bottom: var(--sp-12); }
+
+/* 한 낱말씩 이어 붙는 답. 3쪽에서 이 모양이 곧 그 쪽의 주장이다 */
+w { display: inline; opacity: 0; }
+w.lit { animation: seqin 420ms var(--ease-enter) both; }
+
+/* 입력 바. 커서가 "여기에 글이 든다"를 말하므로 자리 표시 문장을 담지 않는다.
+   왼쪽 안 여백 20 을 못박아 커서가 언제나 같은 곳에서 깜빡인다.
+   초점은 한 화면에 하나다. 활성인 칸만 링과 커서를 갖는다 */
+.inbar { height: var(--inputbar-h); background: var(--sunken); padding: var(--sp-16) var(--sp-24);
+  display: flex; gap: var(--sp-16); align-items: center;
+  box-shadow: inset 0 0 0 3px transparent;
+  transition: box-shadow var(--dur-base) var(--ease-out); }
+.inbar.catch { box-shadow: var(--ring-selected); }
+.inbar .fld { flex: 1; height: var(--input-h); background: var(--surface); border-radius: var(--radius-md);
+  padding: 0 var(--sp-20); display: flex; align-items: center; font-size: var(--fs-body);
+  font-weight: var(--fw-medium); color: var(--ink); white-space: nowrap; overflow: hidden;
+  cursor: text; box-shadow: inset 0 0 0 3px transparent;
+  transition: box-shadow var(--dur-base) var(--ease-out); }
+.inbar .fld:not(.off) { box-shadow: var(--ring-selected); }
+.inbar .fld i { display: inline-block; width: 3px; height: 28px; margin-left: 3px;
+  background: var(--ink); animation: blink 1.06s steps(2, jump-none) infinite; }
+.inbar .fld.off i { display: none; }
+@keyframes blink { from { opacity: 1; } to { opacity: 0; } }
+.btn[disabled] { background: var(--blue-line); color: var(--ink-muted); cursor: not-allowed; }
+.btn.done { background: var(--blue-line); color: var(--ink-muted); cursor: default; }
+
+/* 파일 칩 · 첨부한 파일은 이 덱에서 언제나 이 모양이다.
+   종전 자료 카드와 첨부 표시를 하나로 접었다. 같은 파일이 쪽마다 다른 모양으로 나오면
+   청중이 매번 다시 읽는다. 왼쪽 타일 안 문서 기호는 아이콘 금지의 두 예외 중 하나다.
+   놓이는 칸의 전폭을 그대로 쓴다. 글자 길이만큼 잡으면 태그로 읽힌다 */
+.doc { position: relative; display: flex; align-items: center; gap: var(--sp-16);
+  width: 100%; min-height: var(--doc-h-1);
+  padding: var(--sp-12) var(--sp-20); border-radius: var(--radius-sm);
+  background: var(--surface);
+  transition: opacity var(--dur-base) var(--ease-out); }
+.doc + .doc { margin-top: var(--sp-8); }
+.doc .tile { flex: 0 0 var(--chip-tile); width: var(--chip-tile); height: var(--chip-tile);
+  border-radius: var(--radius-sm); background: var(--sunken); color: var(--ink-support);
+  display: flex; align-items: center; justify-content: center;
+  transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out); }
+.doc .tile svg { width: var(--icon); height: var(--icon); }
+.doc .dtxt { min-width: 0; }
+.doc .dn { display: block; font-size: var(--fs-body); font-weight: var(--fw-bold);
+  line-height: 32px; letter-spacing: var(--ls-body); color: var(--ink);
+  transition: color var(--dur-fast) var(--ease-out); }
+.doc .dk { display: block; margin-top: var(--sp-8); font-size: var(--fs-note);
+  font-weight: var(--fw-medium); line-height: 29px; color: var(--ink-support); }
+/* 입력 바 첨부 행과 말풍선 안에서는 칩이 담긴 글자만큼만 넓다.
+   그 두 곳은 실제 화면에서도 칩이 바 안에 얹히는 모양이라 전폭이면 바를 덮는다 */
+.doc--fit { width: max-content; max-width: var(--bubble-max); }
+/* 파란 말풍선 안에서는 칩 면이 흰색 60% 다 */
+.bub.me .doc { background: rgba(255, 255, 255, .60); }
+.bub.me .doc .tile { background: rgba(255, 255, 255, .60); }
+.doc.gone { opacity: 0; }
+/* 파일 칩의 면 변형은 하나뿐이다. 그 자료를 누가 넣었는지가 그 쪽의 주장일 때
+   내가 넣은 것만 --blue-tint 면을 얻는다. 그 밖의 이유로 면을 바꾸지 않는다.
+   11쪽에서 넷이 같은 흰 면이면 "맨 아래 한 줄만 내가 썼다" 는 대비가 사라진다 */
+.doc.mine { background: var(--blue-tint); }
+.doc.mine .dn { color: var(--blue-accent); }
+.doc.mine .tile { background: rgba(255, 255, 255, .60); color: var(--blue-accent); }
+/* 닫기 표시는 뺄 수 있는 첨부에만 단다. 누를 수 없는 닫기 표시는 어포던스가 거짓말이다.
+   1교시에서 이것을 다는 곳은 9쪽 하나다. 자료를 뺐을 때 답이 되돌아가는 것이 그 쪽의 주장이라
+   되돌림 조작이 값어치가 있다. 보이는 표시는 24 이고 누르는 곳만 ::after 로 넓힌다 */
+.doc .x { position: absolute; right: var(--sp-8); top: var(--sp-8);
+  width: var(--icon); height: var(--icon); border-radius: var(--radius-round);
+  background: var(--ink); color: var(--ink-invert); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background-color var(--dur-fast) var(--ease-out); }
+.doc .x::after { content: ''; position: absolute; left: -16px; right: -16px; top: -16px; bottom: -16px; }
+.doc .x svg { width: 14px; height: 14px; }
+.doc .x:hover { background: var(--blue-accent); }
+
+/* 원형 전송 버튼 · 글자 없이 위쪽 화살표 하나만 있는 원이다.
+   열림과 잠김이 면 색으로 갈린다. 잠긴 것은 눌러도 되지 않는다는 것을 형태로 알린다.
+   .mock 은 도구 재현 화면의 부품이다. 조작이 걸려 있지 않으므로 커서를 바꾸지 않고
+   호버에도 반응하지 않는다. 껍데기는 커서를 바꾸지 않는다는 규칙과 같은 자리다 */
+.send { flex: 0 0 var(--send-d); width: var(--send-d); height: var(--send-d);
+  min-width: var(--send-d); padding: 0; border-radius: var(--radius-round);
+  background: var(--blue-accent); color: var(--ink-invert); cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out); }
+.send svg { width: var(--icon); height: var(--icon); }
+.send[disabled], .send.locked { background: var(--blue-line); color: var(--ink-muted);
+  cursor: not-allowed; }
+.send.mock { cursor: default; pointer-events: none; }
+.send:not([disabled]):not(.locked):not(.mock):hover { background: var(--blue-mark); }
+/* 잠긴 조작부는 면 색만으로는 서지 않는다. 잠긴 전송 면(--blue-line)과 그것이 놓인
+   입력 바 면(--sunken)의 휘도 차이가 3% 뿐이라 원이 바에 묻힌다.
+   색을 새로 만들지 않고 --ring-locked 로 윤곽만 세운다. 열린 것에는 걸지 않는다 */
+.send[disabled], .send.locked, .send.done { box-shadow: var(--ring-locked); }
+.send:focus-visible { outline: none; box-shadow: var(--ring-focus); }
+
+/* ===================== 우물 트레이 =====================
+   정지 상태에서 "누를 수 있음" 을 말하는 담는 그릇이다.
+   배경(0.813) 위에 우물(0.720) 을 깔고 그 위에 흰 판(1.000) 을 올리면 층이 셋이 되어,
+   흰 판이 배경 위에 홀로 있을 때와 달리 고르는 것으로 읽힌다.
+   조건 전환기의 트랙을 목록 전체로 넓힌 것이라 새 부품이 아니다.
+   트레이 자체는 누르는 것이 아니므로 커서를 주지 않는다. 판만 pointer 를 갖는다 */
+.tray { background: var(--sunken); border-radius: var(--tray-r); padding: var(--tray-pad);
+  display: flex; flex-direction: column; gap: var(--sp-8); }
+
+/* ===================== 보낼 줄 =====================
+   아직 보내지 않은 질문 하나다. 실제 대화창에서 보내기 전의 질문은 입력 줄에 담겨 있고
+   그 끝에 보내기가 붙어 있다. 그 모양을 그대로 두면 "질문이다" 와 "누른다" 를
+   한 부품이 함께 말한다. 반드시 우물 트레이 안에 있다.
+   누르는 곳은 원이 아니라 줄 전체다. 원은 무대에서 겨냥하기에 작고,
+   원만 누르게 하면 나머지 면적이 죽는다 */
+.sendrow { display: flex; align-items: center;
+  padding-left: var(--sp-32); padding-right: var(--sp-16); gap: var(--sp-24); }
+.sendrow .sq { flex: 1; min-width: 0; font-size: var(--fs-claim); font-weight: var(--fw-bold);
+  line-height: var(--lh-claim); letter-spacing: var(--ls-claim); color: var(--ink);
+  transition: color var(--dur-fast) var(--ease-out); }
+.sendrow .send { pointer-events: none; }
+.item.sendrow:not(.sent):hover .sq { color: var(--blue-accent); }
+/* 보낸 뒤 · 전송 원이 잠김 색이 된다. 면이 갈리는 것은 판정이 있는 쪽이 따로 정한다 */
+.sendrow.sent { cursor: default; }
+.sendrow.sent .sq { color: var(--ink-support); }
+.sendrow.sent .send { background: var(--blue-line); color: var(--ink-muted);
+  box-shadow: var(--ring-locked); }
+.item.sendrow.sent:hover { --ring-c: transparent; }
+
+/* ===================== 팝업 카드 =====================
+   본문 안의 개념어 하나를 눌러 그 뜻을 연다. 모달이 아니다. 배경을 어둡게 깔지 않고
+   낱말을 덮지 않으며 무대의 창과 장치 위로 올라가지 않는다.
+   짚기 밑줄(--blue-hl 면 띠)과 형태를 가른다. 팝업 낱말은 --blue-accent 2px 실선이다.
+   짚기는 화면의 다른 곳을 가리키고 팝업은 그 낱말 자체를 푼다 */
+.popword { color: var(--blue-accent); border-bottom: 2px solid var(--blue-accent);
+  cursor: pointer; transition: border-color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out); }
+.popword:hover { border-color: var(--blue-mark); }
+.popword.open { background: var(--blue-hl); }
+/* 카드는 세로로 쌓는 상자다. 머리 · 몸 · 닫기 순서라 두 곳(5쪽 · 7쪽)의 카드가
+   같은 폭과 같은 padding 과 같은 닫기 자리로 정확히 같은 모양이 된다.
+   높이는 32 + 36 + 12 + 108 + 24 + 56 + 32 = 300 이라 상한 320 안이다 */
+.pop { position: absolute; width: var(--pop-w); max-height: var(--pop-max-h);
+  background: var(--surface); border-radius: var(--radius-md);
+  padding: var(--sp-32) var(--sp-40); overflow: hidden;
+  display: flex; flex-direction: column; align-items: stretch;
+  opacity: 0; pointer-events: none; z-index: 5; }
+.pop.on { opacity: 1; pointer-events: auto;
+  animation: seqin var(--dur-base) var(--ease-enter) both; }
+.pop .poph { font-size: var(--fs-body); font-weight: var(--fw-bold);
+  line-height: 36px; letter-spacing: var(--ls-body); color: var(--ink); }
+.pop .popb { margin-top: var(--sp-12); font-size: var(--fs-body); font-weight: var(--fw-medium);
+  line-height: var(--lh-body); letter-spacing: var(--ls-body); color: var(--ink); }
+/* 닫기는 아이콘이 아니라 글자다. X 를 쓰면 아이콘 예외가 둘에서 셋으로 늘어난다.
+   되돌림 버튼과 같은 secondary 규격을 그대로 쓰므로 새 부품이 아니다.
+   자리를 오른쪽 아래로 둔 것은 카드를 위에서 아래로 읽고 마지막에 닫기 때문이고,
+   무대에서 겨냥할 면적도 모서리의 24x24 보다 크다 */
+.pop .popclose { align-self: flex-end; margin-top: var(--sp-24);
+  height: var(--btn-h); min-width: var(--btn-min-w); padding: 0 var(--btn-pad-x);
+  border-radius: var(--radius-md); background: var(--blue-tint); color: var(--blue-accent);
+  font-size: var(--fs-body); font-weight: var(--fw-bold); letter-spacing: var(--ls-body);
+  cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+  transition: background-color var(--dur-fast) var(--ease-out); }
+.pop .popclose:hover { background: var(--blue-hl); }
+
+/* 소제목 · 구역을 가르는 머리다. 크기 눈금을 늘리지 않고 이미 있는 32 를 쓴다.
+   소제목이 서면 그 아래 본문이 딸려 붙어 무대가 구역으로 쪼개진다.
+   면 안에서는 면이 이미 구역을 갈랐으므로 24/700 머리를 쓴다 */
+.subhead { font-size: var(--fs-claim); font-weight: var(--fw-bold); line-height: 44px;
+  letter-spacing: var(--ls-claim); color: var(--ink); }
+
+/* 리드 문장 · 머리 오른쪽 칸. 그 쪽을 여는 한 덩이가 여기 선다.
+   무대 안에 두면 무대의 세로를 먹고, 그만큼 창과 카드가 짧아진다 */
+.lead { position: absolute; left: var(--head-right-x); top: calc(var(--title-y) + var(--sp-8));
+  width: var(--head-right-w); font-size: var(--fs-body); font-weight: var(--fw-medium);
+  line-height: var(--lh-body); letter-spacing: var(--ls-body); color: var(--ink); }
+
+/* 예고 판 · 그 쪽의 결론이 이 강의 뒤로 미뤄지는 쪽에만 선다.
+   맺음은 면이 켜져서 "이 쪽이 끝났다" 를 말한다. 예고는 끝이 아니라 미룸이라 면을 주지 않는다.
+   면의 유무와 자리(왼쪽 아래 구석 대 아래 가운데)가 두 물건을 가른다.
+   아래 끝은 맺음과 같은 y 1000 이라 밴드의 기준선은 흔들리지 않는다 */
+.fore { position: absolute; left: var(--margin-x); right: var(--margin-x);
+  bottom: var(--close-bottom); width: auto; text-align: center;
+  font-size: var(--fs-claim); font-weight: var(--fw-bold); line-height: var(--lh-claim);
+  letter-spacing: var(--ls-claim); color: var(--ink);
+  opacity: 0; transition: opacity var(--dur-base) var(--ease-out); }
+.fore.on { opacity: 1; }
+
+/* 문서 판 · 자료 카드가 자료가 있다는 표시라면 이 판은 그 안을 펼친 것이다 */
+.docpanel { background: var(--surface); border-radius: var(--radius-sm);
+  padding: var(--sp-32) var(--sp-40); min-height: var(--docpanel-min-h); }
+.docpanel .ph { font-size: var(--fs-body); font-weight: var(--fw-bold);
+  line-height: 36px; letter-spacing: var(--ls-body); color: var(--ink); }
+.docpanel .pb { margin-top: var(--sp-12); font-size: var(--fs-body); font-weight: var(--fw-medium);
+  line-height: var(--lh-body); letter-spacing: var(--ls-body); color: var(--ink); }
+
+/* 표지 */
+.cover-bg { position: absolute; inset: 0; background: url("../assets/cover-bg.jpg") center/cover no-repeat; }
+.cover-scrim { position: absolute; inset: 0; background: var(--cover-scrim); }
+.cover-scrim2 { position: absolute; inset: 0; background: var(--cover-scrim-bottom); }
+.cover-wm { position: absolute; left: var(--margin-x); top: var(--cover-margin-y); }
+.cover-topright { position: absolute; right: var(--margin-x); top: var(--cover-margin-y);
+  height: var(--wm-ink-h); display: flex; align-items: center; font-family: var(--font-display);
+  font-size: var(--fs-note); font-weight: var(--fw-medium); letter-spacing: var(--ls-wide);
+  color: var(--on-dark-sub); }
+.cover-title { position: absolute; left: var(--margin-x); top: var(--cover-title-y);
+  font-family: var(--font-display); font-size: var(--fs-cover); font-weight: var(--fw-bold);
+  line-height: var(--lh-cover); letter-spacing: var(--ls-display); color: var(--on-dark); }
+.cover-tag { position: absolute; left: var(--margin-x); top: var(--cover-tag-y);
+  font-family: var(--font-display); font-size: var(--fs-body); font-weight: var(--fw-medium);
+  color: var(--on-dark-sub); }
+.cover-foot { position: absolute; right: var(--margin-x); bottom: var(--cover-foot-bottom);
+  text-align: right; font-family: var(--font-display); font-size: var(--fs-note);
+  font-weight: var(--fw-medium); line-height: var(--lh-note); color: var(--on-dark-sub); }
+</style>
+
+<div class="viewport" id="viewport" data-canvas="dark"><div class="stage" id="stage">
+<style>
+/* ===== 2쪽 질문 여섯 개 =====
+   여섯이 목록이 아니라 순서라는 것을 잇는 선이 아니라 세 가지 무게로 말한다.
+   지나온 질문 · 지금 질문 · 아직 오지 않은 질문 */
+/* 한 행이 "번호 · 질문 ......... 상태 문장" 으로 읽힌다.
+   상태 문장을 이름 아래로 내리면 행이 두 배로 벌어지고 오른쪽 1190 이 빈다.
+   같은 행 오른쪽 끝에 세로 중앙으로 두면 가로가 차고 행 높이가 흔들리지 않는다 */
+/* 여섯 줄이 우물 트레이 위에 올라간다. 배경 위에 홀로 놓인 흰 면은 화면이거나 종이라
+   고르는 것으로 읽히지 않는다. 트레이가 깔려야 층이 셋이 되어 마우스 없이 갈린다.
+   트레이가 무대 240..824 를 정확히 채운다.
+   안쪽 여백 8 × 2 를 뺀 568 을 여섯 줄이 나눠 갖는다. 6행 × 88 + 다섯 칸 × 8 = 568 이다.
+   행 높이는 누르는 것의 최소 높이 72 위에 있고 칸은 트레이 규격의 8 이다 */
+.traylist { height: 100%; }
+.qlist { display: flex; flex-direction: column; gap: var(--sp-8); }
+.qlist li { position: relative; }
+.qrow { position: relative; height: 88px; padding: 0 var(--sp-32);
+  display: flex; align-items: center; gap: var(--sp-24); }
+.qrow .num { width: 44px; flex: 0 0 44px; font-size: var(--fs-claim); font-weight: var(--fw-heavy);
+  color: var(--ink-muted); line-height: 46px; font-variant-numeric: tabular-nums;
+  transition: color var(--dur-base) var(--ease-out); }
+.qrow .qn { font-size: var(--fs-claim); font-weight: var(--fw-bold); line-height: 46px;
+  letter-spacing: var(--ls-claim); white-space: nowrap; color: var(--ink-muted);
+  transition: color var(--dur-base) var(--ease-out); }
+.qrow.past .num, .qrow.past .qn { color: var(--ink-support); }
+.qrow.cur .num { color: var(--blue-accent); }
+.qrow.cur .qn { color: var(--ink); }
+/* "지금" 칩은 현재 교시 표시라 첫 항목에 붙어 있고 열림 상태와 관계없이 늘 보인다.
+   열린 항목 표시는 흰 면과 글자 무게가 하고, 칩은 그것과 다른 형태로 구분된다 */
+.qrow .state { margin-left: auto; text-align: right; white-space: nowrap;
+  font-size: var(--fs-body); font-weight: var(--fw-medium); line-height: var(--lh-body);
+  letter-spacing: var(--ls-body); color: var(--ink-support);
+  opacity: 0; transition: opacity var(--dur-base) var(--ease-out); }
+.qrow.cur .state { opacity: 1; }
+
+/* ===== 3쪽 이미 잘 알고 있는 AI의 활용법들 =====
+   대화창을 청중이 처음 만나는 쪽이다. 세 쓰임이 각각 작은 대화 한 판이고
+   보낼 말이 이미 말풍선으로 올라가 있다. 여기서 세운 생김새를 뒤에서 계속 쓴다.
+   답이 한 낱말씩 차오르는 모양이 곧 이 쪽의 주장이다 */
+/* 카드 셋이 우물 트레이 위에 올라간다. 배경 위에 홀로 놓인 흰 면은 화면이거나 종이라
+   고르는 것으로 읽히지 않는다. 트레이가 깔려야 층이 셋이 되어 마우스 없이 갈린다.
+   트레이가 무대 240..824 를 다 쓰고, 안쪽 여백 8x2 와 판 사이 8x2 를 뺀 1728 을
+   세 판이 576 씩 나눠 갖는다. 담기는 판의 radius 는 트레이(32)보다 한 단 작은 24 다 */
+.tray3 { height: var(--stage-h-nosub); flex-direction: row; gap: var(--sp-8); }
+/* 말은 아래에서부터 쌓이므로 창 위쪽이 비고, 그것이 실제 대화창의 생김새다.
+   위가 빈 것을 구멍으로 보고 가운데로 몰지 않는다.
+   답이 앉을 말풍선은 정지 상태에서 이미 자리를 잡고 있다. 칸은 있고 글자만 없다 */
+.ucard { flex: 1 1 0; min-width: 0; border-radius: var(--radius-md); }
+/* 정지 상태에서 이 카드가 무엇인지 입력 바가 말한다. 보낼 요청이 필드에 담겨 있고
+   오른쪽 끝에 열린 전송 원이 붙어 있다. 실제 대화창에서 보내기 전의 질문이 그 모양이다.
+   누르는 곳은 원이 아니라 카드 전체이므로 원에는 조작을 걸지 않는다.
+   축소한 대화라 필드 글자는 말풍선과 같은 20/500 이다 (.bub--sm 과 같은 근거) */
+.ucard .stream { justify-content: flex-end; }
+.ucard .ask { display: none; }
+.ucard.on .ask { display: block; }
+/* 답이 앉을 칸은 정지 상태에 이미 잡혀 있되 면을 갖지 않는다.
+   우물 면을 미리 칠해 두면 글자 없는 회색 빈 상자가 화면에 남는다.
+   면은 글자와 함께 켜진다 */
+.ucard .out { background: transparent; }
+.ucard.on .out { background: var(--sunken); }
+/* 세 카드의 요청 줄 수가 1 · 4 · 3 으로 달라서 바 높이를 내용에 맡기면
+   흰 면이 끝나는 y 가 카드마다 달라진다. 트레이가 깔린 뒤로는 바와 트레이가 같은 우물 면이라
+   그 차이가 흰 판 아래가 들쭉날쭉한 것으로 보인다. 가장 긴 넉 줄에 맞춰 못박는다.
+   20 + (12 + 4행 116 + 12) + 20 = 180 */
+.ubar { height: 180px; background: var(--sunken); padding: var(--sp-20);
+  display: flex; align-items: flex-end; gap: var(--sp-16); }
+.ufld { flex: 1; min-width: 0; background: var(--surface); border-radius: var(--radius-md);
+  padding: var(--sp-12) var(--sp-20); font-size: var(--fs-note); font-weight: var(--fw-medium);
+  line-height: var(--lh-note); letter-spacing: var(--ls-body); color: var(--ink); cursor: text; }
+.ufld i { display: inline-block; width: 3px; height: 28px; margin-left: 3px; vertical-align: -6px;
+  background: var(--ink); animation: blink 1.06s steps(2, jump-none) infinite; }
+/* 보내고 나면 필드에서 글자가 사라지고 커서만 남는다 */
+.ucard.on .ufld .ut { display: none; }
+
+/* ===== 4쪽 구간 막대 장치 =====
+   옛 4쪽과 5쪽을 한 쪽으로 합쳤다. 두 쪽이 같은 막대를 같은 자리에 두고 있어서
+   넘겨도 화면이 달라지지 않았고 넘김 자체가 아무 일도 하지 못했다.
+   합치면 관찰과 명명이 한 화면에서 조작 순서로 이어진다.
+
+   비유와 함께 두 낱말 짚기와 뜻풀이 두 덩이가 없어졌다 (7차). 조작은 둘이다.
+   AI 적용을 켰다 껐다 하는 것과, 켠 상태에서 큰 문장과 예고가 함께 얹히는 것이다.
+   뜻풀이 칸이 빠져 아래 행이 76 에서 56 으로 줄었고, 그만큼 남는 세로를 막대가 가져가
+   행 키가 48 에서 56 으로 올라갔다. 빠진 자리에 다른 글을 끌어오지 않는다.
+
+   무대 240..824 = 584 를 이렇게 나눈다.
+     240..276  본문 한 줄 (36)
+     276..296  간격 20
+     296..824  장치 (528)
+   장치 안: padding 32 + 머리 행 88 + 20 + 막대 다섯 행 280 + 20 + 아래 행 56 + padding 32 = 528.
+   머리 행 왼쪽이 큰 문장이고 오른쪽이 합계다. 큰 문장이 막대 다섯 줄 위에 걸쳐 서므로
+   "막대 전체를 두고 하는 말" 이 자리로 드러난다.
+   아래 행은 버튼 하나뿐이고 오른쪽 끝에 선다 */
+.dev { background: var(--surface); border-radius: var(--radius-lg); padding: var(--sp-32); }
+.dev--pinned { position: absolute; left: 0; right: 0; top: 56px; height: 528px; }
+/* 머리 행. 왼쪽 큰 문장 칸은 정지 상태에서 비어 있고 조작이 그 자리를 채운다 */
+.dev .devhead { height: 88px; display: flex; align-items: center; justify-content: space-between;
+  gap: var(--sp-40); padding-right: 104px; }
+.dev .sum { display: flex; align-items: baseline; gap: var(--sp-8); white-space: nowrap; }
+.dev .sum b { font-size: var(--fs-claim); font-weight: var(--fw-heavy); color: var(--blue-accent);
+  font-variant-numeric: tabular-nums; letter-spacing: var(--ls-claim); line-height: 44px; }
+.dev .sum span { font-size: var(--fs-note); font-weight: var(--fw-medium); color: var(--ink-muted); }
+.rows { margin-top: var(--sp-20); }
+.grow { height: var(--sp-56); display: grid; grid-template-columns: 300px 1fr 80px; gap: var(--sp-24);
+  align-items: center; }
+.grow .gn { font-size: var(--fs-note); font-weight: var(--fw-medium); color: var(--ink); }
+.grow .gv { font-size: var(--fs-note); font-weight: var(--fw-bold); color: var(--ink-support);
+  text-align: right; font-variant-numeric: tabular-nums; }
+.track { position: relative; height: 40px; background: var(--blue-line); border-radius: var(--radius-round);
+  transition: box-shadow var(--dur-fast) var(--ease-out); }
+.track i { position: absolute; top: 0; height: 40px; border-radius: var(--radius-round);
+  background: var(--data-3); transition: left var(--dur-step) var(--ease-out), width var(--dur-step) var(--ease-out); }
+.track.key i { background: var(--data-1); }
+.track.lit { box-shadow: var(--ring-hover); }
+/* 아래 행. 버튼 하나뿐이라 오른쪽 끝에 선다 */
+.dev .ctl { margin-top: var(--sp-20); height: var(--btn-h);
+  display: flex; align-items: center; justify-content: flex-end; }
+
+/* 큰 문장. AI 를 적용한 뒤에 얹히고 한 번 나타나면 막대를 다시 꺼도 사라지지 않는다.
+   막대 전체를 두고 하는 말이지 지금 상태를 두고 하는 말이 아니기 때문이다.
+   칸은 정지 상태에 이미 잡혀 있어서 나타날 때 합계도 막대도 밀리지 않는다 */
+.bigsent { font-size: var(--fs-claim); font-weight: var(--fw-bold); line-height: var(--lh-claim);
+  letter-spacing: var(--ls-claim); white-space: nowrap;
+  opacity: 0; transition: opacity var(--dur-base) var(--ease-out); }
+.bigsent.on { opacity: 1; }
+</style>
+
+<!-- ========== 1쪽 · 표지 ========== -->
+<section class="slide active" data-canvas="dark">
+  <div class="cover-bg"></div>
+  <div class="cover-scrim"></div>
+  <div class="cover-scrim2"></div>
+  <div class="cover-wm"><span class="samsung-wordmark samsung-wordmark--white"></span></div>
+  <div class="cover-topright">AI TRANSFORMATION</div>
+  <div class="cover-title">AX 101</div>
+  <div class="cover-tag">Stop asking. Start delegating.</div>
+  <div class="cover-foot">Six sessions over six hours<br>No coding required</div>
+</section>
+
+<!-- ========== 2쪽 · 오늘 다루는 여섯 가지 ========== -->
+<section class="slide" data-canvas="light" data-page="2">
+  <div class="head"><span class="kicker">Lesson 1</span><span class="pageno">2 / 14</span></div>
+  <h1 class="ptitle">오늘 다루는 여섯 가지</h1>
+  <div class="area nosub">
+    <div class="tray traylist">
+    <ul class="qlist" id="qlist">
+      <li><div class="item item--flat qrow"><span class="num">1</span><span class="qn">AI란 무엇인가</span><span class="pill pill--blue now">지금</span><span class="state">AI가 답을 만드는 방식과 바꿀 수 있는 것을 압니다.</span></div></li>
+      <li><div class="item item--flat qrow"><span class="num">2</span><span class="qn">AI Agent란 무엇인가</span><span class="state">AI Agent에게 맡겨 보고 무엇이 다른지 압니다.</span></div></li>
+      <li><div class="item item--flat qrow"><span class="num">3</span><span class="qn">Claude Code로 일을 시키는 방법</span><span class="state">도구를 열어 지시하고 계획을 받고 결과를 확인합니다.</span></div></li>
+      <li><div class="item item--flat qrow"><span class="num">4</span><span class="qn">반복 작업을 넘기는 방법</span><span class="state">규칙과 순서와 연결과 분담을 내 말로 구분합니다.</span></div></li>
+      <li><div class="item item--flat qrow"><span class="num">5</span><span class="qn">맡길 업무를 고르는 방법</span><span class="state">내 업무에서 첫 번째로 맡길 일을 고릅니다.</span></div></li>
+      <li><div class="item item--flat qrow"><span class="num">6</span><span class="qn">업무 자동화와 회사 적용</span><span class="state">자동화 하나를 만들어 회사의 변화로 잇습니다.</span></div></li>
+    </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 3쪽 · 이미 잘 알고 있는 AI의 활용법들 ========== -->
+<section class="slide" data-canvas="light" data-page="3">
+  <div class="head"><span class="kicker">Lesson 1</span><span class="pageno">3 / 14</span></div>
+  <h1 class="ptitle">AI가 활용되는 기본적인 부분들</h1>
+  <div class="area nosub">
+    <div class="tray tray3" id="ucards">
+      <div class="item talk ucard">
+        <div class="talkhead"><span class="cap en">Translation</span><span class="nm">번역하기</span></div>
+        <div class="stream stream--tight">
+          <div class="bub me bub--sm ln ask">The company closed a Series B round<br>and opened a new office in Singapore.</div>
+          <div class="bub ai bub--sm out ln">이 회사는 시리즈 B를 마감하고<br>싱가포르에 새 사무소를 열었습니다.</div>
+        </div>
+        <div class="ubar">
+          <div class="ufld"><span class="ut">The company closed a Series B round<br>and opened a new office in Singapore.</span><i></i></div>
+          <button class="send mock" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V5"/><path d="M5 12l7-7 7 7"/></svg></button>
+        </div>
+      </div>
+      <div class="item talk ucard">
+        <div class="talkhead"><span class="cap en">Summarization</span><span class="nm">요약하기</span></div>
+        <div class="stream stream--tight">
+          <div class="bub me bub--sm ln ask">지난주 심사 회의에서 세 팀을 검토했습니다.<br>두 팀은 시장 자료가 부족해 보류했습니다.<br>한 팀은 기술 검증을 더 받기로 했습니다.<br>다음 회의는 재무 자료를 받은 뒤에 엽니다.</div>
+          <div class="bub ai bub--sm out ln">세 팀 중 두 팀은 자료가 부족해 보류했고<br>한 팀은 검증을 더 받기로 했습니다.</div>
+        </div>
+        <div class="ubar">
+          <div class="ufld"><span class="ut">지난주 심사 회의에서 세 팀을 검토했습니다.<br>두 팀은 시장 자료가 부족해 보류했습니다.<br>한 팀은 기술 검증을 더 받기로 했습니다.<br>다음 회의는 재무 자료를 받은 뒤에 엽니다.</span><i></i></div>
+          <button class="send mock" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V5"/><path d="M5 12l7-7 7 7"/></svg></button>
+        </div>
+      </div>
+      <div class="item talk ucard">
+        <div class="talkhead"><span class="cap en">Drafting</span><span class="nm">초안 만들기</span></div>
+        <div class="stream stream--tight">
+          <div class="bub me bub--sm ln ask">포트폴리오 분기 점검<br>신규 채용 두 명 완료<br>다음 라운드 준비 시작</div>
+          <div class="bub ai bub--sm out ln">이번 분기에 신규 채용 두 명을 마쳤고<br>다음 라운드 준비도 시작했습니다.</div>
+        </div>
+        <div class="ubar">
+          <div class="ufld"><span class="ut">포트폴리오 분기 점검<br>신규 채용 두 명 완료<br>다음 라운드 준비 시작</span><i></i></div>
+          <button class="send mock" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V5"/><path d="M5 12l7-7 7 7"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 이 쪽은 결론을 두지 않는다. 세 카드가 각각 결과를 남기는 것으로 이미 닫힌다 -->
+</section>
+
+<!-- ========== 4쪽 · AI를 사용해도 효과가 느껴지지 않는 이유 (옛 4쪽과 5쪽을 합쳤다) ========== -->
+<section class="slide" data-canvas="light" data-page="4">
+  <div class="head"><span class="kicker">Lesson 1</span><span class="pageno">4 / 14</span></div>
+  <h1 class="ptitle">AI를 사용해도 효과가 느껴지지 않는 이유</h1>
+  <div class="area nosub">
+    <p class="t-body ln">지금까지 우리는 묻고 답을 받는 방식으로 썼습니다.</p>
+    <div class="dev dev--pinned">
+      <div class="devhead">
+        <p class="bigsent" id="big4">답을 받는 구간만 짧아졌고<br><span class="acc">나머지 구간은 그대로입니다.</span></p>
+        <span class="sum"><b id="sumval">합계 230분</b><span>(예시)</span></span>
+      </div>
+      <div class="rows" id="grows">
+        <div class="grow"><span class="gn">요청 쓰기</span><span class="track" data-seg="0"><i></i></span><span class="gv" data-v="0">10분</span></div>
+        <div class="grow"><span class="gn">답 받기</span><span class="track key" data-seg="1"><i></i></span><span class="gv" data-v="1">30분</span></div>
+        <div class="grow"><span class="gn">검증</span><span class="track" data-seg="2"><i></i></span><span class="gv" data-v="2">30분</span></div>
+        <div class="grow"><span class="gn">문서 정리</span><span class="track" data-seg="3"><i></i></span><span class="gv" data-v="3">40분</span></div>
+        <div class="grow"><span class="gn">다음 사람에게 넘기기</span><span class="track" data-seg="4"><i></i></span><span class="gv" data-v="4">120분</span></div>
+      </div>
+      <div class="ctl">
+        <button class="btn" id="aibtn">AI 적용</button>
+      </div>
+    </div>
+  </div>
+  <p class="fore ln" id="fore4">무엇을 바꿔야 효과가 나타나는지는<br>오늘 마지막 시간에 답합니다.</p>
+</section>
+
+<style>
+.two { display: flex; gap: var(--gap); }
+.mid { align-items: center; }
+
+/* ===== 5쪽 다음 단어 예측하기 =====
+   3쪽에서 답이 한 낱말씩 차오르는 것을 봤으니, 이 쪽은 그 말풍선 하나를 확대해
+   안에서 무슨 일이 벌어지는지 보인다. 대화창 부품 가운데 말풍선만 꺼내 쓴 화면이다.
+   버튼은 확률대로 뽑는다. 늘 1등이 나오지 않고, 다시 돌리면 다른 문장이 나온다.
+   이 쪽이 주장하는 바가 조작의 결과로 그대로 나온다 */
+.wsent { display: block; max-width: none; white-space: nowrap; }
+.wsent b { font-weight: var(--fw-bold); color: var(--ink);
+  transition: color var(--dur-step) var(--ease-out); }
+.wsent b.just { color: var(--blue-accent); transition: none; }
+.wsent b.new { animation: seqin 380ms var(--ease-enter) both; }
+.wsent u { display: inline-block; width: 120px; height: 32px; vertical-align: -4px;
+  background: var(--blue-tint); border-radius: var(--radius-sm); text-decoration: none;
+  animation: waiting 1.6s var(--ease-inout) infinite; }
+.wsent u.gone { display: none; }
+@keyframes waiting { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+.wprev { height: 29px; margin-top: var(--sp-12); white-space: nowrap;
+  font-size: var(--fs-note); font-weight: var(--fw-medium); line-height: 29px;
+  color: var(--ink-muted); opacity: 0; transition: opacity var(--dur-base) var(--ease-out); }
+.wprev.on { opacity: 1; }
+.cands { margin-top: var(--sp-24); position: relative; height: 240px; }
+.cgroup { position: absolute; inset: 0; display: none; }
+.cgroup.on { display: block; }
+.crow { height: var(--sp-48); display: grid; grid-template-columns: 200px 1fr 70px; gap: var(--sp-24);
+  align-items: center; border-radius: var(--radius-sm);
+  transition: background-color var(--dur-base) var(--ease-out); }
+.crow .cw { font-size: var(--fs-note); font-weight: var(--fw-medium); color: var(--ink);
+  padding-left: var(--sp-12); }
+.crow .cp { font-size: var(--fs-note); font-weight: var(--fw-bold); color: var(--ink-support);
+  text-align: right; font-variant-numeric: tabular-nums; padding-right: var(--sp-12); }
+.crow .gauge span { background: var(--data-4); transition: background-color var(--dur-base) var(--ease-out); }
+.crow.picked { background: var(--blue-tint); }
+.crow.picked .cw { color: var(--blue-accent); font-weight: var(--fw-bold); }
+.crow.picked .cp { color: var(--blue-accent); }
+.crow.picked .gauge span { background: var(--blue-accent); }
+.wctl { margin-top: var(--sp-20); display: flex; align-items: center; justify-content: space-between; }
+
+/* ===== 6쪽 할루시네이션 =====
+   두 답이 견줌 관계라는 것을 배치가 말한다 (7차). 큰 흰 대화창 껍데기를 없애고
+   같은 크기의 흰 답 판 둘을 우물 트레이 위에 좌우로 나란히 놓는다.
+   껍데기가 둘을 감싸면 그 창이 주역이 되고 두 답은 그 안을 떠다니는 조각이 된다.
+   부제가 있으므로 무대는 284..824 (540) 이다.
+   왼쪽 560 은 딸림 열이고 면은 문서 판 하나뿐이다. 오른쪽 1160 이 주열이다 */
+.scol6 { width: var(--col-3); }
+.scol6 .docpanel { margin-top: var(--sp-32); }
+.scol6 .after { margin-top: var(--sp-32); }
+.srcwell .pb i { font-style: normal; transition: color var(--dur-base) var(--ease-out); }
+.srcwell .pb i.lit { color: var(--blue-accent); font-weight: var(--fw-bold); }
+/* 질문 말풍선 하나가 두 답 위에 걸쳐 서서 "같은 질문" 이 하나라는 것을 자리가 말한다.
+   그 아래 우물 트레이가 무대 바닥 824 까지 내려간다 */
+.mcol6 { width: var(--col-wide); height: var(--stage-h); display: flex; flex-direction: column; }
+.asked { display: flex; justify-content: flex-end; }
+.tray6 { flex: 1; min-height: 0; margin-top: var(--sp-24);
+  flex-direction: row; gap: var(--sp-8); }
+/* 답 판. 크기와 y 가 같아서 나란한 것 자체가 견줌이다.
+   누르는 곳은 판 전체이고 버튼은 그 판의 부품이다 (보낼 줄에서 원과 줄의 관계와 같다).
+   버튼은 primary 파랑에서 --blue-tint secondary 로 내려앉아 내용 밖에서 소리치지 않는다 */
+.anspanel { flex: 1 1 0; min-width: 0; padding: var(--sp-32);
+  display: flex; flex-direction: column; }
+.anspanel .atext { font-size: var(--fs-body); font-weight: var(--fw-medium);
+  line-height: var(--lh-body); letter-spacing: var(--ls-body); color: var(--ink); }
+.anspanel .atext i { font-style: normal; transition: color var(--dur-base) var(--ease-out); }
+.anspanel.on .atext i.bad { color: var(--alert); font-weight: var(--fw-bold); }
+/* 답 글과 버튼 사이에 세로가 남으면 버튼과 확인 결과를 판 바닥에 붙인다.
+   간격을 균등히 벌려 메우지 않는다 */
+.anspanel .btn { margin-top: auto; align-self: flex-start; pointer-events: none; }
+.anspanel:not(.on):hover .btn { background: var(--blue-hl); }
+.anspanel .verdict { margin-top: var(--sp-12); height: 58px; }
+
+/* ===== 7쪽 모델이 알고 있는 것과, 알 수 없는 것 =====
+   보내기 전의 질문이 실제로 생긴 모양을 그대로 가져왔다 (7차). 흰 줄 오른쪽 끝에
+   원형 전송 화살표가 붙고 그 다섯 줄이 우물 트레이 위에 올라간다.
+   형태가 "이것은 아직 안 보낸 질문이다" 와 "누른다" 를 함께 말한다.
+   줄을 누르면 그 질문이 오른쪽 대화창 입력 필드에 한 글자씩 들어갔다가 말풍선으로 올라간다.
+   판정을 글자로 통보하지 않는다. 안다와 모른다를 돌아온 답으로 보고,
+   보낸 줄의 면이 갈려서 경계가 남는다.
+   부제가 있으므로 무대는 284..824 (540) 이다 */
+/* 소제목 44 + 층 사이 12 를 뺀 484 를 트레이가 다 쓰고 아래 끝이 824 다.
+   안쪽 여백 8x2 와 줄 사이 8x4 를 뺀 436 을 다섯 줄이 나눠 87.2 씩 갖는다.
+   누르는 것의 최소 높이 72 위에 있다 */
+.kcol { width: var(--col-2); height: var(--stage-h); display: flex; flex-direction: column; }
+.traysend { flex: 1; min-height: 0; margin-top: var(--sp-12); }
+.traysend .sendrow { flex: 1 1 0; }
+/* 답이 온 줄만 흰 면으로 남고 모른다고 한 줄은 우물 면으로 내려앉는다 */
+.sendrow.sent[data-in="0"] { background: var(--sunken); }
+.kchat { width: var(--col-2); height: var(--stage-h); }
+.khead { position: relative; height: 29px; margin: var(--sp-24) var(--sp-24) 0; }
+.khead span { position: absolute; left: 0; top: 0; font-size: var(--fs-note);
+  font-weight: var(--fw-bold); color: var(--ink-support); line-height: 29px; opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-out); }
+.khead span.on { opacity: 1; }
+.stream--scroll { overflow-y: auto; scroll-behavior: smooth; }
+.stream--scroll::-webkit-scrollbar { width: 10px; }
+.stream--scroll::-webkit-scrollbar-track { background: transparent; }
+.stream--scroll::-webkit-scrollbar-thumb { background: var(--divider-strong); border-radius: var(--radius-round); }
+.stream--scroll { scrollbar-width: thin; scrollbar-color: var(--divider-strong) transparent; }
+/* 덩이의 1층 머리. 20/700 회색 라벨로 덩이를 시작하지 않는다 */
+.glabel { font-size: var(--fs-body); font-weight: var(--fw-bold); line-height: 36px; color: var(--ink); }
+
+/* ===== 8쪽 우리가 바꿀 수 있는 것, 프롬프트와 컨텍스트 =====
+   오른쪽 시연 칸을 통째로 걷어냈다 (7차). 이 쪽은 분류만 맡고 증명은 9쪽 실습이 맡는다.
+   자료를 넣기 전후로 답이 달라지는 것을 여기서 먼저 보이면 실습에서 발견할 것이 사라진다.
+
+   면의 유무가 곧 잠김과 열림이다. 같은 크기 카드 둘이 우물 트레이 위에 나란히 서는데
+   잠긴 쪽은 면을 갖지 않아 우물 바탕 그대로이고 열린 쪽만 흰 면을 얻는다.
+   이 쪽의 주장이 트레이의 형태 그 자체가 된다.
+
+   부제가 있으므로 무대는 284..824 (540) 이다.
+   소제목 44 + 12 + 트레이 364 + 48 + 본문 두 줄 72 = 540 */
+.tray8 { height: 364px; margin-top: var(--sp-12); flex-direction: row; gap: var(--sp-8); }
+.pcard { flex: 1 1 0; min-width: 0; padding: var(--sp-32);
+  display: flex; flex-direction: column; }
+/* 잠긴 카드도 눌린다. 열리지는 않고 확인 결과 세 줄이 그 카드 안에 붙는다.
+   그래서 cursor 는 not-allowed 가 아니라 pointer 다. 종전 표시는 실제 동작과 어긋났다 */
+.item.pcard--locked { background: transparent; }
+.pcard .rh { height: 44px; display: flex; align-items: center; gap: var(--sp-16); }
+.pcard .nm { font-size: var(--fs-claim); font-weight: var(--fw-bold);
+  line-height: 44px; letter-spacing: var(--ls-claim); }
+.pcard .rh .pill { margin-left: auto; }
+.lock { flex: 0 0 var(--icon); width: var(--icon); height: var(--icon); color: var(--ink-support);
+  transition: color var(--dur-base) var(--ease-out); }
+.pcard.buzz .lock { color: var(--alert); }
+.pcard .cp { margin-top: var(--sp-8); font-size: var(--fs-body); font-weight: var(--fw-medium);
+  line-height: var(--lh-body); letter-spacing: var(--ls-body); color: var(--ink); }
+/* 조작 뒤 확인 결과가 들어갈 칸을 정지 상태에 미리 잡아 둔다. 아래로 자라는 칸이다.
+   두 카드가 같은 칸을 가지므로 높이도 같다. 44 + 8 + 72 + 8 + 152 = 284 이고
+   카드 padding 32 를 더하면 트레이 안쪽 높이 348 과 맞는다 */
+.pcard .why { margin-top: var(--sp-8); height: 152px; opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-out); }
+.pcard.shown .why { opacity: 1; }
+.pcard .why .wl { font-size: var(--fs-body); font-weight: var(--fw-bold);
+  line-height: 36px; color: var(--ink); }
+.pcard .why .wb { font-size: var(--fs-body); font-weight: var(--fw-medium);
+  line-height: var(--lh-body); letter-spacing: var(--ls-body); color: var(--ink); }
+.pcard .why .wl + .wb { margin-top: var(--sp-8); }
+
+/* ===== 9쪽 실습 =====
+   오른쪽 참가자 화면에서 요청문은 한 번 놓이면 끝까지 그 자리 그대로다.
+   1단계와 2단계 사이에 달라지는 것은 첨부 하나뿐이라는 것이 화면으로 증명된다 */
+/* 세 단계가 우물 트레이 위에 올라간다. 현재 단계만 흰 판을 얻고 나머지는 우물 위 글줄이다.
+   트레이 아래 끝이 오른쪽 참가자 화면과 같은 812 다.
+   소제목 44 + 12 + 트레이 516 = 572 이고 무대는 240 에서 시작한다.
+   824 까지 12 를 남긴 것은 이 쪽의 맺음이 세 줄(판 높이 178)이라 아래 끝 1000 에서
+   위로 자라면 822 에서 시작하기 때문이다. 두 열이 824 까지 내려가면 맺음과 겹친다 */
+.traysteps { height: 516px; }
+.traysteps .steps { flex: 1; min-height: 0; }
+.steps { display: flex; flex-direction: column; gap: var(--sp-8); }
+.step { flex: 1 1 auto; padding: var(--sp-12) var(--sp-32);
+  display: grid; grid-template-columns: 64px 1fr; align-content: center; }
+.step .sn { font-size: var(--fs-claim); font-weight: var(--fw-heavy); color: var(--ink-muted);
+  line-height: 44px; transition: color var(--dur-base) var(--ease-out); }
+.step.cur .sn { color: var(--blue-accent); }
+.step .sh { font-size: var(--fs-claim); font-weight: var(--fw-bold); line-height: 44px;
+  letter-spacing: var(--ls-claim); }
+.step .sd { grid-column: 2; margin-top: var(--gap-layer); font-size: var(--fs-body);
+  font-weight: var(--fw-medium); line-height: var(--lh-body); letter-spacing: var(--ls-body);
+  color: var(--ink-support); }
+/* 오른쪽 참가자 화면은 묘사가 아니라 복제다. 참가자가 자기 노트북에서 보는 것과 같아야
+   따라온다. 그래서 대화창 부품에서 상태 줄과 첨부 칩과 입력 칸을 그대로 꺼내 쓴다.
+   요청문은 한 번 놓이면 끝까지 같은 자리에 같은 글자로 있고 첨부 한 줄만 더해진다 */
+.pscreen { width: var(--col-2); height: 516px; margin-top: var(--gap-layer); }
+.pstate { position: relative; height: 29px; margin: var(--sp-24) var(--sp-24) 0; }
+.pstate span { position: absolute; left: 0; top: 0; font-size: var(--fs-note);
+  font-weight: var(--fw-bold); color: var(--ink-support); line-height: 29px; opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-out); }
+.pstate span.on { opacity: 1; }
+.plist { flex: 1; min-height: 0; padding: var(--sp-24); display: flex; flex-direction: column;
+  justify-content: flex-end; font-size: var(--fs-body); font-weight: var(--fw-medium);
+  line-height: var(--lh-body); letter-spacing: var(--ls-body); color: var(--ink); opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-out); }
+.plist.on { opacity: 1; }
+.composer { background: var(--sunken); padding: var(--sp-24); }
+.attslot { height: var(--doc-h-1); }
+.attslot .doc { opacity: 0; }
+.attslot .doc.on { opacity: 1; }
+/* 입력 칸과 원형 전송이 한 행이다. 전송은 칸의 아래 끝에 맞춰 앉는다 */
+.cbar { margin-top: var(--sp-16); display: flex; align-items: flex-end; gap: var(--sp-16); }
+.cfield { flex: 1; min-width: 0; background: var(--surface); border-radius: var(--radius-md);
+  padding: var(--sp-16) var(--sp-20); font-size: var(--fs-body); font-weight: var(--fw-medium);
+  line-height: var(--lh-body); letter-spacing: var(--ls-body); color: var(--ink); cursor: text; }
+.cfield i { display: inline-block; width: 3px; height: 28px; margin-left: 3px;
+  vertical-align: -6px; background: var(--ink); animation: blink 1.06s steps(2, jump-none) infinite; }
+</style>
+
+<!-- ========== 5쪽 · 다음 단어 예측하기 ========== -->
+<section class="slide" data-canvas="light" data-page="5">
+  <div class="head"><span class="kicker">Lesson 1</span><span class="pageno">5 / 14</span></div>
+  <h1 class="ptitle">AI가 답변을 <span class="hl">생성하는 방식</span></h1>
+  <div class="psub">Large Language Model · Next-token prediction</div>
+  <div class="area">
+    <div class="two">
+      <!-- 명명 세 줄이 본문에서 팝업 카드로 내려갔다. 빠진 세로를 다른 글로 채우지 않는다.
+           팝업 낱말이 있는 문단에는 인라인 강조를 두지 않는다. 둘 다 --blue-accent 라
+           한 문단에 같이 있으면 어느 것이 눌리는지 갈리지 않는다 -->
+      <div style="width:860px">
+        <p class="t-claim ln"><span class="popword" data-pop="pop-llm">LLM</span>은 답을 한 단어씩 만들면서<br>다음에 올 단어를 확률적으로 고르는 모델입니다.</p>
+        <p class="t-body ln" style="margin-top:64px">가장 확률이 높은 단어가 늘 뽑히지는 않아서<br><span class="acc">같은 질문에도 답이 조금씩 달라집니다.</span></p>
+      </div>
+      <div class="dev" style="width:860px;height:540px">
+        <div class="bub ai bub--lg wsent" id="wsent"><b>이 회사는</b><span id="wwords"></span> <u id="wslot"></u></div>
+        <div class="wprev" id="wprev">직전 문장 · <span id="wprevtext"></span></div>
+        <div class="cands" id="cands"></div>
+        <div class="wctl">
+          <span class="dots" id="wdots"><i></i><i></i><i></i><i></i></span>
+          <button class="btn" id="wbtn">다음 단어</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 팝업 카드 · 핵심 문장의 LLM 을 누르면 그 낱말 아래에 선다.
+       왼쪽 글 열 안(x 80..640)에 서므로 오른쪽 장치(x 980..1840)를 덮지 않는다 -->
+  <div class="pop" id="pop-llm">
+    <div class="poph ln">Large Language Model (거대언어모델)</div>
+    <div class="popb ln">어떤 단어 다음에 어떤 단어가 오는지<br>방대한 공개 텍스트에서 학습한 모델입니다.<br>오늘 쓰는 대화형 AI는 이 모델로 만듭니다.</div>
+    <span class="popclose">닫기</span>
+  </div>
+  <p class="close ln" id="close6">다음 단어 하나를 고르는 일을 되풀이해 답을 만듭니다.</p>
+</section>
+
+<!-- ========== 6쪽 · 할루시네이션 ========== -->
+<section class="slide" data-canvas="light" data-page="6">
+  <div class="head"><span class="kicker">Lesson 1</span><span class="pageno">6 / 14</span></div>
+  <!-- 제목이 한 낱말이라 하이라이트를 걸지 않는다. 한두 낱말만 거는 규칙에서
+       한 낱말짜리 제목에 걸면 제목 전체가 걸리는 것이 되어 강조가 사라진다 -->
+  <h1 class="ptitle">할루시네이션</h1>
+  <div class="psub">Hallucination</div>
+  <div class="area">
+    <div class="two">
+      <div class="scol6">
+        <p class="t-claim ln">LLM은 다음에 나올 단어를<br>확률적으로 골라서 생성하기 때문에<br><span class="acc">잘못된 내용이더라도 문장을 읽어 보면<br>그럴싸하다고 느껴집니다.</span></p>
+        <div class="docpanel srcwell">
+          <div class="ph ln">자료 · 미리내로보틱스 회사 소개문 (가상)</div>
+          <div class="pb ln">2023년에 설립된 물류 로봇 회사입니다.<br>물류창고에서 쓰는 자율이동로봇을 만듭니다.<br><i id="srcline3">지금까지 시범 도입 고객은 세 곳입니다.</i></div>
+        </div>
+        <p class="t-body ln after">할루시네이션은 답을 만드는 방식에서 나오므로<br><span class="acc">성능이 좋아져도 완전히 없어지지는 않습니다.</span></p>
+      </div>
+      <div class="mcol6">
+        <div class="asked"><div class="bub me ln">이 회사를 한 문단으로 요약해 주세요.</div></div>
+        <div class="tray tray6">
+          <div class="item anspanel" id="ansL">
+            <div class="atext ln">2023년 설립된 물류 로봇 회사입니다.<br>물류창고용 자율이동로봇을 만듭니다.<br>시범 도입 고객은 세 곳입니다.</div>
+            <button class="btn btn--sec" tabindex="-1">자료와 대조</button>
+            <div class="verdict ln">자료와 일치합니다.</div>
+          </div>
+          <div class="item anspanel" id="ansR">
+            <div class="atext ln">2023년 설립된 물류 로봇 회사입니다.<br>물류창고용 자율이동로봇을 만듭니다.<br>시범 도입 고객은 <i class="bad">열두 곳</i>입니다.</div>
+            <button class="btn btn--sec" tabindex="-1">자료와 대조</button>
+            <div class="verdict no ln">고객 수가 자료와 다릅니다.<br>소개문에는 세 곳이라고 적혀 있습니다.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="close ln" id="close7">두 답은 자료와 맞춰 보기 전까지 구별되지 않았습니다.</p>
+</section>
+
+<!-- ========== 7쪽 · 모델이 알고 있는 것과, 알 수 없는 것 ========== -->
+<section class="slide" data-canvas="light" data-page="7">
+  <div class="head"><span class="kicker">Lesson 1</span><span class="pageno">7 / 14</span></div>
+  <h1 class="ptitle">모델이 알고 있는 것과, 알 수 없는 것</h1>
+  <div class="psub">Training data · Knowledge cutoff</div>
+  <!-- 원고의 "본문 (목록 아래)" 세 줄이 머리 오른쪽 리드 칸에 선다.
+       무대 안에 두면 무대의 세로를 먹고 트레이의 줄 높이가 72 아래로 내려간다.
+       머리 오른쪽 칸은 6차에서 "무대 안에 두면 무대의 세로를 먹고 그만큼 창과 카드가
+       짧아진다" 는 이유로 만든 자리다.
+       팝업 낱말이 있는 문단이라 인라인 강조를 두지 않는다 -->
+  <p class="lead ln">모델이 학습을 끝낸 시점을 <span class="popword" data-pop="pop-cut">지식 컷오프</span>라고 하고<br>그 뒤에 일어난 일은 모델 안에 없습니다.<br>공개된 적 없는 자료도 들어 있지 않습니다.</p>
+  <div class="area">
+    <div class="two">
+      <div class="kcol">
+        <div class="subhead ln">모델 안에 있는 것과 없는 것</div>
+        <ul class="tray traysend" id="klist">
+          <li class="item sendrow" data-in="1" data-q="0"><span class="sq ln">인터넷에 공개된 기술 소식</span><span class="send" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V5"/><path d="M5 12l7-7 7 7"/></svg></span></li>
+          <li class="item sendrow" data-in="0" data-q="1"><span class="sq ln">우리 회사가 만든 내부 문서</span><span class="send" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V5"/><path d="M5 12l7-7 7 7"/></svg></span></li>
+          <li class="item sendrow" data-in="0" data-q="2"><span class="sq ln">우리 팀의 투자 검토 기준</span><span class="send" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V5"/><path d="M5 12l7-7 7 7"/></svg></span></li>
+          <li class="item sendrow" data-in="0" data-q="3"><span class="sq ln">지금 진행 중인 딜의 상황</span><span class="send" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V5"/><path d="M5 12l7-7 7 7"/></svg></span></li>
+          <li class="item sendrow" data-in="0" data-q="4"><span class="sq ln">방금 내가 알려 준 내용</span><span class="send" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V5"/><path d="M5 12l7-7 7 7"/></svg></span></li>
+        </ul>
+      </div>
+      <!-- 대화창이 284 에서 824 까지 다 쓴다 (종전 384 높이).
+           정지 상태는 머리글과 빈 칸과 커서가 깜빡이는 입력 바다. 실제 새 대화의 모습이다 -->
+      <div class="talk kchat">
+        <div class="khead" id="khead">
+          <span class="ln on">대화</span>
+          <span class="ln">새 대화</span>
+        </div>
+        <div class="stream stream--scroll" id="kstream"></div>
+        <div class="inbar">
+          <div class="fld" id="kfld"><span id="kfldtext"></span><i></i></div>
+          <button class="send mock" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V5"/><path d="M5 12l7-7 7 7"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 팝업 카드 · 리드 칸의 지식 컷오프 아래에 선다. 오른쪽 끝이 x 1840 을 넘으므로
+       x 1280..1840 에 서고, 왼쪽 트레이(x 80..940)를 덮지 않는다 -->
+  <div class="pop" id="pop-cut">
+    <div class="poph ln">지식 컷오프 (Knowledge cutoff)</div>
+    <div class="popb ln">모델은 정해진 시점까지 모은 글로 학습하고<br>그 뒤로는 새로 배우지 않습니다.<br>그 시점은 모델마다 다릅니다.</div>
+    <span class="popclose">닫기</span>
+  </div>
+  <p class="close ln" id="close8">우리 회사 일은 물어볼 때마다 함께 넣어 줘야 합니다.</p>
+</section>
+
+<!-- ========== 8쪽 · 우리가 바꿀 수 있는 것, 프롬프트와 컨텍스트 ========== -->
+<section class="slide" data-canvas="light" data-page="8">
+  <div class="head"><span class="kicker">Lesson 1</span><span class="pageno">8 / 14</span></div>
+  <h1 class="ptitle">우리가 바꿀 수 있는 것, 프롬프트와 컨텍스트</h1>
+  <div class="psub">Prompt · Context · Prompt engineering</div>
+  <div class="area">
+    <div class="subhead ln">결과를 정하는 두 가지</div>
+    <div class="tray tray8">
+      <div class="item pcard pcard--locked" id="routeT">
+        <div class="rh">
+          <svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>
+          <span class="nm">사전 학습</span><span class="pill pill--ink">잠김</span>
+        </div>
+        <div class="cp ln">모델을 만들 때 이미 끝난 학습이라<br>지금은 되돌릴 수 없습니다.</div>
+        <div class="why">
+          <div class="wb ln">우리가 모델을 학습시킨다고 말해도<br>실제로는 프롬프트와 컨텍스트로<br><span class="acc">원하는 답 쪽으로 이끌 뿐입니다.</span></div>
+        </div>
+      </div>
+      <div class="item pcard" id="routeI">
+        <div class="rh"><span class="nm">프롬프트와 컨텍스트</span><span class="pill pill--blue">열림</span></div>
+        <div class="cp ln">우리가 넣는 요청과 자료라<br>매번 바꿔 넣을 수 있습니다.</div>
+        <div class="why">
+          <div class="wl ln">우리가 넣을 수 있는 것</div>
+          <div class="wb ln">내가 써서 보내는 요청 문장<br>요청에 함께 붙이는 첨부 자료<br>되풀이할 일을 적어 둔 스킬</div>
+        </div>
+      </div>
+    </div>
+    <p class="t-body ln" style="margin-top:48px">자료를 첨부하면 다음 단어의 확률이<br><span class="acc">자료 내용 쪽으로 쏠립니다.</span></p>
+  </div>
+  <p class="close ln" id="close9">이 일을 프롬프트 엔지니어링이라고 부릅니다.</p>
+</section>
+
+<!-- ========== 9쪽 · 자료를 주기 전과 준 뒤의 답 비교 (실습) ========== -->
+<section class="slide" data-canvas="light" data-page="9">
+  <div class="head"><span class="kicker">Lesson 1</span><span class="pageno">9 / 14</span></div>
+  <h1 class="ptitle">자료를 주기 전과 준 뒤의 답 비교</h1>
+  <div style="position:absolute;right:80px;top:124px"><span class="pill pill--blue">실습 · 10분</span></div>
+  <div class="area nosub">
+    <div class="two">
+      <div style="width:860px">
+        <div class="subhead ln">실습 자료 폴더 · 미리내로보틱스 회사 소개문 (가상)</div>
+        <div class="tray traysteps" style="margin-top:12px">
+        <div class="steps" id="steps">
+          <div class="item item--flat step"><span class="sn">1</span><span class="sh">자료 없이 요청</span><div class="sd ln">Claude에서 새 대화를 열고<br>아래 요청을 그대로 보냅니다.</div></div>
+          <div class="item item--flat step"><span class="sn">2</span><span class="sh">자료를 첨부해 같은 요청</span><div class="sd ln">새 대화를 열고 회사 소개문을 첨부한 뒤<br>같은 요청을 그대로 다시 보냅니다.<br>같은 대화에서 보내면 비교가 흐려집니다.</div></div>
+          <div class="item item--flat step"><span class="sn">3</span><span class="sh">두 답 비교</span><div class="sd ln">두 답에서 달라진 대목을 찾아서<br>옆 사람과 맞춰 봅니다.</div></div>
+        </div>
+        </div>
+      </div>
+      <div style="width:860px">
+        <div class="subhead ln">참가자 화면</div>
+        <div class="talk pscreen">
+          <div class="pstate" id="pt10">
+            <span class="ln on">새 대화 · 첨부 없음</span>
+            <span class="ln">새 대화 · 회사 소개문 첨부</span>
+          </div>
+          <div class="plist ln" id="plist10">회사가 무엇을 하는 곳인지<br>검토에서 볼 항목이 무엇인지<br>숫자가 어디에서 나왔는지</div>
+          <div class="composer">
+            <div class="attslot"><span class="doc doc--fit" id="att10"><span class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path></svg></span><span class="dtxt"><span class="dn ln">회사 소개문</span></span></span></div>
+            <div class="cbar">
+              <div class="cfield ln">미리내로보틱스가 무엇을 하는 회사이고<br>투자 검토에서 무엇을 봐야 하는지 요약해 주세요.<i></i></div>
+              <button class="send mock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V5"></path><path d="M5 12l7-7 7 7"></path></svg></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="close ln" id="close10">도구도 질문도 그대로였고 준 것만 바꿨습니다.<br><span class="acc">자료가 없으면 일반론이 오고<br>자료를 주면 그 자료 안에서 답합니다.</span></p>
+</section>
+
+<style>
+/* ===== 10쪽 컨텍스트 : AI가 읽는 것과 읽지 못하는 것 =====
+   조작 자체가 컨텍스트의 정의다. 접힌 상태에서는 방금 쓴 요청 한 줄만 보이고,
+   펼치면 그 위로 기본 지침과 지금까지의 대화와 첨부한 소개문이 드러난다.
+   칸은 처음부터 잡혀 있고 줄이 아래에서부터 채워지므로, 아래로 자라지 않고 위로 자란다.
+   내가 쓴 것은 맨 아래 한 줄뿐이라는 사실이 자라는 방향으로 보인다 */
+.col3 { display: flex; gap: var(--gap); }
+/* 소제목이 32 로 서면서 한 열에 넷을 세로로 쌓을 수 없다.
+   아래 두 덩이를 좌우로 갈라 놓으면 소제목이 커진 만큼 구역이 눈에 나뉜다.
+   410 칸에 24/500 본문이 들어가는 것은 실측으로 확인했다 (가장 긴 줄 367) */
+.pair { display: flex; gap: var(--gap); }
+.pair > .chunk { width: var(--col-4); }
+/* 창은 무대 바닥(y 824)에 못박히고 위로 자란다. 접힌 상태는 담긴 한 줄만큼만 높다.
+   조작 뒤에 나타날 칸을 미리 잡는 규칙은 아래로 자라는 칸의 것이다.
+   이 창은 아래 끝이 고정이라 위로 자라도 아무것도 밀지 않고,
+   접힌 높이와 펼친 높이의 차이가 곧 이 쪽의 주장이다.
+   고정 높이를 두면 그 차이가 사라지고 커다란 빈 상자만 남는다 */
+.readcol { position: relative; width: var(--col-2); height: var(--stage-h-nosub); }
+/* 트레이가 무대 바닥(y 824)에 못박히고 안의 창이 위로 자라면 트레이도 함께 자란다.
+   높이에 전환을 걸지 않는다. 위 끝은 즉시 올라가고 새로 드러난 칩만 또렷해진다 */
+.trayread { position: absolute; left: 0; right: 0; bottom: 0; }
+.item.readbox { border-radius: var(--radius-md);
+  display: flex; flex-direction: column; overflow: hidden; }
+/* 칩 하나만 담은 트레이다. 그릇이 하는 일은 개수를 세는 것이 아니라
+   그 판이 들어 올려져 있다는 것을 말하는 것이다 */
+.trayblock { width: var(--col-2); }
+.readlabel { padding: var(--sp-24) var(--sp-24) 0; font-size: var(--fs-body);
+  font-weight: var(--fw-bold); line-height: 36px; color: var(--ink);
+  transition: color var(--dur-fast) var(--ease-out); }
+/* 우물 면은 담긴 칩만큼만 잡는다. 높이를 미리 잡으면 접힌 상태가 빈 상자가 된다 */
+.ctxfill { margin: var(--sp-16) var(--sp-24); padding: var(--sp-16);
+  border-radius: var(--radius-md); background: var(--sunken);
+  display: flex; flex-direction: column; gap: var(--sp-16); }
+.ctxfill .doc { flex: 0 0 auto; }
+.ctxfill .doc + .doc { margin-top: 0; }
+.doc.above { display: none; }
+/* 위 끝은 즉시 올라가고 새로 드러난 칩만 또렷해진다. 높이 전환을 걸지 않는다 */
+.readbox.open .doc.above { display: flex; animation: seqin var(--dur-base) var(--ease-enter) both; }
+.outrow { cursor: pointer;
+  --ring-c: transparent;
+  box-shadow: inset 0 0 0 2px var(--ring-c);
+  transition: box-shadow var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out); }
+.outrow:hover { --ring-c: var(--blue-soft); }
+.outrow:hover .dn { color: var(--blue-accent); }
+/* 소제목 아래 본문까지는 12 다 */
+.chunk .bd { margin-top: var(--sp-12); font-size: var(--fs-body); font-weight: var(--fw-medium);
+  line-height: var(--lh-body); letter-spacing: var(--ls-body); color: var(--ink); }
+
+/* ===== 11쪽 토큰 =====
+   조각 경계와 개수는 원고가 실제 토크나이저로 재서 확정한 값이다.
+   구현은 토큰을 계산하지 않고 그 표의 조각을 순서대로 옮기기만 한다.
+   조각 앞의 공백은 조각 안에 그대로 담는다. 조각이 낱말 단위가 아니라는 것이 거기서 보인다 */
+.tokstack { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: var(--sp-24); }
+.tokrow { height: 56px; display: flex; align-items: center; }
+.tokplain { font-size: var(--fs-claim); font-weight: var(--fw-bold); letter-spacing: var(--ls-claim);
+  white-space: nowrap; }
+.tokplain.en { font-family: var(--font-display); font-weight: var(--fw-bold); }
+.toks { display: flex; gap: 8px; align-items: center; }
+.toks b { padding: 4px 10px; border-radius: var(--radius-sm); background: var(--blue-tint);
+  color: var(--ink); font-size: var(--fs-claim); font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-claim); white-space: pre; }
+.toks.enline b { background: var(--sunken); font-family: var(--font-display); }
+.hidden { display: none; }
+.tokfoot { display: flex; align-items: center; justify-content: space-between; }
+.tokcount { height: 44px; font-size: var(--fs-claim); font-weight: var(--fw-heavy);
+  color: var(--blue-accent); line-height: 44px; font-variant-numeric: tabular-nums;
+  letter-spacing: var(--ls-claim); opacity: 0; transition: opacity var(--dur-base) var(--ease-out); }
+.tokcount.on { opacity: 1; }
+/* 해설은 두 문장이 모두 쪼개진 뒤에 켜진다. 조작 전에 띄우면 결론을 먼저 말하는 쪽이 된다.
+   조각 수(결과 수치 32/800)가 머리이고 이 줄이 그 몸이라 한 덩이로 붙는다 */
+.toknote { margin-top: var(--sp-8); font-size: var(--fs-body); font-weight: var(--fw-medium);
+  line-height: var(--lh-body); letter-spacing: var(--ls-body); color: var(--ink);
+  opacity: 0; transition: opacity var(--dur-base) var(--ease-out); }
+.toknote.on { opacity: 1; }
+.tokctl { display: flex; gap: var(--sp-20); }
+
+/* ===== 12쪽 컨텍스트 윈도우 =====
+   빈 대화에서 시작한다. Claude 를 실행해야 시스템 프롬프트가 0에서 2,000으로 올라간다.
+   보내지 않았는데 이미 차 있다는 말이 눈앞에서 일어난다 */
+.chat { width: var(--col-wide); height: var(--stage-h); }
+.msgs { overflow-y: auto; scroll-behavior: smooth; }
+.msgs::-webkit-scrollbar { width: 10px; }
+.msgs::-webkit-scrollbar-track { background: transparent; }
+.msgs::-webkit-scrollbar-thumb { background: var(--divider-strong); border-radius: var(--radius-round); }
+.msgs { scrollbar-width: thin; scrollbar-color: var(--divider-strong) transparent; }
+/* 오른쪽 범례와 서로를 가리키는 조작이 걸려 있으므로 이 말풍선만 커서와 링을 얻는다 */
+#msgs .bub { cursor: pointer; }
+#msgs .bub:hover { box-shadow: var(--ring-hover); }
+/* 위로 더 있다는 것을 위쪽 가장자리가 알린다. 겹쳐 뜨는 막대가 없는 브라우저에서도 보인다 */
+.chat .above { position: absolute; left: 0; right: 0; top: 0; height: 44px; z-index: 1;
+  pointer-events: none; opacity: 0; transition: opacity var(--dur-base) var(--ease-out);
+  background: linear-gradient(180deg, var(--surface) 0%, rgba(255, 255, 255, 0) 100%); }
+.chat .above.on { opacity: 1; }
+/* 대화가 시작되기 전 상태. 실행해야 시스템 프롬프트가 들어오고 그때 전송이 열린다.
+   말이 쌓이는 칸만 덮고 입력 바는 덮지 않는다. 실행 전의 잠긴 전송 버튼이 보여야
+   실행을 누른 순간 잠김이 열림으로 갈리는 것이 눈에 든다 */
+.runbox { position: absolute; left: 0; right: 0; top: 0; bottom: var(--inputbar-h);
+  z-index: 2; display: flex; align-items: center;
+  justify-content: center; background: var(--surface);
+  transition: opacity var(--dur-base) var(--ease-out); }
+.runbox.gone { opacity: 0; pointer-events: none; }
+.runcol { display: flex; flex-direction: column; align-items: center; gap: var(--sp-24); }
+.anspanel.on .verdict { opacity: 1; }
+/* 오른쪽 열은 컨텍스트 판과 그 아래 곁 문장 넷으로 284 에서 824 를 다 쓴다.
+   348 + 48 + 144 = 540 이다 */
+.ctxcol { width: var(--col-3); }
+.ctxcol > p { margin-top: var(--gap-block); }
+.ctxpane { width: 100%; height: 348px; padding: var(--sp-24);
+  display: flex; flex-direction: column; }
+.two.top { align-items: flex-start; }
+/* 전송이 다 쓰인 상태. 잠긴 것이 아니라 소진된 것이라 커서를 바꾸지 않는다 */
+.send.done { cursor: default; }
+.ctxpane .tot { height: 36px; display: flex; align-items: baseline; gap: var(--sp-12); }
+.ctxpane .tot b { font-size: var(--fs-claim); font-weight: var(--fw-heavy); color: var(--blue-accent);
+  font-variant-numeric: tabular-nums; letter-spacing: var(--ls-claim); line-height: 36px; }
+.ctxpane .tot span { font-size: var(--fs-note); font-weight: var(--fw-medium); color: var(--ink-support);
+  font-variant-numeric: tabular-nums; }
+.ctxstack { position: relative; margin-top: var(--sp-16); height: 140px; }
+/* 실행 전에는 오른쪽도 비어 있다. 아무것도 보내지 않은 상태가 화면에 그대로 있어야
+   실행을 누른 순간 0에서 2,000으로 올라가는 일이 눈앞에서 벌어진다 */
+.ctxempty { position: absolute; left: 0; top: 0;
+  transition: opacity var(--dur-base) var(--ease-out); }
+.ctxstack.empty .legend { opacity: 0; }
+.ctxstack:not(.empty) .ctxempty { opacity: 0; }
+.legend { display: flex; flex-direction: column;
+  transition: opacity var(--dur-base) var(--ease-out); }
+/* 범례와 말풍선이 서로를 가리킨다. 가리키기 조작이 걸려 있으므로 커서와 링을 얻는다 */
+.lg { height: 24px; display: grid; grid-template-columns: 14px 1fr auto; align-items: center;
+  gap: var(--sp-16); border-radius: var(--radius-sm); cursor: pointer;
+  --ring-c: transparent; box-shadow: inset 0 0 0 2px var(--ring-c);
+  transition: box-shadow var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out); }
+.lg i { width: 14px; height: 14px; border-radius: var(--radius-round); }
+.lg .nm { font-size: var(--fs-note); font-weight: var(--fw-medium); color: var(--ink);
+  transition: color var(--dur-fast) var(--ease-out); }
+.lg .vl { font-size: var(--fs-note); font-weight: var(--fw-bold); color: var(--ink-support);
+  text-align: right; font-variant-numeric: tabular-nums; }
+.lg.zero .nm, .lg.zero .vl { color: var(--ink-muted); }
+.lg.lit { --ring-c: var(--blue-soft); }
+.lg:hover { --ring-c: var(--blue-soft); }
+.lg:hover .nm { color: var(--blue-accent); }
+/* 단계마다 갈아 끼우는 해설 한 줄. 컨텍스트 판 안 아래쪽에 둔다.
+   대화창 아래 절대 좌표에 띄워 두면 그만큼 대화창을 늘릴 수 없다.
+   두 줄 자리를 미리 잡아 두어 단계가 바뀔 때 아래가 밀리지 않는다.
+   크기는 놓인 칸의 폭이 정한다. 판 안쪽이 512 라 20/500 이고,
+   24 로 깔면 가장 긴 해설(552)이 꺾여 마지막 줄에 한 어절만 남는다 */
+.notepane { position: relative; margin-top: var(--sp-24); height: 58px; }
+.notepane > div { position: absolute; left: 0; top: 0; width: 100%; font-size: var(--fs-note);
+  font-weight: var(--fw-medium); line-height: var(--lh-note); letter-spacing: var(--ls-body);
+  color: var(--ink-support); display: none; }
+.notepane > div.on { display: block; }
+.details { position: absolute; inset: 0; pointer-events: none; opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-out); }
+.details > div { position: absolute; left: 0; top: 0; font-size: var(--fs-note);
+  font-weight: var(--fw-medium); line-height: 29px; color: var(--ink-support); display: none; }
+.details > div.on { display: block; }
+.ctxstack.detail .legend { opacity: 0; }
+.ctxstack.detail .details { opacity: 1; }
+
+/* ===== 13쪽 환각 =====
+   출처를 목록으로 뽑지 않고 답변 말풍선 안에 각주로 둔다.
+   목록이면 검증할 대상처럼 보이지만 답 안에 박혀 있으면 그냥 읽고 넘어가게 되고,
+   이 쪽이 하려는 말이 바로 그 넘어감이다.
+   보이는 표시는 위첨자 하나뿐이고 누르는 곳은 그 각주가 달린 줄 전체다 */
+/* 글 열 하나에 대화창 하나다 (7차). 세 열이 비슷한 무게로 나란히 서면 어디를 먼저
+   읽을지 배치가 말하지 못한다. 원고가 줄었으므로 왼쪽 560 딸림 열과
+   오른쪽 1160 주열로 다시 잡았다. 부제가 13쪽에서 6쪽으로 갔으므로 무대는 240..824 (584) 다.
+   원고의 "본문 (아래)" 두 줄은 머리 오른쪽 리드 칸이 받는다 */
+.c13 { width: var(--col-3); }
+/* 말풍선은 담긴 말만큼만 넓다. 흐름 안에 놓여도 칸을 채우지 않는다.
+   이 말풍선만 세로 padding 이 12 다. 아래에 20/500 각주 줄이 붙고
+   그 줄의 행간(29 - 20 = 9)이 아래 여백을 절반쯤 대신 만들어 주기 때문이다.
+   16 을 그대로 두면 답 여덟 줄과 각주 다섯 줄이 무대 아래 끝 824 를 넘는다 */
+/* 셋째 열은 흰 대화창이다. 말풍선이 배경 위에 떠 있으면 대화로 읽히지 않는다.
+   창 아래 끝이 무대 바닥 824 이고 말은 아래에서부터 쌓인다.
+   담긴 답이 여덟 줄에 각주 다섯 줄이라 이 창의 안 여백은 8 이고 말풍선 세로 여백도 한 단 내렸다.
+   원고의 줄을 한 줄도 줄일 수 없으므로 여백이 줄 수에 맞춘다 */
+/* 창 안은 질문 말풍선 60 + 12 + 답 말풍선 449 = 521 이라 안 여백 24 를 두고도
+   창 높이 584 안에 든다. 말은 아래에서부터 쌓이므로 위가 비는 것이 대화창의 생김새다 */
+.talk13 { width: var(--col-wide); height: var(--stage-h-nosub); }
+.talk13 .stream { padding: var(--sp-24); gap: var(--sp-12); }
+.talk13 .bub.me { padding: var(--sp-12) var(--sp-24); }
+#fnbub { width: fit-content; padding: var(--sp-8) var(--sp-24); }
+.fnbody { font-size: var(--fs-body); font-weight: var(--fw-medium); line-height: var(--lh-body);
+  letter-spacing: var(--ls-body); }
+/* 보이는 표시는 위첨자 하나뿐이고 누르는 곳은 그 줄 전체다.
+   세로 여백을 padding 으로 주면 줄 상자가 위로 벌어져 줄 수 검사에 한 줄이 더 잡히므로,
+   흐름 밖의 ::after 로 조작 영역만 넓힌다. 글자가 앉는 자리는 그대로다 */
+/* 정지 상태에서 짚을 수 있다는 것을 밑줄이 말한다. 짚기 밑줄과 같은 --blue-hl 면 띠이고
+   팝업 낱말의 --blue-accent 2px 실선과는 형태가 갈린다. 이 줄은 화면의 다른 곳(각주 칸)을
+   가리키는 짚기이지 그 낱말 자체를 푸는 팝업이 아니다.
+   누를 수 있다고 표시돼 있는데도 그냥 읽고 넘어가는 것이 이 쪽이 하려는 말이라
+   표식이 있는 편이 오히려 강하다 */
+.fn { position: relative; cursor: pointer; padding: 0 8px; margin: 0 -8px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(to top, var(--blue-hl) 0 34%, transparent 34%);
+  transition: background-color var(--dur-fast) var(--ease-out); }
+.fn::after { content: ''; position: absolute; left: 0; right: 0; top: -7px; bottom: -7px; }
+.fn:not(.on):hover { background: var(--blue-hl); }
+.fn:not(.on):hover .fnmark { color: var(--blue-mark); }
+.fn.on { background: var(--blue-hl); cursor: default; }
+/* 위첨자는 <sup> 대신 유니코드 위첨자 글자다. <sup>는 줄 상자 밖으로 올라가
+   줄 수를 세는 검사에서 한 줄을 더 그린 것처럼 잡힌다. 글자로 두면 같은 줄에 머문다.
+   글자 크기는 24 그대로이고 작게 보이는 것은 그 글리프의 생김새다 */
+.fnmark { color: var(--blue-accent); font-weight: var(--fw-bold); }
+/* 각주는 자료 카드로 뽑지 않는다. 카드는 "여기 자료가 있다" 고 알리는 부품이라
+   각주를 검증할 목록으로 만들어 버리고, 그러면 이 쪽의 요지가 뒤집힌다.
+   답 안에 박혀 있어야 그냥 읽고 넘어가게 되고 그 넘어감이 이 쪽이 하려는 말이다.
+   그래서 말풍선 안 아래쪽에 20/500 작은 글자 세 줄로만 붙인다.
+   세 줄은 한 덩이라 줄 사이를 띄우지 않고, 답 몸에 이어 붙는 같은 흐름이라 위도 띄우지 않는다.
+   확인 결과는 그 줄 오른쪽 칸에 20/500 으로 든다 */
+.fnotes { display: flex; flex-direction: column; }
+.fnrow { display: grid; grid-template-columns: max-content 1fr; gap: var(--sp-16);
+  align-items: start; }
+.fnrow .fl { font-size: var(--fs-note); font-weight: var(--fw-medium);
+  line-height: var(--lh-note); letter-spacing: var(--ls-body); color: var(--ink-support); }
+.fnrow .fr { font-size: var(--fs-note); font-weight: var(--fw-medium);
+  line-height: var(--lh-note); color: var(--blue-accent); opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-out); }
+.fnrow .fr.no { color: var(--alert); }
+.fnrow.on .fr { opacity: 1; }
+.mini { font-size: var(--fs-body); font-weight: var(--fw-medium); line-height: var(--lh-body);
+  letter-spacing: var(--ls-body); color: var(--ink); }
+
+/* ===== 14쪽 정리 =====
+   오늘 확인한 것이 하나씩 쌓여 한 문장이 된다. 일곱이 다 켜지면 선언의 뒷줄이 붙는다.
+   쪽 번호는 인쇄하지 않는다. 원고 항목에 없는 글자라 구현이 지어낼 수 없고,
+   어느 쪽에서 확인한 것인지는 발표자가 말로 붙인다.
+   항목은 32/700 이다. 소제목과 같은 크기이지만 항목은 꺼진 채로 시작해 --ink-muted 이고
+   소제목만 처음부터 검정이라, 조작이 끝나기 전까지 무엇이 머리인지 색이 말한다.
+   세로로 먼저 읽히도록 열 방향으로 흘려서 앞 넷과 뒤 셋이 각각 한 줄기가 된다 */
+/* 소제목이 32 로 서면서 그 아래 격자의 y 를 다시 잡았다.
+   소제목 396~440, 아래 12 를 띄워 452 에서 시작하고 4행 64 에 행 사이 20 으로 768 에서 끝난다 */
+.recap { position: absolute; left: 80px; top: 452px; width: 1760px;
+  display: grid; grid-auto-flow: column; grid-template-rows: repeat(4, 64px);
+  grid-template-columns: repeat(2, var(--col-2)); gap: var(--sp-20) var(--gap); }
+.recap div { display: flex; align-items: center; font-size: var(--fs-claim);
+  font-weight: var(--fw-bold); letter-spacing: var(--ls-claim); color: var(--ink-muted);
+  transition: color var(--dur-base) var(--ease-out); }
+.recap div.on { color: var(--ink); }
+.decl { position: absolute; left: 80px; top: 140px; width: 1760px; font-size: var(--fs-decl);
+  font-weight: var(--fw-heavy); line-height: var(--lh-decl); letter-spacing: var(--ls-display);
+  color: var(--ink); }
+.decl span { opacity: 0; transition: opacity var(--dur-base) var(--ease-out); }
+.decl span.on { opacity: 1; }
+/* 아래 밴드를 두 칸으로 쓴다. 왼쪽 860 이 그 쪽의 딸림 글이고 오른쪽 860 이 다음 물음이다.
+   두 덩이의 아래 끝이 맺음과 같은 y 1000 이라 밴드의 기준선이 흔들리지 않는다 */
+.nextq { position: absolute; left: var(--margin-x); bottom: var(--close-bottom); width: var(--col-wide);
+  font-size: var(--fs-body); font-weight: var(--fw-medium); line-height: var(--lh-body);
+  letter-spacing: var(--ls-body); opacity: 0; transition: opacity var(--dur-base) var(--ease-out); }
+.nextq.on { opacity: 1; }
+</style>
+
+<!-- ========== 10쪽 · 컨텍스트 : AI가 읽는 것과 읽지 못하는 것 ========== -->
+<section class="slide" data-canvas="light" data-page="10">
+  <div class="head"><span class="kicker">Lesson 1</span><span class="pageno">10 / 14</span></div>
+  <h1 class="ptitle">컨텍스트 : AI가 읽는 것과 읽지 못하는 것</h1>
+  <div class="area nosub">
+    <div class="two">
+      <div style="width:860px">
+        <p class="t-claim ln">컨텍스트는 AI가 답을 만들 때<br>한 번에 놓고 읽는 글 전체입니다.<br>컨텍스트 윈도우라고도 부릅니다.</p>
+        <div class="tray trayblock" style="margin-top:48px"><div class="doc outrow" id="blockitem"><span class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg></span><span class="dtxt"><span class="dn ln">우리 회사 문서함 전체</span></span></div></div>
+        <div class="verdict no ln" id="blocknote" style="margin-top:8px">넣지 않았으므로 AI에게는 보이지 않습니다.</div>
+        <div class="pair" style="margin-top:64px">
+          <div class="chunk"><div class="subhead ln">매번 처음부터</div><div class="bd ln">답을 만들 때마다 이 글 전체를 다시 읽고<br>대화가 길수록 읽는 분량이 늘어납니다.</div></div>
+          <div class="chunk"><div class="subhead ln">새 대화를 열면</div><div class="bd ln">이 글이 통째로 비워진 채 시작합니다.<br><span class="acc">방금 실습에서 새 대화로 연 이유입니다.</span></div></div>
+        </div>
+      </div>
+      <div class="readcol">
+        <div class="tray trayread">
+        <div class="item readbox" id="readbox">
+          <div class="readlabel ln">AI가 이번에 읽는 글</div>
+          <div class="ctxfill">
+            <div class="doc above"><span class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg></span><span class="dtxt"><span class="dn ln">도구가 먼저 넣는 기본 지침</span></span></div>
+            <div class="doc above"><span class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg></span><span class="dtxt"><span class="dn ln">지금까지 주고받은 대화 전부</span></span></div>
+            <div class="doc above"><span class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg></span><span class="dtxt"><span class="dn ln">내가 첨부한 회사 소개문</span></span></div>
+            <div class="doc mine"><span class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg></span><span class="dtxt"><span class="dn ln">내가 방금 보낸 요청</span></span></div>
+          </div>
+          <div class="inbar"><div class="fld ln">미리내로보틱스 검토 항목을 정리해 주세요.<i></i></div><button class="send mock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V5"/><path d="M5 12l7-7 7 7"/></svg></button></div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="close ln" id="close11">AI는 내가 넣은 글만 보고 다음 단어를 고릅니다.</p>
+</section>
+
+<!-- ========== 11쪽 · 토큰 ========== -->
+<section class="slide" data-canvas="light" data-page="11">
+  <div class="head"><span class="kicker">Lesson 1</span><span class="pageno">11 / 14</span></div>
+  <h1 class="ptitle">토큰 : 분량을 세는 단위</h1>
+  <div class="psub">Token</div>
+  <div class="area">
+    <div class="two">
+      <div style="width:1160px;height:var(--stage-h);display:flex;flex-direction:column">
+      <p class="t-claim ln">AI는 글을 토큰이라는 조각으로<br>나눠서 읽고 씁니다.</p>
+      <div class="dev" style="margin-top:24px;flex:1;display:flex;flex-direction:column">
+        <div class="tokstack">
+          <div class="tokrow">
+            <span class="tokplain" id="koPlain">좋은 답은 좋은 자료에서 나옵니다.</span>
+            <span class="toks hidden" id="koToks"><b>좋</b><b>은</b><b> 답</b><b>은</b><b> 좋은</b><b> 자료</b><b>에서</b><b> 나</b><b>옵</b><b>니다</b><b>.</b></span>
+          </div>
+          <div class="tokrow" id="enrow" style="visibility:hidden">
+            <span class="tokplain en" id="enPlain">Good answers come from good source material.</span>
+            <span class="toks enline hidden" id="enToks"><b>Good</b><b> answers</b><b> come</b><b> from</b><b> good</b><b> source</b><b> material</b><b>.</b></span>
+          </div>
+        </div>
+        <div class="tokfoot">
+          <div>
+            <div class="tokcount ln" id="tokcount">한국어 11조각 · 영어 8조각</div>
+            <div class="toknote ln" id="toknote">같은 뜻이라도 한국어가 조각을 더 많이 씁니다.</div>
+          </div>
+          <div class="tokctl">
+            <button class="btn" id="tokbtn">쪼개 보기</button>
+            <button class="btn btn--sec" id="tokbtn2">영어도 쪼개 보기</button>
+          </div>
+        </div>
+      </div>
+      </div>
+      <div style="width:560px">
+        <div class="chunk"><div class="subhead ln">세는 방식</div><div class="bd ln">자주 쓰이는 말은 통째로 한 조각이 되고<br>드문 말은 여러 조각으로 나뉩니다.<br>조각을 나누는 규칙은 모델마다 다릅니다.</div></div>
+        <div class="chunk" style="margin-top:64px"><div class="subhead ln">한도와 요금</div><div class="bd ln">컨텍스트 한도는 토큰 수로 정해져 있고<br>모델마다 다르며 계속 커지는 중입니다.<br>지금 주력 모델은 백만 토큰 규모입니다.<br>요금도 입력 토큰과 출력 토큰에 매겨집니다.</div></div>
+      </div>
+    </div>
+  </div>
+  <p class="close ln" id="close12">자료를 많이 넣을수록 읽는 토큰이 늘어<br><span class="acc">비용이 오르고 한도도 빨리 찹니다.</span></p>
+</section>
+
+<!-- ========== 12쪽 · 컨텍스트 윈도우 ========== -->
+<section class="slide" data-canvas="light" data-page="12">
+  <div class="head"><span class="kicker">Lesson 1</span><span class="pageno">12 / 14</span></div>
+  <h1 class="ptitle">컨텍스트 윈도우 : 대화가 쌓이는 과정</h1>
+  <div class="psub">Context window · Compaction</div>
+  <p class="lead ln">대화 하나를 처음부터 보내면서<br>무엇이 얼마나 쌓이는지 봅니다.</p>
+  <div class="area">
+    <div class="two top">
+      <div class="talk chat">
+        <div class="runbox" id="runbox">
+          <div class="runcol">
+            <div class="t-note ln">아직 대화가 없습니다.</div>
+            <button class="btn" id="runbtn">Claude 실행</button>
+          </div>
+        </div>
+        <div class="above" id="above"></div>
+        <div class="msgs stream" id="msgs">
+          <div class="bub sys hidden" data-k="sys" data-s="0">시스템 프롬프트</div>
+          <div class="bub me hidden ln" data-k="me" data-s="1">미리내로보틱스를 검토하고 있습니다.<br>투자 검토에서 무엇을 봐야 하는지<br>항목으로 정리해 주세요.</div>
+          <div class="bub ai hidden ln" data-k="ai" data-s="1">보통 창업팀 구성과 기술 차별성과<br>시장 규모와 재무 상태를 봅니다.<br>회사 자료를 주시면 그 자료를<br>기준으로 정리해 드리겠습니다.</div>
+          <div class="bub me hidden ln" data-k="file" data-s="2"><span class="docs"><span class="doc doc--fit"><span class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg></span><span class="dtxt"><span class="dn ln">첨부 파일 · 회사 소개문</span></span></span><span class="doc doc--fit"><span class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg></span><span class="dtxt"><span class="dn ln">첨부 파일 · 사업계획서 요약</span></span></span></span>검토 자료 두 건을 첨부했습니다.<br>이 자료로 다시 정리해 주세요.</div>
+          <div class="bub ai hidden ln" data-k="ai" data-s="2">첨부하신 자료로 다시 정리했습니다.<br>미리내로보틱스는 물류창고용<br>자율이동로봇을 만드는 회사입니다.<br>소개문에 시범 도입 고객이<br>세 곳이라고 적혀 있습니다.<br>재무 상태는 자료에 없어서<br>추가 자료가 필요합니다.</div>
+          <div class="bub me hidden ln" data-k="me" data-s="3">재무 자료가 없으면 다음 미팅에서<br>무엇을 요청해야 할까요?</div>
+          <div class="bub ai hidden ln" data-k="ai" data-s="3">최근 2년 손익계산서와<br>현금흐름표를 요청하시면 됩니다.<br>시범 도입 세 곳의 계약 조건도<br>함께 받으면 좋습니다.</div>
+          <div class="bub me hidden ln" data-k="file" data-s="4"><span class="docs"><span class="doc doc--fit"><span class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg></span><span class="dtxt"><span class="dn ln">첨부 파일 · 경쟁사 분석 보고서</span></span></span></span>경쟁사 분석 보고서를 첨부했습니다.<br>이 자료도 함께 반영해 주세요.</div>
+          <div class="bub ai hidden ln" data-k="ai" data-s="4">경쟁사 분석까지 반영해<br>검토 항목을 갱신했습니다.</div>
+          <div class="bub fold hidden ln" data-k="fold" data-s="5">앞의 대화 27,750토큰이<br>요약 1,200토큰으로 접혔습니다.</div>
+          <div class="bub me hidden ln" data-k="me" data-s="5">지금까지 정리한 검토 항목을<br>한 장으로 묶어 주세요.</div>
+          <div class="bub ai hidden ln" data-k="ai" data-s="5">검토 항목을 한 장으로 묶었습니다.<br>시범 도입 고객 수는 앞에서 받은<br>자료에 있었는데 지금은 없습니다.<br>회사 소개문을 다시 주시겠습니까?</div>
+        </div>
+        <div class="inbar">
+          <button class="btn btn--sec" id="resetbtn">처음부터 다시</button>
+          <div class="fld off" id="fld"><span id="fldtext"></span><i></i></div>
+          <button class="send" id="sendbtn" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V5"/><path d="M5 12l7-7 7 7"/></svg></button>
+        </div>
+      </div>
+      <div class="ctxcol">
+        <div class="well r-lg ctxpane">
+        <div class="tot"><b id="ctot">0</b><span id="ctotsub">/ 30,000토큰 (예시) · 0%</span></div>
+        <div class="gauge on-sunken" id="cgauge" style="margin-top:12px">
+          <span data-k="sys" style="background:var(--data-1);width:0"></span>
+          <span data-k="me" style="background:var(--data-2);width:0"></span>
+          <span data-k="ai" style="background:var(--data-3);width:0"></span>
+          <span data-k="file" style="background:var(--data-4);width:0"></span>
+          <span data-k="fold" style="background:var(--data-5);width:0"></span>
+        </div>
+        <div class="ctxstack empty" id="ctxstack">
+          <div class="ctxempty t-note ln" id="ctxempty">아직 비어 있습니다.</div>
+          <div class="legend" id="legend">
+            <div class="lg zero" data-k="sys"><i style="background:var(--data-1)"></i><span class="nm">시스템 프롬프트</span><span class="vl">0</span></div>
+            <div class="lg zero" data-k="me"><i style="background:var(--data-2)"></i><span class="nm">사용자 메시지</span><span class="vl">0</span></div>
+            <div class="lg zero" data-k="ai"><i style="background:var(--data-3)"></i><span class="nm">AI 응답</span><span class="vl">0</span></div>
+            <div class="lg zero" data-k="file"><i style="background:var(--data-4)"></i><span class="nm">첨부 파일</span><span class="vl">0</span></div>
+            <div class="lg zero" data-k="fold"><i style="background:var(--data-5)"></i><span class="nm">요약된 이전 대화</span><span class="vl">0</span></div>
+          </div>
+          <div class="details" id="details">
+            <div data-d="sys">도구가 모델에게 먼저 주는 기본 지침이고<br>Claude를 실행하는 순간 들어갑니다.</div>
+            <div data-d="me">내가 보낸 메시지이고 보낸 뒤에도<br>대화가 끝날 때까지 그대로 남습니다.</div>
+            <div data-d="ai">모델이 만든 답변이고 이 답변도<br>다음 답을 만들 때 다시 읽힙니다.</div>
+            <div data-d="file">메시지에 첨부한 문서이고 전체가<br>들어가서 말 몇 줄보다 훨씬 큽니다.</div>
+            <div data-d="fold">한도에 닿아 답을 만들 공간이 없어지자<br>앞의 대화와 첨부 파일을 요약으로 바꿨습니다.<br>이렇게 접는 방식을 압축(compaction)이라고 부르고<br>접히면서 세부 내용은 사라집니다.</div>
+          </div>
+        </div>
+        <div class="notepane" id="notepane">
+          <div data-n="0">Claude를 열자마자 기본 지침이 먼저 들어갔습니다.</div>
+          <div data-n="1">사람이 쓴 말은 아주 적게 차지합니다.</div>
+          <div data-n="3">답을 만들 때마다 지금까지 쌓인 전부를 다시 읽습니다.</div>
+          <div data-n="4">한도까지 250토큰 남았습니다.</div>
+          <div data-n="5">접히면서 자료의 세부가 사라졌습니다.</div>
+        </div>
+        </div>
+        <p class="t-body ln">왼쪽 대화에는 그대로 남아 있어도<br><span class="acc">모델이 보는 것은 요약뿐입니다.</span><br><span class="acc">긴 일은 한 대화에 끌고 가지 말고</span><br><span class="acc">끊어서 새로 시작하는 편이 낫습니다.</span></p>
+      </div>
+    </div>
+  </div>
+  <p class="close ln" id="close13">한도에 닿으면 앞서 넣은 자료의 세부가 먼저 사라집니다.</p>
+</section>
+
+<!-- ========== 13쪽 · 환각 ========== -->
+<section class="slide" data-canvas="light" data-page="13">
+  <div class="head"><span class="kicker">Lesson 1</span><span class="pageno">13 / 14</span></div>
+  <h1 class="ptitle">할루시네이션에 <span class="hl">대응하는 방법</span></h1>
+  <p class="lead ln"><span class="acc">자료 안에서 일하게 할수록<br>지어낼 여지가 줄어듭니다.</span></p>
+  <div class="area nosub">
+    <div class="two">
+      <div class="c13">
+        <p class="t-body ln">다음 단어를 고르는 절차에는<br>사실을 확인하는 단계가 없습니다.<br><span class="acc">그래서 출처와 수치처럼<br>형식이 정해진 것도 그대로 지어냅니다.</span></p>
+        <div class="subhead ln" style="margin-top:64px">자주 지어내는 것</div>
+        <div class="mini ln" style="margin-top:12px">실존하지 않는 논문과 기사의 인용<br>구체적이지만 출처가 없는 수치<br>실존 인물이 하지 않은 발언</div>
+        <div class="subhead ln" style="margin-top:64px">대응 두 가지</div>
+        <div class="mini ln" style="margin-top:12px">중요한 답에는 출처와 근거를 함께 요구합니다.<br>답마다 자료의 어디에서 나왔는지 밝히게 합니다.</div>
+      </div>
+      <div class="talk talk13">
+        <div class="stream">
+        <div class="bub me ln">미리내로보틱스 검토를 요약해 주세요.</div>
+        <div class="bub ai" id="fnbub">
+          <div class="fnbody ln">미리내로보틱스는 2023년에<br>설립된 회사이고 물류창고용<br><span class="fn" data-f="0">자율이동로봇을 만듭니다.<span class="fnmark">¹</span></span><br>시범 도입 고객은 세 곳입니다.<br>국내 경쟁사 두 곳과 견주면<br><span class="fn" data-f="1">도입 가격이 낮은 편입니다.<span class="fnmark">²</span></span><br>2025년 매출은 48억 원이고<br><span class="fn" data-f="2">영업손실은 12억 원입니다.<span class="fnmark">³</span></span></div>
+          <div class="fnotes" id="fnotes">
+            <div class="fnrow"><div class="fl ln"><span class="fnmark">¹</span> 회사 소개문 3쪽</div><div class="fr ln">첨부한 회사 소개문에 있습니다.</div></div>
+            <div class="fnrow"><div class="fl ln"><span class="fnmark">²</span> 경쟁사 분석 보고서 7쪽</div><div class="fr ln">첨부한 경쟁사 보고서에 있습니다.</div></div>
+            <div class="fnrow"><div class="fl ln"><span class="fnmark">³</span> 2025년 감사보고서 12쪽</div><div class="fr no ln">이 문서는 첨부한 자료에도<br>공개된 자료에도 없습니다.<br>두 수치도 함께 지어냈습니다.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="close ln" id="close14">지어낸 각주가 가장 공식적으로 보였습니다.</p>
+</section>
+
+<!-- ========== 14쪽 · 정리 ========== -->
+<section class="slide" data-canvas="light" data-page="14">
+  <div class="head"><span class="kicker">Lesson 1</span><span class="pageno">14 / 14</span></div>
+  <p class="decl ln">AI가 어떤 답을 내놓을지는<br><span class="acc" id="declb">내가 무엇을 넣어 줬는지로 갈립니다.</span></p>
+  <div class="subhead ln" style="position:absolute;left:80px;top:396px">오늘 확인한 것</div>
+  <div class="recap" id="recap">
+    <div><span>확률로 하나씩 골라 만드는 답</span></div>
+    <div><span>그럴싸하게 나오는 할루시네이션</span></div>
+    <div><span>배운 적 없는 우리 회사의 일</span></div>
+    <div><span>결과를 바꾸는 프롬프트와 컨텍스트</span></div>
+    <div><span>내가 넣은 것만 들어가는 컨텍스트</span></div>
+    <div><span>한도에 닿으면 접히는 앞의 자료</span></div>
+    <div><span>가장 공식적으로 보인 지어낸 출처</span></div>
+  </div>
+  <!-- 목록 아래 본문을 뺐다. 새 큰 문장이 같은 말을 하고 있어 한 쪽에 두 번 인쇄된다.
+       비워진 아래 밴드 왼쪽을 다음 물음이 쓴다 -->
+  <p class="nextq ln" id="nextq">그 자료를 매번 사람이 찾아서 넣어 줘야 할까요?<br>스스로 찾아 읽고 만드는 AI Agent가 다음 시간입니다.</p>
+</section>
+
+<!-- SLIDES -->
+</div></div>
+
+<script>
+/* ===== 스테이지를 뷰포트에 균일 축소한다. transform 금지의 유일한 예외다 ===== */
+const stage = document.getElementById('stage');
+const viewport = document.getElementById('viewport');
+function fit() {
+  const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+  stage.style.transform = 'translate(-50%, -50%) scale(' + s + ')';
+}
+addEventListener('resize', fit);
+fit();
+
+const $ = function (id) { return document.getElementById(id); };
+const $$ = function (sel, root) { return [].slice.call((root || document).querySelectorAll(sel)); };
+function on(el, fn) { if (el) el.addEventListener('click', fn); }
+
+/* 검사용 정지 모드. 등장 중간 상태에서 자로 재지 않는다 */
+window.still = function () { document.documentElement.classList.add('still'); };
+
+/* 예약된 동작은 쪽마다 모아 두고 쪽을 떠날 때 함께 거둔다 */
+const TIMERS = {};
+function later(p, fn, ms) { (TIMERS[p] = TIMERS[p] || []).push(setTimeout(fn, ms)); }
+function clearLater(p) { (TIMERS[p] || []).forEach(clearTimeout); TIMERS[p] = []; }
+/* 완료 상태는 즉시 선다. 창 안 스크롤은 평소 부드럽게 따라가지만
+   finish 에서는 그 부드러움이 곧 지연이라 그때만 끄고 단번에 아래 끝으로 보낸다 */
+function jumpBottom(el) {
+  if (el.scrollTo) el.scrollTo({ top: el.scrollHeight, behavior: 'instant' });
+  else el.scrollTop = el.scrollHeight;
+}
+
+/* ===== 등장 =====
+   글자 덩이가 순서대로 또렷해진다. 자리는 처음부터 끝까지 그대로다.
+   조작으로 켜지는 것(맺음 문장, 다음 시간 물음)은 여기서 건드리지 않는다 */
+const SEQ_SKIP = ['close', 'fore', 'nextq', 'cover-bg', 'cover-scrim', 'cover-scrim2', 'pop'];
+function seqTargets(slide) {
+  const out = [];
+  function push(el) {
+    if (!el || el.nodeType !== 1) return;
+    for (let i = 0; i < SEQ_SKIP.length; i++) if (el.classList.contains(SEQ_SKIP[i])) return;
+    out.push(el);
+  }
+  [].slice.call(slide.children).forEach(function (c) {
+    if (!c.classList.contains('area')) { push(c); return; }
+    [].slice.call(c.children).forEach(function (g) {
+      if (g.classList.contains('two') || g.classList.contains('col3')) [].slice.call(g.children).forEach(push);
+      else push(g);
+    });
+  });
+  return out;
+}
+function armSeq(slide) {
+  seqTargets(slide).forEach(function (el, i) {
+    el.classList.remove('seq-done');
+    el.classList.add('seq');
+    el.style.setProperty('--d', (0.04 + i * 0.07).toFixed(2) + 's');
+  });
+}
+document.addEventListener('animationend', function (e) {
+  if (e.animationName === 'seqin' && e.target.classList && e.target.classList.contains('seq')) {
+    e.target.classList.add('seq-done');
+  }
+});
+
+/* ===== 넘김. 레터박스는 전환이 시작될 때 그 쪽의 캔버스 색으로 바꾼다.
+   떠난 쪽은 보이지 않게 된 뒤에 처음 상태로 되돌린다 ===== */
+const slides = $$('.slide');
+let cur = 0;
+function release() {
+  if (document.activeElement && document.activeElement !== document.body) document.activeElement.blur();
+}
+const PAGE = {};
+function go(n) {
+  const prev = cur;
+  const next = Math.max(0, Math.min(slides.length - 1, n));
+  if (next === prev) return;
+  if (window.POP) POP.close();   /* 쪽을 떠나면 팝업도 닫힌다 */
+  cur = next;
+  viewport.dataset.canvas = slides[cur].dataset.canvas;
+  armSeq(slides[cur]);
+  slides.forEach(function (s, i) { s.classList.toggle('active', i === cur); });
+  release();
+  const p = PAGE[prev + 1];
+  clearLater(prev + 1);
+  if (p && p.reset) setTimeout(p.reset, 420);
+}
+/* ===== 팝업 카드 =====
+   본문 안의 개념어 하나를 눌러 그 뜻을 연다. 모달이 아니라 그 낱말 아래에 서는 카드다.
+   한 번에 하나만 열리고 쪽을 떠나면 닫힌다.
+   좌표는 반드시 스테이지 1920x1080 기준으로 잡는다. 스테이지에는 뷰포트 맞춤 배율이
+   걸려 있어서 화면 좌표를 그대로 쓰면 창 크기가 달라질 때마다 카드가 엉뚱한 곳에 선다 */
+window.POP = (function () {
+  let word = null, card = null;
+  function scale() { const r = stage.getBoundingClientRect(); return (r.width / 1920) || 1; }
+  function gap() {
+    return parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--pop-gap')) || 12;
+  }
+  function close() {
+    if (card) { card.classList.remove('on'); card.style.left = ''; card.style.top = ''; }
+    if (word) word.classList.remove('open');
+    card = null; word = null;
+  }
+  /* 카드가 매달리는 곳은 낱말이 아니라 낱말이 든 덩이다.
+     낱말 하나만 피하면 그 낱말이 속한 문장의 나머지 줄이 카드 밑으로 들어간다.
+     발표자가 낱말을 설명하는 동안 그 문장이 화면에 남아 있어야 하므로 덩이 전체를 피한다 */
+  function blockOf(el) {
+    let n = el;
+    while (n && n !== stage) {
+      if (getComputedStyle(n).display !== 'inline') return n;
+      n = n.parentElement;
+    }
+    return el;
+  }
+  function open(wordEl, popEl) {
+    if (!wordEl || !popEl) return;
+    if (card === popEl && word === wordEl) return;
+    close();
+    const s = scale(), sr = stage.getBoundingClientRect();
+    const wr = blockOf(wordEl).getBoundingClientRect();
+    const g = gap();
+    const wx = (wr.left - sr.left) / s;
+    const wtop = (wr.top - sr.top) / s;
+    const wbot = (wr.bottom - sr.top) / s;
+    const pr = popEl.getBoundingClientRect();
+    const pw = pr.width / s, ph = pr.height / s;
+    /* 덩이 왼쪽 끝에 왼쪽을 맞추고, 오른쪽이 x 1840 을 넘으면 오른쪽 끝을 1840 에 맞춘다 */
+    let x = wx;
+    if (x + pw > 1840) x = 1840 - pw;
+    if (x < 80) x = 80;
+    /* 덩이 아래로 --pop-gap 을 띄운다. 아래가 y 1000 을 넘으면 덩이 위로 같은 값을 띄운다 */
+    let y = wbot + g;
+    if (y + ph > 1000) y = wtop - g - ph;
+    popEl.style.left = Math.round(x) + 'px';
+    popEl.style.top = Math.round(y) + 'px';
+    popEl.classList.add('on');
+    wordEl.classList.add('open');
+    word = wordEl; card = popEl;
+  }
+  return {
+    open: open, close: close,
+    get el() { return card; },
+    get word() { return word; }
+  };
+})();
+/* 닫기는 셋이다. 닫기 표시 누르기, Esc, 카드 밖 아무 곳이나 누르기.
+   여는 것은 낱말 누르기 하나이고 data-pop 으로 짝을 맺는다 */
+document.addEventListener('click', function (e) {
+  const t = e.target;
+  if (t.closest && t.closest('.popclose')) { POP.close(); return; }
+  const w = t.closest && t.closest('.popword[data-pop]');
+  if (w) { POP.open(w, document.getElementById(w.dataset.pop)); return; }
+  const c = POP.el;
+  if (!c) return;
+  if (c.contains(t)) return;
+  if (POP.word && POP.word.contains(t)) return;
+  POP.close();
+});
+/* 자기 검사용. 임시 낱말과 카드로 열고 닫아 보고 흔적을 남기지 않는다 */
+window.__popDemo = function (x, y) {
+  const host = slides[cur];
+  const w = document.createElement('span');
+  w.className = 'popword';
+  w.style.cssText = 'position:absolute;left:' + (x || 200) + 'px;top:' + (y || 400) + 'px';
+  w.textContent = 'demo';
+  const p = document.createElement('div');
+  p.className = 'pop';
+  p.innerHTML = '<div class="poph">demo</div><div class="popb">demo body line one<br>demo body line two</div>' +
+    '<span class="popclose">demo</span>';
+  host.appendChild(w); host.appendChild(p);
+  POP.open(w, p);
+  const box = p.getBoundingClientRect(), sb = stage.getBoundingClientRect();
+  const s = (sb.width / 1920) || 1;
+  const opened = {
+    on: p.classList.contains('on'),
+    wordOpen: w.classList.contains('open'),
+    left: Math.round((box.left - sb.left) / s),
+    top: Math.round((box.top - sb.top) / s),
+    right: Math.round((box.right - sb.left) / s),
+    bottom: Math.round((box.bottom - sb.top) / s),
+    width: Math.round(box.width / s)
+  };
+  POP.close();
+  const closed = { on: p.classList.contains('on'), wordOpen: w.classList.contains('open') };
+  host.removeChild(w); host.removeChild(p);
+  return { opened: opened, closed: closed };
+};
+
+addEventListener('keydown', function (e) {
+  POP.close();   /* 방향키는 팝업을 닫고 그대로 쪽을 넘긴다. 넘김을 막지 않는다 */
+  if (e.key === 'ArrowRight' || e.key === 'PageDown') { go(cur + 1); e.preventDefault(); }
+  else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { go(cur - 1); e.preventDefault(); }
+  else if (e.key === ' ') { const p = PAGE[cur + 1]; if (p && p.step) p.step(); e.preventDefault(); }
+  else if (e.key === 'End') { const p = PAGE[cur + 1]; if (p && p.finish) p.finish(); e.preventDefault(); }
+});
+document.addEventListener('click', release);
+function off(el) { if (el) el.classList.remove('on'); }
+function focusOne(list, el) { list.forEach(function (x) { x.classList.toggle('cur', x === el); }); }
+
+/* ===== 2쪽 · 여섯 질문 =====
+   목록이 아니라 순서다. 지나온 질문과 지금 질문과 아직 오지 않은 질문이
+   잇는 선이 아니라 세 가지 무게로 갈린다 */
+const qrows = $$('#qlist .qrow');
+let qi = 0;
+function qopen(i) {
+  qi = i;
+  qrows.forEach(function (r, k) {
+    r.classList.toggle('cur', k === i);
+    r.classList.toggle('past', k < i);
+  });
+}
+qrows.forEach(function (r, i) { on(r, function () { qopen(i); }); });
+qopen(0);
+PAGE[2] = {
+  step: function () { qopen((qi + 1) % qrows.length); },
+  finish: function () { clearLater(2); qopen(qrows.length - 1); },
+  reset: function () { qopen(0); }
+};
+
+/* ===== 3쪽 · 세 가지 쓰임 =====
+   세 대화에 보낼 말이 이미 말풍선으로 올라가 있고, 누르면 답이 한 낱말씩 차오른다.
+   위에 받은 글이 있고 아래에서 새 글이 만들어지는 모양이 이 쪽의 주장 자체다.
+   답이 앉을 말풍선은 처음부터 자리를 잡고 있어서 글자가 들어와도 화면이 밀리지 않는다 */
+const ucards = $$('#ucards .ucard');
+function wrapWords(el) {
+  if (el.dataset.w) return;
+  el.dataset.w = '1';
+  [].slice.call(el.childNodes).forEach(function (n) {
+    if (n.nodeType !== 3) return;
+    const frag = document.createDocumentFragment();
+    n.nodeValue.split(/(\s+)/).forEach(function (part) {
+      if (!part) return;
+      if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
+      const w = document.createElement('w');
+      w.textContent = part;
+      frag.appendChild(w);
+    });
+    el.replaceChild(frag, n);
+  });
+}
+/* 답의 낱말은 처음부터 감싸 둔다. 감싸기를 누른 뒤로 미루면 그전까지 답이 그대로 보인다 */
+ucards.forEach(function (c) { wrapWords(c.querySelector('.out')); });
+/* 한 카드의 마지막 상태를 그 자리에서 세운다. 예약 없이 부르므로 finish 가 이것만 쓴다 */
+function u3done(c) {
+  c.classList.add('on');
+  $$('w', c.querySelector('.out')).forEach(function (w) { w.classList.add('lit'); });
+  c.querySelector('.send').classList.add('locked');
+}
+/* 누르면 필드의 글자가 사라지고 같은 글자가 말풍선으로 올라간 다음
+   답이 한 낱말씩 차오르고 마지막에 전송 원이 잠긴다 */
+function u3open(c) {
+  if (c.classList.contains('on')) { focusOne(ucards, c); return; }
+  c.classList.add('on');
+  focusOne(ucards, c);
+  const ws = $$('w', c.querySelector('.out'));
+  ws.forEach(function (w, i) { later(3, function () { w.classList.add('lit'); }, 180 + i * 60); });
+  const end = 180 + ws.length * 60;
+  later(3, function () { c.querySelector('.send').classList.add('locked'); }, end);
+}
+ucards.forEach(function (c) { on(c, function () { u3open(c); }); });
+PAGE[3] = {
+  step: function () { const c = ucards.filter(function (x) { return !x.classList.contains('on'); })[0]; if (c) u3open(c); },
+  finish: function () {
+    clearLater(3);
+    /* 누르는 차례를 그대로 밟는다. 고른 표시가 마지막 카드에 남는 것까지 같아야 한다 */
+    ucards.forEach(function (c) { u3done(c); focusOne(ucards, c); });
+  },
+  reset: function () {
+    ucards.forEach(function (c) {
+      c.classList.remove('on', 'cur');
+      $$('w', c).forEach(function (w) { w.classList.remove('lit'); });
+      c.querySelector('.send').classList.remove('locked');
+    });
+  }
+};
+
+/* ===== 4쪽 · 구간 막대 =====
+   조작이 둘이다 (7차. 비유와 함께 두 낱말 짚기가 사라졌다).
+   1) AI 적용을 켰다 껐다 하며 합계가 거의 안 움직이는 것을 본다.
+   2) 켠 순간 막대 위에 큰 문장이 얹히고 아래 가운데에 예고 문장이 함께 뜬다.
+      둘 다 한 번 나타나면 막대를 다시 꺼도 사라지지 않는다.
+      막대 전체를 두고 하는 말이지 지금 상태를 두고 하는 말이 아니기 때문이다.
+   이 쪽에는 맺음 판이 없고 예고가 맺음을 겸한다.
+   step() 은 켜기 → 끄기 → 켜기로만 돌고 Space 로 넘기던 낱말 조작은 없앴다 */
+const MIN_NOW = [10, 30, 30, 40, 120];
+const MIN_AI = [10, 3, 30, 40, 120];
+const SCALE = 230;
+function drawBars(root, mins) {
+  let acc = 0;
+  $$('.track', root).forEach(function (t, i) {
+    const bar = t.querySelector('i');
+    bar.style.left = (acc / SCALE * 100) + '%';
+    bar.style.width = (mins[i] / SCALE * 100) + '%';
+    acc += mins[i];
+  });
+}
+const grows = $('grows'), aibtn = $('aibtn'), big4 = $('big4'), fore4 = $('fore4');
+drawBars(grows, MIN_NOW);
+let ai4 = false;
+function set4(v) {
+  ai4 = v;
+  const mins = v ? MIN_AI : MIN_NOW;
+  drawBars(grows, mins);
+  $$('#grows .gv').forEach(function (el, i) { el.textContent = mins[i] + '분'; });
+  $('sumval').textContent = '합계 ' + mins.reduce(function (a, b) { return a + b; }, 0) + '분';
+  aibtn.textContent = v ? 'AI 끄기' : 'AI 적용';
+  /* 큰 문장과 예고는 함께 켜지고, 한 번 켜지면 막대를 다시 꺼도 그대로 남는다 */
+  if (v) { big4.classList.add('on'); fore4.classList.add('on'); }
+}
+on(aibtn, function () { set4(!ai4); });
+PAGE[4] = {
+  step: function () { set4(!ai4); },
+  /* 마지막 상태를 그 자리에서 세운다. AI 를 켠 상태에 큰 문장과 예고가 함께 보인다.
+     예약을 쓰지 않고 되풀이해 불러도 같은 화면이다 */
+  finish: function () {
+    clearLater(4);
+    set4(true);
+  },
+  reset: function () {
+    set4(false);
+    big4.classList.remove('on');
+    off(fore4);
+  }
+};
+
+/* ===== 5쪽 · 다음 단어 =====
+   확률대로 뽑는다. 1등이 늘 나오지는 않고, 다시 돌리면 다른 문장이 나온다.
+   "같은 질문에도 답이 조금씩 달라집니다" 가 조작의 결과로 그대로 나온다 */
+/* 칸마다 한 범주다. 기간 · 주격 조사가 붙은 회사 지표 · 증감을 꾸미는 부사 · 증감의 자동사.
+   625가지 조합이 모두 문장으로 성립하므로 무작위로 뽑아도 비문이 나오지 않는다.
+   1등 경로를 미리 정해 두지 않는다. 확률대로 뽑으므로 경로가 고정되지 않는다 */
+const W6 = [
+  [['지난해', 31], ['지난달', 22], ['올해', 17], ['최근', 12], ['창업 이후', 6]],
+  [['매출이', 36], ['계약이', 21], ['주문이', 15], ['이익이', 11], ['거래가', 6]],
+  [['크게', 41], ['빠르게', 24], ['꾸준히', 14], ['조금', 9], ['계속', 5]],
+  [['늘었습니다', 52], ['줄었습니다', 19], ['늘어났습니다', 12], ['달라졌습니다', 8], ['회복됐습니다', 4]]
+];
+const cands6 = $('cands'), wwords = $('wwords'), wslot = $('wslot');
+const wprev = $('wprev'), wprevtext = $('wprevtext'), wdots = $$('#wdots i');
+const wbtn = $('wbtn'), close6 = $('close6');
+W6.forEach(function (g, gi) {
+  const box = document.createElement('div');
+  box.className = 'cgroup' + (gi === 0 ? ' on' : '');
+  g.forEach(function (c) {
+    const row = document.createElement('div');
+    row.className = 'crow';
+    row.innerHTML = '<span class="cw"></span><span class="gauge"><span style="width:' + c[1] +
+      '%"></span></span><span class="cp">' + c[1] + '%</span>';
+    row.querySelector('.cw').textContent = c[0];
+    box.appendChild(row);
+  });
+  cands6.appendChild(box);
+});
+const cgroups = $$('.cgroup', cands6);
+let w6i = 0, w6words = [], w6busy = false;
+function w6draw() {
+  cgroups.forEach(function (g, i) { g.classList.toggle('on', i === Math.min(w6i, 3)); });
+  wdots.forEach(function (d, i) { d.classList.toggle('on', i < w6i); });
+  wslot.classList.toggle('gone', w6i >= 4);
+  wbtn.textContent = w6i >= 4 ? '다시 시작' : '다음 단어';
+}
+function w6clear() {
+  w6i = 0; w6words = []; w6busy = false;
+  wwords.textContent = '';
+  $$('.crow', cands6).forEach(function (r) { r.classList.remove('picked'); });
+  w6draw();
+}
+/* 뽑기와 반영을 갈라 둔다. 애니메이션 경로는 뽑아서 표시해 두고 420ms 뒤에 반영하고,
+   finish 는 예약 없이 그 자리에서 네 칸을 차례로 뽑아 반영한다 */
+function w6choose(step) {
+  const g = W6[step];
+  let r = Math.random() * g.reduce(function (a, b) { return a + b[1]; }, 0), k = 0;
+  for (; k < g.length - 1; k++) { r -= g[k][1]; if (r <= 0) break; }
+  return k;
+}
+function w6mark(step, k) {
+  $$('.crow', cgroups[step]).forEach(function (row, i) { row.classList.toggle('picked', i === k); });
+}
+function w6apply(step, k) {
+  const g = W6[step], last = step === W6.length - 1;
+  w6mark(step, k);
+  const b = document.createElement('b');
+  b.textContent = ' ' + g[k][0] + (last ? '.' : '');
+  b.className = 'just new';
+  $$('b', wwords).forEach(function (x) { x.classList.remove('just'); });
+  wwords.appendChild(b);
+  w6words.push(g[k][0] + (last ? '.' : ''));
+  w6i = step + 1;
+  w6draw();
+  if (last) close6.classList.add('on');
+}
+function w6pick() {
+  if (w6busy) return;
+  if (w6i >= 4) {
+    wprevtext.textContent = '이 회사는 ' + w6words.join(' ');
+    wprev.classList.add('on');
+    w6clear();
+    return;
+  }
+  const step = w6i, k = w6choose(step);
+  w6mark(step, k);
+  w6busy = true;
+  later(5, function () { w6apply(step, k); w6busy = false; }, 420);
+}
+on(wbtn, w6pick);
+w6draw();
+PAGE[5] = {
+  step: w6pick,
+  /* 네 칸을 확률대로 즉시 뽑아 문장을 완성한다. 예약을 쓰지 않는다 */
+  finish: function () {
+    clearLater(5);
+    w6busy = false;
+    while (w6i < 4) { const s = w6i; w6apply(s, w6choose(s)); }
+    close6.classList.add('on');
+  },
+  reset: function () { clearLater(5); w6clear(); wprev.classList.remove('on'); wprevtext.textContent = ''; off(close6); }
+};
+
+/* ===== 6쪽 · 같은 질문에 돌아온 답 두 개를 자료와 대조한다 =====
+   답과 자료가 선으로 이어지는 것이 아니라 양쪽이 동시에 켜진다.
+   누르는 곳은 답 판 전체이고 버튼은 그 판의 부품이다. 보낼 줄에서 원과 줄의 관계와 같다 */
+const ansL = $('ansL'), ansR = $('ansR'), close7 = $('close7'), srcline3 = $('srcline3');
+const answers = [ansL, ansR];
+function ansCheck(el) {
+  el.classList.add('on', 'spent');
+  el.querySelector('.btn').classList.add('done');
+  if (el === ansR) srcline3.classList.add('lit');
+  if (ansL.classList.contains('on') && ansR.classList.contains('on')) close7.classList.add('on');
+}
+answers.forEach(function (el) { on(el, function () { ansCheck(el); }); });
+PAGE[6] = {
+  step: function () { ansCheck(ansL.classList.contains('on') ? ansR : ansL); },
+  finish: function () { clearLater(6); ansCheck(ansL); ansCheck(ansR); },
+  reset: function () {
+    answers.forEach(function (el) {
+      el.classList.remove('on', 'spent');
+      el.querySelector('.btn').classList.remove('done');
+    });
+    srcline3.classList.remove('lit');
+    off(close7);
+  }
+};
+
+/* ===== 7쪽 · 물어보고 답을 받는다 =====
+   판정을 통보하지 않는다. 항목이 질문으로 올라가고 돌아온 답이 안다와 모른다를 말한다.
+   대화는 한 창에 쌓이고 다섯째에서만 머리글이 "새 대화"로 바뀐다.
+   같은 대화 안이라면 모델은 방금 받은 내용을 그대로 읽으므로, 모른다고 하는 것은 대화가 바뀐 뒤다 */
+const krows = $$('#klist .sendrow'), close8 = $('close8');
+const kstream = $('kstream'), kheads = $$('#khead span');
+const kfldtext = $('kfldtext');
+const K8 = [
+  [['me', '물류 로봇 기술은 어디까지 왔습니까?'],
+   ['ai', '창고에서 스스로 길을 찾는<br>로봇이 이미 쓰이고 있습니다.<br>여러 대를 한꺼번에 관리하는<br>소프트웨어도 함께 나왔습니다.']],
+  [['me', '우리 회사 내부 문서를 요약해 주세요.'],
+   ['ai', '제가 배운 글에는 인터넷에<br>공개된 것만 들어 있습니다.<br>회사 안에만 있는 문서는<br>읽어 본 적이 없습니다.']],
+  [['me', '우리 팀 검토 기준을 알려 주세요.'],
+   ['ai', '그 기준은 팀 안에만 있어서<br>저에게는 보이지 않습니다.<br>일반적인 초기 투자 검토라면<br>성장성과 경쟁력과 팀을 봅니다.']],
+  [['me', '진행 중인 딜은 어떤 상황입니까?'],
+   ['ai', '제가 배운 글은 어느 시점에서<br>멈춰 있어서 지금 벌어지는<br>일은 들어 있지 않습니다.']],
+  [['me', '검토 기준은 계열사 시너지입니다.'],
+   ['ai', '그 기준으로 정리해 드리겠습니다.'],
+   ['new', ''],
+   ['me', '제가 말한 검토 기준이 무엇입니까?'],
+   ['ai', '이 대화에는 그 내용이 없습니다.<br>무엇을 알려 주셨는지 다시<br>적어 주시면 답해 드리겠습니다.']]
+];
+function kbottom() { kstream.scrollTop = kstream.scrollHeight; }
+function khead(i) { kheads.forEach(function (s, k) { s.classList.toggle('on', k === i); }); }
+function kpush(t) {
+  if (t[0] === 'new') { khead(1); return; }
+  const b = document.createElement('div');
+  b.className = 'bub ' + t[0] + ' ln in';
+  b.innerHTML = t[1];
+  kstream.appendChild(b);
+  kbottom();
+}
+/* 보낼 줄을 누르면 그 질문이 대화창 입력 필드에 한 글자씩 들어갔다가 말풍선으로 올라간다.
+   12쪽의 전송과 같은 문법이라 새 문법이 아니고, 보내기 전과 보낸 뒤가 한 화면에서 이어진다.
+   kgen 은 되돌리기 표다. reset 이나 finish 가 끼어들면 앞의 타이핑이 스스로 멎는다 */
+let kbusy = false, kgen = 0;
+function ktype(text, done) {
+  const gen = ++kgen, ms = Math.min(900, 26 * text.length), t0 = performance.now();
+  (function tick(now) {
+    if (gen !== kgen) return;
+    const p = Math.min(1, (now - t0) / ms);
+    kfldtext.textContent = text.slice(0, Math.round(text.length * p));
+    if (p < 1) requestAnimationFrame(tick); else later(7, done, 260);
+  })(t0);
+}
+function kask(el) {
+  if (kbusy || el.classList.contains('sent')) return;
+  kbusy = true;
+  el.classList.add('sent', 'spent');
+  const turns = K8[Number(el.dataset.q)];
+  ktype(turns[0][1], function () {
+    kfldtext.textContent = '';
+    kpush(turns[0]);
+    turns.slice(1).forEach(function (t, i) { later(7, function () { kpush(t); }, (i + 1) * 420); });
+    /* 마지막 말풍선이 앉는 그 순간 잠금을 푼다. 그보다 늦게 풀면 다음 조작이 막힌 채로
+       화면이 멎어서, 잇달아 누르는 발표자도 step 검사도 한 항목에서 걸린다 */
+    later(7, function () {
+      kbusy = false;
+      if (krows.every(function (r) { return r.classList.contains('sent'); })) close8.classList.add('on');
+    }, Math.max(1, turns.length - 1) * 420 + 20);
+  });
+}
+krows.forEach(function (r) { on(r, function () { kask(r); }); });
+PAGE[7] = {
+  step: function () { const r = krows.filter(function (x) { return !x.classList.contains('sent'); })[0]; if (r) kask(r); },
+  /* 다섯을 다 눌러 본 마지막 상태를 그 자리에서 세운다.
+     한 낱말도 늦게 오지 않고 예약도 남지 않는다. 되풀이해 불러도 같은 화면이다 */
+  finish: function () {
+    clearLater(7);
+    kgen += 1; kbusy = false;
+    kfldtext.textContent = '';
+    krows.forEach(function (r) { r.classList.add('sent', 'spent'); });
+    kstream.innerHTML = '';
+    khead(0);
+    K8.forEach(function (turns) {
+      turns.forEach(function (t) {
+        if (t[0] === 'new') { khead(1); return; }
+        const b = document.createElement('div');
+        b.className = 'bub ' + t[0] + ' ln in';
+        b.innerHTML = t[1];
+        kstream.appendChild(b);
+      });
+    });
+    jumpBottom(kstream);
+    close8.classList.add('on');
+  },
+  reset: function () {
+    kgen += 1; kbusy = false;
+    kfldtext.textContent = '';
+    krows.forEach(function (r) { r.classList.remove('sent', 'cur', 'spent'); });
+    kstream.innerHTML = '';
+    khead(0);
+    off(close8);
+  }
+};
+
+/* ===== 8쪽 · 잠긴 것과 열린 것 =====
+   조작이 둘이고 둘 다 카드를 누르는 것이다. 잠긴 카드는 눌러도 열리지 않고
+   왜 학습시킨다고들 말하는지가 그 카드 안에 붙는다. 열린 카드는 눌러야 무엇이 속하는지 펼쳐진다.
+   잠긴 카드도 눌리므로 커서는 pointer 다. 눌린 순간 자물쇠가 --alert 로 240ms 물들었다 돌아온다 */
+const routeT = $('routeT'), routeI = $('routeI'), close9 = $('close9');
+function done9() {
+  if (routeT.classList.contains('shown') && routeI.classList.contains('shown')) close9.classList.add('on');
+}
+function openCard() {
+  routeI.classList.add('shown', 'spent');
+  done9();
+}
+function knock() {
+  routeT.classList.add('buzz', 'shown');
+  later(8, function () { routeT.classList.remove('buzz'); }, 240);
+  done9();
+}
+on(routeI, openCard);
+on(routeT, knock);
+PAGE[8] = {
+  step: function () { if (!routeT.classList.contains('shown')) knock(); else openCard(); },
+  /* 두 카드의 확인 결과가 모두 드러난 마지막 상태다.
+     자물쇠가 물들었다 돌아오는 것은 그 순간의 반응이라 남지 않는다 */
+  finish: function () {
+    clearLater(8);
+    routeT.classList.add('shown');
+    routeT.classList.remove('buzz');
+    openCard();
+    done9();
+  },
+  reset: function () {
+    routeI.classList.remove('shown', 'spent');
+    routeT.classList.remove('shown', 'buzz');
+    off(close9);
+  }
+};
+
+/* ===== 9쪽 · 실습 단계 =====
+   요청문은 한 번 놓이면 끝까지 그대로다. 1단계와 2단계 사이에 달라지는 것은 첨부 하나다 */
+const steps = $$('#steps .step'), pt10 = $$('#pt10 span'), att10 = $('att10'), plist10 = $('plist10');
+const close10 = $('close10');
+let si = 0;
+function setStep(i) {
+  si = i;
+  focusOne(steps, steps[i]);
+  /* 3단계에서도 화면은 첨부한 대화 그대로다. 달라지는 것은 비교할 것이 뜬다는 점뿐이다 */
+  pt10.forEach(function (s, k) { s.classList.toggle('on', k === Math.min(i, 1)); });
+  att10.classList.toggle('on', i >= 1);
+  plist10.classList.toggle('on', i === 2);
+  if (i === steps.length - 1) close10.classList.add('on');
+}
+steps.forEach(function (s, i) { on(s, function () { setStep(i); }); });
+setStep(0);
+PAGE[9] = {
+  step: function () { setStep((si + 1) % steps.length); },
+  finish: function () { clearLater(9); setStep(steps.length - 1); },
+  reset: function () { setStep(0); off(close10); }
+};
+
+/* ===== 10쪽 · 접힌 것을 펼쳐 본다 =====
+   한 줄을 보냈는데 실제로는 이만큼이 함께 읽힌다. 펼치기를 오가며 그 차이를 반복해 보인다.
+   문서함까지 눌러야 경계가 완성되고 그때 결론이 나온다 */
+const readbox = $('readbox'), blockitem = $('blockitem'), blocknote = $('blocknote'), close11 = $('close11');
+function done11() {
+  if (readbox.classList.contains('open') && blocknote.classList.contains('on')) close11.classList.add('on');
+}
+function unfold(v) {
+  readbox.classList.toggle('open', v);
+  readbox.classList.toggle('cur', v);
+  done11();
+}
+on(readbox, function () { unfold(!readbox.classList.contains('open')); });
+on(blockitem, function () { blocknote.classList.add('on'); done11(); });
+PAGE[10] = {
+  step: function () {
+    if (!readbox.classList.contains('open')) unfold(true);
+    else if (!blocknote.classList.contains('on')) { blocknote.classList.add('on'); done11(); }
+    else unfold(false);
+  },
+  finish: function () { clearLater(10); unfold(true); blocknote.classList.add('on'); done11(); },
+  reset: function () { unfold(false); off(blocknote); off(close11); }
+};
+
+/* ===== 11쪽 · 토큰 ===== */
+const koPlain = $('koPlain'), koToks = $('koToks'), enPlain = $('enPlain'), enToks = $('enToks');
+const enrow = $('enrow'), tokcount = $('tokcount'), toknote = $('toknote'), close12 = $('close12');
+let splitOn = false, enOn = false;
+function tdraw() {
+  koPlain.classList.toggle('hidden', splitOn);
+  koToks.classList.toggle('hidden', !splitOn);
+  enPlain.classList.toggle('hidden', splitOn);
+  enToks.classList.toggle('hidden', !splitOn);
+  enrow.style.visibility = enOn ? '' : 'hidden';
+  /* 견주기는 둘 다 갈린 뒤에 성립한다. 해설은 그때 켜진다 */
+  tokcount.classList.toggle('on', splitOn && enOn);
+  toknote.classList.toggle('on', splitOn && enOn);
+  if (splitOn && enOn) close12.classList.add('on');
+}
+on($('tokbtn'), function () { splitOn = !splitOn; tdraw(); });
+on($('tokbtn2'), function () { enOn = !enOn; tdraw(); });
+tdraw();
+PAGE[11] = {
+  step: function () { if (!splitOn) splitOn = true; else enOn = !enOn; tdraw(); },
+  finish: function () { clearLater(11); splitOn = true; enOn = true; tdraw(); },
+  reset: function () { splitOn = false; enOn = false; tdraw(); off(close12); }
+};
+
+/* ===== 12쪽 · 컨텍스트 윈도우 =====
+   빈 대화에서 시작한다. Claude 를 실행해야 시스템 프롬프트가 0에서 2,000으로 올라가고,
+   그 다음부터 전송이 열린다. 전송을 누르면 말이 입력되고 나서 올라간다 */
+const LIMIT = 30000;
+const CHAT = [
+  { t: '미리내로보틱스를 검토하고 있습니다.', me: 60, ai: 220 },
+  { t: '검토 자료 두 건을 첨부했습니다.', file: 13000, me: 70, ai: 340 },
+  { t: '재무 자료가 없으면 다음 미팅에서 무엇을 요청해야 할까요?', me: 50, ai: 180 },
+  { t: '경쟁사 분석 보고서를 첨부했습니다.', file: 13500, me: 70, ai: 260 },
+  { t: '지금까지 정리한 검토 항목을 한 장으로 묶어 주세요.', fold: 1, me: 60, ai: 280 }
+];
+const msgs = $('msgs'), bubs = $$('#msgs .bub'), legs = $$('#legend .lg');
+const gsegs = $$('#cgauge span'), notes = $$('#notepane > div'), dets = $$('#details > div');
+const ctxstack = $('ctxstack'), sendbtn = $('sendbtn'), close13 = $('close13');
+const runbox = $('runbox'), runbtn = $('runbtn'), fld = $('fld'), fldtext = $('fldtext');
+const ZERO = { sys: 0, me: 0, ai: 0, file: 0, fold: 0 };
+let sIdx = 0, ran = false, busy13 = false, raf13 = 0;
+let seg = Object.assign({}, ZERO);
+const above = $('above');
+function bottom() { msgs.scrollTop = msgs.scrollHeight; }
+msgs.addEventListener('scroll', function () { above.classList.toggle('on', msgs.scrollTop > 6); });
+function showBub(b) { b.classList.remove('hidden'); b.classList.add('in'); bottom(); }
+function setSeg(next, ms) {
+  const from = seg;
+  seg = next;
+  gsegs.forEach(function (s) { s.style.width = (seg[s.dataset.k] / LIMIT * 100).toFixed(2) + '%'; });
+  legs.forEach(function (l) { l.classList.toggle('zero', seg[l.dataset.k] === 0); });
+  cancelAnimationFrame(raf13);
+  const t0 = performance.now();
+  (function tick(now) {
+    const p = ms > 0 ? Math.min(1, (now - t0) / ms) : 1;
+    const e = 1 - Math.pow(1 - p, 3);
+    let total = 0;
+    legs.forEach(function (l) {
+      const k = l.dataset.k, v = Math.round(from[k] + (seg[k] - from[k]) * e);
+      l.querySelector('.vl').textContent = v.toLocaleString();
+      total += v;
+    });
+    $('ctot').textContent = total.toLocaleString();
+    $('ctotsub').textContent = '/ ' + LIMIT.toLocaleString() + '토큰 (예시) · ' + Math.round(total / LIMIT * 100) + '%';
+    if (p < 1) raf13 = requestAnimationFrame(tick);
+  })(t0);
+}
+function note(i) { notes.forEach(function (n) { n.classList.toggle('on', Number(n.dataset.n) === i && ran); }); }
+function run13() {
+  if (ran) return;
+  ran = true;
+  runbox.classList.add('gone');
+  ctxstack.classList.remove('empty');
+  fld.classList.remove('off');
+  sendbtn.disabled = false;
+  showBub(bubs[0]);
+  setSeg(Object.assign({}, seg, { sys: 2000 }), 720);
+  note(0);
+}
+function type13(text, done) {
+  const ms = Math.min(900, 26 * text.length), t0 = performance.now();
+  (function tick(now) {
+    const p = Math.min(1, (now - t0) / ms);
+    fldtext.textContent = text.slice(0, Math.round(text.length * p));
+    if (p < 1) requestAnimationFrame(tick); else later(12, done, 260);
+  })(t0);
+}
+function send() {
+  if (!ran || busy13 || sIdx >= CHAT.length) return;
+  const a = CHAT[sIdx], step = sIdx + 1;
+  busy13 = true;
+  type13(a.t, function () {
+    fldtext.textContent = '';
+    const mine = bubs.filter(function (b) { return Number(b.dataset.s) === step && b.dataset.k !== 'ai'; });
+    const reply = bubs.filter(function (b) { return Number(b.dataset.s) === step && b.dataset.k === 'ai'; });
+    const next = Object.assign({}, seg);
+    if (a.fold) { next.me = 0; next.ai = 0; next.file = 0; next.fold = 1200; }
+    if (a.me) next.me += a.me;
+    if (a.file) next.file += a.file;
+    mine.forEach(function (b, i) { later(12, function () { showBub(b); }, i * 260); });
+    setSeg(next, 620);
+    later(12, function () {
+      const after = Object.assign({}, seg);
+      after.ai += a.ai;
+      reply.forEach(showBub);
+      setSeg(after, 620);
+      sIdx = step;
+      note(sIdx);
+      busy13 = false;
+      if (sIdx >= CHAT.length) { sendbtn.classList.add('done'); sendbtn.disabled = true; close13.classList.add('on'); }
+    }, 640 + mine.length * 260);
+  });
+}
+function reset13() {
+  clearLater(13);
+  cancelAnimationFrame(raf13);
+  sIdx = 0; ran = false; busy13 = false;
+  bubs.forEach(function (b) { b.classList.add('hidden'); b.classList.remove('in', 'lit'); });
+  runbox.classList.remove('gone');
+  fld.classList.add('off');
+  fldtext.textContent = '';
+  sendbtn.disabled = true;
+  sendbtn.classList.remove('done');
+  setSeg(Object.assign({}, ZERO), 0);
+  note(-1);
+  ctxstack.classList.remove('detail');
+  ctxstack.classList.add('empty');
+  off(close13);
+  msgs.scrollTop = 0;
+  above.classList.remove('on');
+}
+on(runbtn, run13);
+on(sendbtn, send);
+on($('resetbtn'), reset13);
+legs.forEach(function (l) {
+  const k = l.dataset.k;
+  l.addEventListener('mouseenter', function () {
+    ctxstack.classList.add('detail');
+    dets.forEach(function (d) { d.classList.toggle('on', d.dataset.d === k); });
+    bubs.forEach(function (b) { b.classList.toggle('lit', b.dataset.k === k && !b.classList.contains('hidden')); });
+  });
+  l.addEventListener('mouseleave', function () {
+    ctxstack.classList.remove('detail');
+    bubs.forEach(function (b) { b.classList.remove('lit'); });
+  });
+});
+bubs.forEach(function (b) {
+  b.addEventListener('mouseenter', function () {
+    legs.forEach(function (l) { l.classList.toggle('lit', l.dataset.k === b.dataset.k); });
+  });
+  b.addEventListener('mouseleave', function () { legs.forEach(function (l) { l.classList.remove('lit'); }); });
+});
+reset13();
+PAGE[12] = {
+  step: function () { if (!ran) run13(); else send(); },
+  /* 다섯 번을 다 보낸 마지막 상태를 그 자리에서 세운다.
+     종전에는 step 을 시간차로 되풀이해서, End 를 누르면 오른쪽 해설만 마지막이고
+     왼쪽 대화창이 비어 있고 카운터가 2,001 에 멈춰 있었다. 그것이 반려 사유다.
+     예약을 모두 거두고, 말풍선을 전부 최종 표시 상태로 놓고, seg 를 마지막 단계 값으로
+     즉시 계산해 게이지 폭과 범례 숫자와 합계와 백분율을 최종값으로 넣는다 */
+  finish: function () {
+    clearLater(12);
+    cancelAnimationFrame(raf13);
+    ran = true; busy13 = false;
+    runbox.classList.add('gone');
+    ctxstack.classList.remove('empty', 'detail');
+    fld.classList.remove('off');
+    fldtext.textContent = '';
+    bubs.forEach(function (b) { b.classList.remove('hidden', 'lit'); b.classList.add('in'); });
+    const s = Object.assign({}, ZERO);
+    s.sys = 2000;
+    CHAT.forEach(function (a) {
+      if (a.fold) { s.me = 0; s.ai = 0; s.file = 0; s.fold = 1200; }
+      if (a.me) s.me += a.me;
+      if (a.file) s.file += a.file;
+      s.ai += a.ai;
+    });
+    setSeg(s, 0);
+    sIdx = CHAT.length;
+    note(5);
+    sendbtn.classList.add('done');
+    sendbtn.disabled = true;
+    close13.classList.add('on');
+    jumpBottom(msgs);
+    above.classList.add('on');
+  },
+  reset: reset13
+};
+
+/* ===== 13쪽 · 답 안에 박힌 각주 =====
+   누르는 곳은 위첨자가 아니라 그 각주가 달린 줄 전체다. 위첨자는 무대에서 겨냥하기에 너무 작다.
+   셋을 다 눌러 봐야 어느 것이 지어낸 것인지 드러난다 */
+const fns = $$('#fnbub .fn'), fnrows = $$('#fnotes .fnrow'), close14 = $('close14');
+function scheck(el) {
+  if (el.classList.contains('on')) return;
+  el.classList.add('on');
+  fnrows[Number(el.dataset.f)].classList.add('on');
+  if (fns.every(function (s) { return s.classList.contains('on'); })) close14.classList.add('on');
+}
+fns.forEach(function (s) { on(s, function () { scheck(s); }); });
+PAGE[13] = {
+  step: function () { const s = fns.filter(function (x) { return !x.classList.contains('on'); })[0]; if (s) scheck(s); },
+  finish: function () { clearLater(13); fns.forEach(scheck); },
+  reset: function () {
+    fns.forEach(function (s) { s.classList.remove('on'); });
+    fnrows.forEach(function (r) { r.classList.remove('on'); });
+    off(close14);
+  }
+};
+
+/* ===== 14쪽 · 하나씩 켜지는 되짚기 ===== */
+const recap = $$('#recap div'), declb = $('declb'), nextq = $('nextq');
+let ri = 0;
+function rdraw() {
+  recap.forEach(function (d, i) { d.classList.toggle('on', i < ri); });
+  declb.classList.toggle('on', ri >= recap.length);
+  nextq.classList.toggle('on', ri > recap.length);
+}
+rdraw();
+PAGE[14] = {
+  step: function () { if (ri <= recap.length) ri += 1; rdraw(); },
+  finish: function () { clearLater(14); ri = recap.length + 1; rdraw(); },
+  reset: function () { ri = 0; rdraw(); }
+};
+
+/* 첫 쪽도 같은 등장 규칙을 따른다 */
+armSeq(slides[0]);
+</script>
