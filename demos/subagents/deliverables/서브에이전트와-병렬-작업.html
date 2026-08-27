@@ -495,6 +495,12 @@ button { font-family: inherit; border: 0; background: none; color: inherit; }
 .nextq { position: absolute; left: var(--margin-x); bottom: var(--close-bottom);
   width: var(--col-wide); font-size: var(--fs-body); font-weight: var(--fw-medium);
   line-height: var(--lh-body); letter-spacing: var(--ls-body); color: var(--ink-support); }
+
+/* 키보드 초점 표시와 모션 축소. 초점 링은 마우스가 아니라 키보드로 잡았을 때만 보인다 */
+[data-click]:focus-visible, .grip:focus-visible { outline: none; box-shadow: var(--ring-focus); }
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-fast: 0ms; --dur-base: 0ms; --dur-step: 0ms; --dur-page: 0ms; --dur-enter: 0ms; }
+}
 </style>
 </head>
 <body>
@@ -720,6 +726,7 @@ function $$(sel, root) { return [].slice.call((root || document).querySelectorAl
 function on(el, fn) {
   if (!el) return;
   el.dataset.click = '1';
+  el.tabIndex = 0;
   el.addEventListener('click', function (e) { e.stopPropagation(); fn(e); });
 }
 function hov(el, enter, leave) {
@@ -795,10 +802,23 @@ armSeq(slides[0]);
    좌우는 쪽 넘김, Space 는 그 쪽의 다음 조작, End 는 그 쪽의 완료 상태다 */
 addEventListener('keydown', function (e) {
   if (e.key === 'ArrowRight' || e.key === 'PageDown') { go(cur + 1); e.preventDefault(); }
+  else if (e.key === ' ') {
+    /* 완료된 쪽에서 Space 는 처음 상태로 되돌린다. 쪽마다 다르면 발표자가 외울 수 없다 */
+    var a = PAGE[cur + 1];
+    var done = slides[cur].querySelector('.close.on, .decl.on');
+    if (done && a && a.reset) a.reset();
+    else if (a && a.step) a.step();
+    e.preventDefault();
+  }
   else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { go(cur - 1); e.preventDefault(); }
-  else if (e.key === ' ') { var a = PAGE[cur + 1]; if (a && a.step) a.step(); e.preventDefault(); }
   else if (e.key === 'End') { var b = PAGE[cur + 1]; if (b && b.finish) b.finish(); e.preventDefault(); }
+  else if (e.key === 'Enter') {
+    /* Tab 으로 잡은 요소를 Enter 가 누른다. 마우스 없이도 항목이 열린다 */
+    var el = document.activeElement;
+    if (el && el.dataset && el.dataset.click) { el.click(); e.preventDefault(); }
+  }
 });
+window.SPACE_RESTART = true;
 /* 빈 곳을 누르면 그 쪽의 고정이 풀린다. 조작 뒤에 초점을 놓아 방향키가 즉시 듣는다 */
 document.addEventListener('click', function () {
   release();
@@ -1063,7 +1083,11 @@ p6render();
    항목은 누르는 대상이 아니라 발표자가 넘길 때마다 켜지는 대상이다 ===== */
 var p7items = $$('#p7list span');
 var p7i = 0;
-function p7render() { mark(p7items, 'on', function (el, k) { return k < p7i; }); }
+function p7render() {
+  mark(p7items, 'on', function (el, k) { return k < p7i; });
+  /* 항목이 다 켜지면 선언이 완료 표시를 가진다. 완료 후 Space 재시작의 감지 기준이다 */
+  p7items[0].closest('section').querySelector('.decl').classList.toggle('on', p7i === p7items.length);
+}
 PAGE[7] = {
   step: function () { p7i = Math.min(p7items.length, p7i + 1); p7render(); },
   finish: function () { p7i = p7items.length; p7render(); },

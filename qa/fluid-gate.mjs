@@ -202,6 +202,54 @@ for (const DECK of DECKS) {
     /* 여백 검사가 한 쪽도 안 걸렸으면 통과가 아니라 검사 무효다 */
     check(`${tag} 여백 검사 대상`, pageCount <= 1 || marginChecked > 0, `${marginChecked}쪽`);
 
+    /* 발표자 통제권 계약 세 가지. 1920 에서만 돌려 실행 시간을 묶는다 */
+    if (vp.w === 1920) {
+      /* prefers-reduced-motion 에서 전환 시간 토큰이 0 이 된다 */
+      await page.emulateMedia({ reducedMotion: 'reduce' });
+      const durs = await page.evaluate(`['--dur-fast','--dur-base','--dur-step','--dur-page','--dur-enter']
+        .map((k) => getComputedStyle(document.documentElement).getPropertyValue(k).trim()).filter((v) => v !== '')`);
+      check(`${tag} reduced-motion 시간 0`, durs.length > 0 && durs.every((v) => v === '0ms' || v === '0s'), durs.join(' '));
+      await page.emulateMedia({ reducedMotion: null });
+      /* 서명은 class 만이 아니라 inline style 도 담는다. 핸들 위치는 left 로만 움직인다 */
+      const sig = `(() => { const sec = document.querySelector('.slide.active');
+        return [].map.call(sec.querySelectorAll('*'), (e) => e.className + '~' + (e.getAttribute('style') || '')).join(';'); })()`;
+      const spaceRestart = await page.evaluate('!!window.SPACE_RESTART');
+      for (let p = 2; p <= pageCount; p++) {
+        await page.evaluate(`go(${p - 1})`);
+        await page.waitForTimeout(450);
+        const rest = await page.evaluate(sig);
+        /* static-fallback 멱등: End 를 두 번 불러도 같은 화면이다 */
+        await page.keyboard.press('End');
+        await page.waitForTimeout(400);
+        const end1 = await page.evaluate(sig);
+        await page.keyboard.press('End');
+        await page.waitForTimeout(400);
+        const end2 = await page.evaluate(sig);
+        check(`${tag} p${p} End 멱등`, end1 === end2);
+        /* Space 재시작: 완료된 쪽에서 Space 는 처음 상태로 되돌린다 */
+        if (spaceRestart) {
+          await page.keyboard.press(' ');
+          await page.waitForTimeout(450);
+          const back = await page.evaluate(sig);
+          check(`${tag} p${p} 완료 후 Space 재시작`, back === rest, back === rest ? '' : '처음 상태와 다르다');
+        }
+        /* keyboard-recovery: 조작 직후 방향키가 즉시 쪽을 넘긴다 */
+        const hasClick = await page.evaluate(`(() => {
+          const el = document.querySelector('.slide.active [data-click]');
+          if (!el) return false;
+          el.focus(); el.click(); return true; })()`);
+        if (hasClick && p < pageCount) {
+          await page.waitForTimeout(150);
+          await page.keyboard.press('ArrowRight');
+          await page.waitForTimeout(450);
+          const idx = await page.evaluate(`(() => {
+            const all = [].slice.call(document.querySelectorAll('.slide'));
+            return all.indexOf(document.querySelector('.slide.active')); })()`);
+          check(`${tag} p${p} 조작 후 키보드 복구`, idx === p, `이동 결과 색인 ${idx}`);
+        }
+      }
+    }
+
     /* stage-reset 계약. End 로 완료시킨 쪽을 떠났다 돌아오면 처음 상태여야 한다 */
     if (pageCount >= 3) {
       const sig = `(() => { const sec = document.querySelector('.slide.active');
