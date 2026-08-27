@@ -1,0 +1,221 @@
+# qa/gates.mjs
+ok   토큰 일치 · tokens.css 선언 수  110개
+ok   토큰 일치 · HTML 에 빠진 선언
+ok   토큰 일치 · 값이 다른 선언
+ok   토큰 일치 · HTML 에만 있는 선언  tokens.css 110 / HTML 110
+ok   1280x960 스테이지 폭 1920  실측 1920
+ok   1280x960 렌더 배율  실측 0.667 / 기대 0.667
+ok   1280x960 뷰포트 맞춤  렌더 1280x720 / 뷰포트 1280x960
+ok   1280x960 가운데 정렬
+ok   1920x1080 스테이지 폭 1920  실측 1920
+ok   1920x1080 렌더 배율  실측 1.000 / 기대 1.000
+ok   1920x1080 뷰포트 맞춤  렌더 1920x1080 / 뷰포트 1920x1080
+ok   1920x1080 가운데 정렬
+ok   2560x1080 스테이지 폭 2560  실측 2560
+ok   2560x1080 렌더 배율  실측 1.000 / 기대 1.000
+ok   2560x1080 뷰포트 맞춤  렌더 2560x1080 / 뷰포트 2560x1080
+ok   2560x1080 가운데 정렬
+ok   3440x1440 스테이지 폭 2560  실측 2560
+ok   3440x1440 렌더 배율  실측 1.333 / 기대 1.333
+ok   3440x1440 뷰포트 맞춤  렌더 3413x1440 / 뷰포트 3440x1440
+ok   3440x1440 가운데 정렬
+ok   1920 p01 rest 네 변 넘침 없음
+ok   1920 p01 rest 세로 1080 이내  scrollHeight 1080
+ok   1920 p02 rest 왼쪽 여백 80  실측 80.0
+ok   1920 p02 rest 오른쪽 여백 80  실측 80.0
+ok   1920 p02 rest 네 변 넘침 없음
+ok   1920 p02 rest 세로 1080 이내  scrollHeight 1080
+ok   1920 p03 rest 왼쪽 여백 80  실측 80.0
+ok   1920 p03 rest 오른쪽 여백 80  실측 80.0
+ok   1920 p03 rest 네 변 넘침 없음
+ok   1920 p03 rest 세로 1080 이내  scrollHeight 1080
+ok   1920 p04 rest 왼쪽 여백 80  실측 80.0
+ok   1920 p04 rest 오른쪽 여백 80  실측 80.0
+ok   1920 p04 rest 네 변 넘침 없음
+ok   1920 p04 rest 세로 1080 이내  scrollHeight 1080
+ok   1920 p05 rest 왼쪽 여백 80  실측 80.0
+ok   1920 p05 rest 오른쪽 여백 80  실측 80.0
+ok   1920 p05 rest 네 변 넘침 없음
+ok   1920 p05 rest 세로 1080 이내  scrollHeight 1080
+ok   1920 p06 rest 왼쪽 여백 80  실측 80.0
+ok   1920 p06 rest 오른쪽 여백 80  실측 80.0
+ok   1920 p06 rest 네 변 넘침 없음
+ok   1920 p06 rest 세로 1080 이내  scrollHeight 1080
+ok   1920 p07 rest 왼쪽 여백 80  실측 80.0
+ok   1920 p07 rest 오른쪽 여백 80  실측 80.0
+ok   1920 p07 rest 네 변 넘침 없음
+ok   1920 p07 rest 세로 1080 이내  scrollHeight 1080
+ok   1920 p01 done 네 변 넘침 없음
+ok   1920 p01 done 세로 1080 이내  scrollHeight 1080
+ok   1920 p02 done 왼쪽 여백 80  실측 80.0
+ok   1920 p02 done 오른쪽 여백 80  실측 80.0
+ok   1920 p02 done 네 변 넘침 없음
+ok   1920 p02 done 세로 1080 이내  scrollHeight 1080
+ok   1920 p03 done 왼쪽 여백 80  실측 80.0
+ok   1920 p03 done 오른쪽 여백 80  실측 80.0
+ok   1920 p03 done 네 변 넘침 없음
+ok   1920 p03 done 세로 1080 이내  scrollHeight 1080
+ok   1920 p04 done 왼쪽 여백 80  실측 80.0
+ok   1920 p04 done 오른쪽 여백 80  실측 80.0
+ok   1920 p04 done 네 변 넘침 없음
+ok   1920 p04 done 세로 1080 이내  scrollHeight 1080
+ok   1920 p05 done 왼쪽 여백 80  실측 80.0
+ok   1920 p05 done 오른쪽 여백 80  실측 80.0
+ok   1920 p05 done 네 변 넘침 없음
+ok   1920 p05 done 세로 1080 이내  scrollHeight 1080
+ok   1920 p06 done 왼쪽 여백 80  실측 80.0
+ok   1920 p06 done 오른쪽 여백 80  실측 80.0
+ok   1920 p06 done 네 변 넘침 없음
+ok   1920 p06 done 세로 1080 이내  scrollHeight 1080
+ok   1920 p07 done 왼쪽 여백 80  실측 80.0
+ok   1920 p07 done 오른쪽 여백 80  실측 80.0
+ok   1920 p07 done 네 변 넘침 없음
+ok   1920 p07 done 세로 1080 이내  scrollHeight 1080
+ok   2560 p01 rest 네 변 넘침 없음
+ok   2560 p01 rest 세로 1080 이내  scrollHeight 1080
+ok   2560 p02 rest 왼쪽 여백 80  실측 80.0
+ok   2560 p02 rest 오른쪽 여백 80  실측 80.0
+ok   2560 p02 rest 네 변 넘침 없음
+ok   2560 p02 rest 세로 1080 이내  scrollHeight 1080
+ok   2560 p03 rest 왼쪽 여백 80  실측 80.0
+ok   2560 p03 rest 오른쪽 여백 80  실측 80.0
+ok   2560 p03 rest 네 변 넘침 없음
+ok   2560 p03 rest 세로 1080 이내  scrollHeight 1080
+ok   2560 p04 rest 왼쪽 여백 80  실측 80.0
+ok   2560 p04 rest 오른쪽 여백 80  실측 80.0
+ok   2560 p04 rest 네 변 넘침 없음
+ok   2560 p04 rest 세로 1080 이내  scrollHeight 1080
+ok   2560 p05 rest 왼쪽 여백 80  실측 80.0
+ok   2560 p05 rest 오른쪽 여백 80  실측 80.0
+ok   2560 p05 rest 네 변 넘침 없음
+ok   2560 p05 rest 세로 1080 이내  scrollHeight 1080
+ok   2560 p06 rest 왼쪽 여백 80  실측 80.0
+ok   2560 p06 rest 오른쪽 여백 80  실측 80.0
+ok   2560 p06 rest 네 변 넘침 없음
+ok   2560 p06 rest 세로 1080 이내  scrollHeight 1080
+ok   2560 p07 rest 왼쪽 여백 80  실측 80.0
+ok   2560 p07 rest 오른쪽 여백 80  실측 80.0
+ok   2560 p07 rest 네 변 넘침 없음
+ok   2560 p07 rest 세로 1080 이내  scrollHeight 1080
+ok   2560 p01 done 네 변 넘침 없음
+ok   2560 p01 done 세로 1080 이내  scrollHeight 1080
+ok   2560 p02 done 왼쪽 여백 80  실측 80.0
+ok   2560 p02 done 오른쪽 여백 80  실측 80.0
+ok   2560 p02 done 네 변 넘침 없음
+ok   2560 p02 done 세로 1080 이내  scrollHeight 1080
+ok   2560 p03 done 왼쪽 여백 80  실측 80.0
+ok   2560 p03 done 오른쪽 여백 80  실측 80.0
+ok   2560 p03 done 네 변 넘침 없음
+ok   2560 p03 done 세로 1080 이내  scrollHeight 1080
+ok   2560 p04 done 왼쪽 여백 80  실측 80.0
+ok   2560 p04 done 오른쪽 여백 80  실측 80.0
+ok   2560 p04 done 네 변 넘침 없음
+ok   2560 p04 done 세로 1080 이내  scrollHeight 1080
+ok   2560 p05 done 왼쪽 여백 80  실측 80.0
+ok   2560 p05 done 오른쪽 여백 80  실측 80.0
+ok   2560 p05 done 네 변 넘침 없음
+ok   2560 p05 done 세로 1080 이내  scrollHeight 1080
+ok   2560 p06 done 왼쪽 여백 80  실측 80.0
+ok   2560 p06 done 오른쪽 여백 80  실측 80.0
+ok   2560 p06 done 네 변 넘침 없음
+ok   2560 p06 done 세로 1080 이내  scrollHeight 1080
+ok   2560 p07 done 왼쪽 여백 80  실측 80.0
+ok   2560 p07 done 오른쪽 여백 80  실측 80.0
+ok   2560 p07 done 네 변 넘침 없음
+ok   2560 p07 done 세로 1080 이내  scrollHeight 1080
+ok   호버 반응 · pointer 요소 54개 전수  실패 0건
+ok   호버 반응 · 검사 대상이 비어 있지 않다  54개
+ok   콘솔 오류 0건
+ok   원격 요청 0건
+
+128건 중 실패 0건
+
+# qa/selfcontained-gate.mjs
+ok   외부 url() 0건
+ok   원격 참조 0건
+ok   한글이 문서 서체로 그려진다  Pretendard "가" 86.43 / 폴백 100.00
+ok   라틴이 문서 서체로 그려진다  Pretendard "H" 71.92 / 폴백 76.95
+ok   막힌 원격 요청 0건
+
+5건 중 실패 0건  ·  파일 162 KB
+
+# qa/palette-solve.py
+기준 휘도 (ax-education 1교시 실측)
+  canvas         #E5E9F1  Y=0.8129
+  sunken         #D7DDE8  Y=0.7199
+  divider        #CBD3E0  Y=0.6467
+  divider-strong #AEB9CB  Y=0.4801
+  line           #CFD9E5  Y=0.6855
+  tint           #DCE8FB  Y=0.7989
+  hl             #C1D8F8  Y=0.6723
+  data-3         #3A8FFF  Y=0.2776
+  data-4         #89BCFF  Y=0.4850
+  ink-support    #5B5B5B  Y=0.1046
+  ink-meta       #737373  Y=0.1714
+  ink-muted      #B2B2B2  Y=0.4452
+  canvas-dark    #020820  Y=0.0029
+
+푼 값
+  surface        #FFFFFF  Y=1.0000  
+  canvas         #E8E8F2  Y=0.8128  
+  sunken         #DCDBEC  Y=0.7193  
+  canvas-dark    #080819  Y=0.0030  
+  divider        #D1D1E6  Y=0.6487  
+  divider-strong #B6B5D7  Y=0.4790  
+  accent         #533AFD  Y=0.1196  Stripe --accent 실측
+  accent-hover   #4434D4  Y=0.0844  Stripe --accent-hover 실측
+  accent-deep    #2E2B8C  Y=0.0420  Stripe --accent-active 실측
+  accent-line    #D9D3FF  Y=0.6856  
+  accent-tint    #E8E4FF  Y=0.7986  
+  accent-hl      #D7D1FF  Y=0.6727  
+  data-1         #2E2B8C  Y=0.0420  
+  data-2         #533AFD  Y=0.1196  
+  data-3         #8E7EFE  Y=0.2783  
+  data-4         #BAB0FE  Y=0.4865  
+  data-5         #D9D3FF  Y=0.6856  
+  ink            #000000  Y=0.0000  
+  ink-support    #5A5A64  Y=0.1041  
+  ink-meta       #73727C  Y=0.1713  
+  ink-muted      #B2B1BB  Y=0.4450  
+
+대비 (WCAG)
+  ink / canvas             17.26:1
+  ink / surface            21.00:1
+  ink / sunken             15.39:1
+  ink-support / canvas     5.60:1
+  ink-support / surface    6.82:1
+  ink-meta / canvas        3.90:1
+  accent / canvas          5.09:1
+  accent / surface         6.19:1
+  accent / accent-tint     5.00:1
+  surface / data-1         11.41:1
+  surface / data-2         6.19:1
+  ink / data-4             10.73:1
+  ink / data-5             14.71:1
+
+면 층 사이 휘도 차
+  surface - canvas  0.1872
+  canvas  - sunken  0.0935
+
+tokens.css 에 옮길 줄
+  --surface: #FFFFFF;
+  --canvas: #E8E8F2;
+  --sunken: #DCDBEC;
+  --canvas-dark: #080819;
+  --divider: #D1D1E6;
+  --divider-strong: #B6B5D7;
+  --accent: #533AFD;
+  --accent-hover: #4434D4;
+  --accent-deep: #2E2B8C;
+  --accent-line: #D9D3FF;
+  --accent-tint: #E8E4FF;
+  --accent-hl: #D7D1FF;
+  --data-1: #2E2B8C;
+  --data-2: #533AFD;
+  --data-3: #8E7EFE;
+  --data-4: #BAB0FE;
+  --data-5: #D9D3FF;
+  --ink: #000000;
+  --ink-support: #5A5A64;
+  --ink-meta: #73727C;
+  --ink-muted: #B2B1BB;

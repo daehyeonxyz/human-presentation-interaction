@@ -7,7 +7,7 @@ description: (마당) 발표의 목적과 메시지를 먼저 잡고, 청중이 
 
 개념을 도형 몇 개로 그려 넣는 대신, 그 개념에 어떤 인터랙션이 필요한지 먼저 판정하고 실제 웹에서 구동되는 구현체 수준까지 만들어내는 스킬이다. 품질 기준의 실물 표본은 Claude Code 공식 문서의 "Explore the context window" 위젯이며, 그 해부와 지향점은 `research/north-star.md`에 있다. 발표 철학의 실측 근거는 `research/daehyeon-presentation-philosophy.md`, 인터랙션 함정과 방법론 근거는 `research/presentation-landscape.md`다. 세 문서는 필요할 때 Read하는 참조 소스이고, 이 스킬 본문이 실행 절차의 SSOT다. 트리거 어휘: "인터랙티브 발표", "체험형 프레젠테이션", "인터랙티브 슬라이드", "발표에 인터랙션 넣자".
 
-레이아웃의 SSOT는 `layout-taxonomy.md`다. 조작 문법과 메시지의 논리 구조를 교차해 판 16종을 정의하고, 판마다 1920x1080 절대 좌표 규격과 조합 규칙과 복잡도 등급 대응을 갖는다. 안정성 가드레일 여덟 가지도 그 문서가 갖는다. 3단계 구성과 5단계 채널 배분과 7단계 디자인 시스템과 8단계 구현이 그 문서의 패턴 ID로 레이아웃을 지목한다. 전역 `~/.claude/skills/layout-taxonomy/taxonomy.md`는 스크롤 웹 UX용이라 그대로 끌어오지 않는다.
+레이아웃의 SSOT는 `layout-taxonomy.md`다. 조작 문법과 메시지의 논리 구조를 교차해 판 16종을 정의하고, 판마다 마진 보존 가변 폭 좌표 규격(폭 1920 기준 기본값)과 조합 규칙과 복잡도 등급 대응을 갖는다. 안정성 가드레일 열 가지도 그 문서가 갖는다. 3단계 구성과 5단계 채널 배분과 7단계 디자인 시스템과 8단계 구현이 그 문서의 패턴 ID로 레이아웃을 지목한다. 전역 `~/.claude/skills/layout-taxonomy/taxonomy.md`는 스크롤 웹 UX용이라 그대로 끌어오지 않는다.
 
 ## 핵심 원칙 (계약)
 
@@ -163,7 +163,7 @@ qa/              렌더 캡처와 조작 관찰 증거. 완료 판정 근거를 
 
 zero-dependency 단일 HTML(1920x1080 고정 스테이지)로 전체를 제작한다. 인터랙션은 카탈로그 조립이 아니라 페이지별 명세에서 직접 구현하고, 발표자 통제권(키보드 즉시 복구, 인터랙션 모드 토글)과 폴백 정적 상태를 모든 인터랙션에 내장한다.
 
-`layout-taxonomy.md`의 안정성 가드레일 여덟 가지(`overflow-containment`·`reserved-slot`·`growth-direction`·`no-position-shift`·`keyboard-recovery`·`static-fallback`·`stage-reset`·`self-contained`)를 전 페이지에 적용한다. 선택 항목이 아니라 기본이다.
+`layout-taxonomy.md`의 안정성 가드레일 열 가지(`overflow-containment`·`reserved-slot`·`growth-direction`·`no-position-shift`·`keyboard-recovery`·`hover-response`·`static-fallback`·`stage-reset`·`stacking-discipline`·`self-contained`)를 전 페이지에 적용한다. 선택 항목이 아니라 기본이다.
 
 - 산출물: `deliverables/`의 발표 HTML (파일명은 발표 제목)
 - 통과 기준: file://로 열리고, 처음부터 끝까지 키보드만으로 진행되며, 모든 인터랙션이 명세의 상태, 시퀀스, 상세, 해석, 폴백을 실제로 구현했다. 웹폰트와 이미지가 인라인돼 있어 HTML 파일 하나만 옮겨도 같은 화면이 나온다.

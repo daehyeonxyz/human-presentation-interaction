@@ -55,10 +55,11 @@ async function playwright() {
 const VIEWPORTS = [
   { w: 1280, h: 960,  expectW: 1920, shots: [4] },
   { w: 1920, h: 1080, expectW: 1920, shots: [4, 13] },
-  { w: 2560, h: 1080, expectW: 2560, shots: [1, 4, 6, 12, 13, 14] },
+  { w: 2560, h: 1080, expectW: 2560, shots: [1, 4, 6, 12, 13, 14], hover: true },
   { w: 3440, h: 1440, expectW: 2560, shots: [4, 13] },
 ];
-const PAGES = Array.from({ length: 14 }, (_, i) => i + 1);
+/* 쪽 수는 하드코딩하지 않고 열린 덱의 .slide 개수에서 얻는다 */
+let PAGES = [];
 /* 표지(1쪽)는 네 변 여백 60 의 전면 액자라 여백 80 검사에서 뺀다. 넘침 검사는 전 쪽에 건다 */
 const MARGIN_SKIP = new Set([1]);
 
@@ -76,6 +77,9 @@ for (const vp of VIEWPORTS) {
   const page = await browser.newPage({ viewport: { width: vp.w, height: vp.h } });
   await page.goto(url, { waitUntil: 'load' });
   await page.evaluate('window.still && window.still()');
+  const pageCount = await page.evaluate('document.querySelectorAll(".slide").length');
+  PAGES = Array.from({ length: pageCount }, (_, i) => i + 1);
+  check(`${vp.w}x${vp.h} 쪽 수 감지`, pageCount > 0, `${pageCount}쪽`);
 
   /* 1. 스테이지 폭과 2. 렌더 배율·맞춤·가운데 정렬 */
   const fitm = await page.evaluate(`(() => {
@@ -98,7 +102,9 @@ for (const vp of VIEWPORTS) {
       const stage = document.getElementById('stage');
       const sr = stage.getBoundingClientRect();
       const s = sr.width / stage.offsetWidth;
-      const sec = document.querySelector('section.active');
+      const all = [].slice.call(document.querySelectorAll('.slide'));
+      const sec = document.querySelector('.slide.active');
+      const activeIdx = all.indexOf(sec);
       const kicker = sec ? sec.querySelector('[class*="kick"]') : null;
       const pageno = sec ? sec.querySelector('[class*="pgno"], [class*="pageno"], [class*="pg"]') : null;
       let bad = '';
@@ -115,18 +121,71 @@ for (const vp of VIEWPORTS) {
         }
       }
       return {
-        stageW: stage.offsetWidth, active: !!sec,
+        stageW: stage.offsetWidth, active: !!sec, activeIdx,
         kickerLeft: kicker ? (kicker.getBoundingClientRect().left - sr.left) / s : null,
         pagenoRight: pageno ? (pageno.getBoundingClientRect().right - sr.left) / s : null,
         bad,
       };
     })()`);
-    check(`${vp.w}x${vp.h} p${p} 활성 쪽 확인`, m.active);
+    check(`${vp.w}x${vp.h} p${p} 활성 쪽 확인`, m.active && m.activeIdx === p - 1, m.active ? `활성 색인 ${m.activeIdx}` : '활성 쪽 없음');
     if (!MARGIN_SKIP.has(p) && m.kickerLeft !== null)
       check(`${vp.w}x${vp.h} p${p} 왼쪽 여백 80`, Math.abs(m.kickerLeft - 80) <= 1, `실측 ${m.kickerLeft.toFixed(1)}`);
     if (!MARGIN_SKIP.has(p) && m.pagenoRight !== null)
       check(`${vp.w}x${vp.h} p${p} 오른쪽 여백 80`, Math.abs(m.stageW - 80 - m.pagenoRight) <= 1, `쪽 번호 오른쪽 끝 ${m.pagenoRight.toFixed(1)} / 기대 ${m.stageW - 80}`);
     check(`${vp.w}x${vp.h} p${p} 네 변 넘침 없음`, !m.bad, m.bad);
+  }
+
+  /* 호버 전수 검사. 렌더 폭이 넓어져도 pointer 요소 전부가 호버 반응을 내는지 잰다.
+     render-v5.mjs 의 검사와 같은 방식이고 이쪽은 가변 폭 상태에서 돈다 */
+  if (vp.hover) {
+    const mark = () => page.evaluate(() => {
+      const list = [];
+      document.querySelectorAll('[data-hx]').forEach((el) => { delete el.dataset.hx; });
+      document.querySelectorAll('.slide.active *').forEach((el) => {
+        if (getComputedStyle(el).cursor !== 'pointer') return;
+        const p = el.parentElement;
+        if (p && getComputedStyle(p).cursor === 'pointer') return;
+        const r = el.getBoundingClientRect();
+        if (r.width < 4 || r.height < 4) return;
+        let node = el, dead = false;
+        while (node && node !== document.body) {
+          const c = getComputedStyle(node);
+          if (c.pointerEvents === 'none' || parseFloat(c.opacity) === 0 || c.visibility === 'hidden') { dead = true; break; }
+          node = node.parentElement;
+        }
+        if (dead) return;
+        el.dataset.hx = String(list.length);
+        list.push((el.className || el.tagName).toString().slice(0, 40));
+      });
+      return list;
+    });
+    const snap = (i) => page.evaluate((k) => {
+      const el = document.querySelector('[data-hx="' + k + '"]');
+      const cs = getComputedStyle(el);
+      const txt = el.querySelector('*') || el;
+      return [cs.boxShadow, cs.backgroundColor, cs.color, cs.borderBottomColor,
+        getComputedStyle(txt).color, getComputedStyle(txt).backgroundColor].join('|');
+    }, i);
+    const hoverDead = [];
+    let clickCount = 0;
+    for (const p of PAGES) {
+      await page.evaluate(`go(${p - 1})`);
+      await page.waitForTimeout(300);
+      const names = await mark();
+      clickCount += names.length;
+      for (let i = 0; i < names.length; i++) {
+        const before = await snap(i);
+        await page.hover('[data-hx="' + i + '"]', { force: true }).catch(() => {});
+        await page.waitForTimeout(170);
+        const after = await snap(i);
+        await page.mouse.move(10, vp.h - 10);
+        await page.waitForTimeout(60);
+        if (before === after) hoverDead.push(p + '쪽 · ' + names[i]);
+      }
+    }
+    /* 대상 0개는 통과가 아니라 검사 무효다. 덱에 pointer 요소가 하나도 안 잡히면 실패로 센다 */
+    check(`${vp.w}x${vp.h} 호버 전수 (pointer ${clickCount}개)`, clickCount > 0 && hoverDead.length === 0,
+      clickCount === 0 ? '검사 대상 0개' : hoverDead.slice(0, 6).join(' / '));
   }
 
   for (const p of vp.shots) {
