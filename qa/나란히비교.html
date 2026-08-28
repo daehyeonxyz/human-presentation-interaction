@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>나란히 비교 — 덱과 상용 실물</title>
+<style>
+  body { margin: 0; background: #14141c; color: #fff; font: 14px/1.5 -apple-system, "Malgun Gothic", sans-serif; }
+  h1 { font-size: 22px; margin: 32px 32px 8px; }
+  p.lead { margin: 0 32px 24px; color: #a8a8b8; max-width: 900px; }
+  h2 { font-size: 16px; margin: 40px 32px 12px; color: #b9b3ff; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 0 32px 16px; }
+  figure { margin: 0; }
+  figcaption { font-size: 12px; color: #9a9aa8; padding: 6px 2px; }
+  img { width: 100%; display: block; border-radius: 6px; }
+</style>
+</head>
+<body>
+<h1>나란히 비교 — 덱과 상용 실물</h1>
+<p class="lead">왼쪽이 이 레포의 덱이고 오른쪽이 같은 배율(1920x1080)로 찍은 상용 화면이다. 밀도와 대비와 리듬을 같은 크기에서 견준다. 참조 캡처는 <code>qa/reference/</code> 에 있고 덱 캡처는 <code>qa/final/</code> 에 있다.</p>
+
+<h2>정지 구성 — 항목 셋을 한 화면에 펼치는 쪽</h2>
+<div class="row">
+  <figure><img src="final/sub/p02-rest-1920x1080.png"><figcaption>덱 1호 2쪽 · hierarchical-grid</figcaption></figure>
+  <figure><img src="reference/stripe-payments-1800.png"><figcaption>Stripe Payments · 섹션 표제와 본문과 우측 지표</figcaption></figure>
+</div>
+<div class="row">
+  <figure><img src="final/pc/p02-rest-1920x1080.png"><figcaption>덱 2호 2쪽 · hierarchical-grid</figcaption></figure>
+  <figure><img src="reference/linear-features-900.png"><figcaption>Linear Features · 기능 타일 그리드</figcaption></figure>
+</div>
+
+<h2>장치가 화면을 쓰는 쪽</h2>
+<div class="row">
+  <figure><img src="final/sub/p03-end-1920x1080.png"><figcaption>덱 1호 3쪽 완료 · advance-machine</figcaption></figure>
+  <figure><img src="reference/stripe-payments-2700.png"><figcaption>Stripe Payments · 제품 화면 카드</figcaption></figure>
+</div>
+<div class="row">
+  <figure><img src="final/pc/p03-end-1920x1080.png"><figcaption>덱 2호 3쪽 완료 · drag-compare</figcaption></figure>
+  <figure><img src="reference/linear-home-1800.png"><figcaption>Linear Home · 대비 구성</figcaption></figure>
+</div>
+
+<h2>조작 창과 관찰 창</h2>
+<div class="row">
+  <figure><img src="final/sub/p04-end-1920x1080.png"><figcaption>덱 1호 4쪽 완료 · simulate-console</figcaption></figure>
+  <figure><img src="reference/claude-docs-context-900.png"><figcaption>Claude Code 문서 · 인터랙티브 위젯</figcaption></figure>
+</div>
+<div class="row">
+  <figure><img src="final/pc/p04-end-1920x1080.png"><figcaption>덱 2호 4쪽 완료 · input-sandbox</figcaption></figure>
+  <figure><img src="reference/claude-docs-context-1800.png"><figcaption>Claude Code 문서 · 본문과 코드 블록</figcaption></figure>
+</div>
+
+<h2>큰 글자가 화면을 장악하는 쪽</h2>
+<div class="row">
+  <figure><img src="final/sub/p01-rest-1920x1080.png"><figcaption>덱 1호 표지 · oversized-type</figcaption></figure>
+  <figure><img src="reference/linear-home-0.png"><figcaption>Linear Home · 히어로</figcaption></figure>
+</div>
+<div class="row">
+  <figure><img src="final/sub/p06-end-1920x1080.png"><figcaption>덱 1호 6쪽 완료 · accumulate-recap</figcaption></figure>
+  <figure><img src="reference/linear-home-2700.png"><figcaption>Linear Home · 큰 문장과 목록</figcaption></figure>
+</div>
+
+<h2>넓은 화면 (2560x1080)</h2>
+<div class="row">
+  <figure><img src="final/sub/p04-rest-2560x1080.png"><figcaption>덱 1호 4쪽 · 폭 2560 에서 열이 늘어난다</figcaption></figure>
+  <figure><img src="final/pc/p05-rest-2560x1080.png"><figcaption>덱 2호 5쪽 · 폭 2560</figcaption></figure>
+</div>
+</body>
+</html>

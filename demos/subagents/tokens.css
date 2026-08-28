@@ -92,36 +92,21 @@
   --ls-wide: 0.18em;   /* 표지 오른쪽 위 영문 한 줄 전용 */
 
   /* ============================================================
-     격자와 페이지
-     세로는 1080 기준 절대 좌표다. 가로는 네 변 여백 80 을 지킨 채 늘어난다.
+     스테이지와 벤토 격자
+     설계 높이는 1080 고정이고 설계 폭만 1920~2560 으로 늘어난다.
+     네 변 여백은 정확히 80 이고 그 안쪽을 벤토 격자가 빈 데 없이 채운다.
      ============================================================ */
   --page-w: 1920px;    /* 기본값. fit() 이 뷰포트에 맞춰 1920~2560 사이로 갱신한다 */
   --page-h: 1080px;
-  --margin-x: 80px;
-  --margin-y: 80px;
-  --cover-margin-y: 60px;  /* 표지만 60 을 쓴다 */
-  --content-w: calc(var(--page-w) - 2 * var(--margin-x));
-  --gap: 40px;
-  --col-2: calc((var(--content-w) - var(--gap)) / 2);
-  --col-3: calc((var(--content-w) - 2 * var(--gap)) / 3);
-  --col-4: calc((var(--content-w) - 3 * var(--gap)) / 4);
-  --col-wide: calc(var(--content-w) - var(--gap) - var(--col-3));
-  --measure: 700px;    /* 문장 한 줄의 폭 상한. 폭이 늘어나도 늘어나지 않는다 */
-  --close-w: 1040px;   /* 맺음 문장 폭 */
-
-  /* 본문 판 공통 기준선. 판이 바뀌어도 이 y 는 흔들리지 않는다 */
-  --head-y: 80px;
-  --head-h: 24px;
-  --title-y: 120px;
-  --sub-y: 208px;
-  --head-right-x: calc(var(--margin-x) + var(--col-wide) + var(--gap));
-  --head-right-w: var(--col-3);
-  --stage-y: 284px;
-  --stage-h: 540px;
-  --stage-y-nosub: 240px;
-  --stage-h-nosub: 584px;
-  --stage-bottom: 824px;
-  --close-bottom: 80px;
+  --margin: 80px;
+  --content-w: calc(var(--page-w) - 2 * var(--margin));
+  --content-h: calc(var(--page-h) - 2 * var(--margin));
+  --cell-gap: 24px;    /* 벤토 칸 사이. 여백 80 과 구분되는 유일한 격자 간격이다 */
+  --head-h: 24px;      /* 머리 행 */
+  --foot-h: 104px;     /* 맺음 행 최소 높이 */
+  --pad-tile: 40px;    /* 타일 안쪽 여백 */
+  --pad-tile-sm: 28px;
+  --measure: 760px;    /* 문장 한 줄의 폭 상한. 폭이 늘어나도 늘어나지 않는다 */
 
   /* 간격 스케일 (이 밖 임의 간격 금지) */
   --sp-8: 8px;
@@ -149,11 +134,11 @@
      링 · 상호작용
      그림자는 없다. 층은 면의 밝기가 만들고 조작은 링이 표시한다.
      링은 border 가 아니라 box-shadow 이고 안쪽으로 넣는다. 2px 이상만 쓴다.
+     초점 링은 두지 않는다. Tab 과 Enter 는 그대로 동작한다.
      ============================================================ */
   --ring-faint: inset 0 0 0 2px var(--data-4);     /* 정적 폴백의 대응 표시 */
   --ring-hover: inset 0 0 0 2px var(--data-3);
   --ring-selected: inset 0 0 0 3px var(--accent);
-  --ring-focus: 0 0 0 3px var(--accent);
   --surface-hover: rgba(255, 255, 255, 0.58);      /* 면이 없는 항목에 마우스를 올렸을 때 */
 
   /* 모션 (transform 금지. 뷰포트 배율 한 곳만 예외) */
@@ -170,7 +155,7 @@
   --btn-h: 56px;
   --btn-min-w: 160px;
   --btn-pad-x: 28px;
-  --bar-h: 56px;       /* 구간 막대와 트랙 막대. 조각 안에 20/700 수치를 담으므로 버튼 높이를 그대로 쓴다 */
+  --bar-h: 64px;       /* 구간 막대와 트랙 막대. 조각 안에 20/700 수치를 담는다 */
   --pill-h: 36px;
   --dot: 10px;
   --dot-gap: 12px;

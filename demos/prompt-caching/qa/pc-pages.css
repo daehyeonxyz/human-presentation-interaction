@@ -1,0 +1,210 @@
+
+/* ===================== 1쪽 · 표지 ===================== */
+.cv-top { grid-column: 1 / -1; display: flex; justify-content: flex-end;
+  font-size: var(--fs-note); font-weight: var(--fw-medium); letter-spacing: var(--ls-wide);
+  color: var(--on-dark-sub); line-height: var(--head-h); }
+.cv-mid { grid-column: 1 / -1; display: flex; align-items: flex-end; }
+.cv-title { font-size: var(--fs-cover); font-weight: var(--fw-bold); line-height: var(--lh-cover);
+  letter-spacing: var(--ls-display); color: var(--on-dark); }
+.cv-foot { grid-column: 1 / -1; display: flex; align-items: flex-end; justify-content: space-between;
+  gap: var(--sp-40); }
+.cv-tag { font-size: var(--fs-body); font-weight: var(--fw-medium); line-height: var(--lh-body);
+  letter-spacing: var(--ls-body); color: var(--on-dark-sub); }
+.cv-mark { font-size: var(--fs-note); font-weight: var(--fw-medium); line-height: var(--lh-note);
+  color: var(--on-dark-sub); text-align: right; }
+
+/* ===================== 2쪽 · 정지 구성 (hierarchical-grid) =====================
+   조작이 없는 쪽이라 세 항목이 정지 상태로 다 펼쳐져 있다.
+   표제가 왼쪽 네 칸을 세로로 다 쓰고 세 항목이 오른쪽 여덟 칸을 나눠 갖는다.
+   캐싱이 줄이는 셋째 항목만 흰 면을 갖는다 */
+.p2 .frame { grid-template-rows: var(--head-h) 1fr; }
+.p2head { grid-column: 1 / 5; grid-row: 2; display: flex; flex-direction: column;
+  justify-content: center; gap: var(--sp-24); min-width: 0; }
+.p2head .ptitle { white-space: normal; }
+.p2list { grid-column: 5 / -1; grid-row: 2; display: flex; flex-direction: column;
+  gap: var(--cell-gap); min-height: 0; }
+.p2list > * { flex: 1 1 0; min-height: 0; justify-content: center; gap: var(--sp-20); }
+.p2n { font-size: var(--fs-claim); font-weight: var(--fw-bold); line-height: var(--lh-claim);
+  letter-spacing: var(--ls-claim); color: var(--accent); }
+.p2t { font-size: var(--fs-claim); font-weight: var(--fw-medium);
+  line-height: var(--lh-claim); letter-spacing: var(--ls-claim); color: var(--ink); }
+
+/* ===================== 끌기 핸들 (3쪽·5쪽 공통) ===================== */
+.grip { position: absolute; cursor: ew-resize; touch-action: none; z-index: 2; }
+.knob { width: var(--handle); height: var(--handle); border-radius: var(--radius-round);
+  background: var(--surface); box-shadow: inset 0 0 0 3px var(--accent-deep);
+  display: flex; align-items: center; justify-content: center; gap: var(--sp-8);
+  transition: box-shadow var(--dur-fast) var(--ease-out); }
+.knob i { width: 0; height: 0; border-top: 6px solid transparent; border-bottom: 6px solid transparent; }
+.knob i:first-child { border-right: 8px solid var(--accent-deep); }
+.knob i:last-child { border-left: 8px solid var(--accent-deep); }
+.grip:hover .knob { box-shadow: inset 0 0 0 3px var(--accent), 0 0 0 3px var(--accent-line); }
+
+/* ===================== 3쪽 · 겹침 비교 (drag-compare) =====================
+   같은 요청 구조 두 벌이 같은 좌표에 겹쳐 있고 세로 경계가 어느 쪽을 보일지 정한다.
+   장치가 본체 행을 다 쓰고 맺음이 그 장치의 마지막 행이다 */
+.p3dev { grid-column: 1 / -1; grid-row: 3; gap: var(--sp-24); }
+.p3in { position: relative; flex: 1; min-height: 0; --split: 62%; }
+.p3layer { position: absolute; inset: 0; display: flex; flex-direction: column; }
+.p3layer.b { clip-path: inset(0 0 0 var(--split));
+  transition: clip-path var(--dur-base) var(--ease-out); }
+.p3in.drag .p3layer.b { transition: none; }
+.p3badge { height: var(--pill-h); display: flex; }
+.p3badge.right { justify-content: flex-end; }
+.p3rows { margin-top: var(--sp-20); flex: 1; display: flex; flex-direction: column; gap: var(--sp-12); }
+.p3row { flex: 1 1 0; min-height: 0; border-radius: var(--radius-md); padding: 0 var(--sp-40);
+  display: flex; align-items: center; justify-content: space-between; gap: var(--sp-40); }
+/* 캐시 단가 칸은 옅은 면, 입력 단가 칸은 짙은 면. 면의 밝기가 곧 단가다 */
+.p3row.cache { background: var(--data-5); color: var(--ink);
+  --ring-h: var(--data-3); --ring-p: var(--accent); --ring-ph: var(--accent-hover); }
+.p3row.input { background: var(--data-2); color: var(--ink-invert);
+  --ring-h: var(--data-5); --ring-p: var(--ink-invert); --ring-ph: var(--data-4); }
+.p3row:hover { --ring-c: var(--ring-h); }
+.p3row.lit { --ring-c: var(--ring-h); }
+.p3row.cur { --ring-c: var(--ring-p); --ring-w: 3px; }
+.p3row.cur:hover { --ring-c: var(--ring-ph); --ring-w: 3px; }
+.p3nm { font-size: var(--fs-claim); font-weight: var(--fw-bold);
+  line-height: var(--lh-claim); letter-spacing: var(--ls-claim); }
+.p3pr { font-size: var(--fs-body); font-weight: var(--fw-medium); letter-spacing: var(--ls-body);
+  white-space: nowrap; transition: color var(--dur-fast) var(--ease-out); }
+.p3ex { font-size: var(--fs-note); font-weight: var(--fw-medium); letter-spacing: var(--ls-none); }
+.p3row.cache .p3pr { color: var(--ink-support); }
+.p3row.input .p3pr { color: var(--on-dark-sub); }
+.p3row.cache:hover .p3pr, .p3row.cache.lit .p3pr, .p3row.cache.cur .p3pr { color: var(--ink); }
+.p3row.input:hover .p3pr, .p3row.input.lit .p3pr, .p3row.input.cur .p3pr { color: var(--on-dark); }
+.p3seam { top: 0; bottom: 0; left: calc(var(--split) - var(--handle) / 2); width: var(--handle); }
+.p3line { position: absolute; top: 0; bottom: 0;
+  left: calc(50% - var(--seam) / 2); width: var(--seam); background: var(--accent-deep); }
+.p3seam .knob { position: absolute; left: 0; top: calc(50% - var(--handle) / 2); }
+
+/* ===================== 4쪽 · 입력 무대 (input-sandbox) =====================
+   왼쪽 조작 창에서 요청을 보내고 오른쪽 관찰 창에서 그 요청의 구성을 본다.
+   이력은 아래 끝을 고정하고 위쪽으로 쌓인다 */
+.p4ctl { grid-column: 1 / 9; grid-row: 3; }
+.p4obs { grid-column: 9 / -1; grid-row: 3; }
+.p4log { flex: 1; min-height: 0; display: flex; flex-direction: column;
+  justify-content: flex-end; gap: var(--sp-12); }
+.p4it { min-height: 104px; border-radius: var(--radius-md); background: var(--accent-tint);
+  display: flex; align-items: center; gap: var(--sp-24); padding: 0 var(--sp-32); }
+.p4no { font-size: var(--fs-note); font-weight: var(--fw-bold); color: var(--accent);
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+  transition: color var(--dur-fast) var(--ease-out); }
+.p4tx { font-size: var(--fs-claim); font-weight: var(--fw-medium); letter-spacing: var(--ls-claim);
+  line-height: var(--lh-claim); }
+.p4mark { height: 40px; display: flex; align-items: center;
+  font-size: var(--fs-note); font-weight: var(--fw-medium); color: var(--ink-support); }
+.p4bar { height: var(--inputbar-h); margin-top: var(--sp-16);
+  display: flex; align-items: center; gap: var(--sp-16); }
+.p4field { flex: 1; min-width: 0; height: var(--btn-h); border-radius: var(--radius-md);
+  background: var(--sunken); display: flex; align-items: center;
+  gap: var(--sp-24); padding: 0 var(--sp-24); }
+.p4field .p4tx { font-size: var(--fs-body); line-height: var(--lh-body); }
+.p4send { flex: 0 0 auto; width: var(--btn-h); height: var(--btn-h);
+  border-radius: var(--radius-round); background: var(--accent); color: var(--ink-invert);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: var(--fs-claim); font-weight: var(--fw-bold); line-height: 1;
+  transition: background-color var(--dur-base) var(--ease-out); }
+.p4send:hover { background: var(--accent-hover); }
+.p4oh { font-size: var(--fs-claim); font-weight: var(--fw-bold);
+  line-height: var(--lh-claim); letter-spacing: var(--ls-claim); }
+.p4track { margin-top: var(--sp-24); height: var(--bar-h); border-radius: var(--radius-round);
+  background: var(--accent-line); overflow: hidden; display: flex; }
+.p4seg { display: block; height: 100%; width: 0;
+  transition: width var(--dur-step) var(--ease-out), filter var(--dur-fast) var(--ease-out); }
+/* 트랙 면(--accent-line)과 적중 구간이 같은 단이면 빈 트랙이 꽉 찬 적중으로 읽힌다 */
+.p4seg[data-k="a"] { background: var(--data-3); }
+.p4seg[data-k="b"] { background: var(--data-1); }
+.p4seg.lit { filter: brightness(0.88); }
+.p4seg.cur { filter: brightness(0.78); }
+.p4leg { margin-top: var(--sp-24); display: flex; flex-direction: column; gap: var(--sp-12); }
+.p4lg { flex: 1 1 0; min-height: 96px; border-radius: var(--radius-md); background: var(--surface);
+  display: flex; align-items: center; gap: var(--sp-16); padding: 0 var(--sp-24); }
+.p4dot { flex: 0 0 auto; width: var(--sp-16); height: var(--sp-16);
+  border-radius: var(--radius-round); }
+.p4lg[data-k="a"] .p4dot { background: var(--data-3); }
+.p4lg[data-k="b"] .p4dot { background: var(--data-1); }
+.p4ln { font-size: var(--fs-body); font-weight: var(--fw-medium); letter-spacing: var(--ls-body); }
+.p4lv { margin-left: auto; font-size: var(--fs-claim); font-weight: var(--fw-heavy);
+  color: var(--accent); font-variant-numeric: tabular-nums; letter-spacing: var(--ls-claim); }
+.p4note { margin-top: auto; padding-top: var(--sp-24); min-height: 120px;
+  font-size: var(--fs-body); font-weight: var(--fw-medium); line-height: var(--lh-body);
+  letter-spacing: var(--ls-body); color: var(--ink); }
+.p4note2 { color: var(--ink-support); }
+
+/* ===================== 5쪽 · 값 조절 무대 (drag-threshold) ===================== */
+.p5dev { grid-column: 1 / 9; grid-row: 3; justify-content: space-between; }
+/* 슬라이더와 맺음을 한 덩어리로 묶는다. 따로 두면 장치 아래가 크게 벌어진다 */
+.p5foot { display: flex; flex-direction: column; gap: var(--sp-24); }
+.p5side { grid-column: 9 / -1; grid-row: 3; display: flex; flex-direction: column;
+  gap: var(--sp-12); min-height: 0; padding-left: var(--sp-16); }
+.p5sh { font-size: var(--fs-note); font-weight: var(--fw-bold); color: var(--ink-support);
+  letter-spacing: var(--ls-none); padding: 0 var(--sp-20) var(--sp-8); }
+.p5si { flex: 1 1 0; min-height: 0; display: flex; align-items: center; padding: 0 var(--sp-20);
+  border-radius: var(--radius-md); background: var(--sunken);
+  font-size: var(--fs-body); font-weight: var(--fw-medium); line-height: var(--lh-body);
+  letter-spacing: var(--ls-body); color: var(--ink); }
+.p5note { display: flex; align-items: center; padding: var(--sp-16) var(--sp-20) 0;
+  font-size: var(--fs-note); font-weight: var(--fw-medium); line-height: var(--lh-note);
+  letter-spacing: var(--ls-body); color: var(--ink-support); }
+.p5h { display: flex; align-items: baseline; justify-content: space-between; }
+.p5hn { font-size: var(--fs-body); font-weight: var(--fw-medium); letter-spacing: var(--ls-body); }
+.p5gh { display: flex; align-items: baseline; justify-content: space-between; }
+.p5gn { font-size: var(--fs-body); font-weight: var(--fw-medium); letter-spacing: var(--ls-body); }
+/* 값이 바뀌는 동안 게이지의 높이와 자리는 그대로다. 폭과 색만 바뀐다 */
+.p5rail { position: relative; margin-top: var(--gap-layer); height: var(--gauge-h);
+  border-radius: var(--radius-round); background: var(--accent-line); overflow: hidden;
+  cursor: pointer; box-shadow: inset 0 0 0 var(--ring-w, 2px) var(--ring-c, transparent);
+  transition: box-shadow var(--dur-fast) var(--ease-out); }
+.p5rail:hover { --ring-c: var(--data-3); }
+.p5rail.cur { --ring-c: var(--accent); --ring-w: 3px; }
+.p5rail.cur:hover { --ring-c: var(--accent-hover); --ring-w: 3px; }
+.p5fill { display: block; height: 100%; width: 100%; border-radius: var(--radius-round);
+  background: var(--data-1);
+  transition: width var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out); }
+.p5fill[data-s="2"] { background: var(--data-2); }
+.p5fill[data-s="3"] { background: var(--data-3); }
+.p5cap { position: relative; margin-top: var(--sp-16); height: 30px; }
+.p5cap > span { position: absolute; left: 0; top: 0;
+  font-size: var(--fs-note); font-weight: var(--fw-medium); line-height: 30px;
+  color: var(--ink-support); white-space: nowrap;
+  transition: opacity var(--dur-base) var(--ease-out); }
+.p5cap1.off { opacity: 0; }
+.p5cap2 { opacity: 0; font-variant-numeric: tabular-nums; }
+.p5cap2.on { opacity: 1; }
+.p5ctl { position: relative; height: var(--btn-h); --v: 0%; }
+.p5track { position: absolute; left: 0; right: 0;
+  top: calc((var(--btn-h) - var(--track-h)) / 2); height: var(--track-h);
+  border-radius: var(--radius-round); background: var(--accent-line); overflow: hidden; }
+.p5tf { display: block; height: 100%; width: 0; border-radius: var(--radius-round);
+  background: var(--accent); transition: width var(--dur-base) var(--ease-out); }
+.p5grip { top: 0; left: calc(var(--v) - var(--handle) / 2);
+  width: var(--handle); height: var(--handle); }
+
+/* ===================== 6쪽 · 누적 정리 (accumulate-recap) =====================
+   선언이 왼쪽 다섯 칸을 세로로 다 쓰고 되짚기 넷이 오른쪽 일곱 칸을 나눈다 */
+.p6 .frame { grid-template-rows: var(--head-h) 1fr; }
+.p6left { grid-column: 1 / 6; grid-row: 2; display: flex; flex-direction: column;
+  justify-content: center; gap: var(--sp-48); min-width: 0; }
+.p6decl { font-size: var(--fs-decl); font-weight: var(--fw-heavy);
+  line-height: var(--lh-decl); letter-spacing: var(--ls-display); color: var(--ink); }
+.p6grid { grid-column: 6 / -1; grid-row: 2; display: flex; flex-direction: column;
+  gap: var(--sp-12); min-height: 0; }
+.p6it { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; justify-content: center;
+  gap: var(--sp-8); padding: 0 var(--sp-40);
+  border-radius: var(--radius-md); background: var(--sunken); color: var(--ink-muted);
+  transition: color var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out); }
+.p6it.on { color: var(--ink); background: var(--surface); }
+.p6n { font-size: var(--fs-claim); font-weight: var(--fw-bold); line-height: var(--lh-claim);
+  letter-spacing: var(--ls-claim); color: inherit; }
+.p6t { font-size: var(--fs-body); font-weight: var(--fw-medium); line-height: var(--lh-body);
+  letter-spacing: var(--ls-body); color: inherit; opacity: 0.72; }
+.p6next { font-size: var(--fs-claim); font-weight: var(--fw-bold); line-height: var(--lh-claim);
+  letter-spacing: var(--ls-claim); color: var(--ink-support); background: none; padding: 0;
+  opacity: 0; transition: opacity var(--dur-base) var(--ease-out); }
+.p6next.on { opacity: 1; }
+
+/* 모션 축소 환경에서는 전환 시간 토큰이 전부 0 이 된다 */
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-fast: 0ms; --dur-base: 0ms; --dur-step: 0ms; --dur-page: 0ms; --dur-enter: 0ms; }
+}

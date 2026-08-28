@@ -1,0 +1,197 @@
+
+<!-- ===================== 1쪽 · 표지 (cover-stage) ===================== -->
+<section class="slide" data-canvas="dark">
+  <div class="frame frame--cover" data-frame>
+    <div class="cv-top en">PROMPT CACHING</div>
+    <div class="cv-mid"><h1 class="cv-title">프롬프트 캐싱과<br>비용</h1></div>
+    <div class="cv-foot">
+      <p class="cv-tag">같은 앞부분을 다시 보내지 않는 법</p>
+      <p class="cv-mark en">human-presentation-interaction demo deck 02</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 2쪽 · 정지 구성 (등급 0) ===================== -->
+<section class="slide p2" data-canvas="light">
+  <div class="frame" data-frame>
+    <div class="head"><span class="kicker en">COST</span><span class="pageno en">02 / 06</span></div>
+    <div class="p2head">
+      <h2 class="ptitle">토큰 비용의 <span class="acc">구조</span></h2>
+      <p class="psub en">Input · Output · Repetition</p>
+    </div>
+    <div class="p2list">
+      <div class="tile tile--sunken">
+        <p class="p2n">입력 토큰</p>
+        <p class="p2t ln">시스템 프롬프트와 도구 정의와 지난 대화 전부가<br>요청마다 입력으로 다시 들어간다</p>
+      </div>
+      <div class="tile tile--sunken">
+        <p class="p2n">출력 토큰</p>
+        <p class="p2t ln">모델이 새로 만든 글자<br>단가가 입력보다 높다</p>
+      </div>
+      <div class="tile tile--surface">
+        <p class="p2n">반복 전송</p>
+        <p class="p2t ln">대화가 길어질수록 같은 앞부분을<br>다시 보내는 비중이 커진다<br>캐싱이 줄이는 것이 이 부분이다</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 3쪽 · 겹침 비교 (drag-compare) ===================== -->
+<section class="slide" data-canvas="light">
+  <div class="frame" data-frame>
+    <div class="head"><span class="kicker en">CACHE</span><span class="pageno en">03 / 06</span></div>
+    <div class="titleblock">
+      <h2 class="ptitle">캐시가 저장하는 <span class="acc">범위</span></h2>
+      <p class="psub en">Without cache · With cache</p>
+    </div>
+    <div class="tile tile--surface p3dev">
+      <div class="p3in" id="p3in">
+        <div class="p3layer">
+          <div class="p3badge"><span class="pill s1">캐시 있음</span></div>
+          <div class="p3rows">
+            <div class="hit p3row cache" data-i="0">
+              <span class="p3nm">시스템 프롬프트</span>
+              <span class="p3pr">캐시 단가 <span class="p3ex">(예시 10%)</span></span>
+            </div>
+            <div class="hit p3row cache" data-i="1">
+              <span class="p3nm">도구 정의</span>
+              <span class="p3pr">캐시 단가 <span class="p3ex">(예시 10%)</span></span>
+            </div>
+            <div class="hit p3row cache" data-i="2">
+              <span class="p3nm">지난 대화</span>
+              <span class="p3pr">캐시 단가 <span class="p3ex">(예시 10%)</span></span>
+            </div>
+            <div class="hit p3row input" data-i="3">
+              <span class="p3nm">새 질문</span>
+              <span class="p3pr">입력 단가</span>
+            </div>
+          </div>
+        </div>
+        <div class="p3layer b">
+          <div class="p3badge right"><span class="pill s2">캐시 없음</span></div>
+          <div class="p3rows">
+            <div class="hit p3row input" data-i="0">
+              <span class="p3nm">시스템 프롬프트</span>
+              <span class="p3pr">입력 단가 <span class="p3ex">(예시 100%)</span></span>
+            </div>
+            <div class="hit p3row input" data-i="1">
+              <span class="p3nm">도구 정의</span>
+              <span class="p3pr">입력 단가 <span class="p3ex">(예시 100%)</span></span>
+            </div>
+            <div class="hit p3row input" data-i="2">
+              <span class="p3nm">지난 대화</span>
+              <span class="p3pr">입력 단가 <span class="p3ex">(예시 100%)</span></span>
+            </div>
+            <div class="hit p3row input" data-i="3">
+              <span class="p3nm">새 질문</span>
+              <span class="p3pr">입력 단가</span>
+            </div>
+          </div>
+        </div>
+        <div class="grip p3seam" id="p3seam" tabindex="0" role="slider"
+             aria-valuemin="0" aria-valuemax="100" aria-valuenow="62">
+          <i class="p3line"></i>
+          <span class="knob"><i></i><i></i></span>
+        </div>
+      </div>
+      <p class="close" id="p3close">경계를 끝까지 밀어 보면 남는 차이는 새 질문 한 줄이다</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 4쪽 · 입력 무대 (input-sandbox) ===================== -->
+<section class="slide" data-canvas="light">
+  <div class="frame" data-frame>
+    <div class="head"><span class="kicker en">HIT</span><span class="pageno en">04 / 06</span></div>
+    <div class="titleblock">
+      <h2 class="ptitle">적중 조건, <span class="acc">같은 접두사</span></h2>
+      <p class="psub en">Prefix match</p>
+    </div>
+    <div class="tile tile--surface p4ctl">
+      <div class="p4log" id="p4log"></div>
+      <div class="p4bar">
+        <div class="p4field" id="p4field"></div>
+        <button class="p4send" id="p4send" aria-label="전송">→</button>
+      </div>
+      <p class="close" id="p4close">요청 2 는 앞이 같아 적중했고 요청 3 은 시스템 프롬프트가 바뀌어 전부 새로 계산했다</p>
+    </div>
+    <div class="tile tile--sunken p4obs">
+      <p class="p4oh">요청의 구성 <span class="ex">(예시)</span></p>
+      <div class="p4track">
+        <span class="p4seg" data-k="a"></span>
+        <span class="p4seg" data-k="b"></span>
+      </div>
+      <div class="p4leg">
+        <div class="hit p4lg" data-k="a">
+          <span class="p4dot"></span><span class="p4ln">캐시 적중</span><span class="p4lv" id="p4va"></span>
+        </div>
+        <div class="hit p4lg" data-k="b">
+          <span class="p4dot"></span><span class="p4ln">새로 계산</span><span class="p4lv" id="p4vb"></span>
+        </div>
+      </div>
+      <p class="p4note ln" id="p4note"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 5쪽 · 값 조절 무대 (drag-threshold) ===================== -->
+<section class="slide" data-canvas="light">
+  <div class="frame" data-frame>
+    <div class="head"><span class="kicker en">RATE</span><span class="pageno en">05 / 06</span></div>
+    <div class="titleblock">
+      <h2 class="ptitle"><span class="acc">적중률</span>과 입력 비용</h2>
+      <p class="psub en">Hit rate · Input cost</p>
+    </div>
+    <div class="tile tile--surface p5dev">
+      <div class="p5h">
+        <span class="p5hn">캐시 적중률</span>
+        <span class="t-num" id="p5rate">0%</span>
+      </div>
+      <div class="p5ctl" id="p5ctl">
+        <div class="p5track"><span class="p5tf" id="p5tf"></span></div>
+        <div class="grip p5grip" id="p5grip" tabindex="0" role="slider"
+             aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <span class="knob"><i></i><i></i></span>
+        </div>
+      </div>
+      <div class="p5g">
+        <div class="p5gh">
+          <span class="p5gn">하루 입력 비용 <span class="ex">(예시)</span></span>
+          <span class="t-num" id="p5cost">100</span>
+        </div>
+        <div class="p5rail" id="p5rail"><span class="p5fill" id="p5fill" data-s="1"></span></div>
+        <p class="p5cap">
+          <span class="p5cap1" id="p5cap1">적중 0%면 100 / 적중 100%면 대략 10 <span class="ex">(예시)</span></span>
+          <span class="p5cap2" id="p5cap2"></span>
+        </p>
+      </div>
+      <div class="p5foot">
+      <p class="close" id="p5close">적중률 60%면 하루 입력 비용이 100 에서 46 으로 내려간다 <span class="ex">(예시)</span></p>
+      </div>
+    </div>
+    <div class="p5side">
+      <p class="p5sh">접두사를 안정시키는 방법</p>
+      <p class="p5si">시스템 프롬프트와 도구 정의를<br>앞에 고정한다</p>
+      <p class="p5si">날짜와 세션 값처럼 자주 바뀌는 것을<br>뒤로 보낸다</p>
+      <p class="p5si">대화 이력은 그대로 두고<br>끝에만 덧붙인다</p>
+      <p class="p5note">자주 바뀌는 것을 요청의 뒤로 보내면<br>접두사가 안정되어 적중률이 오른다</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 6쪽 · 누적 정리 (accumulate-recap) ===================== -->
+<section class="slide p6" data-canvas="light">
+  <div class="frame" data-frame>
+    <div class="head"><span class="kicker en">RECAP</span><span class="pageno en">06 / 06</span></div>
+    <div class="p6left">
+      <p class="p6decl">같은 접두사를 유지하는 요청 구조가 입력 비용을 줄인다</p>
+      <p class="close p6next" id="p6next">우리 요청에서 매번 다시 보내는 앞부분은 몇 토큰일까</p>
+    </div>
+    <div class="p6grid" id="p6grid">
+      <span class="p6it"><span class="p6n">반복 전송</span><span class="p6t ln">같은 앞부분이 요청마다 다시 나간다</span></span>
+      <span class="p6it"><span class="p6n">남는 차이는 새 질문 한 줄</span><span class="p6t ln">겹침 비교에서 이음매가 없던 줄</span></span>
+      <span class="p6it"><span class="p6n">글자 그대로 같은 접두사</span><span class="p6t ln">한 글자가 달라도 적중이 깨진다</span></span>
+      <span class="p6it"><span class="p6n">100 에서 46</span><span class="p6t ln">적중률 60% 의 하루 입력 비용 <span class="ex">(예시)</span></span></span>
+    </div>
+  </div>
+</section>

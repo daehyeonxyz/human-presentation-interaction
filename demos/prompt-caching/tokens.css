@@ -3,55 +3,52 @@
    qa/gates.mjs 의 토큰 일치 검사가 두 곳이 갈라지면 실패를 낸다.
 
    색의 출처는 두 갈래다.
-   색상(hue)은 OpenAI 토큰 실측이다.
-     ~/projects/daehyeon-design/references/brand-tokens/openai/tokens.css
-     --accent #10a37f 의 OKLCh 색상각 169.51 도를 쓴다.
-   밝기(상대 휘도)와 자리별 채도는 검증 덱 1호(demos/subagents/tokens.css)의 사다리다.
-     1호의 사다리는 ax-education 1교시 덱의 프로젝터 워시 모사를 통과한 값이다.
+   색상(hue)은 Stripe 토큰 실측이다.
+     ~/projects/daehyeon-design/references/brand-tokens/stripe/tokens.css
+     --accent #533afd, --accent-hover #4434d4, --accent-active #2e2b8c
+   밝기(상대 휘도)는 ax-education 1교시 덱의 통과한 사다리다.
+     면 세 층과 데이터 다섯 단과 글자 네 단의 휘도를 목표로 두고 색상만 갈아 끼웠다.
    두 값을 겹쳐 푸는 것은 qa/palette-solve.py 이고 아래 값은 전부 그 출력이다.
-   1호가 Stripe 세 값을 그대로 쓸 수 있었던 것은 그 휘도가 이미 목표와 맞아서다.
-   OpenAI 청록은 휘도 0.278 이라 강조색 자리에 그대로 두면 캔버스 대비가 2.6:1 로
-   떨어진다. 그래서 색상각만 남기고 밝기를 OKLCh 에서 옮겼다.
-   이 덱은 브랜드 자산을 쓰지 않는다. 워드마크도 표지 사진도 없다. */
+   이 덱은 삼성 브랜드 자산을 쓰지 않는다. 워드마크도 표지 사진도 없다. */
 :root {
   /* ============================================================
      색 · 면 세 층
      흰 면은 만지는 것, 캔버스는 읽는 것, 우물은 보는 곳이다.
-     층 사이 휘도 차는 0.189 와 0.091 다. 그림자는 이 시스템에 없다.
+     층 사이 휘도 차는 0.187 과 0.094 다. 그림자는 이 시스템에 없다.
      ============================================================ */
   --surface: #FFFFFF;
-  --canvas: #E3EAE9;
-  --sunken: #D4DFDC;
-  --canvas-dark: #000C09;  /* 표지 전용. 레터박스도 이 색으로 바뀐다 */
-  --divider: #C7D6D2;
-  --divider-strong: #A6BDB7;
+  --canvas: #E8E8F2;
+  --sunken: #DCDBEC;
+  --canvas-dark: #080819;  /* 표지 전용. 레터박스도 이 색으로 바뀐다 */
+  --divider: #D1D1E6;
+  --divider-strong: #B6B5D7;
 
   /* ============================================================
      색 · 강조 층
      강조색은 하나뿐이다. 종류 구분이 필요하면 색상을 늘리지 않고 명도 단을 옮긴다.
      ============================================================ */
-  --accent: #006F55;       /* 유일한 강조색. kicker, 인라인 강조, 버튼 면, 고른 것의 링 */
-  --accent-hover: #005E47; /* 버튼에 마우스를 올렸을 때 */
-  --accent-deep: #004332;  /* 데이터 최심단 */
-  --accent-line: #AFE3CF;  /* 트랙 면, 잠긴 면 */
-  --accent-tint: #CFEEE2;  /* 배지 면, 보조 버튼 면 */
-  --accent-hl: #ABE2CD;    /* 밑줄 하이라이트 */
+  --accent: #533AFD;       /* 유일한 강조색. kicker, 인라인 강조, 버튼 면, 고른 것의 링 */
+  --accent-hover: #4434D4; /* 버튼에 마우스를 올렸을 때 */
+  --accent-deep: #2E2B8C;  /* 데이터 최심단 */
+  --accent-line: #D9D3FF;  /* 트랙 면, 잠긴 면 */
+  --accent-tint: #E8E4FF;  /* 배지 면, 보조 버튼 면 */
+  --accent-hl: #D7D1FF;    /* 밑줄 하이라이트 */
 
   /* 데이터 다섯 단. 흰 글자를 얹어도 되는 단은 1 과 2 뿐이다 */
-  --data-1: #004332;
-  --data-2: #006F55;
-  --data-3: #00A37F;
-  --data-4: #64CCAA;
-  --data-5: #AFE3CF;
+  --data-1: #2E2B8C;
+  --data-2: #533AFD;
+  --data-3: #8E7EFE;
+  --data-4: #BAB0FE;
+  --data-5: #D9D3FF;
 
   /* ============================================================
      색 · 글자
      본문의 기본은 회색이 아니라 검정이다. 얇고 흐린 본문은 프로젝터에서 사라진다.
      ============================================================ */
   --ink: #000000;
-  --ink-support: #565C5B;  /* 부연, 캡션, 영문 부제 */
-  --ink-meta: #6E7473;     /* 쪽 번호 전용 */
-  --ink-muted: #ADB3B2;    /* 아직 켜지지 않은 항목 전용. 본문 금지 */
+  --ink-support: #5A5A64;  /* 부연, 캡션, 영문 부제 */
+  --ink-meta: #73727C;     /* 쪽 번호 전용 */
+  --ink-muted: #B2B1BB;    /* 아직 켜지지 않은 항목 전용. 본문 금지 */
   --ink-invert: #FFFFFF;
   --on-dark: #FFFFFF;
   --on-dark-sub: rgba(255, 255, 255, 0.78);
@@ -95,36 +92,21 @@
   --ls-wide: 0.18em;   /* 표지 오른쪽 위 영문 한 줄 전용 */
 
   /* ============================================================
-     격자와 페이지
-     세로는 1080 기준 절대 좌표다. 가로는 네 변 여백 80 을 지킨 채 늘어난다.
+     스테이지와 벤토 격자
+     설계 높이는 1080 고정이고 설계 폭만 1920~2560 으로 늘어난다.
+     네 변 여백은 정확히 80 이고 그 안쪽을 벤토 격자가 빈 데 없이 채운다.
      ============================================================ */
   --page-w: 1920px;    /* 기본값. fit() 이 뷰포트에 맞춰 1920~2560 사이로 갱신한다 */
   --page-h: 1080px;
-  --margin-x: 80px;
-  --margin-y: 80px;
-  --cover-margin-y: 60px;  /* 표지만 60 을 쓴다 */
-  --content-w: calc(var(--page-w) - 2 * var(--margin-x));
-  --gap: 40px;
-  --col-2: calc((var(--content-w) - var(--gap)) / 2);
-  --col-3: calc((var(--content-w) - 2 * var(--gap)) / 3);
-  --col-4: calc((var(--content-w) - 3 * var(--gap)) / 4);
-  --col-wide: calc(var(--content-w) - var(--gap) - var(--col-3));
-  --measure: 700px;    /* 문장 한 줄의 폭 상한. 폭이 늘어나도 늘어나지 않는다 */
-  --close-w: 1040px;   /* 맺음 문장 폭 */
-
-  /* 본문 판 공통 기준선. 판이 바뀌어도 이 y 는 흔들리지 않는다 */
-  --head-y: 80px;
-  --head-h: 24px;
-  --title-y: 120px;
-  --sub-y: 208px;
-  --head-right-x: calc(var(--margin-x) + var(--col-wide) + var(--gap));
-  --head-right-w: var(--col-3);
-  --stage-y: 284px;
-  --stage-h: 540px;
-  --stage-y-nosub: 240px;
-  --stage-h-nosub: 584px;
-  --stage-bottom: 824px;
-  --close-bottom: 80px;
+  --margin: 80px;
+  --content-w: calc(var(--page-w) - 2 * var(--margin));
+  --content-h: calc(var(--page-h) - 2 * var(--margin));
+  --cell-gap: 24px;    /* 벤토 칸 사이. 여백 80 과 구분되는 유일한 격자 간격이다 */
+  --head-h: 24px;      /* 머리 행 */
+  --foot-h: 104px;     /* 맺음 행 최소 높이 */
+  --pad-tile: 40px;    /* 타일 안쪽 여백 */
+  --pad-tile-sm: 28px;
+  --measure: 760px;    /* 문장 한 줄의 폭 상한. 폭이 늘어나도 늘어나지 않는다 */
 
   /* 간격 스케일 (이 밖 임의 간격 금지) */
   --sp-8: 8px;
@@ -152,11 +134,11 @@
      링 · 상호작용
      그림자는 없다. 층은 면의 밝기가 만들고 조작은 링이 표시한다.
      링은 border 가 아니라 box-shadow 이고 안쪽으로 넣는다. 2px 이상만 쓴다.
+     초점 링은 두지 않는다. Tab 과 Enter 는 그대로 동작한다.
      ============================================================ */
   --ring-faint: inset 0 0 0 2px var(--data-4);     /* 정적 폴백의 대응 표시 */
   --ring-hover: inset 0 0 0 2px var(--data-3);
   --ring-selected: inset 0 0 0 3px var(--accent);
-  --ring-focus: 0 0 0 3px var(--accent);
   --surface-hover: rgba(255, 255, 255, 0.58);      /* 면이 없는 항목에 마우스를 올렸을 때 */
 
   /* 모션 (transform 금지. 뷰포트 배율 한 곳만 예외) */
@@ -173,13 +155,15 @@
   --btn-h: 56px;
   --btn-min-w: 160px;
   --btn-pad-x: 28px;
-  --bar-h: 56px;       /* 구간 막대와 트랙 막대. 조각 안에 20/700 수치를 담으므로 버튼 높이를 그대로 쓴다 */
-  --gauge-h: 112px;    /* 값 조절 무대의 결과 게이지. 장치가 무대 높이를 다 쓰도록 막대의 두 배로 둔다 */
+  --bar-h: 64px;       /* 구간 막대와 트랙 막대. 조각 안에 20/700 수치를 담는다 */
   --pill-h: 36px;
   --dot: 10px;
   --dot-gap: 12px;
   --tray-pad: 8px;     /* 우물 트레이 안쪽 여백 */
   --tray-gap: 8px;     /* 담긴 판 사이 */
+
+  /* 이 덱만 쓰는 치수. 끌기 판 셋이 함께 쓴다 */
+  --gauge-h: 260px;    /* 값 조절 무대의 결과 게이지. 장치가 본체 행을 다 쓰도록 키운다 */
   --handle: 56px;      /* 끌기 핸들 지름. 겹침 비교와 값 조절이 함께 쓴다 */
   --seam: 3px;         /* 겹침 비교의 경계 폭 */
   --track-h: 14px;     /* 값 조절 트랙 높이 */

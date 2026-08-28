@@ -40,4 +40,4 @@ export async function playwright() {
   throw new Error('playwright 를 못 찾았다');
 }
 
-export const PAGES = 7;
+export const PAGES = 6;

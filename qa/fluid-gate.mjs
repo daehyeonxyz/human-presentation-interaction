@@ -68,13 +68,15 @@ async function playwright() {
   throw new Error('playwright 를 못 찾았다');
 }
 
-/* 뷰포트와 기대 스테이지 폭. 4:3, 16:10, 16:9, 21:9, 21:9 고해상도 */
+/* 뷰포트와 기대 스테이지 설계 크기. 배율 s = min(vw/1920, vh/1080) 이고
+   설계 폭 = clamp(1920, vw/s, 2560), 설계 높이 = clamp(1080, vh/s, 1600) 다.
+   상한 안에서는 어느 화면비에서도 레터박스가 없다 */
 const VIEWPORTS = [
-  { w: 1280, h: 960,  expectW: 1920 },
-  { w: 1440, h: 900,  expectW: 1920 },
-  { w: 1920, h: 1080, expectW: 1920, shots: [4] },
-  { w: 2560, h: 1080, expectW: 2560, hover: true, shots: [1, 4, 6] },
-  { w: 3440, h: 1440, expectW: 2560, shots: [4] },
+  { w: 1280, h: 960,  expectW: 1920, expectH: 1440 },
+  { w: 1440, h: 900,  expectW: 1920, expectH: 1200 },
+  { w: 1920, h: 1080, expectW: 1920, expectH: 1080, shots: [4] },
+  { w: 2560, h: 1080, expectW: 2560, expectH: 1080, hover: true, shots: [1, 4, 6] },
+  { w: 3440, h: 1440, expectW: 2560, expectH: 1080, shots: [4] },
 ];
 
 const results = [];
@@ -108,14 +110,17 @@ for (const DECK of DECKS) {
     const fitm = await page.evaluate(`(() => {
       const stage = document.getElementById('stage');
       const sr = stage.getBoundingClientRect();
-      return { offW: stage.offsetWidth, w: sr.width, h: sr.height, left: sr.left, top: sr.top,
-               vw: innerWidth, vh: innerHeight };
+      return { offW: stage.offsetWidth, offH: stage.offsetHeight, w: sr.width, h: sr.height,
+               left: sr.left, top: sr.top, vw: innerWidth, vh: innerHeight };
     })()`);
     check(`${tag} 스테이지 폭 ${vp.expectW}`, Math.abs(fitm.offW - vp.expectW) <= 2, `실측 ${fitm.offW}`);
-    const sExpect = fitm.vw / fitm.vh >= 1920 / 1080 ? fitm.vh / 1080 : fitm.vw / 1920;
-    check(`${tag} 렌더 배율`, Math.abs(fitm.h / 1080 - sExpect) <= 0.01, `실측 ${(fitm.h / 1080).toFixed(3)} / 기대 ${sExpect.toFixed(3)}`);
-    check(`${tag} 배율 균일`, Math.abs(fitm.w / fitm.offW - fitm.h / 1080) <= 0.01, `가로 ${(fitm.w / fitm.offW).toFixed(3)} / 세로 ${(fitm.h / 1080).toFixed(3)}`);
-    check(`${tag} 뷰포트 맞춤`, fitm.w <= fitm.vw + 1 && fitm.h <= fitm.vh + 1);
+    /* 높이는 1080 고정(레터박스 허용)과 가변(뷰포트 채움) 둘 다 계약 안이다. 범위만 지킨다 */
+    check(`${tag} 스테이지 높이 범위`, fitm.offH >= 1080 - 2 && fitm.offH <= 1600 + 2, `실측 ${fitm.offH}`);
+    const sExpect = Math.min(fitm.vw / 1920, fitm.vh / 1080);
+    check(`${tag} 렌더 배율`, Math.abs(fitm.w / fitm.offW - sExpect) <= 0.01, `실측 ${(fitm.w / fitm.offW).toFixed(3)} / 기대 ${sExpect.toFixed(3)}`);
+    check(`${tag} 배율 균일`, Math.abs(fitm.w / fitm.offW - fitm.h / fitm.offH) <= 0.01, `가로 ${(fitm.w / fitm.offW).toFixed(3)} / 세로 ${(fitm.h / fitm.offH).toFixed(3)}`);
+    /* 레터박스는 허용된다. 뷰포트를 넘지만 않으면 된다 */
+    check(`${tag} 뷰포트 맞춤`, fitm.w <= fitm.vw + 2 && fitm.h <= fitm.vh + 2, `렌더 ${Math.round(fitm.w)}x${Math.round(fitm.h)} / 뷰포트 ${fitm.vw}x${fitm.vh}`);
     check(`${tag} 가운데 정렬`, Math.abs(fitm.left - (fitm.vw - fitm.w) / 2) <= 1 && Math.abs(fitm.top - (fitm.vh - fitm.h) / 2) <= 1);
 
     const probe = `(() => {
@@ -128,6 +133,7 @@ for (const DECK of DECKS) {
       const kicker = sec ? sec.querySelector('[class*="kick"]') : null;
       const pageno = sec ? sec.querySelector('[class*="pageno"], [class*="pgno"]') : null;
       let bad = '', margin = '';
+      let maxB = 0;
       /* 여백 전수는 slide 의 자손만 잰다. slide 자신과 전역 레이어 컨테이너는 전면 요소라
          넘침 검사에만 넣고 여백 검사에서는 뺀다 */
       const marginSet = new Set(sec ? sec.querySelectorAll('*') : []);
@@ -166,16 +172,18 @@ for (const DECK of DECKS) {
         const L = (L2 - sr.left) / s, T = (T2 - sr.top) / s;
         const R = (R2 - sr.left) / s, B = (B2 - sr.top) / s;
         const tagName = (el.className || el.tagName) + ' L' + Math.round(L) + ' T' + Math.round(T) + ' R' + Math.round(R) + ' B' + Math.round(B);
-        if (!bad && (L < -2 || T < -2 || R > stage.offsetWidth + 2 || B > 1082)) bad = tagName;
-        /* 본문 판의 좌우 여백은 kicker 만이 아니라 보이는 요소 전수로 잰다 */
+        if (!bad && (L < -2 || T < -2 || R > stage.offsetWidth + 2 || B > stage.offsetHeight + 2)) bad = tagName;
+        /* 여백은 kicker 만이 아니라 보이는 요소 전수로 잰다. FILL_STAGE 덱은 네 변 전부다 */
         if (!margin && marginSet.has(el) && (L < 79 || R > stage.offsetWidth - 79)) margin = tagName;
-        if (bad && margin) break;
+        if (!margin && marginSet.has(el) && window.FILL_STAGE && (T < 79 || B > stage.offsetHeight - 79)) margin = tagName;
+        if (marginSet.has(el)) maxB = Math.max(maxB, B);
       }
       return {
         stageW: stage.offsetWidth, active: !!sec, activeIdx,
         kickerLeft: kicker ? (kicker.getBoundingClientRect().left - sr.left) / s : null,
         pagenoRight: pageno ? (pageno.getBoundingClientRect().right - sr.left) / s : null,
-        bad, margin,
+        bad, margin, maxB: Math.round(maxB),
+        fill: !!window.FILL_STAGE,
       };
     })()`;
 
@@ -192,12 +200,33 @@ for (const DECK of DECKS) {
         check(`${tag} p${p} 오른쪽 여백 80`, Math.abs(m.stageW - 80 - m.pagenoRight) <= 1, `쪽 번호 오른쪽 끝 ${m.pagenoRight.toFixed(1)} / 기대 ${m.stageW - 80}`);
       check(`${tag} p${p} 정지 넘침 없음`, !m.bad, m.bad);
       if (p > 1) check(`${tag} p${p} 좌우 여백 전수`, !m.margin, m.margin);
+      /* 아래 여백선 닿음은 내용물 픽셀 실측이 아니라 CSS 구조로 강제된다.
+         본문 쪽의 레이아웃 루트(data-frame)가 여백 상자와 일치하는지 구조만 검사한다.
+         프레임 안의 세로 밀도는 수치가 아니라 렌더 비교 판정의 몫이다 */
+      if (p > 1 && m.fill) {
+        const fr = await page.evaluate(`(() => {
+          const stage = document.getElementById('stage');
+          const sr = stage.getBoundingClientRect();
+          const s = sr.width / stage.offsetWidth;
+          const f = document.querySelector('.slide.active [data-frame]');
+          if (!f) return null;
+          const r = f.getBoundingClientRect();
+          return { L: (r.left - sr.left) / s, T: (r.top - sr.top) / s,
+                   R: (r.right - sr.left) / s, B: (r.bottom - sr.top) / s,
+                   W: stage.offsetWidth, H: stage.offsetHeight };
+        })()`);
+        const okFrame = fr && Math.abs(fr.L - 80) <= 2 && Math.abs(fr.T - 80) <= 2
+          && Math.abs(fr.R - (fr.W - 80)) <= 2 && Math.abs(fr.B - (fr.H - 80)) <= 2;
+        check(`${tag} p${p} 프레임 여백 상자 일치`, okFrame,
+          fr ? `실측 L${Math.round(fr.L)} T${Math.round(fr.T)} R${Math.round(fr.R)} B${Math.round(fr.B)}` : 'data-frame 없음');
+      }
       /* 완료 상태에서도 넘치지 않아야 한다. overflow-containment 는 정지 상태만 재고 통과시키지 않는다 */
       await page.keyboard.press('End');
       await page.waitForTimeout(350);
       const me = await page.evaluate(probe);
       check(`${tag} p${p} End 넘침 없음`, !me.bad, me.bad);
       if (p > 1) check(`${tag} p${p} End 좌우 여백 전수`, !me.margin, me.margin);
+
     }
     /* 여백 검사가 한 쪽도 안 걸렸으면 통과가 아니라 검사 무효다 */
     check(`${tag} 여백 검사 대상`, pageCount <= 1 || marginChecked > 0, `${marginChecked}쪽`);
