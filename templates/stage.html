@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>무대 계약 뼈대</title>
+<!--
+  무대 계약의 구현체다. 레이아웃 카탈로그도 인터랙션 카탈로그도 아니다.
+  여기 든 것은 어느 발표에서나 같은 것뿐이다: 배율과 프레임과 키보드 계약과 공용 API.
+  판과 인터랙션은 페이지 명세에서 직접 구현한다. 이 파일에서 베껴 오지 않는다.
+
+  쓰는 법
+  1. 이 파일을 복사해 발표 HTML 의 출발점으로 삼는다.
+  2. :root 의 값을 그 발표의 디자인 시스템(tokens.css)으로 갈아 끼운다. 아래 값은 중립 기본값이다.
+  3. .slide 를 쪽 수만큼 늘리고 각 쪽의 .frame 안을 그 쪽의 판으로 채운다.
+  4. 조작이 있는 쪽은 PAGE[쪽번호] 에 { step, finish, reset, spaceDone, unpin } 을 등록한다.
+  5. 서체와 이미지는 base64 로 인라인한다. 이 뼈대는 시스템 서체로 두었다.
+-->
+<style>
+:root {
+  /* 면 세 층. 흰 면은 만지는 것, 캔버스는 읽는 것, 우물은 보는 곳이다 */
+  --surface: #FFFFFF;
+  --canvas: #ECECF2;
+  --sunken: #DEDEE8;
+  --canvas-dark: #0B0B16;   /* 표지 전용. 레터박스도 이 색이 된다 */
+  --divider: #D4D4E0;
+
+  --accent: #3B3BE8;        /* 강조색은 하나다. 종류 구분은 명도 단으로 한다 */
+  --accent-line: #D6D6FA;
+  --accent-tint: #E9E9FF;
+
+  --ink: #000000;           /* 본문의 기본은 회색이 아니라 검정이다 */
+  --ink-support: #5A5A64;
+  --ink-meta: #73727C;
+  --ink-muted: #B2B1BB;     /* 아직 켜지지 않은 항목 전용. 본문 금지 */
+  --on-dark: #FFFFFF;
+  --on-dark-sub: rgba(255,255,255,0.78);
+
+  --font-sans: "Pretendard Variable", Pretendard, "Noto Sans KR",
+               "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+
+  /* 타입. 역할 하나에 크기 하나다. 64 와 32 사이의 빈 구간이 위계다 */
+  --fs-cover: 200px;
+  --fs-title: 64px;
+  --fs-claim: 32px;
+  --fs-body: 24px;
+  --fs-note: 20px;
+  --fw-medium: 500;
+  --fw-bold: 700;
+  --fw-heavy: 800;
+  --lh-cover: 1.0;
+  --lh-title: 1.12;
+  --lh-claim: 1.35;
+  --lh-body: 1.5;
+  --lh-note: 1.45;
+  --ls-display: -0.02em;
+  --ls-claim: -0.015em;
+  --ls-body: -0.01em;
+  --ls-wide: 0.18em;
+
+  /* 스테이지와 벤토 격자.
+     설계 높이는 1080 고정이고 설계 폭만 1920~2560 으로 늘어난다.
+     네 변 여백은 정확히 80 이고 그 안쪽을 격자가 빈 데 없이 채운다 */
+  --page-w: 1920px;         /* fit() 이 뷰포트에 맞춰 갱신한다 */
+  --page-h: 1080px;
+  --margin: 80px;
+  --content-w: calc(var(--page-w) - 2 * var(--margin));
+  --content-h: calc(var(--page-h) - 2 * var(--margin));
+  --cell-gap: 24px;         /* 여백 80 과 구분되는 유일한 격자 간격 */
+  --head-h: 24px;
+  --foot-h: 104px;
+  --pad-tile: 40px;
+  --measure: 760px;         /* 한 줄 폭 상한. 무대가 넓어져도 늘어나지 않는다 */
+
+  --sp-12: 12px; --sp-16: 16px; --sp-20: 20px; --sp-24: 24px;
+  --sp-32: 32px; --sp-40: 40px; --sp-48: 48px; --sp-64: 64px;
+  --gap-layer: 12px;
+  --gap-block: 48px;
+
+  --radius-lg: 32px; --radius-md: 24px; --radius-sm: 14px; --radius-round: 999px;
+  --ring: inset 0 0 0 2px var(--accent);
+
+  --dur-fast: 120ms; --dur-base: 240ms; --dur-step: 480ms;
+  --dur-page: 360ms; --dur-enter: 560ms;
+  --ease-out: cubic-bezier(.2,.7,.3,1);
+  --ease-enter: cubic-bezier(.16,.84,.34,1);
+}
+
+/* 움직임을 줄이라는 설정이면 전환 시간을 전부 0 으로 만든다. 상태 변화 자체는 남는다 */
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-fast: 0ms; --dur-base: 0ms; --dur-step: 0ms; --dur-page: 0ms; --dur-enter: 0ms; }
+  *, *::before, *::after { animation-duration: 0ms !important; transition-duration: 0ms !important; }
+}
+
+/* ===================== 골격 ===================== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; overflow: hidden; background: var(--canvas); }
+body { font-family: var(--font-sans); color: var(--ink); -webkit-font-smoothing: antialiased; }
+button { font-family: inherit; border: 0; background: none; color: inherit; }
+
+/* 레터박스는 지금 쪽의 캔버스 색이다. 화면비가 안 맞으면 남기고 감추지 않는다 */
+.viewport { position: fixed; inset: 0; overflow: hidden; background: var(--canvas);
+  transition: background-color var(--dur-page) var(--ease-out); }
+.viewport[data-canvas="dark"] { background: var(--canvas-dark); }
+
+.stage { width: var(--page-w); height: var(--page-h); position: absolute; left: 50%; top: 50%;
+  transform-origin: center center; overflow: hidden; }
+.stage, .stage * { word-break: keep-all; overflow-wrap: normal; line-break: strict; }
+
+.slide { position: absolute; inset: 0; visibility: hidden; opacity: 0; background: var(--canvas);
+  transition: opacity var(--dur-page) var(--ease-out), visibility 0s linear var(--dur-page); }
+.slide.active { visibility: visible; opacity: 1; transition: none;
+  animation: pagein var(--dur-page) var(--ease-enter) both; }
+.slide[data-canvas="dark"] { background: var(--canvas-dark); color: var(--on-dark); }
+@keyframes pagein { from { opacity: 0; filter: blur(10px); } to { opacity: 1; filter: none; } }
+
+/* ===================== 벤토 격자 =====================
+   네 변 여백 80 안쪽이 곧 격자다. 열은 열두 칸이고 칸 사이는 24 하나뿐이다.
+   행은 머리 · 표제 · 본체(1fr) 이고 본체가 남는 세로를 전부 먹는다.
+   항목이 적으면 간격을 늘리지 않고 타일 안의 정보를 늘린다 */
+.frame { position: absolute; left: var(--margin); top: var(--margin);
+  width: var(--content-w); height: var(--content-h);
+  display: grid; grid-template-columns: repeat(12, 1fr);
+  column-gap: var(--cell-gap); row-gap: var(--cell-gap);
+  grid-template-rows: var(--head-h) auto 1fr;
+  align-content: stretch; }
+.frame--foot { grid-template-rows: var(--head-h) auto 1fr minmax(var(--foot-h), auto); }
+.frame--cover { grid-template-rows: var(--head-h) 1fr auto; }
+
+.head { grid-column: 1 / -1; display: flex; align-items: baseline; justify-content: space-between;
+  line-height: var(--head-h); }
+.head .kicker { font-size: var(--fs-note); font-weight: var(--fw-bold); color: var(--accent);
+  letter-spacing: 0.06em; }
+.slide[data-canvas="dark"] .head .kicker { color: var(--on-dark); letter-spacing: var(--ls-wide); }
+.head .pageno { font-size: var(--fs-note); font-weight: var(--fw-medium); color: var(--ink-meta);
+  font-variant-numeric: tabular-nums; letter-spacing: 0.04em; }
+
+.titleblock { grid-column: 1 / -1; display: flex; flex-direction: column; gap: var(--gap-layer);
+  justify-content: flex-end; min-width: 0; }
+.ptitle { font-size: var(--fs-title); font-weight: var(--fw-heavy); line-height: var(--lh-title);
+  letter-spacing: var(--ls-display); white-space: nowrap; }
+.psub { font-size: var(--fs-note); font-weight: var(--fw-medium); color: var(--ink-support);
+  line-height: var(--lh-note); }
+
+/* 맺음 밴드. 조작을 다 마쳐야 켜진다.
+   자리는 정지 상태에도 잡혀 있어서 켜질 때 위의 것이 밀리지 않는다 (칸 예약) */
+.close { grid-column: 1 / -1; background: var(--sunken); border-radius: var(--radius-md);
+  padding: var(--sp-20) var(--sp-32); display: flex; align-items: center;
+  font-size: var(--fs-claim); font-weight: var(--fw-bold); line-height: var(--lh-claim);
+  letter-spacing: var(--ls-claim);
+  opacity: 0; transition: opacity var(--dur-base) var(--ease-out); }
+.close.on { opacity: 1; }
+
+/* 등장. 자리는 처음부터 끝까지 그대로다 (위치 이동 금지) */
+.seq { opacity: 0; }
+.slide.active .seq { animation: seqin var(--dur-enter) var(--ease-enter) both; animation-delay: var(--d, 0s); }
+.seq.seq-done { animation: none; opacity: 1; filter: none; }
+@keyframes seqin { from { opacity: 0; filter: blur(12px); } to { opacity: 1; filter: none; } }
+/* 검사용 정지 모드. 등장 중간 상태에서 자로 재지 않는다 */
+.still .slide.active, .still .seq { animation: none !important; opacity: 1 !important; filter: none !important; }
+
+/* 줄 고정. 자동 줄바꿈이 물리적으로 일어나지 않도록 블록 폭을 최장 줄에 맞춘다 */
+.ln { width: max-content; max-width: 100%; }
+
+.t-claim { font-size: var(--fs-claim); font-weight: var(--fw-bold); line-height: var(--lh-claim); letter-spacing: var(--ls-claim); }
+.t-body { font-size: var(--fs-body); font-weight: var(--fw-medium); line-height: var(--lh-body); letter-spacing: var(--ls-body); }
+.t-note { font-size: var(--fs-note); font-weight: var(--fw-medium); line-height: var(--lh-note); color: var(--ink-support); }
+
+/* 타일. 묶을 이유가 있을 때만 쓴다. 기본은 배경 위에 직접 놓는 것이다 */
+.tile { background: var(--surface); border-radius: var(--radius-lg); padding: var(--pad-tile);
+  display: flex; flex-direction: column; gap: var(--gap-layer); min-width: 0; overflow: hidden; }
+
+/* 누르는 것은 호버에 반응한다. 커서만 pointer 이고 반응이 없는 요소를 두지 않는다 */
+[data-click] { cursor: pointer; transition: box-shadow var(--dur-base) var(--ease-out),
+  background-color var(--dur-base) var(--ease-out); }
+[data-click]:hover { box-shadow: var(--ring); }
+[data-click]:focus-visible { box-shadow: var(--ring); outline: none; }
+.p3item.lit { box-shadow: inset 0 0 0 2px var(--accent-line); }
+.p3item.cur { box-shadow: var(--ring); background: var(--accent-tint); }
+</style>
+</head>
+<body>
+<div class="viewport" id="viewport" data-canvas="dark"><div class="stage" id="stage">
+
+<!-- ========== 1쪽 · 표지 (cover-stage) ========== -->
+<section class="slide" data-canvas="dark">
+  <div class="frame frame--cover" data-frame>
+    <div class="head"><span class="kicker">KICKER</span></div>
+    <div style="display:flex;flex-direction:column;justify-content:flex-end;gap:var(--sp-24)">
+      <h1 class="ln" style="font-size:var(--fs-cover);font-weight:var(--fw-heavy);line-height:var(--lh-cover);letter-spacing:var(--ls-display)">발표 제목</h1>
+    </div>
+    <div class="t-note" style="color:var(--on-dark-sub)">부제 한 줄 · 날짜 · 발표자</div>
+  </div>
+</section>
+
+<!-- ========== 2쪽 · 본문 뼈대 (판은 여기서 정한다) ========== -->
+<section class="slide">
+  <div class="frame frame--foot" data-frame>
+    <div class="head"><span class="kicker">KICKER</span><span class="pageno">02</span></div>
+    <div class="titleblock">
+      <h2 class="ptitle">쪽 제목</h2>
+      <p class="psub">부제 한 줄</p>
+    </div>
+    <!-- 본체 행. 이 안이 그 쪽의 판이다. 열두 칸을 쓰고 세로는 1fr 이 채운다 -->
+    <div style="grid-column:1/-1;display:grid;grid-template-columns:repeat(12,1fr);gap:var(--cell-gap)">
+      <div class="tile" style="grid-column:span 4">
+        <span class="t-claim">항목 이름</span>
+        <span class="t-body">설명 문장</span>
+      </div>
+      <div class="tile" style="grid-column:span 4">
+        <span class="t-claim">항목 이름</span>
+        <span class="t-body">설명 문장</span>
+      </div>
+      <div class="tile" style="grid-column:span 4">
+        <span class="t-claim">항목 이름</span>
+        <span class="t-body">설명 문장</span>
+      </div>
+    </div>
+    <div class="close" id="p2close">체험 뒤에 문장으로 고정하는 해석 한 줄</div>
+  </div>
+</section>
+
+<!-- ========== 3쪽 · 조작이 있는 쪽 (호버 미리보기 + 클릭 고정) ========== -->
+<section class="slide">
+  <div class="frame frame--foot" data-frame>
+    <div class="head"><span class="kicker">KICKER</span><span class="pageno">03</span></div>
+    <div class="titleblock">
+      <h2 class="ptitle">쪽 제목</h2>
+      <p class="psub">마우스를 올리면 미리 보이고 누르면 고정됩니다</p>
+    </div>
+    <div style="grid-column:1/-1;display:grid;grid-template-columns:repeat(12,1fr);gap:var(--cell-gap)">
+      <div style="grid-column:span 7;display:flex;flex-direction:column;gap:var(--cell-gap)">
+        <div class="tile p3item" data-i="0"><span class="t-claim">항목 하나</span></div>
+        <div class="tile p3item" data-i="1"><span class="t-claim">항목 둘</span></div>
+        <div class="tile p3item" data-i="2"><span class="t-claim">항목 셋</span></div>
+      </div>
+      <!-- 상세 칸. 자리는 정지 상태에도 잡혀 있다 (칸 예약) -->
+      <div class="tile" style="grid-column:span 5">
+        <span class="t-note">상세</span>
+        <span class="t-body" id="p3detail">항목을 짚으면 여기에 설명이 선다</span>
+      </div>
+    </div>
+    <div class="close" id="p3close">체험 뒤에 문장으로 고정하는 해석 한 줄</div>
+  </div>
+</section>
+
+</div></div>
+
+<script>
+/* ===== 스테이지를 뷰포트에 맞춘다. transform 금지의 유일한 예외다.
+   배율 s = min(vw/1920, vh/1080), 설계 폭 = clamp(1920, vw/s, 2560).
+   화면비가 맞지 않으면 레터박스가 남고 그것을 감추지 않는다.
+   세로를 고정한 이유는 채움 때문이다. 세로까지 가변이면 같은 판이
+   화면비마다 다른 밀도를 요구해 판마다 구성을 두 벌 설계하게 된다 ===== */
+var stage = document.getElementById('stage');
+var viewport = document.getElementById('viewport');
+var PAGE_H = 1080, PAGE_W_MIN = 1920, PAGE_W_MAX = 2560;
+function fit() {
+  var s = Math.min(innerWidth / PAGE_W_MIN, innerHeight / PAGE_H);
+  var w = Math.min(PAGE_W_MAX, Math.max(PAGE_W_MIN, innerWidth / s));
+  document.documentElement.style.setProperty('--page-w', w + 'px');
+  stage.style.transform = 'translate(-50%, -50%) scale(' + s + ')';
+}
+addEventListener('resize', fit);
+fit();
+window.FILL_STAGE = true;   /* 게이트가 이 플래그로 세로 채움을 검사한다 */
+
+function $(id) { return document.getElementById(id); }
+function $$(sel, root) { return [].slice.call((root || document).querySelectorAll(sel)); }
+
+/* 누르는 것에는 data-click 이 붙는다. 커서만 pointer 이고 핸들러가 없는 요소를
+   호버 검사가 골라낼 수 있게 하는 표시다 */
+function on(el, fn) {
+  if (!el) return;
+  el.dataset.click = '1';
+  el.tabIndex = 0;
+  el.addEventListener('click', function (e) {
+    e.stopPropagation();
+    var s = el.closest('section');
+    if (s && !s.classList.contains('active')) return;   /* 지나간 쪽의 조작은 듣지 않는다 */
+    fn(e);
+  });
+}
+function hov(el, enter, leave) {
+  if (!el) return;
+  el.addEventListener('mouseenter', enter);
+  el.addEventListener('mouseleave', leave);
+}
+function mark(list, cls, pred) {
+  list.forEach(function (el, i) { el.classList.toggle(cls, !!pred(el, i)); });
+}
+
+/* 검사용 정지 모드 */
+window.still = function () { document.documentElement.classList.add('still'); };
+
+/* 예약된 동작은 쪽마다 모아 두고 쪽을 떠날 때 함께 거둔다 */
+var TIMERS = {};
+function later(p, fn, ms) { (TIMERS[p] = TIMERS[p] || []).push(setTimeout(fn, ms)); }
+function clearLater(p) { (TIMERS[p] || []).forEach(clearTimeout); TIMERS[p] = []; }
+
+/* ===== 등장. 프레임의 직계 자식이 차례로 든다 ===== */
+var SEQ_SKIP = ['close'];
+function seqTargets(slide) {
+  var out = [], frame = slide.querySelector('.frame');
+  if (!frame) return out;
+  [].slice.call(frame.children).forEach(function (el) {
+    if (!el || el.nodeType !== 1) return;
+    for (var i = 0; i < SEQ_SKIP.length; i++) if (el.classList.contains(SEQ_SKIP[i])) return;
+    out.push(el);
+  });
+  return out;
+}
+function armSeq(slide) {
+  seqTargets(slide).forEach(function (el, i) {
+    el.classList.remove('seq-done');
+    el.classList.add('seq');
+    el.style.setProperty('--d', (0.04 + i * 0.07).toFixed(2) + 's');
+  });
+}
+document.addEventListener('animationend', function (e) {
+  if (e.animationName === 'seqin' && e.target.classList && e.target.classList.contains('seq')) {
+    e.target.classList.add('seq-done');
+  }
+});
+
+/* ===== 넘김 =====
+   PAGE[쪽번호(1 기반)] 에 그 쪽의 조작을 등록한다.
+     step()      Space. 다음 단계 하나
+     finish()    End. 그 쪽의 완료 상태로 한 번에
+     reset()     처음 상태로. 쪽을 떠날 때와 완료 뒤 Space 에 불린다
+     spaceDone() 완료 상태인가. 있으면 Space 가 되돌림으로 바뀐다
+     unpin()     빈 곳 클릭. 고정 해제 */
+var slides = $$('.slide');
+var cur = 0;
+var PAGE = {};
+window.PAGE = PAGE;
+var PENDING = {};
+function release() {
+  if (document.activeElement && document.activeElement !== document.body) document.activeElement.blur();
+}
+function go(n) {
+  var prev = cur;
+  var next = Math.max(0, Math.min(slides.length - 1, n));
+  if (next === prev) return;
+  /* 진행 중인 드래그는 쪽을 떠나기 전에 취소한다. 캡처가 남으면 숨은 핸들이 계속 값을 받는다 */
+  document.querySelectorAll('.grip.drag').forEach(function (g) { g.dispatchEvent(new Event('pointercancel')); });
+  cur = next;
+  if (PENDING[next]) { var rp = PAGE[next + 1]; if (rp && rp.reset) rp.reset(); PENDING[next] = false; }
+  viewport.dataset.canvas = slides[cur].dataset.canvas || '';
+  armSeq(slides[cur]);
+  slides.forEach(function (s, i) { s.classList.toggle('active', i === cur); });
+  release();
+  var p = PAGE[prev + 1];
+  clearLater(prev + 1);
+  if (p && p.reset) {   /* 떠난 쪽은 넘김이 끝난 뒤에 되돌린다. 되돌아가는 장면을 보이지 않는다 */
+    PENDING[prev] = true;
+    setTimeout(function () { if (cur !== prev && PENDING[prev]) { p.reset(); PENDING[prev] = false; } }, 420);
+  }
+}
+window.go = go;
+slides[0].classList.add('active');
+armSeq(slides[0]);
+
+/* 키 배치는 발표 전체에서 하나다.
+   좌우는 쪽 넘김, Space 는 그 쪽의 다음 조작, End 는 그 쪽의 완료 상태다.
+   완료된 쪽에서 Space 는 처음 상태로 되돌린다 */
+addEventListener('keydown', function (e) {
+  if (e.repeat && e.key !== 'ArrowRight' && e.key !== 'ArrowLeft' && e.key !== 'PageDown' && e.key !== 'PageUp') { e.preventDefault(); return; }
+  if (e.key === 'ArrowRight' || e.key === 'PageDown') { go(cur + 1); e.preventDefault(); }
+  else if (e.key === ' ') {
+    var a = PAGE[cur + 1];
+    var done = a && a.spaceDone ? a.spaceDone() : slides[cur].querySelector('.close.on');
+    if (done && a && a.reset) a.reset();
+    else if (a && a.step) a.step();
+    release();
+    e.preventDefault();
+  }
+  else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { go(cur - 1); e.preventDefault(); }
+  else if (e.key === 'End') {
+    document.querySelectorAll('.grip.drag').forEach(function (g) { g.dispatchEvent(new Event('pointercancel')); });
+    var b = PAGE[cur + 1]; if (b && b.finish) b.finish(); release(); e.preventDefault();
+  }
+  else if (e.key === 'Enter') {   /* 키보드만으로도 조작이 닿는다 */
+    var el = document.activeElement;
+    if (el && el.dataset && el.dataset.click) { el.click(); e.preventDefault(); }
+  }
+});
+window.SPACE_RESTART = true;
+
+/* 빈 곳을 누르면 그 쪽의 고정이 풀린다. 조작 뒤에 초점을 놓아 방향키가 즉시 듣는다 */
+document.addEventListener('click', function () {
+  release();
+  var p = PAGE[cur + 1];
+  if (p && p.unpin) p.unpin();
+});
+
+/* ===== 쪽별 조작 등록 예시 =====
+   2쪽은 맺음 밴드만 켜는 가장 단순한 형태다.
+   실제 쪽의 인터랙션은 그 쪽의 명세에서 직접 구현한다 */
+PAGE[2] = {
+  step: function () { $('p2close').classList.add('on'); },
+  finish: function () { $('p2close').classList.add('on'); },
+  reset: function () { $('p2close').classList.remove('on'); },
+  spaceDone: function () { return $('p2close').classList.contains('on'); }
+};
+
+/* 3쪽 · 호버 미리보기와 클릭 고정을 짝으로 둔다.
+   미리보기만 있고 고정이 없으면 발표자가 손을 뗄 수 없다 */
+var P3TEXT = ['항목 하나의 설명', '항목 둘의 설명', '항목 셋의 설명'];
+var p3items = $$('.p3item'), p3pin = -1, p3hov = -1, p3i = 0;
+function p3render() {
+  var k = p3pin >= 0 ? p3pin : p3hov;
+  mark(p3items, 'lit', function (el) { return p3hov >= 0 && p3pin < 0 && +el.dataset.i === k; });
+  mark(p3items, 'cur', function (el) { return p3pin >= 0 && +el.dataset.i === k; });
+  $('p3detail').textContent = k >= 0 ? P3TEXT[k] : '항목을 짚으면 여기에 설명이 선다';
+}
+p3items.forEach(function (el) {
+  hov(el, function () { p3hov = +el.dataset.i; p3render(); },
+          function () { p3hov = -1; p3render(); });
+  on(el, function () { var k = +el.dataset.i; p3pin = p3pin === k ? -1 : k; p3render(); });
+});
+PAGE[3] = {
+  step: function () { p3i++; if (p3i >= 1) $('p3close').classList.add('on'); },
+  finish: function () { p3i = 1; $('p3close').classList.add('on'); },
+  reset: function () { p3i = 0; p3pin = -1; p3hov = -1; p3render(); $('p3close').classList.remove('on'); },
+  spaceDone: function () { return $('p3close').classList.contains('on'); },
+  unpin: function () { p3pin = -1; p3render(); }
+};
+</script>
+</body>
+</html>

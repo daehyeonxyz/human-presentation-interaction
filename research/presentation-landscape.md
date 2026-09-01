@@ -43,16 +43,16 @@
 
 ## 4. 하네스 안의 기존 자산
 
-**앵커링 경계 (2026-07-25 사용자 확정):** `design-decks`·`labsem-ppt`는 이 스킬의 앵커가 아니다. 정적 슬라이드 생성기의 절차·미감·템플릿을 기본값으로 끌어오면 지향점(research/north-star.md)이 하향 앵커링된다. 아래 표의 "관계"는 그 경계 안에서의 선별 참고 관계다.
+**앵커링 경계 (사용자 확정):** 정적 슬라이드 생성기류는 이 스킬의 앵커가 아니다. 정적 슬라이드 생성기의 절차·미감·템플릿을 기본값으로 끌어오면 지향점(research/north-star.md)이 하향 앵커링된다. 아래 표의 "관계"는 그 경계 안에서의 선별 참고 관계다.
 
 | 자산 | 위치 | 이번 스킬과의 관계 |
 |---|---|---|
-| `design-decks` | `~/.claude/skills/design-decks/` | 비앵커. 검증된 개별 역학(1920x1080 고정 스테이지 스케일링, PDF/배포 스크립트)만 의식적으로 선별 참고. 절차·스타일 프리셋·템플릿 미감은 가져오지 않는다. MIT (frontend-slides @9906a34) |
-| `labsem-ppt` | `~/.claude/skills/labsem-ppt/` | 비앵커. "소스에 없는 주장 금지·file:// 렌더 검증" 같은 규율만 참고. 절차 골격은 이 레포가 새로 정의한다 |
-| `ppt-narration` 팩 | `~/projects/daehyeon-voice/packs/` | 슬라이드 텍스트·대본의 문체 SSOT. 서술 단계에서 레서(leader-writing)가 사용 |
-| `slop-check` / anti-slop 기준 | `~/.claude/skills/slop-check/` + design/memory.md | 텍스트·디자인 AI 티 검증 게이트 |
-| 디자인 팀 (나비) | `~/.claude/agents/design/` | 비주얼 QA accept gate·locked-token 가드. 시각 게이트는 /browse 렌더로만 |
-| 실물 덱 + 디자인 노트 | `~/projects/applock-dashbord/tmp/slides/` | 사용자 승인 이력이 있는 디자인 시스템 실측 표본 |
+| 정적 슬라이드 생성기류 | 외부 도구 | 비앵커. 검증된 개별 역학(1920x1080 고정 스테이지 스케일링, PDF/배포 스크립트)만 의식적으로 선별 참고. 절차·스타일 프리셋·템플릿 미감은 가져오지 않는다. MIT (frontend-slides @9906a34) |
+| 발표 자료 생성 스킬류 | 외부 도구 | 비앵커. "소스에 없는 주장 금지·file:// 렌더 검증" 같은 규율만 참고. 절차 골격은 이 레포가 새로 정의한다 |
+| 문체 기준 | `outputs` 스킬의 `standards/slides.md` · `standards/genres/presentation.md` | 슬라이드 텍스트·대본의 문체 SSOT. 6단계 서술에서 연다 |
+| 검수 절차 | `outputs` 스킬의 `guides/review.md` | 내용 검수와 표현 검수를 나눠 진행하는 9단계 게이트 |
+| 시각 검증 | `tools/fluid-gate.mjs` · `checklists/build-selfcheck.md` | 렌더 게이트와 구현 자가 점검. 시각 판정은 실제 렌더로만 한다 |
+| 실물 덱 + 디자인 노트 | 사용자가 제공하는 지난 발표 자료 | 승인 이력이 있는 디자인 시스템 실측 표본. 2.5단계 실물 조사의 입력 |
 
 ## 5. 기술 스택 권고 (설계 제안의 근거)
 
