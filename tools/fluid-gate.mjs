@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /* 해상도 매트릭스 게이트. 레포의 모든 덱에 다섯 해상도 검사를 돌린다.
 
-     node qa/fluid-gate.mjs            레포의 덱 전부
-     node qa/fluid-gate.mjs <경로>     지정한 덱 하나
+     node tools/fluid-gate.mjs            레포의 덱 전부
+     node tools/fluid-gate.mjs <경로>     지정한 덱 하나
 
    검사는 다섯 가지다.
    1. 스테이지 폭이 규격(하한 1920, 상한 2560, 세로 1080 기준 배율)대로 계산된다.
@@ -21,7 +21,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..');
-const OUT = path.join(HERE, 'matrix');
+const OUT = path.join(ROOT, 'qa', 'matrix');
 fs.mkdirSync(OUT, { recursive: true });
 
 function decks() {
@@ -44,15 +44,20 @@ function versionKey(v) {
   return (/-/.test(s) ? 0 : 1) * 1e12 + (m[0] || 0) * 1e6 + (m[1] || 0) * 1e3 + (m[2] || 0);
 }
 async function playwright() {
+  /* 1) 보통의 해결 경로. 이 레포나 상위에 설치돼 있으면 여기서 끝난다 */
+  try { return await import('playwright'); } catch (e) { /* 다음 후보 */ }
+  /* 2) 후보 디렉터리를 뒤진다. 환경 변수로 지정한 곳과 npx 캐시를 본다 */
   const roots = [];
+  if (process.env.PLAYWRIGHT_DIR) roots.push(process.env.PLAYWRIGHT_DIR);
   const local = process.env.LOCALAPPDATA;
   if (local) {
     const npx = path.join(local, 'npm-cache', '_npx');
     if (fs.existsSync(npx)) for (const d of fs.readdirSync(npx)) roots.push(path.join(npx, d, 'node_modules', 'playwright'));
   }
   const home = process.env.USERPROFILE || process.env.HOME;
-  if (home && fs.existsSync(path.join(home, 'projects'))) {
-    for (const d of fs.readdirSync(path.join(home, 'projects'))) roots.push(path.join(home, 'projects', d, 'node_modules', 'playwright'));
+  if (home) {
+    const npx = path.join(home, '.npm', '_npx');
+    if (fs.existsSync(npx)) for (const d of fs.readdirSync(npx)) roots.push(path.join(npx, d, 'node_modules', 'playwright'));
   }
   const found = [];
   for (const r of roots) {
@@ -65,7 +70,7 @@ async function playwright() {
     try { return await import(pathToFileURL(path.join(f.dir, 'index.mjs')).href); }
     catch (e) { /* 다음 후보 */ }
   }
-  throw new Error('playwright 를 못 찾았다');
+  throw new Error('playwright 를 못 찾았다. npm i playwright 로 설치하거나 PLAYWRIGHT_DIR 로 위치를 지정한다');
 }
 
 /* 뷰포트와 기대 스테이지 설계 크기. 배율 s = min(vw/1920, vh/1080) 이고
@@ -86,7 +91,8 @@ function check(name, ok, detail) {
 }
 
 const pw = await playwright();
-const browser = await pw.chromium.launch();
+/* 시스템에 이미 있는 크로미움을 쓸 수 있게 열어 둔다. playwright 가 받아 둔 것이 없을 때 쓴다 */
+const browser = await pw.chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
 
 const DECKS = decks();
 check('덱 발견', DECKS.length > 0, `${DECKS.length}개`);
