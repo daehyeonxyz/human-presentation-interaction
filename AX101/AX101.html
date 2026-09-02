@@ -149,10 +149,12 @@ svg.ic { width: 1em; height: 1em; flex: none; }
 .svc.nest .note { opacity: 1; }
 
 /* Claude 재현 · 다크 (사용자 화면과 같은 테마) */
-.k { background: var(--k-bg); border: 1px solid var(--k-bd); border-radius: 20px; color: var(--k-ink); position: relative; overflow: hidden; display: flex; flex-direction: column; font-size: 24px; line-height: 34px; min-height: 0; }
+.k { background: var(--k-bg); border: 1px solid var(--k-bd); border-radius: 20px; color: var(--k-ink); position: relative; overflow: hidden; display: flex; flex-direction: column; font-size: 24px; line-height: 34px; min-height: 0; align-self: start; }
+.k.fill { align-self: stretch; }
+.k.fill .k-msgs { flex: 1; }
 .k .k-top { height: 56px; display: flex; align-items: center; padding: 0 24px; gap: 12px; font-size: 18px; color: var(--k-sub); border-bottom: 1px solid var(--k-bd); flex: none; }
 .k .k-top .dot { width: 20px; height: 20px; border-radius: 6px; background: var(--k-send); }
-.k .k-msgs { flex: 1; min-height: 0; padding: 28px 32px; display: flex; flex-direction: column; gap: 16px; justify-content: flex-end; overflow: hidden; }
+.k .k-msgs { flex: none; min-height: 0; padding: 28px 32px; display: flex; flex-direction: column; gap: 16px; justify-content: flex-start; overflow: hidden; }
 .k .u { align-self: flex-end; max-width: 80%; background: var(--k-user); border-radius: 20px; padding: 16px 24px; position: relative; }
 .k .a { align-self: flex-start; max-width: 90%; padding: 0 0 0 44px; position: relative; }
 .k .a::before { content: ''; position: absolute; left: 0; top: 3px; width: 28px; height: 28px; border-radius: 50%; background: var(--k-send); }
@@ -252,7 +254,8 @@ svg.ic { width: 1em; height: 1em; flex: none; }
 
 /* 7장 · 토큰 */
 .tok .tl { font-size: var(--t-h); line-height: var(--l-h); font-weight: 700; letter-spacing: -.015em; }
-.tok .tk { display: inline-block; border-radius: var(--r-dot); padding: 0 var(--gap-3xs); margin: 0 calc(-1 * var(--gap-3xs)) var(--gap-xs); transition: background var(--dur), box-shadow var(--dur); }
+.tok .w { white-space: nowrap; }
+.tok .tk { display: inline-block; border-radius: var(--r-dot); padding: 0 var(--gap-3xs); margin: 0 0 var(--gap-xs); transition: background var(--dur), box-shadow var(--dur); }
 .tok.split .tk.c0 { background: var(--n6); } .tok.split .tk.c1 { background: var(--n5); }
 .tok.split .tk { box-shadow: inset 0 0 0 2px var(--paper); }
 
@@ -668,7 +671,7 @@ table.t td.key { font-weight: 700; }
 <section class="s" id="s12" data-steps="3" data-sec="Model">
   <div class="head"><div class="eye">Model</div><div class="h"><span class="no">4.</span> Effort <span class="hs">: 노력 수준을 고르는 메뉴</span></div></div>
   <div class="main cols side" style="--side:600px">
-    <div class="k" id="s12k">
+    <div class="k fill" id="s12k">
       <div class="k-top"><span class="dot"></span>새 채팅</div>
       <div class="k-msgs"></div>
       <div class="k-in" style="position:relative">
@@ -764,7 +767,7 @@ table.t td.key { font-weight: 700; }
       <div class="legend" id="s17lg"></div>
     </div>
     <div class="cols side" style="--side:640px;flex:1">
-      <div class="k" data-step="7">
+      <div class="k fill" data-step="7">
         <div class="k-top"><span class="dot"></span>새 채팅</div>
         <div class="k-msgs"></div>
         <div class="k-in"><div class="ph" id="s17ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
@@ -1019,7 +1022,7 @@ table.t td.key { font-weight: 700; }
       <div class="fi"><svg><use href="#i-code"/></svg><code>scripts/build_brief.py</code><span>조립과 검사</span></div>
     </div>
     <div class="col wide">
-      <div class="k" data-step="1" style="flex:1">
+      <div class="k" data-step="1">
         <div class="k-top"><span class="dot"></span>새 채팅</div>
         <div class="k-msgs">
           <div class="u"><span class="chip"><svg><use href="#i-file"/></svg>Core Automation_IR.pdf</span><br>Core Automation 초기 분석 자료 만들어 줘</div>
@@ -1243,7 +1246,14 @@ HOOK.s2 = { step: function (k) { $('s2q').classList.toggle('is-dim', k >= 2); } 
 /* S7 · 토큰 조각. 예시이며 실제 조각은 모델마다 다르다 */
 (function () {
   var KO = ['이', ' 영어', ' 글', '을', ' 한국어', '로', ' 자연', '스럽게', ' 번역', '하고', ' 원문', '의', ' 어조', '는', ' 그대로', ' 유지', '해', ' 줘', '.'];
-  function render(id, arr) { $(id).innerHTML = arr.map(function (p, i) { return '<span class="tk c' + (i % 2) + '">' + p + '</span>'; }).join(''); }
+  function render(id, arr) {
+    var groups = [];
+    arr.forEach(function (p, i) {
+      if (p.charAt(0) === ' ' || !groups.length) groups.push([]);
+      groups[groups.length - 1].push('<span class="tk c' + (i % 2) + '">' + p.trim() + '</span>');
+    });
+    $(id).innerHTML = groups.map(function (g) { return '<span class="w">' + g.join('') + '</span>'; }).join(' ');
+  }
   render('s7ko', KO);
   HOOK.s7 = { step: function (k) { $('s7tok').classList.toggle('split', k >= 1); } };
 })();

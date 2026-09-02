@@ -92,7 +92,14 @@ HOOK.s2 = { step: function (k) { $('s2q').classList.toggle('is-dim', k >= 2); } 
 /* S7 · 토큰 조각. 예시이며 실제 조각은 모델마다 다르다 */
 (function () {
   var KO = ['이', ' 영어', ' 글', '을', ' 한국어', '로', ' 자연', '스럽게', ' 번역', '하고', ' 원문', '의', ' 어조', '는', ' 그대로', ' 유지', '해', ' 줘', '.'];
-  function render(id, arr) { $(id).innerHTML = arr.map(function (p, i) { return '<span class="tk c' + (i % 2) + '">' + p + '</span>'; }).join(''); }
+  function render(id, arr) {
+    var groups = [];
+    arr.forEach(function (p, i) {
+      if (p.charAt(0) === ' ' || !groups.length) groups.push([]);
+      groups[groups.length - 1].push('<span class="tk c' + (i % 2) + '">' + p.trim() + '</span>');
+    });
+    $(id).innerHTML = groups.map(function (g) { return '<span class="w">' + g.join('') + '</span>'; }).join(' ');
+  }
   render('s7ko', KO);
   HOOK.s7 = { step: function (k) { $('s7tok').classList.toggle('split', k >= 1); } };
 })();
