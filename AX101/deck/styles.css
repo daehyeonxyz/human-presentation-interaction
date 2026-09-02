@@ -1,8 +1,8 @@
 /* AX 101 · 편집 강의. 값은 여기 한 곳에만 */
 :root {
-  --paper: #F2EFE8; --paper-2: #E7E3D9; --paper-3: #DDD8CC;
-  --ink: #161616; --sub: #6B675E; --mute: #B3AEA3; --line: #D6D1C6;
-  --acc: #1428A0; --acc-soft: #DCE1F5; --acc-2: #3A8FFF;
+  --paper: #F4F5F8; --paper-2: #E8EAEF; --paper-3: #DBDFE7;
+  --ink: #14171F; --sub: #585E6B; --mute: #A3A9B5; --line: #D2D6DF;
+  --acc: #1428A0; --acc-soft: #DFE4F8; --acc-2: #3A8FFF;
   --warn: #B4412F; --warn-soft: #F3DDD8;
   --cl-bg: #FAF9F5; --cl-bd: #E4E1D9; --cl-user: #EEEBE2; --cl-ink: #2B2A27; --cl-sub: #7A766D; --cl-send: #C96442;
   --font: "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
@@ -52,6 +52,22 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .note { font-size: 20px; color: var(--sub); }
 .rule { height: 2px; background: var(--line); }
 
+/* 제목 옆 부제 */
+.h .hs { font-size: 28px; font-weight: 500; color: var(--sub); margin-left: 20px; letter-spacing: 0; }
+
+/* 파란 섹션 표지 · 입력 → 모델 → 출력 */
+.s.blue { background: var(--acc); color: #fff; }
+.viewport.blue { background: var(--acc); }
+.tri { position: absolute; left: 120px; right: 120px; top: 50%; transform: translateY(-50%); text-align: center; }
+.tri .big { font-size: 180px; font-weight: 800; letter-spacing: -.03em; line-height: 1; margin-bottom: 56px; }
+.tri .lead { font-size: 40px; font-weight: 600; color: rgba(255,255,255,.88); line-height: 1.55; }
+.tri .row { display: flex; justify-content: center; align-items: center; gap: 40px; }
+.tri .bx { width: 420px; height: 200px; border-radius: 28px; border: 3px solid rgba(255,255,255,.42); color: rgba(255,255,255,.5); display: flex; align-items: center; justify-content: center; font-size: 88px; font-weight: 800; letter-spacing: -.03em; transition: background var(--dur), color var(--dur), border-color var(--dur); }
+.tri .bx.lit { background: #fff; color: var(--acc); border-color: #fff; }
+.tri .ar { font-size: 56px; color: rgba(255,255,255,.55); line-height: 1; }
+.tri .after { margin-top: 72px; font-size: 36px; color: #fff; line-height: 1.5; }
+.tri .before { margin-bottom: 64px; font-size: 36px; color: rgba(255,255,255,.88); line-height: 1.5; }
+
 /* 표지 */
 .cover .mark { position: absolute; left: 120px; top: 100px; height: 40px; }
 .cover .mark img { height: 100%; }
@@ -68,18 +84,27 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .agenda .after { margin-top: 72px; font-size: 36px; color: var(--ink); }
 
 /* 카드 (S3) */
-.cards { position: absolute; left: 120px; right: 120px; top: 260px; height: 620px; }
-.card { position: absolute; top: 0; height: 620px; width: 816px; border: 2px solid var(--line); border-radius: 28px; padding: 40px; background: var(--paper);
-  transition: left var(--dur) var(--ease), width var(--dur) var(--ease), height var(--dur) var(--ease), top var(--dur) var(--ease), transform 600ms var(--ease), border-color var(--dur); }
+.cards { position: absolute; left: 120px; right: 120px; top: 260px; height: 640px; }
+.card { position: absolute; top: 0; height: 640px; width: 816px; border: 2px solid var(--line); border-radius: 28px; padding: 40px; background: #fff;
+  transition: left 700ms var(--ease), width 700ms var(--ease), height 700ms var(--ease), top 700ms var(--ease), border-color var(--dur), background var(--dur); }
 .card .cn { font-size: 40px; font-weight: 800; }
-.card .cb { position: absolute; left: 40px; right: 40px; top: 120px; bottom: 40px; display: flex; align-items: center; justify-content: center; }
+.card .cn .cx { font-size: 28px; font-weight: 600; color: var(--acc); margin-left: 16px; opacity: 0; transition: opacity var(--dur); }
+.card .cd { font-size: 24px; font-weight: 500; color: var(--ink); margin-top: 10px; line-height: 1.4; transition: opacity var(--dur); }
+.card .cb { position: absolute; left: 40px; right: 40px; top: 150px; bottom: 40px; display: flex; align-items: center; justify-content: center; transition: right 700ms var(--ease); }
 .card.model { left: 0; } .card.iface { left: 864px; }
-.cards.nest .card.iface { left: 0; width: 1680px; border-color: var(--acc); }
+.card.model .cb svg { transition: width 700ms var(--ease), height 700ms var(--ease); }
+.cards.nest .card.iface { left: 0; width: 1680px; border-color: var(--acc); background: var(--acc-soft); }
 .cards.nest .card.iface .cn { color: var(--acc); }
-.cards.nest .card.model { left: 1060px; top: 150px; width: 540px; height: 400px; z-index: 2; background: #fff; }
+.cards.nest .card.iface .cn .cx { opacity: 1; }
+.cards.nest .card.model { left: 1120px; top: 150px; width: 500px; height: 360px; z-index: 2; border-color: var(--acc); box-shadow: 0 16px 48px rgba(20,40,160,.18); }
+.cards.nest .card.model .cd { opacity: 0; }
 .cards.nest .card.model .cb { top: 90px; }
-.cards.nest .card.iface .cb { right: 620px; }
-.cards .cap { font-size: 24px; color: var(--sub); margin-top: 16px; text-align: center; }
+.cards.nest .card.model .cb svg { width: 380px; height: 240px; }
+.cards.nest .card.iface .cb { right: 640px; }
+.card .wrapnote { position: absolute; left: 40px; right: 40px; bottom: 32px; font-size: 26px; line-height: 1.5; color: var(--ink); opacity: 0; transition: opacity var(--dur) 500ms; }
+.card .wrapnote b { color: var(--acc); font-weight: 800; }
+.cards.nest .card.iface .wrapnote { opacity: 1; }
+.cards.nest .card.iface .cb { bottom: 110px; }
 
 /* Claude Chat 재현 */
 .cl { background: var(--cl-bg); border: 2px solid var(--cl-bd); border-radius: 22px; color: var(--cl-ink); position: relative; overflow: hidden; display: flex; flex-direction: column; font-size: 24px; }
@@ -106,20 +131,25 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .repro { position: absolute; right: 16px; bottom: 10px; font-size: 14px; color: #A6A29A; letter-spacing: .04em; }
 .cl.spot .cl-top, .cl.spot .cl-msgs, .cl.spot .cl-in > :not(.keep) { opacity: .25; transition: opacity var(--dur); }
 
-/* 장부 (S7 · S8) */
-.ledger { position: absolute; right: 120px; top: 260px; width: 560px; }
-.ledger .lh { font-size: 24px; color: var(--sub); margin-bottom: 8px; }
-.ledger .premise { font-size: 24px; line-height: 1.6; margin-bottom: 40px; }
-.ledger .premise b { font-weight: 700; }
-.lrow { display: grid; grid-template-columns: 96px 1fr 120px; align-items: center; gap: 16px; height: 56px; font-size: 26px; }
+/* 장부 (S8 · S9) */
+.ledger { position: absolute; right: 120px; top: 250px; width: 560px; }
+.ledger .premise { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 36px; }
+.ledger .premise span { font-size: 20px; font-weight: 600; background: var(--paper-2); border-radius: 999px; padding: 6px 14px; }
+.ledger .premise span b { color: var(--acc); font-weight: 800; }
+.ledger .lh { font-size: 22px; color: var(--sub); margin-bottom: 8px; }
+.lrow { display: grid; grid-template-columns: 130px 1fr 100px; align-items: center; gap: 16px; height: 56px; font-size: 26px; }
 .lrow .bar { height: 22px; background: var(--paper-3); border-radius: 6px; overflow: hidden; display: flex; }
 .lrow .bar i { display: block; height: 100%; width: 0; transition: width 500ms var(--ease); }
 .lrow .bar i.new { background: var(--acc); } .lrow .bar i.old { background: var(--acc-2); } .lrow .bar i.out { background: var(--ink); }
 .lrow .v { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
-.lsum { margin-top: 12px; padding-top: 12px; border-top: 2px solid var(--line); font-size: 30px; font-weight: 800; display: flex; justify-content: space-between; }
-.lcost { margin-top: 36px; font-size: 26px; line-height: 1.7; }
-.lcost .big { font-size: 56px; font-weight: 800; color: var(--acc); letter-spacing: -.02em; line-height: 1.2; }
-.lcost .mut { color: var(--sub); }
+.lrow .v.zero { color: var(--mute); font-weight: 500; }
+.lsum { margin-top: 12px; padding-top: 12px; border-top: 2px solid var(--line); font-size: 28px; font-weight: 800; display: flex; justify-content: space-between; }
+.lcost { margin-top: 36px; font-size: 24px; line-height: 1.6; }
+.lcost .cr { display: flex; justify-content: space-between; font-variant-numeric: tabular-nums; }
+.lcost .cr span:last-child { font-weight: 700; }
+.lcost .big { font-size: 60px; font-weight: 800; color: var(--acc); letter-spacing: -.02em; line-height: 1.2; margin-top: 8px; }
+.lcost .mut { color: var(--sub); font-size: 22px; margin-top: 4px; }
+.cl .u.prev, .cl .a.prev { opacity: .55; }
 
 /* 표 */
 table.t { border-collapse: collapse; width: 100%; font-size: 28px; }
@@ -135,12 +165,20 @@ table.t code { font: inherit; font-weight: 700; }
 table.t .col-dim { color: var(--mute); }
 table.t .col-lit { color: var(--acc); font-weight: 700; }
 
-/* 뇌 크기 (S9) */
-.brains { position: absolute; left: 1240px; top: 300px; width: 560px; height: 420px; display: flex; align-items: flex-end; justify-content: space-between; }
-.brain { display: flex; flex-direction: column; align-items: center; gap: 14px; opacity: 0; transition: opacity var(--dur); }
-.brain.on { opacity: 1; }
-.brain i { display: block; border-radius: 50%; background: var(--acc-soft); border: 3px solid var(--acc); }
-.brain span { font-size: 20px; color: var(--sub); }
+/* 라인업 (S10) */
+.nm-ex { display: inline-flex; gap: 28px; margin-top: 64px; font-size: 140px; font-weight: 800; letter-spacing: -.03em; line-height: 1; }
+.nm-ex span { position: relative; padding-bottom: 60px; border-bottom: 6px solid var(--acc); }
+.nm-ex span small { position: absolute; left: 50%; bottom: -60px; transform: translateX(-50%); font-size: 30px; font-weight: 700; color: var(--acc); white-space: nowrap; }
+.mcs { position: absolute; left: 120px; right: 120px; top: 260px; display: flex; gap: 32px; }
+.mc { flex: 1; height: 440px; border: 2px solid var(--line); border-radius: 28px; background: #fff; padding: 32px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 16px; cursor: pointer; transition: opacity var(--dur), border-color var(--dur), transform var(--dur); }
+.mc i { display: block; width: var(--d); height: var(--d); border-radius: 50%; background: var(--acc-soft); border: 3px solid var(--acc); margin-bottom: auto; margin-top: auto; }
+.mc .mn { font-size: 40px; font-weight: 800; letter-spacing: -.02em; }
+.mc .mn b { color: var(--acc); font-weight: 800; }
+.mc .mt { font-size: 22px; color: var(--sub); text-align: center; }
+.mcs.focus .mc { opacity: .3; }
+.mcs.focus .mc.lit { opacity: 1; border-color: var(--acc); transform: translateY(-10px); }
+.mdesc { position: absolute; left: 120px; right: 120px; top: 760px; min-height: 120px; font-size: 32px; line-height: 1.55; }
+.mdesc b { color: var(--acc); font-weight: 800; }
 
 /* Effort 장치 (S12) */
 .device { display: flex; gap: 60px; align-items: flex-start; }
@@ -306,6 +344,16 @@ table.t .col-lit { color: var(--acc); font-weight: 700; }
 .cand .p { text-align: right; color: var(--sub); font-variant-numeric: tabular-nums; }
 .cand.top { font-weight: 800; color: var(--acc); }
 
+/* 토큰 조각 (S7) */
+.tok .tl { font-size: 56px; font-weight: 700; letter-spacing: -.02em; line-height: 1.5; margin-bottom: 40px; min-height: 84px; }
+.tok .tl .tk { display: inline-block; transition: background var(--dur), padding var(--dur), margin var(--dur), border-color var(--dur); border: 2px solid transparent; border-radius: 12px; padding: 0; margin: 0; }
+.tok.split .tl { font-size: 44px; line-height: 1.35; margin-bottom: 28px; }
+.tok.split .tl .tk { background: #fff; border-color: var(--acc); padding: 0 12px; margin: 5px 3px; }
+.tok.split .tl .tk.sp { margin-left: 18px; }
+.tok .tcount { font-size: 26px; color: var(--sub); opacity: 0; transition: opacity var(--dur); }
+.tok.split .tcount { opacity: 1; }
+.tok .tcount b { color: var(--acc); font-weight: 800; }
+
 /* 기타 */
 .two { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; }
 .col { display: flex; flex-direction: column; gap: 24px; }
@@ -320,3 +368,8 @@ table.t .col-lit { color: var(--acc); font-weight: 700; }
 .cards.nest .card.model svg { width: 360px; height: 230px; }
 .cards.nest .card.model .cap { display: none; }
 .cards.nest .card.iface .cap { position: absolute; left: 40px; bottom: 40px; margin: 0; text-align: left; }
+
+/* 표를 넓게 쓰는 장 (S26) */
+table.t.wide { font-size: 34px; }
+table.t.wide td { padding: 34px 20px; }
+table.t.wide th { font-size: 24px; }
