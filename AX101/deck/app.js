@@ -124,7 +124,7 @@ HOOK.s9 = { step: function (k) { ['s9p1', 's9p2'].forEach(function (id) { $(id).
 HOOK.s12 = { step: function (k) {
   $('s12n').classList.toggle('focus', k >= 1);
   $$('#s12n .it').forEach(function (n, i) { n.classList.toggle('lit', i + 1 === k); });
-  $('s12k').classList.toggle('focus', k >= 2);
+  $('s12k').classList.toggle('focus', k >= 1);
   $('s12model').classList.toggle('hot', k === 1);
   $('s12effort').classList.toggle('hot', k === 2); $$('#s12sub .mi').forEach(function (m) { m.classList.toggle('hot', k === 2); });
   $('s12think').classList.toggle('hot', k === 3);
@@ -177,7 +177,7 @@ HOOK.s14 = { step: function (k) { $$('#s14ax .unk').forEach(function (u) { u.cla
   }
   function bind(sel) { $$(sel).forEach(function (el) { el.addEventListener('mouseenter', function () { var i = +el.dataset.i; if (i < n) { hover = i; render(); } }); el.addEventListener('mouseleave', function () { hover = -1; render(); }); }); }
   bind('#s17bar i'); bind('#s17lg span');
-  HOOK.s17 = { reset: function () { n = 0; hover = -1; render(); }, step: function (k) { n = Math.min(7, k); hover = -1; render(); } };
+  HOOK.s17 = { reset: function () { n = 1; hover = -1; render(); }, step: function (k) { n = Math.min(7, k + 1); hover = -1; render(); } };
 })();
 
 /* S18 · 가이드 지우기 */
@@ -191,7 +191,7 @@ HOOK.s22 = { step: function (k) {
 
 /* S23 · S24 · 설정 화면에서 짚기 */
 HOOK.s23 = { step: function (k) { $('s23st').classList.toggle('focus', k >= 1); } };
-HOOK.s24 = { step: function (k) { $('s24st').classList.toggle('focus', k >= 1); $('s24row').classList.toggle('hot', k === 1); $('s24sw').classList.toggle('hot', k === 2); $('s24sw2').classList.toggle('hot', k === 2); $('s24new').classList.toggle('hot', k === 3); } };
+HOOK.s24 = { step: function (k) { $('s24st').classList.add('focus'); $('s24row').classList.toggle('hot', k <= 1); $('s24sw').classList.toggle('hot', k === 2); $('s24sw2').classList.toggle('hot', k === 2); $('s24new').classList.toggle('hot', k === 3); } };
 
 /* S26 · 지식과 지침 짚기 */
 HOOK.s26 = { step: function (k) { $('s26pj').classList.toggle('focus', k === 1); $('s26k').classList.toggle('hot', k === 1); $('s26i').classList.toggle('hot', k === 1); } };
@@ -240,7 +240,7 @@ HOOK.s26 = { step: function (k) { $('s26pj').classList.toggle('focus', k === 1);
     nodes += '<div class="sv" style="left:' + x + 'px;top:' + y + 'px">' + n + '</div>'; });
   svg += '</svg>';
   host.innerHTML = svg + nodes + '<div class="c">Claude</div>';
-  HOOK.s35 = { step: function (k) { $$('#s35hub .sv').forEach(function (s) { s.classList.toggle('on', k >= 1); }); $$('#s35hub line').forEach(function (l) { l.classList.toggle('on', k >= 1); l.classList.toggle('two', k >= 2); }); $$('#s35hub .arr').forEach(function (a) { a.classList.toggle('on', a.classList.contains('in') ? k >= 1 : k >= 2); }); } };
+  HOOK.s35 = { step: function (k) { $$('#s35hub .sv').forEach(function (s) { s.classList.add('on'); }); $$('#s35hub line').forEach(function (l) { l.classList.add('on'); l.classList.toggle('two', k >= 2); }); $$('#s35hub .arr').forEach(function (a) { a.classList.toggle('on', a.classList.contains('in') ? k >= 1 : k >= 2); }); } };
 })();
 
 /* 시작 */

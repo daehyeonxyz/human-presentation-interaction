@@ -12,6 +12,8 @@
   <symbol id="i-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/></symbol>
   <symbol id="i-plug" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/></symbol>
   <symbol id="i-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></symbol>
   <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></symbol>
 </svg>
 <div class="viewport dark" id="viewport"><div class="stage" id="stage">
@@ -44,7 +46,7 @@
       <div class="cb" data-step="2"><div class="k" style="width:640px;height:360px">
         <div class="k-top"><span class="dot"></span>새 채팅</div>
         <div class="k-msgs"><div class="u">이 회사의 강점을 세 줄로 정리해 줘</div><div class="a">세 가지로 정리하면 첫째 …</div></div>
-        <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus">+</span><span class="model">Sonnet 5 ▾</span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
+        <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
         </div></div>
       <div class="wrapnote"><b>AI 서비스</b> : 채팅을 중심으로 모델을 잘 사용하기 위한 시스템과 인터페이스를 구축해 놓은 플랫폼</div>
     </div>
@@ -91,13 +93,13 @@
 <section class="s" id="s8" data-steps="4" data-sec="Model">
   <div class="head"><div class="eye">Model</div><div class="h"><span class="no">2.</span> 토큰과 비용 <span class="hs">: case 1 빈 채팅창</span></div></div>
   <div class="main cols side" style="--side:640px">
-    <div class="k" data-step="1">
+    <div class="k">
       <div class="k-top"><span class="dot"></span>새 채팅</div>
       <div class="k-msgs">
         <div class="u mark" data-step="1" style="--mk:var(--acc)">이 영어 글을 한국어로 번역해 줘 <span style="color:var(--k-sub)">(100단어)</span></div>
         <div class="a mark" data-step="2" style="--mk:var(--k-ink)">번역했습니다. <span style="color:var(--k-sub)">(100단어)</span></div>
       </div>
-      <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus">+</span><span class="model">Sonnet 5 ▾</span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
+      <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
     </div>
     <div class="bill">
       <div class="rule"><span>1단어 = 1토큰</span><span>1토큰 = 1원</span></div>
@@ -121,7 +123,7 @@
         <div class="u mark" data-step="1" style="--mk:var(--acc)">이 글도 한국어로 번역해 줘 <span style="color:var(--k-sub)">(100단어)</span></div>
         <div class="a mark" data-step="2" style="--mk:var(--k-ink)">번역했습니다. <span style="color:var(--k-sub)">(100단어)</span></div>
       </div>
-      <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus">+</span><span class="model">Sonnet 5 ▾</span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
+      <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
     </div>
     <div class="bill">
       <div class="rule"><span>입력 1원</span><span>출력 5원</span></div>
@@ -138,7 +140,7 @@
 <section class="s" id="s10" data-steps="5" data-sec="Model">
   <div class="stack">
     <div class="layer mid center" data-out="1">
-      <div class="decl">이름은 <span class="acc">등급</span>, 숫자는 <span class="acc">버전</span></div>
+      <div class="decl">이름은 <b>등급</b>, 숫자는 <b>버전</b></div>
       <div class="nm-ex"><span>Sonnet<small>등급</small></span><span>5<small>버전</small></span></div>
     </div>
     <div class="layer" data-step="1">
@@ -173,7 +175,7 @@
       <div class="k-msgs"></div>
       <div class="k-in" style="position:relative">
         <div class="ph">Claude에게 메시지 보내기</div>
-        <div class="row"><span class="plus">+</span><span class="model" id="s12model">Sonnet 5 ▾</span><span class="send"><svg><use href="#i-up"/></svg></span></div>
+        <div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model" id="s12model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div>
         <div class="menu" id="s12menu" data-step="1" style="right:16px;bottom:76px;width:420px">
           <div class="mh">모델</div>
           <div class="mi">Haiku 4.5<span>가장 빠른</span></div>
@@ -190,8 +192,8 @@
       </div>
     </div>
     <div class="items mid" id="s12n">
-      <div class="it" data-step="1"><div class="t"><span class="no">1.</span>모델</div><div class="d">전송 버튼 옆 모델 이름을 누르면 변경</div></div>
-      <div class="it" data-step="2"><div class="t"><span class="no">2.</span>Effort</div><div class="d">Low, Medium, High, Extra high, Max 다섯 단계<br>기본값은 <b>High</b></div></div>
+      <div class="it"><div class="t"><span class="no">1.</span>모델</div><div class="d">전송 버튼 옆 모델 이름을 누르면 변경</div></div>
+      <div class="it" data-step="2"><div class="t"><span class="no">2.</span>Effort</div><div class="d">Low, Medium, High, Extra high, Max <span class="ln">다섯 단계</span><br>기본값은 <b>High</b></div></div>
       <div class="it" data-step="3"><div class="t"><span class="no">3.</span>확장된 사고</div><div class="d">노력 수준과 별개의 씽킹 토글<br>Opus 5는 끌 수 없음</div></div>
     </div>
   </div>
@@ -216,7 +218,7 @@
       </div>
       <ul class="bullets">
         <li data-step="1">올리면 답이 더 <b>꼼꼼</b>해지지만 시간이 더 걸리고 토큰을 더 씀</li>
-        <li data-step="2">토큰 예산이 아니라 <b>“이 정도 세기로 일해라”</b>라는 신호</li>
+        <li data-step="2">토큰 예산이 아니라 <b class="ln">“이 정도 세기로 일해라”</b>라는 신호</li>
         <li data-step="3">일상 질문은 기본값 그대로이고 계산이 얽히거나 문서를 여러 개 놓고 판단할 때 <b class="ln">한 단계 위</b></li>
       </ul>
     </div>
@@ -227,7 +229,7 @@
 <section class="s" id="s14" data-steps="2" data-sec="Model">
   <div class="head"><div class="eye">Model</div><div class="h"><span class="no">5.</span> Knowledge cutoff <span class="hs">: 학습이 끝난 시점</span></div></div>
   <div class="main axis mid" id="s14ax">
-    <div class="ticks"><span style="--x:0%">2025. 1</span><span style="--x:30%">2025. 7</span><span style="--x:60%">2026. 1</span><span style="--x:100%" class="acc end">오늘</span></div>
+    <div class="ticks"><span style="--x:0%">2025. 1</span><span style="--x:30%">2025. 7</span><span style="--x:60%">2026. 1</span><span style="--x:100%" class="end">오늘</span></div>
     <span class="nm">Haiku 4.5</span><div class="tr"><span class="unk" style="--x:5%"><span class="in">모름</span></span><span class="pt" data-step="1" style="--x:5%"></span><span class="dt" data-step="1" style="--x:5%">2025년 2월</span></div>
     <span class="nm">Sonnet 5</span><div class="tr"><span class="unk" style="--x:60%"></span><span class="pt" data-step="1" style="--x:60%"></span><span class="dt" data-step="1" style="--x:60%">2026년 1월</span></div>
     <span class="nm">Opus 5</span><div class="tr"><span class="unk" style="--x:80%"></span><span class="pt" data-step="1" style="--x:80%"></span><span class="dt" data-step="1" style="--x:80%">2026년 5월</span></div>
@@ -267,7 +269,7 @@
       <div class="k" data-step="7">
         <div class="k-top"><span class="dot"></span>새 채팅</div>
         <div class="k-msgs"></div>
-        <div class="k-in"><div class="ph" id="s17ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus">+</span><span class="model">Sonnet 5 ▾</span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
+        <div class="k-in"><div class="ph" id="s17ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
       </div>
       <div class="col">
         <div class="cwi" id="s17i"><div class="n"><i></i><span></span></div><div class="w"></div></div>
@@ -317,7 +319,7 @@
 <section class="s" id="s22" data-steps="3" data-sec="Input">
   <div class="head"><div class="eye">Input</div><div class="h">변하지 않는 부분 <span class="hs">: 업무마다 매번 치지 않아도 되는 것</span></div></div>
   <div class="main mid">
-    <div class="para tag" id="s22p">“<span class="g mem" data-n="1">우리 회사는 삼성벤처투자야. 우리 회사는 이런이런 업무를 하고,</span><br><span class="g prof" data-n="2">나는 어떤 일을 하는 누구고, 너는 무슨 업무를 맡은 어떤 직책을 가지고 있고,</span><br><span class="g proj" data-n="3">지금은 무슨 프로젝트를 하고 있고,</span><br>당장 지금 해야 할 일은 앤트로픽에 대한 조사인데,<br>이런 부분을 이 정도 수준까지 조사한 뒤에, 워드 형태로 정리해줘.<br>그리고 우리는 이런 식으로 워드 보고서를 작성하니까 참고하고…”</div>
+    <div class="para tag" id="s22p"><span class="q">“</span><span class="g mem" data-n="1">우리 회사는 삼성벤처투자야. 우리 회사는 이런이런 업무를 하고,</span><br><span class="g prof" data-n="2">나는 어떤 일을 하는 누구고, 너는 무슨 업무를 맡은 어떤 직책을 가지고 있고,</span><br><span class="g proj" data-n="3">지금은 무슨 프로젝트를 하고 있고,</span><br>당장 지금 해야 할 일은 앤트로픽에 대한 조사인데,<br>이런 부분을 이 정도 수준까지 조사한 뒤에, 워드 형태로 정리해줘.<br>그리고 우리는 이런 식으로 워드 보고서를 작성하니까 참고하고…”</div>
     <div class="labels">
       <div class="lb mem"><i>1</i><div><b>메모리</b><small>설정 &gt; 메모리</small></div></div>
       <div class="lb prof"><i>2</i><div><b>프로필 지침</b><small>설정 &gt; 일반</small></div></div>
@@ -385,12 +387,12 @@
         <div class="sec">나</div>
         <div class="mrow" id="s24row"><span class="n">Profile</span><span class="v">삼성벤처투자에서 인턴으로 근무하며 AX TF에서 사내 AI 도입을 …</span><span class="t">24시간 전 업데이트됨</span></div>
         <div class="mrow" id="s24new" data-step="3"><span class="n">A사 딜</span><span class="v">A사 딜은 9월 투자심의 안건</span><span class="t">방금 추가됨</span></div>
-        <div class="kin"><span>변경하거나 제거할 내용을 Claude에게 알려주세요</span><i></i></div>
+        <div class="kin"><span>변경하거나 제거할 내용을 Claude에게 알려주세요</span><i><svg><use href="#i-up"/></svg></i></div>
       </div>
     </div>
     <div class="col wide mid">
       <ul class="bullets">
-        <li data-step="1">여러 대화에 걸쳐 반복해서 나온 내용을 정리해 두고 <b>다음 대화에서 참조</b></li>
+        <li>여러 대화에 걸쳐 반복해서 나온 내용을 정리해 두고 <b>다음 대화에서 참조</b></li>
         <li data-step="2">설정에서 <b>켜고 끌 수 있고</b> 무엇이 쌓였는지 직접 확인하고 지울 수도 있음</li>
         <li data-step="3">대화 중에 <b>“이건 기억해 줘”</b>라고 말해서 바로 추가</li>
       </ul>
@@ -406,14 +408,14 @@
       <div class="k-top"><span class="dot"></span>새 채팅</div>
       <div class="k-msgs">
         <div class="u" data-out="2">미리내로보틱스의 시범 도입 고객이 몇 곳인지 알려 줘</div>
-        <div class="a" data-out="2">공개된 자료에서는 미리내로보틱스의 도입 고객 수를 확인할 수 없습니다. 회사 자료가 있다면 …</div>
+        <div class="a" data-out="2">공개 자료에서는 확인할 수 없습니다</div>
         <div class="u" data-step="2"><span class="chip"><svg><use href="#i-file"/></svg>미리내로보틱스_회사소개.md</span><br>미리내로보틱스의 시범 도입 고객이 몇 곳인지 알려 줘</div>
         <div class="a" data-step="2">회사 소개 문서 기준으로 시범 도입 고객은 <b>세 곳</b>입니다.<br>물류 두 곳과 병원 한 곳<br><span class="badge"><b>출처</b> 회사소개.md 고객 절</span></div>
       </div>
-      <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus">+</span><span class="model">Sonnet 5 ▾</span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
+      <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
     </div>
     <div class="col mid">
-      <ul class="bullets"><li data-step="1">답변을 만들기 전에 외부 문서에서 관련 정보를 <b>먼저 찾아보고</b> 그 정보를 기반으로 응답을 생성</li></ul>
+      <ul class="bullets"><li>답변을 만들기 전에 외부 문서에서 관련 정보를 <b>먼저 찾아보고</b> 그 정보를 기반으로 응답을 생성</li></ul>
       <div class="flow" data-step="2"><span class="n">질문</span><span class="ar">↓</span><span class="n hi">문서에서 먼저 찾기</span><span class="ar">↓</span><span class="n">찾은 정보 + 질문</span><span class="ar">↓</span><span class="n">응답</span></div>
       <div class="col" data-step="3"><div class="h2">넓은 의미로는 다 RAG</div><div class="pills"><span class="pill">파일 첨부</span><span class="pill">웹 검색</span><span class="pill">프로젝트 지식</span></div></div>
     </div>
@@ -426,7 +428,7 @@
   <div class="main">
     <div class="pj" id="s26pj">
       <div><div class="crumb">프로젝트 ›</div><div class="pn">반도체</div><div class="pdesc">반도체 섹터 딜 검토</div>
-        <div class="pin"><span>이 프로젝트에서 새 채팅</span><div class="row"><span>+</span><span>Sonnet 5 ▾</span><span class="send"></span></div></div></div>
+        <div class="pin"><span>이 프로젝트에서 새 채팅</span><div class="row"><svg class="chev"><use href="#i-plus"/></svg><span>Sonnet 5</span><svg class="chev"><use href="#i-chev"/></svg><span class="send"><svg><use href="#i-up"/></svg></span></div></div></div>
       <div class="side">
         <div class="box" id="s26i"><h5>지침 <span>편집</span></h5><div style="color:var(--k-sub)">반도체 팀 기준으로 답한다. 수치는 출처와 기준 연도를 같이 적는다.</div></div>
         <div class="box" id="s26k"><h5>프로젝트 지식 <span>+</span></h5><div class="f"><svg><use href="#i-file"/></svg>반도체_시장_2026.md</div><div class="f"><svg><use href="#i-file"/></svg>A사_회사소개.md</div><div class="f"><svg><use href="#i-file"/></svg>보고서_양식.md</div><div class="cap"><i></i></div><div class="sub">용량의 18% 사용</div></div>
@@ -491,7 +493,7 @@
       <div class="col wide"><div class="h"><span class="no">1.</span> 자세한 프롬프트</div><ul class="bullets" data-step="1"><li>보고서 양식처럼 지켜야 할 게 많으면<br>말로 설명하는 데 한계</li></ul></div>
       <div class="col wide"><div class="h"><span class="no">2.</span> 예시 보여주기</div><ul class="bullets" data-step="2"><li>계속 보여주면 컨텍스트 윈도우를 너무 잡아먹음</li><li>예시의 종류에 따라<br>일관된 작업물이 나오지 않을 수도 있음</li></ul></div>
     </div>
-    <div class="close-line decl" data-step="3"><span class="acc">일관성과 재현성</span>이 떨어짐</div>
+    <div class="close-line decl" data-step="3"><b>일관성과 재현성</b>이 떨어짐</div>
   </div>
 </section>
 
@@ -525,7 +527,7 @@
           <div class="u"><span class="chip"><svg><use href="#i-file"/></svg>Core Automation_IR.pdf</span><br>Core Automation 초기 분석 자료 만들어 줘</div>
           <div class="a" data-step="2"><span class="badge"><b>deal-initial-analysis</b> 스킬 사용</span><br>첨부한 IR 덱을 읽고 기술 실사 브리프를 만들겠습니다</div>
         </div>
-        <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus">+</span><span class="model">Sonnet 5 ▾</span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
+        <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
       </div>
       <div class="close-line" data-step="2">채팅 중에 관련된 작업이 나오면 <b>Claude가 알아서 불러 씀</b></div>
     </div>
@@ -550,7 +552,7 @@
           <div class="file" id="s33card" data-step="2"><svg><use href="#i-file"/></svg><div><b>Core Automation_기술실사_20260826.html</b><small>눌러서 열기</small></div></div>
         </div>
       </div>
-      <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus">+</span><span class="model">Sonnet 5 ▾</span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
+      <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
     </div>
     <div class="col mid"><div class="decl" data-step="2">일관된<br>품질</div></div>
     <div class="brief" id="s33b" data-step="3">
