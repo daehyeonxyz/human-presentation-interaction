@@ -340,7 +340,7 @@ svg.ic { width: 1em; height: 1em; flex: none; }
 .para .q { position: absolute; left: calc(36px + var(--gap-xs)); }
 .para .g { position: relative; border-radius: var(--r-dot); padding: 0 var(--gap-3xs); margin: 0 0 0 calc(-1 * var(--gap-3xs)); transition: background var(--dur), color var(--dur); }
 .para .g.on { background: var(--acc-soft); color: var(--acc); }
-.para .g::before { content: attr(data-n); position: absolute; left: calc(-36px - var(--gap-xs) - var(--gap-sm) - var(--gap-3xs)); top: calc((var(--l-h2) - 36px) / 2 - 2px); width: 36px; height: 36px; border-radius: 50%; font-size: var(--t-cap); line-height: 36px; font-weight: 800; color: var(--white); background: var(--acc); text-align: center; opacity: 0; transition: opacity var(--dur); }
+.para .g::before { content: attr(data-n); position: absolute; left: calc(-36px - var(--gap-xs) - var(--gap-sm) + var(--gap-3xs)); top: calc((var(--l-h2) - 36px) / 2 - 2px); width: 36px; height: 36px; border-radius: 50%; font-size: var(--t-cap); line-height: 36px; font-weight: 800; color: var(--white); background: var(--acc); text-align: center; opacity: 0; transition: opacity var(--dur); }
 .para .g.on::before { opacity: 1; }
 .labels { display: flex; gap: var(--gap-lg); }
 .labels .lb { opacity: 0; transition: opacity var(--dur); display: flex; align-items: flex-start; gap: var(--gap-xs); }
