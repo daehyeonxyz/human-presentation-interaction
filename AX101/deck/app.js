@@ -114,7 +114,7 @@ HOOK.s2 = { step: function (k) { $('s2q').classList.toggle('is-dim', k >= 2); } 
   var KO = ['이', ' 영어', ' 글', '을', ' 한국어', '로', ' 자연', '스럽게', ' 번역', '해', ' 주고', ',', ' 원문', '의', ' 어조', '는', ' 그대로', ' 유지', '해', ' 줘', '.'];
   function render(id, arr) { $(id).innerHTML = arr.map(function (p, i) { return '<span class="tk c' + (i % 5) + '">' + p + '</span>'; }).join(''); }
   render('s7en', EN); render('s7ko', KO);
-  $('s7cnt').innerHTML = '영어 <b>' + EN.length + '개</b> · 한국어 <b>' + KO.length + '개</b><span class="tag mute">예시 · 실제 조각 수는 모델마다 다르다</span>';
+  $('s7cnt').innerHTML = '<span>영어 <b>' + EN.length + '조각</b></span><span>한국어 <b>' + KO.length + '조각</b></span>';
   var tok = $('s7tok'), on = false;
   function set(v) { on = v; tok.classList.toggle('split', on); $('s7btn').textContent = on ? '되돌리기' : '쪼개기'; }
   $('s7btn').addEventListener('click', function (e) { e.stopPropagation(); set(!on); this.blur(); });
@@ -127,10 +127,10 @@ HOOK.s9 = { step: function (k) { ['s9p1', 's9p2'].forEach(function (id) { $(id).
 /* S10 · 라인업. 파라미터 점과 모델 고르기 */
 (function () {
   var M = [
-    { n: 'Haiku <b>4.5</b>', t: '가장 저렴하고 빠른 모델', d: ['일상 Q&A와 검색에는 충분', '지금은 잘 쓰이지 않는다', '버전 갱신도 1년 가까이 정체'], p: 40 },
-    { n: 'Sonnet <b>5</b>', t: '기본 모델', d: ['속도와 성능의 균형이 가장 좋다', '고민 없이 쓰는 기본값'], p: 120 },
-    { n: 'Opus <b>5</b>', t: '더 복잡한 문제를 위한 모델', d: ['고가 요금제 사용자에게는 사실상 기본 모델', '문서 여러 개를 놓고 판단하는 일'], p: 240 },
-    { n: 'Fable <b>5</b>', t: '가장 높은 등급', d: ['Mythos에 안전장치를 씌워 일반 사용자에게 연 모델', '현존 모델 중 최고 성능으로 알려짐'], p: 400 }
+    { n: 'Haiku <b>4.5</b>', t: '가장 저렴하고 빠른 모델', d: ['일상 Q&A와 검색에는 충분', '지금은 잘 쓰이지 않는 모델', '버전 갱신도 1년 가까이 정체'], p: 40 },
+    { n: 'Sonnet <b>5</b>', t: '기본 모델', d: ['속도와 성능의 균형이 가장 좋은 모델'], p: 120 },
+    { n: 'Opus <b>5</b>', t: '더 복잡한 문제를 위한 모델', d: ['고가 요금제 사용자에게는 사실상 기본 모델'], p: 240 },
+    { n: 'Fable <b>5</b>', t: '가장 높은 등급', d: ['Mythos에 안전장치를 씌워 일반 사용자에게 연 모델', '현존 모델 중 최고 성능으로 알려진 모델'], p: 400 }
   ];
   var g = $('s10g'); for (var i = 0; i < 400; i++) { var e = document.createElement('i'); g.appendChild(e); }
   var dots = $$('#s10g i'), sel = -1;
@@ -138,7 +138,7 @@ HOOK.s9 = { step: function (k) { ['s9p1', 's9p2'].forEach(function (id) { $(id).
     $$('#s10pick button').forEach(function (b, i) { b.classList.toggle('sel', i === sel); });
     var m = sel >= 0 ? M[sel] : null;
     dots.forEach(function (d, i) { d.classList.toggle('on', m ? i < m.p : false); });
-    $('s10cnt').textContent = m ? m.p + ' / 400' : '';
+    
     $('s10pd').innerHTML = m ? '<div class="pn">' + m.n + '</div><div class="pt">' + m.t + '</div><ul>' + m.d.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ul>' : '';
   }
   $$('#s10pick button').forEach(function (b) { b.addEventListener('click', function (e) { e.stopPropagation(); sel = +b.dataset.i; render(); b.blur(); }); });
@@ -174,13 +174,13 @@ HOOK.s14 = { step: function (k) { $$('#s14ax .unk').forEach(function (u) { u.cla
 /* S17 · 컨텍스트 윈도우. 대본 순서대로 채운다 */
 (function () {
   var IT = [
-    { k: 'sys', n: '시스템 프롬프트를 포함한 설정 파일', w: '서비스가 미리 넣는다', d: '기본 지시와 도구 사용 규칙 · 우리가 확인할 일은 없다', t: 4200, c: 'var(--c-sys)' },
-    { k: 'mem', n: '메모리', w: '설정 > 메모리', d: 'Claude가 이전 대화에서 스스로 정리해 둔 것', t: 680, c: 'var(--c-mem)' },
-    { k: 'tool', n: '도구 정보 (MCP)', w: '설정 > 커넥터', d: '연결된 커넥터가 할 수 있는 일의 목록', t: 1200, c: 'var(--c-tool)' },
-    { k: 'skill', n: '스킬 설명', w: '설정 > 스킬', d: '어떤 스킬이 있고 언제 쓰는지 · 본문은 쓸 때만 들어온다', t: 450, c: 'var(--c-skill)' },
-    { k: 'prof', n: '전역 지침', w: '설정 > 일반 > 프로필 지침', d: '내 모든 대화에 적용', t: 320, c: 'var(--c-prof)' },
-    { k: 'proj', n: '프로젝트 지침', w: '프로젝트 > 지침', d: '그 프로젝트 안의 대화에만 적용', t: 1800, c: 'var(--c-proj)' },
-    { k: 'me', n: '내가 친 프롬프트', w: '채팅창', d: '매번 직접 쓰는 것 · 앞의 것들 뒤에 붙는다', t: 45, c: 'var(--c-me)' }
+    { k: 'sys', n: '시스템 프롬프트를 포함한 설정 파일', w: '서비스가 미리 넣는다', d: '기본 지시와 도구 사용 규칙이며 우리가 볼 일은 없다', t: 4200, c: 'var(--n6)' },
+    { k: 'mem', n: '메모리', w: '설정 > 메모리', d: 'Claude가 이전 대화에서 스스로 정리해 둔 것', t: 680, c: 'var(--n5)' },
+    { k: 'tool', n: '도구 정보 (MCP)', w: '설정 > 커넥터', d: '연결된 커넥터가 할 수 있는 일의 목록', t: 1200, c: 'var(--n4)' },
+    { k: 'skill', n: '스킬 설명', w: '설정 > 스킬', d: '어떤 스킬이 있고 언제 쓰는지의 설명이며 본문은 쓸 때만 들어온다', t: 450, c: 'var(--n3)' },
+    { k: 'prof', n: '전역 지침', w: '설정 > 일반 > 프로필 지침', d: '내 모든 대화에 적용', t: 320, c: 'var(--n2)' },
+    { k: 'proj', n: '프로젝트 지침', w: '프로젝트 > 지침', d: '그 프로젝트 안의 대화에만 적용', t: 1800, c: 'var(--n1)' },
+    { k: 'me', n: '내가 친 프롬프트', w: '채팅창', d: '매번 직접 쓰는 것이며 앞의 것들 뒤에 붙는다', t: 45, c: 'var(--n7)' }
   ];
   var MAX = 12000, bar = $('s17bar'), lg = $('s17lg'), insp = $('s17i'), n = 0, hover = -1;
   bar.innerHTML = IT.map(function (it, i) { return '<i data-i="' + i + '" style="background:' + it.c + '"></i>'; }).join('');
@@ -191,14 +191,14 @@ HOOK.s14 = { step: function (k) { $$('#s14ax .unk').forEach(function (u) { u.cla
     insp.querySelector('.n span').textContent = it ? it.n : '';
     insp.querySelector('.w').textContent = it ? it.w : '';
     insp.querySelector('.d').textContent = it ? it.d : '';
-    insp.querySelector('.t').textContent = it ? it.t.toLocaleString('ko-KR') + ' 토큰 · 예시' : '';
+    insp.querySelector('.t').textContent = it ? '약 ' + it.t.toLocaleString('ko-KR') + ' 토큰' : '';
   }
   function render() {
     var total = 0;
     $$('#s17bar i').forEach(function (s, i) { var on = i < n; s.style.width = on ? (IT[i].t / MAX * 100) + '%' : '0'; if (on) total += IT[i].t; s.classList.toggle('hot', i === hover); });
     $$('#s17lg span').forEach(function (s, i) { s.classList.toggle('on', i < n); });
     bar.classList.toggle('focus', hover >= 0);
-    $('s17tot').textContent = total.toLocaleString('ko-KR') + ' 토큰 · 예시 수치';
+    $('s17tot').textContent = total ? '약 ' + total.toLocaleString('ko-KR') + ' 토큰' : '';
     $('s17ph').textContent = n >= 7 ? 'A사 회사소개 자료 기준으로 시범 도입 고객 수를 정리해 줘' : 'Claude에게 메시지 보내기';
     $('s17ph').style.color = n >= 7 ? 'var(--k-ink)' : '';
     showInsp(hover >= 0 ? hover : n - 1);
@@ -218,10 +218,10 @@ HOOK.s22 = { step: function (k) {
 } };
 
 /* S23 · 지침 표시 */
-HOOK.s23 = { step: function (k) { $('s23ta').style.outline = k >= 1 ? '3px solid var(--c-prof)' : 'none'; } };
+HOOK.s23 = { step: function (k) { $('s23ta').style.outline = k >= 1 ? '3px solid var(--acc)' : 'none'; } };
 
 /* S24 · 메모리 표시 */
-HOOK.s24 = { step: function (k) { $('s24sw').style.outline = k === 2 ? '3px solid var(--c-mem)' : 'none'; $('s24sw').style.outlineOffset = '-3px'; $('s24row').style.outline = k === 2 ? '3px solid var(--c-mem)' : 'none'; $('s24row').style.outlineOffset = '-3px'; } };
+HOOK.s24 = { step: function (k) { $('s24sw').style.outline = k === 2 ? '3px solid var(--acc)' : 'none'; $('s24sw').style.outlineOffset = '-3px'; $('s24row').style.outline = k === 2 ? '3px solid var(--acc)' : 'none'; $('s24row').style.outlineOffset = '-3px'; } };
 
 /* S26 · 지식 · 지침 표시 */
 HOOK.s26 = { step: function (k) { $('s26k').classList.toggle('ring', k === 1); $('s26i').classList.toggle('ring', k === 1); $('s26pj').style.opacity = k >= 2 ? .45 : 1; } };
@@ -252,7 +252,7 @@ HOOK.s31 = { step: function (k) { $('s31a').classList.toggle('is-dim', k >= 2); 
   function render() {
     $('s34dL').innerHTML = docshape(CY[a % 4]); $('s34dR').innerHTML = docshape('D', f ? 3 : undefined);
     $$('#s34mR i').forEach(function (i, k) { i.classList.toggle('on', k <= f); });
-    $('s34cL').textContent = a + '번 눌렀다 · 눈금은 그대로'; $('s34cR').textContent = f + '번 고쳤다';
+    
     $('s34again').classList.toggle('done', a >= 3); $('s34fix').classList.toggle('done', f >= 3);
   }
   $('s34again').addEventListener('click', function (e) { e.stopPropagation(); if (a < 3) a++; render(); this.blur(); });
