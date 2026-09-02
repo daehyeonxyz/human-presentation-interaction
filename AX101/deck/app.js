@@ -75,136 +75,195 @@ HOOK.s2 = { step: function (k) { $('s2q').classList.toggle('is-dim', k >= 2); } 
   HOOK.s3 = { step: function (k) { $('s3cards').classList.toggle('nest', k >= 3); } };
 })();
 
-/* S6 · 다음 낱말 */
-HOOK.s6 = { step: function (k) {
-  $$('#s6cands .b i').forEach(function (i) { i.style.width = k >= 1 ? i.dataset.w + '%' : '0'; });
-  var bl = $('s6blank'); bl.innerHTML = '&nbsp;';
-  if (k >= 1) later(function () { bl.textContent = '나옵니다'; }, 700);
-} };
+/* S6 · 다음 낱말을 잇달아 고른다 (자기회귀) */
+(function () {
+  var GIVEN = ['좋은', '답은'];
+  var STEPS = [
+    [['좋은', 58], ['정확한', 22], ['많은', 12], ['새로운', 8]],
+    [['자료에서', 41], ['질문에서', 33], ['사람에게서', 16], ['데이터에서', 10]],
+    [['나옵니다', 62], ['시작됩니다', 21], ['만들어집니다', 9], ['옵니다', 5]]
+  ];
+  var sent = $('s6sent'), list = $('s6list'), cands = $('s6cands'), words = GIVEN.slice();
+  function drawSent(pending) {
+    sent.innerHTML = words.map(function (w, i) { return '<span class="w' + (i >= GIVEN.length ? ' new' : '') + '">' + w + '</span>'; }).join('') + (pending ? '<span class="cur"></span>' : '');
+  }
+  function drawCands(i) {
+    if (i < 0 || i >= STEPS.length) { list.innerHTML = ''; return; }
+    list.innerHTML = STEPS[i].map(function (c, j) { return '<div class="cand' + (j === 0 ? ' top' : '') + '"><span>' + c[0] + '</span><div class="b"><i data-w="' + c[1] + '"></i></div><span class="p">' + c[1] + '%</span></div>'; }).join('');
+    $('s6ch').textContent = (words.length + 1) + '번째 낱말 후보';
+    later(function () { $$('#s6list .b i').forEach(function (b) { b.style.width = b.dataset.w + '%'; }); }, 30);
+  }
+  HOOK.s6 = {
+    reset: function () { words = GIVEN.slice(); cands.classList.remove('gone'); drawSent(true); drawCands(0); },
+    step: function (k) {
+      clearTimers();
+      var n = Math.min(k, STEPS.length);
+      words = GIVEN.concat(STEPS.slice(0, Math.max(0, n - 1)).map(function (s) { return s[0][0]; }));
+      cands.classList.remove('gone');
+      if (n === 0) { drawSent(true); drawCands(0); return; }
+      drawSent(true); drawCands(n - 1);
+      later(function () { cands.classList.add('gone'); words.push(STEPS[n - 1][0][0]); drawSent(n < STEPS.length); }, 900);
+      later(function () { if (n < STEPS.length) { cands.classList.remove('gone'); drawCands(n); } else { list.innerHTML = ''; $('s6ch').textContent = '끝'; } }, 1500);
+    }
+  };
+})();
 
-/* S7 · 토큰 조각. 예시 · 실제 조각은 모델마다 다르다 */
+/* S7 · 토큰 조각. 예시이며 실제 조각은 모델마다 다르다 */
 (function () {
   var EN = ['Translate', ' this', ' paragraph', ' about', ' Anth', 'ropic', ' into', ' natural', ' Korean', ' and', ' keep', ' the', ' tone', ' of', ' the', ' original', '.'];
   var KO = ['이', ' 영어', ' 글', '을', ' 한국어', '로', ' 자연', '스럽게', ' 번역', '해', ' 주고', ',', ' 원문', '의', ' 어조', '는', ' 그대로', ' 유지', '해', ' 줘', '.'];
-  function render(id, arr) { $(id).innerHTML = arr.map(function (p) { var sp = p.charAt(0) === ' '; return (sp ? ' ' : '') + '<span class="tk' + (sp ? ' sp' : '') + '">' + (sp ? p.slice(1) : p) + '</span>'; }).join(''); }
+  function render(id, arr) { $(id).innerHTML = arr.map(function (p, i) { return '<span class="tk c' + (i % 5) + '">' + p + '</span>'; }).join(''); }
   render('s7en', EN); render('s7ko', KO);
-  $('s7cnt').innerHTML = '영어 <b>' + EN.length + '조각</b> · 한국어 <b>' + KO.length + '조각</b> · 예시 · 실제 조각은 모델마다 다르다';
+  $('s7cnt').innerHTML = '영어 <b>' + EN.length + '개</b> · 한국어 <b>' + KO.length + '개</b><span class="tag mute">예시 · 실제 조각 수는 모델마다 다르다</span>';
   var tok = $('s7tok'), on = false;
   function set(v) { on = v; tok.classList.toggle('split', on); $('s7btn').textContent = on ? '되돌리기' : '쪼개기'; }
   $('s7btn').addEventListener('click', function (e) { e.stopPropagation(); set(!on); this.blur(); });
   HOOK.s7 = { reset: function () { set(false); }, step: function (k) { set(k >= 1); } };
 })();
 
-/* S8 · S9 장부 막대 */
-function bars(id) { return { step: function (k) { $$('#' + id + ' .bar i').forEach(function (i) { i.style.width = (+i.dataset.step <= k) ? i.dataset.w + '%' : '0'; }); if (id === 's9') $$('#s9 .prev').forEach(function (b) { b.style.outline = k >= 3 ? '3px solid #3A8FFF' : 'none'; b.style.outlineOffset = '2px'; }); } }; }
-HOOK.s8 = bars('s8'); HOOK.s9 = bars('s9');
+/* S9 · 이전 대화 강조 */
+HOOK.s9 = { step: function (k) { ['s9p1', 's9p2'].forEach(function (id) { $(id).style.opacity = k >= 3 ? 1 : .6; }); } };
 
-/* S10 · 라인업. 단계로도, 마우스로도 한 모델에 초점 */
+/* S10 · 라인업. 파라미터 점과 모델 고르기 */
 (function () {
-  var D = [
-    '<b>Haiku</b> · 가장 저렴하고 빠르다. 일상적인 Q&amp;A나 검색은 사실 Haiku로도 충분하지만, 지금은 잘 쓰이지 않고 버전 업데이트도 1년 가까이 정체되어 있다',
-    '<b>Sonnet</b> · 기본 모델. 속도와 성능의 균형이 가장 잘 잡혀 있다',
-    '<b>Opus</b> · 조금 더 복잡한 문제를 풀기 위한 모델. 비싼 요금제를 쓰는 사람들은 거의 기본 모델처럼 쓴다',
-    '<b>Fable</b> · 그 유명한 Mythos에 안전장치를 씌워 일반 사용자에게 연 모델. 현존하는 모델 중 가장 성능이 좋다고 알려져 있다'];
-  var m = $('s10m'), cards = $$('#s10m .mc'), cur = -1, hover = -1, done = false;
-  function render() { var f = hover >= 0 ? hover : cur; m.classList.toggle('focus', f >= 0); cards.forEach(function (c, i) { c.classList.toggle('lit', i === f); }); $('s10d').innerHTML = (f >= 0 && !(done && hover < 0)) ? D[f] : ''; }
-  cards.forEach(function (c, i) { c.addEventListener('mouseenter', function () { if (m.classList.contains('on')) { hover = i; render(); } }); c.addEventListener('mouseleave', function () { hover = -1; render(); }); });
-  HOOK.s10 = { reset: function () { cur = -1; hover = -1; done = false; render(); }, step: function (k) { cur = (k >= 2 && k <= 5) ? k - 2 : -1; done = k >= 6; render(); } };
+  var M = [
+    { n: 'Haiku <b>4.5</b>', t: '가장 저렴하고 빠른 모델', d: ['일상 Q&A와 검색에는 충분', '지금은 잘 쓰이지 않는다', '버전 갱신도 1년 가까이 정체'], p: 40 },
+    { n: 'Sonnet <b>5</b>', t: '기본 모델', d: ['속도와 성능의 균형이 가장 좋다', '고민 없이 쓰는 기본값'], p: 120 },
+    { n: 'Opus <b>5</b>', t: '더 복잡한 문제를 위한 모델', d: ['고가 요금제 사용자에게는 사실상 기본 모델', '문서 여러 개를 놓고 판단하는 일'], p: 240 },
+    { n: 'Fable <b>5</b>', t: '가장 높은 등급', d: ['Mythos에 안전장치를 씌워 일반 사용자에게 연 모델', '현존 모델 중 최고 성능으로 알려짐'], p: 400 }
+  ];
+  var g = $('s10g'); for (var i = 0; i < 400; i++) { var e = document.createElement('i'); g.appendChild(e); }
+  var dots = $$('#s10g i'), sel = -1;
+  function render() {
+    $$('#s10pick button').forEach(function (b, i) { b.classList.toggle('sel', i === sel); });
+    var m = sel >= 0 ? M[sel] : null;
+    dots.forEach(function (d, i) { d.classList.toggle('on', m ? i < m.p : false); });
+    $('s10cnt').textContent = m ? m.p + ' / 400' : '';
+    $('s10pd').innerHTML = m ? '<div class="pn">' + m.n + '</div><div class="pt">' + m.t + '</div><ul>' + m.d.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ul>' : '';
+  }
+  $$('#s10pick button').forEach(function (b) { b.addEventListener('click', function (e) { e.stopPropagation(); sel = +b.dataset.i; render(); b.blur(); }); });
+  HOOK.s10 = { reset: function () { sel = -1; render(); }, step: function (k) { sel = k >= 1 ? Math.min(3, k - 1) : -1; if (k === 1) sel = 0; render(); } };
 })();
 
-/* S11 · 스포트라이트 */
+/* S12 · 스포트라이트 */
 HOOK.s12 = { step: function (k) {
-  var cl = $('s12cl'); cl.classList.toggle('spot', k >= 1);
+  $('s12k').classList.toggle('spot', k >= 1); $('s12n').classList.toggle('focus', k >= 1);
+  $$('#s12n .ni').forEach(function (n, i) { n.classList.toggle('lit', i + 1 === k); });
   $('s12model').classList.toggle('spot-ring', k === 1);
-  $('s12effort').classList.toggle('spot-ring', k === 2); $('s12sub').style.opacity = k === 2 || k === 0 ? 1 : .35;
+  $('s12effort').classList.toggle('spot-ring', k === 2); $('s12sub').style.opacity = (k === 2 || k === 0) ? 1 : .3;
   $('s12think').classList.toggle('spot-ring', k === 3);
 } };
 
-/* S12 · 슬라이더 장치 */
+/* S13 · Effort 고르기 */
 (function () {
-  var LV = ['Low', 'Medium', 'High', 'Extra high', 'Max'], G = [[10, 45, 10, 40], [25, 60, 25, 55], [50, 75, 50, 70], [75, 90, 75, 88], [100, 100, 100, 100]];
-  var sl = $('s13sl'), lv = 2, hard = 0, stops = [], labs = [];
-  LV.forEach(function (n, i) { var x = 14 + 522 * i / 4; var s = document.createElement('div'); s.className = 'st'; s.style.left = x + 'px'; sl.appendChild(s); stops.push(s); var l = document.createElement('div'); l.className = 'lb'; l.style.left = x + 'px'; l.textContent = n; sl.appendChild(l); labs.push(l); });
-  function render() { $('s12g1').style.width = G[lv][hard ? 1 : 0] + '%'; $('s12g2').style.width = G[lv][hard ? 3 : 2] + '%'; stops.forEach(function (s, i) { s.classList.toggle('sel', i === lv); }); labs.forEach(function (l, i) { l.classList.toggle('sel', i === lv); }); $$('#s13tg button').forEach(function (b) { b.classList.toggle('sel', +b.dataset.v === hard); }); }
-  function fromX(cx) { var r = sl.getBoundingClientRect(); var x = (cx - r.left) / (r.width / 550); return Math.max(0, Math.min(4, Math.round((x - 14) / 522 * 4))); }
-  var drag = false;
-  sl.addEventListener('pointerdown', function (e) { drag = true; sl.setPointerCapture(e.pointerId); lv = fromX(e.clientX); render(); });
-  sl.addEventListener('pointermove', function (e) { if (!drag) return; var n = fromX(e.clientX); if (n !== lv) { lv = n; render(); } });
-  sl.addEventListener('pointerup', function () { drag = false; }); sl.addEventListener('pointercancel', function () { drag = false; });
-  $$('#s13tg button').forEach(function (b) { b.addEventListener('click', function (e) { e.stopPropagation(); hard = +b.dataset.v; render(); b.blur(); }); });
-  HOOK.s13 = { reset: function () { lv = 2; hard = 0; render(); } };
+  var LV = ['Low', 'Medium', 'High', 'Extra high', 'Max'], G = [[8, 45], [20, 60], [45, 75], [70, 90], [100, 100]];
+  var lv = 2;
+  function render() {
+    $$('#s13lv .l').forEach(function (l) { l.classList.toggle('sel', +l.dataset.i === lv); });
+    $('s13en').innerHTML = LV[lv] + (lv === 2 ? '<small>기본값</small>' : '');
+    $('s13g1').style.width = G[lv][0] + '%'; $('s13g2').style.width = G[lv][1] + '%';
+  }
+  $$('#s13lv .l').forEach(function (l) { l.addEventListener('click', function (e) { e.stopPropagation(); lv = +l.dataset.i; render(); }); });
+  HOOK.s13 = { reset: function () { lv = 2; render(); }, step: function (k) { lv = k === 2 ? 4 : k === 3 ? 0 : 2; render(); } };
   render();
 })();
 
-/* S13 · 모른다 영역 */
+/* S14 · 모른다 영역 */
 HOOK.s14 = { step: function (k) { $$('#s14ax .unk').forEach(function (u) { u.classList.toggle('on', k >= 2); }); } };
 
-/* S15 · 그릇 */
+/* S17 · 컨텍스트 윈도우. 대본 순서대로 채운다 */
 (function () {
-  var INFO = { sys: ['시스템 프롬프트를 포함한 설정 파일', '서비스가 미리 넣어 두는 것 · 우리가 확인할 일은 없다'], mem: ['메모리', '<b>설정 &gt; 메모리</b>'], tool: ['도구 정보 (MCP)', '연결된 커넥터가 무엇을 할 수 있는지'], skill: ['스킬 설명', '어떤 스킬이 있는지'], prof: ['전역 지침', '<b>설정 &gt; 일반 : 프로필 지침</b> · 내 모든 대화에 적용'], proj: ['프로젝트 지침', '<b>프로젝트 &gt; 지침</b> · 프로젝트 내부 대화에만 적용'] };
-  var ORDER = ['sys', 'mem', 'tool', 'skill', 'prof', 'proj'], TOK = { sys: 4200, mem: 800, tool: 2500, skill: 1200, prof: 300, proj: 600 };
-  var items = {}; $$('#s16v .it').forEach(function (it) { items[it.dataset.k] = it; });
-  var pin = null, total = 0;
-  function insp(k) { var i = INFO[k]; $('s16n').textContent = i[0]; $('s16p').innerHTML = i[1]; }
-  function meter() { $('s16m').style.height = (total / 12000 * 100) + '%'; $('s16mv').textContent = total.toLocaleString('ko-KR') + ' 토큰'; }
-  Object.keys(items).forEach(function (k) {
-    items[k].addEventListener('mouseenter', function () { if (!pin && items[k].classList.contains('on')) insp(k); });
-    items[k].addEventListener('mouseleave', function () { if (!pin) { var last = ORDER.filter(function (x) { return items[x].classList.contains('on'); }).pop(); if (last) insp(last); } });
-    items[k].addEventListener('click', function (e) { e.stopPropagation(); if (!items[k].classList.contains('on')) return; pin = pin === k ? null : k; Object.keys(items).forEach(function (x) { items[x].classList.toggle('hot', x === pin); }); insp(k); });
-  });
-  HOOK.s16 = {
-    reset: function () { pin = null; total = 0; Object.keys(items).forEach(function (k) { items[k].className = 'it'; items[k].querySelector('.path') && items[k].querySelector('.path').classList.remove('on'); }); $('s16slot').classList.remove('on'); meter(); $('s16n').innerHTML = '&nbsp;'; $('s16p').innerHTML = '&nbsp;'; },
-    step: function (k) {
-      if (k >= 1) ORDER.forEach(function (x, i) { if (items[x].classList.contains('on')) return; later(function () { items[x].classList.add('on'); total += TOK[x]; meter(); insp(x); }, 550 * i); });
-      if (k >= 1) later(function () { $('s16slot').classList.add('on'); }, 550 * ORDER.length);
-      items.sys.classList.toggle('faded', k >= 2);
-      items.mem.querySelector('.path').classList.toggle('on', k >= 3);
-      items.prof.querySelector('.path').classList.toggle('on', k >= 4); items.proj.querySelector('.path').classList.toggle('on', k >= 4);
-      if (k === 3) insp('mem'); if (k === 4) insp('prof');
-    }
-  };
+  var IT = [
+    { k: 'sys', n: '시스템 프롬프트를 포함한 설정 파일', w: '서비스가 미리 넣는다', d: '기본 지시와 도구 사용 규칙 · 우리가 확인할 일은 없다', t: 4200, c: 'var(--c-sys)' },
+    { k: 'mem', n: '메모리', w: '설정 > 메모리', d: 'Claude가 이전 대화에서 스스로 정리해 둔 것', t: 680, c: 'var(--c-mem)' },
+    { k: 'tool', n: '도구 정보 (MCP)', w: '설정 > 커넥터', d: '연결된 커넥터가 할 수 있는 일의 목록', t: 1200, c: 'var(--c-tool)' },
+    { k: 'skill', n: '스킬 설명', w: '설정 > 스킬', d: '어떤 스킬이 있고 언제 쓰는지 · 본문은 쓸 때만 들어온다', t: 450, c: 'var(--c-skill)' },
+    { k: 'prof', n: '전역 지침', w: '설정 > 일반 > 프로필 지침', d: '내 모든 대화에 적용', t: 320, c: 'var(--c-prof)' },
+    { k: 'proj', n: '프로젝트 지침', w: '프로젝트 > 지침', d: '그 프로젝트 안의 대화에만 적용', t: 1800, c: 'var(--c-proj)' },
+    { k: 'me', n: '내가 친 프롬프트', w: '채팅창', d: '매번 직접 쓰는 것 · 앞의 것들 뒤에 붙는다', t: 45, c: 'var(--c-me)' }
+  ];
+  var MAX = 12000, bar = $('s17bar'), lg = $('s17lg'), insp = $('s17i'), n = 0, hover = -1;
+  bar.innerHTML = IT.map(function (it, i) { return '<i data-i="' + i + '" style="background:' + it.c + '"></i>'; }).join('');
+  lg.innerHTML = IT.map(function (it, i) { return '<span data-i="' + i + '"><i style="background:' + it.c + '"></i>' + it.n + '</span>'; }).join('');
+  function showInsp(i) {
+    var it = i >= 0 ? IT[i] : null;
+    insp.querySelector('.n i').style.background = it ? it.c : 'transparent';
+    insp.querySelector('.n span').textContent = it ? it.n : '';
+    insp.querySelector('.w').textContent = it ? it.w : '';
+    insp.querySelector('.d').textContent = it ? it.d : '';
+    insp.querySelector('.t').textContent = it ? it.t.toLocaleString('ko-KR') + ' 토큰 · 예시' : '';
+  }
+  function render() {
+    var total = 0;
+    $$('#s17bar i').forEach(function (s, i) { var on = i < n; s.style.width = on ? (IT[i].t / MAX * 100) + '%' : '0'; if (on) total += IT[i].t; s.classList.toggle('hot', i === hover); });
+    $$('#s17lg span').forEach(function (s, i) { s.classList.toggle('on', i < n); });
+    bar.classList.toggle('focus', hover >= 0);
+    $('s17tot').textContent = total.toLocaleString('ko-KR') + ' 토큰 · 예시 수치';
+    $('s17ph').textContent = n >= 7 ? 'A사 회사소개 자료 기준으로 시범 도입 고객 수를 정리해 줘' : 'Claude에게 메시지 보내기';
+    $('s17ph').style.color = n >= 7 ? 'var(--k-ink)' : '';
+    showInsp(hover >= 0 ? hover : n - 1);
+  }
+  function bind(sel) { $$(sel).forEach(function (el) { el.addEventListener('mouseenter', function () { var i = +el.dataset.i; if (i < n) { hover = i; render(); } }); el.addEventListener('mouseleave', function () { hover = -1; render(); }); }); }
+  bind('#s17bar i'); bind('#s17lg span');
+  HOOK.s17 = { reset: function () { n = 0; hover = -1; render(); }, step: function (k) { n = Math.min(7, k); hover = -1; render(); } };
 })();
 
-/* S19 · 색 가르기 */
-HOOK.s20 = { step: function (k) {
-  var order = ['ins', 'mem', 'prj'];
-  order.forEach(function (c, i) { $$('#s20p .g.' + c).forEach(function (g) { g.classList.toggle('on', i + 1 <= k); }); $$('.labels .lb.' + c).forEach(function (l) { l.classList.toggle('on', i + 1 <= k); }); });
+/* S18 · 가이드 지우기 */
+HOOK.s18 = { step: function (k) { $('s18g').classList.toggle('x', k >= 1); } };
+
+/* S22 · 색 가르기 */
+HOOK.s22 = { step: function (k) {
+  var order = ['prof', 'mem', 'proj', 'file', 'skill'];
+  order.forEach(function (c, i) { $$('#s22p .g.' + c).forEach(function (g) { g.classList.toggle('on', i + 1 <= k); }); $$('#s22 .labels .lb.' + c).forEach(function (l) { l.classList.toggle('on', i + 1 <= k); }); });
 } };
 
-/* S21 · 표시 */
-HOOK.s22 = { step: function (k) { $('s22sw').classList.toggle('spot-ring', k === 2); $('s22x').classList.toggle('spot-ring', k === 2); } };
+/* S23 · 지침 표시 */
+HOOK.s23 = { step: function (k) { $('s23ta').style.outline = k >= 1 ? '3px solid var(--c-prof)' : 'none'; } };
 
-/* S23 · 지식 · 지침 표시 */
-HOOK.s24 = { step: function (k) { $('s24k').classList.toggle('ring', k === 1); $('s24i').classList.toggle('ring', k === 1); $('s24pj').style.opacity = k >= 2 ? .45 : 1; } };
+/* S24 · 메모리 표시 */
+HOOK.s24 = { step: function (k) { $('s24sw').style.outline = k === 2 ? '3px solid var(--c-mem)' : 'none'; $('s24sw').style.outlineOffset = '-3px'; $('s24row').style.outline = k === 2 ? '3px solid var(--c-mem)' : 'none'; $('s24row').style.outlineOffset = '-3px'; } };
 
-/* S24 · 격자 */
+/* S26 · 지식 · 지침 표시 */
+HOOK.s26 = { step: function (k) { $('s26k').classList.toggle('ring', k === 1); $('s26i').classList.toggle('ring', k === 1); $('s26pj').style.opacity = k >= 2 ? .45 : 1; } };
+
+/* S27 · 격자 */
 (function () {
-  var g = $('s25g'); for (var i = 0; i < 100; i++) { var e = document.createElement('i'); g.appendChild(e); }
-  var cells = $$('#s25g i');
-  HOOK.s25 = { step: function (k) { cells.forEach(function (c, i) { c.classList.toggle('gone', k >= 1 && i >= 10); c.classList.toggle('mine', k >= 1 && i < 10); }); $('s25n').textContent = k >= 1 ? '10번' : '100번'; $('s25l').textContent = k >= 1 ? '한 번 만들어 나눈다 · 쓸수록 좋아진다' : '각자 처음부터 만든다'; } };
+  var g = $('s27g'); for (var i = 0; i < 100; i++) { var e = document.createElement('i'); g.appendChild(e); }
+  var cells = $$('#s27g i');
+  HOOK.s27 = { step: function (k) { cells.forEach(function (c, i) { c.classList.toggle('gone', k >= 1 && i >= 10); c.classList.toggle('mine', k >= 1 && i < 10); }); $('s27n').textContent = k >= 1 ? '10번' : '100번'; $('s27l').textContent = k >= 1 ? '한 번 만들어 나눈다 · 쓸수록 좋아진다' : '각자 처음부터 만든다'; } };
 })();
 
-/* S28 · 앞의 것 흐리기 */
-HOOK.s29 = { step: function (k) { $('s29a').classList.toggle('is-dim', k >= 2); } };
+/* S31 · 앞의 것 흐리기 */
+HOOK.s31 = { step: function (k) { $('s31a').classList.toggle('is-dim', k >= 2); } };
 
-/* S30 · 개선 루프 */
+/* S33 · 진행 표시와 브리프 열기 */
+(function () {
+  var rows = $$('#s33st div');
+  HOOK.s33 = {
+    reset: function () { rows.forEach(function (r) { r.classList.remove('ok'); }); },
+    step: function (k) { if (k >= 1) rows.forEach(function (r, i) { later(function () { r.classList.add('ok'); }, 350 * i); }); else rows.forEach(function (r) { r.classList.remove('ok'); }); }
+  };
+  $('s33card').addEventListener('click', function (e) { e.stopPropagation(); if (state().step < 3) window.finish(); });
+})();
+
+/* S34 · 개선 루프 */
 (function () {
   var a = 0, f = 0, CY = ['A', 'B', 'C', 'E'];
   function render() {
-    $('s31dL').innerHTML = docshape(CY[a % 4]); $('s31dR').innerHTML = docshape('D', f ? 3 : undefined);
-    $$('#s31mR i').forEach(function (i, k) { i.classList.toggle('on', k <= f); });
-    $('s31cL').textContent = a + '번 눌렀다 · 눈금은 그대로'; $('s31cR').textContent = f + '번 고쳤다';
-    $('s31again').classList.toggle('done', a >= 3); $('s31fix').classList.toggle('done', f >= 3);
+    $('s34dL').innerHTML = docshape(CY[a % 4]); $('s34dR').innerHTML = docshape('D', f ? 3 : undefined);
+    $$('#s34mR i').forEach(function (i, k) { i.classList.toggle('on', k <= f); });
+    $('s34cL').textContent = a + '번 눌렀다 · 눈금은 그대로'; $('s34cR').textContent = f + '번 고쳤다';
+    $('s34again').classList.toggle('done', a >= 3); $('s34fix').classList.toggle('done', f >= 3);
   }
-  $('s31again').addEventListener('click', function (e) { e.stopPropagation(); if (a < 3) a++; render(); this.blur(); });
-  $('s31fix').addEventListener('click', function (e) { e.stopPropagation(); if (f < 3) f++; render(); this.blur(); });
-  HOOK.s31 = { reset: function () { a = 0; f = 0; render(); }, step: function (k) { if (k >= 1 && a < 1) { a = 3; render(); } if (k >= 2 && f < 1) { f = 3; render(); } } };
+  $('s34again').addEventListener('click', function (e) { e.stopPropagation(); if (a < 3) a++; render(); this.blur(); });
+  $('s34fix').addEventListener('click', function (e) { e.stopPropagation(); if (f < 3) f++; render(); this.blur(); });
+  HOOK.s34 = { reset: function () { a = 0; f = 0; render(); }, step: function (k) { if (k >= 1 && a < 1) { a = 3; render(); } if (k >= 2 && f < 1) { f = 3; render(); } } };
   render();
 })();
 
-/* S31 · 허브 */
+/* S35 · 허브 */
 (function () {
-  var host = $('s32hub'), W = 1100, H = 640, cx = W / 2, cy = H / 2, SV = ['Google Drive', 'Gmail', 'GitHub', 'Slack', 'Microsoft 365'];
+  var host = $('s35hub'), W = 1100, H = 640, cx = W / 2, cy = H / 2, SV = ['Google Drive', 'Gmail', 'GitHub', 'Slack', 'Microsoft 365'];
   var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '">', nodes = '';
   SV.forEach(function (n, i) { var ang = -Math.PI / 2 + i * 2 * Math.PI / 5; var x = cx + 400 * Math.cos(ang), y = cy + 250 * Math.sin(ang);
     svg += '<line class="ln" x1="' + cx + '" y1="' + cy + '" x2="' + x + '" y2="' + y + '"/>';
@@ -215,12 +274,12 @@ HOOK.s29 = { step: function (k) { $('s29a').classList.toggle('is-dim', k >= 2); 
     nodes += '<div class="sv" style="left:' + x + 'px;top:' + y + 'px">' + n + '</div>'; });
   svg += '</svg>';
   host.innerHTML = svg + nodes + '<div class="c">Claude</div>';
-  HOOK.s32 = { step: function (k) { $$('#s32hub .sv').forEach(function (s) { s.classList.toggle('on', k >= 1); }); $$('#s32hub line').forEach(function (l) { l.classList.toggle('on', k >= 1); l.classList.toggle('two', k >= 2); }); $$('#s32hub .arr').forEach(function (a) { a.classList.toggle('on', k >= 1 && (k >= 2 || !a.classList.contains('two-way'))); }); } };
+  HOOK.s35 = { step: function (k) { $$('#s35hub .sv').forEach(function (s) { s.classList.toggle('on', k >= 1); }); $$('#s35hub line').forEach(function (l) { l.classList.toggle('on', k >= 1); l.classList.toggle('two', k >= 2); }); $$('#s35hub .arr').forEach(function (a) { a.classList.toggle('on', k >= 1 && (k >= 2 || !a.classList.contains('two-way'))); }); } };
 })();
 
-/* S34 */
-HOOK.s35 = { step: function (k) { $('s35b').classList.toggle('is-dim', k >= 1); $('s35c').style.opacity = k >= 2 ? 1 : ''; $('s35c').style.color = k >= 2 ? '#fff' : ''; } };
+/* S38 */
+HOOK.s38 = { step: function (k) { $('s38b').classList.toggle('is-dim', k >= 1); $('s38c').style.opacity = k >= 2 ? 1 : ''; $('s38c').style.color = k >= 2 ? '#fff' : ''; } };
 
 /* 시작 */
-var h = parseInt((location.hash || '#1').slice(1), 10); show(isNaN(h) ? 0 : h - 1);
-document.addEventListener('click', function (e) { if (e.target.closest('button, .it, .slider, .toggle')) return; next(); });
+var h0 = parseInt((location.hash || '#1').slice(1), 10); show(isNaN(h0) ? 0 : h0 - 1);
+document.addEventListener('click', function (e) { if (e.target.closest('button, .lv .l, .pick, .card, #s17bar, #s17lg')) return; next(); });
