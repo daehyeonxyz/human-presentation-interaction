@@ -217,7 +217,6 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 /* 6장 · 다음 단어. Space 한 번에 게이지가 한 번 오른다 */
 .gen .sent { font-size: var(--t-h); line-height: var(--l-h); font-weight: 800; letter-spacing: -.02em; display: flex; flex-wrap: wrap; gap: 0 var(--gap-xs); align-items: baseline; min-height: calc(var(--l-h) * 2); }
 .gen .sent .w.new { color: var(--acc); }
-.gen .sent .cur { width: 200px; height: 8px; background: var(--paper-3); border-radius: var(--r-dot); align-self: flex-end; margin-bottom: var(--gap-sm); }
 .gen .cands { margin-top: var(--gap-sm); min-height: 288px; }
 .gen .cand { display: grid; grid-template-columns: 320px 1fr 120px; align-items: center; gap: var(--gap); height: 72px; font-size: var(--t-body); line-height: var(--l-body); }
 .gen .cand .b { height: 8px; background: var(--paper-3); border-radius: var(--r-dot); overflow: hidden; }

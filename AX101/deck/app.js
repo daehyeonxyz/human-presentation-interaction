@@ -81,7 +81,7 @@ HOOK.s3 = { step: function (k) { $('s3cards').classList.toggle('nest', k >= 3); 
   var sent = $('s6sent'), list = $('s6list');
   function drawSent(n) {
     var words = GIVEN.concat(STEPS.slice(0, n).map(function (s) { return s[0][0]; }));
-    sent.innerHTML = words.map(function (w, i) { return '<span class="w' + (i >= GIVEN.length ? ' new' : '') + (i === words.length - 1 && n > 0 ? ' last' : '') + '">' + w + '</span>'; }).join('') + (n < STEPS.length ? '<span class="cur"></span>' : '');
+    sent.innerHTML = words.map(function (w, i) { return '<span class="w' + (i >= GIVEN.length ? ' new' : '') + (i === words.length - 1 && n > 0 ? ' last' : '') + '">' + w + '</span>'; }).join('');
   }
   function drawCands(i) {
     list.innerHTML = STEPS[i].map(function (c, j) { return '<div class="cand' + (j === 0 ? ' top' : '') + '"><span>' + c[0] + '</span><div class="b"><i style="--w:' + c[1] + '%"></i></div><span class="p">' + c[1] + '%</span></div>'; }).join('');
