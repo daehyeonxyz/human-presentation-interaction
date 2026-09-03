@@ -282,7 +282,8 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 .bullets.cap.two { min-height: calc(var(--l-cap) * 2 + var(--gap-2xs)); }
 
 /* 10장 · 이름 읽는 법. 등급과 버전 밑줄 */
-.nm-ex { display: inline-flex; gap: var(--gap-sm); margin-bottom: var(--gap-lg); font-size: var(--t-decl-lg); line-height: 1; font-weight: 800; letter-spacing: -.03em; }
+.nmcol { padding-top: calc(56px + var(--gap)); }
+.nm-ex { display: inline-flex; gap: var(--gap-sm); align-self: start; font-size: var(--t-decl); line-height: 1; font-weight: 800; letter-spacing: -.03em; }
 .nm-ex span { position: relative; padding-bottom: var(--gap-xs); border-bottom: 6px solid var(--acc); }
 .nm-ex span small { position: absolute; left: 50%; top: calc(100% + var(--gap-xs)); transform: translateX(-50%); font-size: var(--t-body); line-height: var(--l-body); font-weight: 700; white-space: nowrap; }
 .pd { min-height: 320px; display: flex; flex-direction: column; gap: var(--gap-sm); }
@@ -346,7 +347,7 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 /* 18장 · 한 장 전체가 가이드 표, 회색으로 눌러 버린다 */
 .guidebox { position: relative; justify-content: center; }
 .guide { display: flex; flex-direction: column; transition: opacity var(--dur); }
-.guide .gt, .guide .gr { display: grid; grid-template-columns: 220px 1fr 1fr; column-gap: var(--gap); align-items: baseline; }
+.guide .gt, .guide .gr { display: grid; grid-template-columns: 200px 1fr 2fr; column-gap: var(--gap); align-items: baseline; }
 .guide .gt { font-size: var(--t-cap); line-height: var(--l-cap); font-weight: 700; color: var(--mute); padding-bottom: var(--gap-xs); border-bottom: 2px solid var(--ink); }
 .guide .gt span:first-child { grid-column: 1 / -1; font-size: var(--t-body); line-height: var(--l-body); font-weight: 800; color: var(--ink); margin-bottom: var(--gap-xs); }
 .guide .gr { font-size: var(--t-body); line-height: var(--l-body); padding: var(--gap-3xs) 0; border-bottom: 1px solid var(--line); }
@@ -561,7 +562,7 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
     <div class="title">AX 101</div>
     <div class="tagline">Claude Zero to One</div>
   </div>
-  <div class="end"><span></span><div class="who">삼성벤처투자 AX TF<br>2026. 09</div></div>
+  <div class="end"><span></span><div class="who">삼성벤처투자 김대현<br>2026. 09</div></div>
 </section>
 
 <!-- S2 인공지능? -->
@@ -668,8 +669,11 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 <section class="s" id="s10" data-steps="4" data-sec="Model">
   <div class="stack">
     <div class="layer" data-out="1">
-      <div class="head"><div class="eye">Model</div><div class="h"><span class="no">3.</span> 모델 이름 읽는 법 <span class="hs">: 이름은 등급, 숫자는 버전</span></div></div>
-      <div class="main mid center"><div class="nm-ex"><span>Sonnet<small>등급</small></span><span>5<small>버전</small></span></div></div>
+      <div class="head"><div class="eye">Model</div><div class="h"><span class="no">3.</span> 모델 이름 읽는 법 <span class="hs">: 등급과 버전</span></div></div>
+      <div class="main cols" style="--cols:600px 1fr">
+        <div class="nnbox"><svg class="nn" id="s10nn0" viewBox="0 0 600 600" fill="none"></svg></div>
+        <div class="col wide nmcol"><div class="nm-ex"><span>Sonnet<small>이름은 등급</small></span><span>5<small>숫자는 버전</small></span></div></div>
+      </div>
     </div>
     <div class="layer" data-step="1">
       <div class="head"><div class="eye">Model</div><div class="h"><span class="no">3.</span> Claude 모델 라인업 <span class="hs">: 파라미터 수와 성격</span></div></div>
@@ -712,13 +716,13 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
           <div class="mi" id="s12effort">Effort<span>High <svg><use href="#i-chev"/></svg></span></div>
         </div>
         <div class="menu" id="s12sub" data-step="2" style="right:448px;bottom:24px;width:230px">
-          <div class="mi">Low</div><div class="mi">Medium</div><div class="mi sel">High ✓</div><div class="mi">Extra high</div><div class="mi">Max</div>
+          <div class="mi">Low</div><div class="mi">Medium</div><div class="mi sel">High ✓</div><div class="mi">xhigh</div><div class="mi">Max</div>
         </div>
       </div>
     </div>
     <div class="items mid" id="s12n">
       <div class="it"><div class="t"><span class="no">1.</span>모델</div><div class="d">전송 버튼 옆 모델 이름을 누르면 변경</div></div>
-      <div class="it" data-step="2"><div class="t"><span class="no">2.</span>Effort</div><div class="d lvls"><span>Low</span><span>Medium</span><span>High</span><span>Extra high</span><span>Max</span></div></div>
+      <div class="it" data-step="2"><div class="t"><span class="no">2.</span>Effort</div><div class="d lvls"><span>Low</span><span>Medium</span><span>High</span><span>xhigh</span><span>Max</span></div></div>
     </div>
   </div>
 </section>
@@ -729,13 +733,13 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
     <ul class="bullets cap sub">
       <li>Effort를 높이면 답이 더 <b>꼼꼼</b>해지지만 시간이 더 걸리고 토큰을 더 많이 사용하는 경향이 있음</li>
       <li>토큰 예산이 아니라 <b>“이 정도의 노력을 들여서 일해라”</b>라는 소프트한 신호</li>
-      <li>대부분의 작업은 기본값 <b>High</b>로 시작하고, 정확성이 중요한 어려운 작업은 <b>X high나 Max</b>로, 단순한 반복 작업은 <b>Medium이나 Low</b>로 조정</li>
+      <li>대부분의 작업은 기본값 <b>High</b>로 시작하고, 정확성이 중요한 어려운 작업은 <b>xhigh나 Max</b>로, 단순한 반복 작업은 <b>Medium이나 Low</b>로 조정</li>
     </ul>
   </div>
   <div class="main cols" style="--cols:1fr 300px;gap:var(--gap)">
     <div class="lv mid" id="s13lv">
       <div class="l" data-i="4"><div class="n">Max</div><div class="b">사고 깊이에 제약 없이 항상 사고</div></div>
-      <div class="l" data-i="3"><div class="n">X high</div><div class="b">확장된 탐색과 함께 항상 깊이 사고</div></div>
+      <div class="l" data-i="3"><div class="n">xhigh</div><div class="b">확장된 탐색과 함께 항상 깊이 사고</div></div>
       <div class="l" data-i="2"><div class="n">High<small>기본값</small></div><div class="b">거의 항상 사고하며 복잡한 작업에 깊은 추론을 제공</div></div>
       <div class="l" data-i="1"><div class="n">Medium</div><div class="b">적당한 사고를 사용하며 단순한 쿼리는 사고를 건너뛸 수 있음</div></div>
       <div class="l" data-i="0"><div class="n">Low</div><div class="b">사고를 최소화하며 속도가 가장 중요한 단순한 작업은 사고를 건너뜀</div></div>
@@ -1173,7 +1177,7 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
       </div>
       <div class="col">
         <div class="h2">스킬을 사용할 때</div>
-        <ul class="bullets"><li data-step="1">빠뜨리는 내용 없이 만들 수 있음</li><li data-step="2">품질을 일관되게 유지할 수 있음</li><li data-step="3">재현성이 생기고 공유에 용이해짐</li></ul>
+        <ul class="bullets"><li data-step="1">빠뜨리지 않을 수 있음</li><li data-step="2">품질을 일관되게 유지할 수 있음</li><li data-step="3">재현성이 생기고 공유에 용이해짐</li></ul>
       </div>
     </div>
     <div class="docs">
@@ -1370,6 +1374,7 @@ HOOK.s9 = { step: function (k) { $('s9k').classList.toggle('prev', k >= 3); $('s
     { n: 'Fable <b>5</b>', t: '가장 높은 등급', d: ['Mythos 모델을 일반 사용자가 쓸 수 있도록 안전장치를 씌운 모델', '현존하는 모든 AI 모델 중 가장 성능이 좋다고 알려짐'], c: [6, 10, 12, 12, 10, 6], g: 44, r: 8 }
   ];
   var sel = -1, box = $('s10nn');
+  nn($('s10nn0'), M[1].c, { w: 600, h: 600, gapY: M[1].g, r: M[1].r });
   function render() {
     $$('#s10pick button').forEach(function (b, i) { b.classList.toggle('sel', i === sel); });
     var m = sel >= 0 ? M[sel] : null;
@@ -1392,7 +1397,7 @@ HOOK.s12 = { step: function (k) {
 
 /* S13 · Effort 고르기. 세로 게이지 */
 (function () {
-  var LV = ['Low', 'Medium', 'High', 'Extra high', 'Max'], G = [[8, 45], [20, 60], [45, 75], [70, 90], [100, 100]];
+  var LV = ['Low', 'Medium', 'High', 'xhigh', 'Max'], G = [[8, 45], [20, 60], [45, 75], [70, 90], [100, 100]];
   var lv = 2;
   function render() {
     $$('#s13lv .l').forEach(function (l) { l.classList.toggle('sel', +l.dataset.i === lv); });

@@ -146,6 +146,7 @@ HOOK.s9 = { step: function (k) { $('s9k').classList.toggle('prev', k >= 3); $('s
     { n: 'Fable <b>5</b>', t: '가장 높은 등급', d: ['Mythos 모델을 일반 사용자가 쓸 수 있도록 안전장치를 씌운 모델', '현존하는 모든 AI 모델 중 가장 성능이 좋다고 알려짐'], c: [6, 10, 12, 12, 10, 6], g: 44, r: 8 }
   ];
   var sel = -1, box = $('s10nn');
+  nn($('s10nn0'), M[1].c, { w: 600, h: 600, gapY: M[1].g, r: M[1].r });
   function render() {
     $$('#s10pick button').forEach(function (b, i) { b.classList.toggle('sel', i === sel); });
     var m = sel >= 0 ? M[sel] : null;
@@ -168,7 +169,7 @@ HOOK.s12 = { step: function (k) {
 
 /* S13 · Effort 고르기. 세로 게이지 */
 (function () {
-  var LV = ['Low', 'Medium', 'High', 'Extra high', 'Max'], G = [[8, 45], [20, 60], [45, 75], [70, 90], [100, 100]];
+  var LV = ['Low', 'Medium', 'High', 'xhigh', 'Max'], G = [[8, 45], [20, 60], [45, 75], [70, 90], [100, 100]];
   var lv = 2;
   function render() {
     $$('#s13lv .l').forEach(function (l) { l.classList.toggle('sel', +l.dataset.i === lv); });

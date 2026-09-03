@@ -278,7 +278,8 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 .bullets.cap.two { min-height: calc(var(--l-cap) * 2 + var(--gap-2xs)); }
 
 /* 10장 · 이름 읽는 법. 등급과 버전 밑줄 */
-.nm-ex { display: inline-flex; gap: var(--gap-sm); margin-bottom: var(--gap-lg); font-size: var(--t-decl-lg); line-height: 1; font-weight: 800; letter-spacing: -.03em; }
+.nmcol { padding-top: calc(56px + var(--gap)); }
+.nm-ex { display: inline-flex; gap: var(--gap-sm); align-self: start; font-size: var(--t-decl); line-height: 1; font-weight: 800; letter-spacing: -.03em; }
 .nm-ex span { position: relative; padding-bottom: var(--gap-xs); border-bottom: 6px solid var(--acc); }
 .nm-ex span small { position: absolute; left: 50%; top: calc(100% + var(--gap-xs)); transform: translateX(-50%); font-size: var(--t-body); line-height: var(--l-body); font-weight: 700; white-space: nowrap; }
 .pd { min-height: 320px; display: flex; flex-direction: column; gap: var(--gap-sm); }
@@ -342,7 +343,7 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 /* 18장 · 한 장 전체가 가이드 표, 회색으로 눌러 버린다 */
 .guidebox { position: relative; justify-content: center; }
 .guide { display: flex; flex-direction: column; transition: opacity var(--dur); }
-.guide .gt, .guide .gr { display: grid; grid-template-columns: 220px 1fr 1fr; column-gap: var(--gap); align-items: baseline; }
+.guide .gt, .guide .gr { display: grid; grid-template-columns: 200px 1fr 2fr; column-gap: var(--gap); align-items: baseline; }
 .guide .gt { font-size: var(--t-cap); line-height: var(--l-cap); font-weight: 700; color: var(--mute); padding-bottom: var(--gap-xs); border-bottom: 2px solid var(--ink); }
 .guide .gt span:first-child { grid-column: 1 / -1; font-size: var(--t-body); line-height: var(--l-body); font-weight: 800; color: var(--ink); margin-bottom: var(--gap-xs); }
 .guide .gr { font-size: var(--t-body); line-height: var(--l-body); padding: var(--gap-3xs) 0; border-bottom: 1px solid var(--line); }
