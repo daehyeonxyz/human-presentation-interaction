@@ -511,21 +511,29 @@
   </div>
 </section>
 
-<!-- S31 기본 방법 -->
+<!-- S31 기본 방법 · 두 방법을 채팅으로 보인다 -->
 <section class="s" id="s31" data-steps="3" data-sec="Output">
-  <div class="head"><div class="eye">Output</div><div class="h">출력을 통제하는 기본 방법 <span class="hs">: 자세한 프롬프트와 예시</span></div></div>
+  <div class="head"><div class="eye">Output</div><div class="h">출력을 통제하는 기본 방법 <span class="hs">: 자세한 프롬프트와 예시</span></div><div class="body">입력을 아무리 잘 넣어도 나오는 형태가 매번 다르면 쓰기 어려움</div></div>
   <div class="main">
-    <div class="cols" style="flex:1;align-content:center">
-      <div class="col wide"><div class="h"><span class="no">1.</span> 자세한 프롬프트</div><ul class="bullets" data-step="1"><li>보고서 양식처럼 지켜야 할 게 많으면<br>말로 설명하는 데 한계</li></ul></div>
-      <div class="col wide"><div class="h"><span class="no">2.</span> 예시 보여주기</div><ul class="bullets" data-step="2"><li>계속 보여주면 컨텍스트 윈도우를 너무 잡아먹음</li><li>예시의 종류에 따라<br>일관된 작업물이 나오지 않을 수도 있음</li></ul></div>
+    <div class="cols" style="flex:1">
+      <div class="col wide">
+        <div class="h2"><span class="no">1.</span> 자세한 프롬프트</div>
+        <div class="k"><div class="k-msgs"><div class="u">A사 투자 검토 보고서를 만들어 줘. 표지에는 회사명과 날짜를 넣고, 1장은 개요를 다섯 줄로, 2장은 시장 규모를 표로, 3장은 경쟁사 세 곳을 비교해 줘. 수치마다 출처와 기준 연도를 같이 적고, 말투는 개조식으로, 분량은 A4 두 장 안에서, 표 제목은 굵게, 그리고 …</div></div></div>
+        <ul class="bullets cap" data-step="1"><li>보고서 양식처럼 지켜야 할 게 많으면 말로 설명하는 데 한계</li></ul>
+      </div>
+      <div class="col wide">
+        <div class="h2"><span class="no">2.</span> 예시 보여주기</div>
+        <div class="k"><div class="k-msgs"><div class="u"><span class="chip"><svg><use href="#i-file"/></svg>보고서_예시_1.docx</span> <span class="chip"><svg><use href="#i-file"/></svg>보고서_예시_2.docx</span> <span class="chip"><svg><use href="#i-file"/></svg>보고서_예시_3.docx</span><br>이 예시들처럼 A사 투자 검토 보고서를 만들어 줘</div></div></div>
+        <ul class="bullets cap" data-step="2"><li>계속 보여주면 컨텍스트 윈도우를 너무 잡아먹음</li><li>예시의 종류에 따라 일관된 작업물이 나오지 않을 수도 있음</li></ul>
+      </div>
     </div>
-    <div class="close-line decl" data-step="3"><b>일관성과 재현성</b>이 떨어짐</div>
+    <div class="close-line" data-step="3"><b>일관성과 재현성</b>이 떨어짐</div>
   </div>
 </section>
 
 <!-- S32 양식을 알려 주는 법 -->
 <section class="s" id="s32" data-steps="2" data-sec="Output">
-  <div class="head"><div class="eye">Output</div><div class="h">직원에게 보고서 양식을 알려 준다면 <span class="hs">: 말로, 예시로, 템플릿으로</span></div></div>
+  <div class="head"><div class="eye">Output</div><div class="h">사람에게 양식을 알려 주는 방법 <span class="hs">: 직원에게 사내 보고서 양식을 알려 준다면</span></div></div>
   <div class="main mid items big">
     <div class="it"><div class="t"><span class="no">1.</span>말로 설명하고 예시를 옆에</div><div class="d">어느 정도는 함</div></div>
     <div class="it" data-step="1"><div class="t"><span class="no">2.</span>템플릿 자체를 주고 쓰는 법을 알려 주기</div><div class="d">가장 좋은 방법</div></div>
@@ -547,7 +555,7 @@
       <div class="fi"><svg><use href="#i-code"/></svg><code>scripts/build_brief.py</code><span>조립과 검사</span></div>
     </div>
     <div class="col wide">
-      <div class="k" data-step="1">
+      <div class="k fill" data-step="1">
         <div class="k-msgs">
           <div class="u"><span class="chip"><svg><use href="#i-file"/></svg>Core Automation_IR.pdf</span><br>Core Automation 초기 분석 자료 만들어 줘</div>
           <div class="a" data-step="2"><span class="badge"><b>deal-initial-analysis</b> 스킬 사용</span><br>첨부한 IR 덱을 읽고 기술 실사 브리프를 만들겠습니다</div>
@@ -563,7 +571,7 @@
 <section class="s" id="s34" data-steps="3" data-sec="Output">
   <div class="head"><div class="eye">Output</div><div class="h">스킬 시연 <span class="hs">: deal-initial-analysis</span></div></div>
   <div class="main cols side" style="--side:600px;position:relative">
-    <div class="k">
+    <div class="k fill">
       <div class="k-msgs">
         <div class="u"><span class="chip"><svg><use href="#i-file"/></svg>Core Automation_IR.pdf</span><br>Core Automation 초기 분석 자료 만들어 줘</div>
         <div class="a"><span class="badge"><b>deal-initial-analysis</b> 스킬 사용</span>
@@ -642,12 +650,12 @@
   </div>
 </section>
 
-<!-- S37 플러그인 -->
+<!-- S37 플러그인 · 꾸러미 하나 -->
 <section class="s" id="s37" data-steps="0" data-sec="Output">
   <div class="head"><div class="eye">Output</div><div class="h"><span class="no">3.</span> 플러그인 <span class="hs">: 스킬과 커넥터와 명령어를 하나로 묶어 둔 패키지</span></div></div>
-  <div class="main mid col wide">
-    <div class="boxx"><div class="bi">스킬</div><div class="bi">커넥터</div><div class="bi">명령어</div></div>
-    <ul class="bullets"><li>플러그인 하나를 설치하면 그 안에 든 구성이 한 번에 들어옴</li><li>팀 단위로 같은 작업 환경을 맞춰야 할 때 쓰는 방식</li></ul>
+  <div class="main cols" style="--cols:640px 1fr">
+    <div class="pkg card"><div class="pk">플러그인</div><div class="bi">스킬</div><div class="bi">커넥터</div><div class="bi">명령어</div></div>
+    <div class="col wide mid"><ul class="bullets"><li>플러그인 하나를 설치하면 그 안에 든 구성이 <b>한 번에</b> 들어옴</li><li>팀 단위로 같은 작업 환경을 맞춰야 할 때 쓰는 방식</li></ul></div>
   </div>
 </section>
 

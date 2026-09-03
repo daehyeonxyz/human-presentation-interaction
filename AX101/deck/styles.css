@@ -140,6 +140,8 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 .cols > .k { align-self: start; }
 .cols > .k.fill { align-self: stretch; }
 .k.fill .k-msgs { flex: 1; }
+.col > .k { align-self: stretch; }
+.col > .k.fill { flex: 1; }
 .k .k-msgs { flex: none; min-height: 0; padding: 32px 32px 28px; display: flex; flex-direction: column; gap: 20px; justify-content: flex-start; overflow: hidden; }
 .k .u { align-self: flex-end; max-width: 80%; background: var(--k-user); border-radius: 20px; padding: 16px 24px; position: relative; }
 .k .a { align-self: flex-start; max-width: 90%; padding: 0 0 0 44px; position: relative; }
@@ -485,6 +487,7 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 .hub svg .arr { fill: var(--acc); opacity: 0; transition: opacity var(--dur); }
 .hub svg .arr.on { opacity: 1; }
 
-/* 37장 · 상자 셋 */
-.boxx { display: flex; gap: var(--gap-sm); }
-.boxx .bi { font-size: var(--t-h2); line-height: var(--l-h2); font-weight: 800; padding: var(--gap) var(--gap-lg); border-radius: var(--r-card); background: var(--white); box-shadow: var(--shadow); }
+/* 37장 · 꾸러미 하나에 상자 셋 */
+.pkg { align-self: start; display: flex; flex-direction: column; gap: var(--gap-sm); }
+.pkg .pk { font-size: var(--t-cap); line-height: var(--l-cap); font-weight: 700; color: var(--mute); letter-spacing: .02em; }
+.pkg .bi { font-size: var(--t-h2); line-height: var(--l-h2); font-weight: 800; padding: var(--gap-sm) var(--gap); border-radius: var(--r-ctl); background: var(--acc-soft); }
