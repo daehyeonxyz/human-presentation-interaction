@@ -1,4 +1,6 @@
-/* AX 101 · 넘김과 단계. → 또는 Space: 다음 단계, 단계가 끝나면 다음 장. ←: 앞 장. Home/End: 처음/끝 */
+/* AX 101 · 넘김과 단계.
+   Space: 이 장의 다음 단계, 단계가 끝나면 다음 장. → / PageDown: 다음 장. ← / PageUp: 앞 장. Home/End: 처음/끝.
+   화면 클릭으로는 넘어가지 않는다. 눌러서 고르는 부품(알약 · Effort 줄 · 파일 카드)만 반응한다 */
 var stage = document.getElementById('stage'), viewport = document.getElementById('viewport');
 function fit() { var s = Math.min(innerWidth / 1920, innerHeight / 1080); stage.style.transform = 'translate(-50%,-50%) scale(' + s + ')'; }
 addEventListener('resize', fit); fit();
@@ -35,135 +37,131 @@ function next() {
   var s = slides[cur], max = +s.dataset.steps || 0;
   if (step < max) { step++; apply(s, step); } else show(cur + 1);
 }
-function prev() { show(cur - 1); }
 addEventListener('keydown', function (e) {
-  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { next(); e.preventDefault(); }
-  else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { prev(); e.preventDefault(); }
+  if (e.key === ' ') { next(); e.preventDefault(); }
+  else if (e.key === 'ArrowRight' || e.key === 'PageDown') { show(cur + 1); e.preventDefault(); }
+  else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { show(cur - 1); e.preventDefault(); }
   else if (e.key === 'Home') { show(0); } else if (e.key === 'End') { show(slides.length - 1); }
   if (document.activeElement && document.activeElement !== document.body) document.activeElement.blur();
 });
 window.go = function (n) { show(n - 1); }; window.nextStep = next; window.state = function () { return { page: cur + 1, step: step }; };
 window.finish = function () { var s = slides[cur], max = +s.dataset.steps || 0; while (step < max) { step++; apply(s, step); } };
 
+/* 신경망 그림. 층마다 노드 수를 받아 선과 점을 그린다 */
+function nn(el, cols, opt) {
+  opt = opt || {};
+  var W = opt.w || 420, H = opt.h || 300, r = opt.r || 9, gapY = opt.gapY || 44;
+  var xs = cols.map(function (_, c) { return cols.length === 1 ? W / 2 : 40 + c * (W - 80) / (cols.length - 1); });
+  var pts = cols.map(function (n, c) { var arr = []; for (var i = 0; i < n; i++) arr.push([xs[c], H / 2 + (i - (n - 1) / 2) * gapY]); return arr; });
+  var html = '';
+  for (var c = 0; c < cols.length - 1; c++) pts[c].forEach(function (a) { pts[c + 1].forEach(function (b) { html += '<line x1="' + a[0] + '" y1="' + a[1] + '" x2="' + b[0] + '" y2="' + b[1] + '"/>'; }); });
+  pts.forEach(function (col) { col.forEach(function (p) { html += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="' + r + '"/>'; }); });
+  el.innerHTML = html;
+}
+
 /* S2 */
 HOOK.s2 = { step: function (k) { $('s2q').classList.toggle('is-dim', k >= 2); } };
 
-/* S3 · 신경망 그림과 포함 */
-(function () {
-  var g = $('nn'), cols = [4, 6, 6, 3], xs = [40, 150, 260, 380], html = '';
-  var pts = cols.map(function (n, c) { var arr = []; for (var i = 0; i < n; i++) arr.push([xs[c], 150 + (i - (n - 1) / 2) * 44]); return arr; });
-  for (var c = 0; c < 3; c++) pts[c].forEach(function (a) { pts[c + 1].forEach(function (b) { html += '<line x1="' + a[0] + '" y1="' + a[1] + '" x2="' + b[0] + '" y2="' + b[1] + '" stroke="#C9CDD6" stroke-width="1"/>'; }); });
-  pts.forEach(function (col) { col.forEach(function (p) { html += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="9" fill="#fff" stroke="#14171F" stroke-width="2"/>'; }); });
-  g.innerHTML = html;
-  HOOK.s3 = { step: function (k) { $('s3cards').classList.toggle('nest', k >= 3); } };
-})();
+/* S3 · 인터페이스가 모델을 품는다 */
+nn($('s3nn'), [4, 6, 6, 3]);
+HOOK.s3 = { step: function (k) { $('s3cards').classList.toggle('nest', k >= 3); } };
 
-/* S6 · 다음 낱말을 잇달아 고른다 (자기회귀) */
+/* S6 · 다음 낱말을 잇달아 고른다. Space 한 번에 후보 게이지가 한 번 오르고 고른 낱말이 문장에 붙는다 */
 (function () {
-  var GIVEN = ['이 영어 글을', '한국어로'];
+  var GIVEN = ['이', '영어', '글을', '한국어로'];
   var STEPS = [
-    [['번역해', 62], ['옮겨', 21], ['바꿔', 9], ['정리해', 5]],
-    [['줘', 71], ['주세요', 18], ['봐', 7], ['라', 4]]
+    [['자연스럽게', 48], ['번역해', 31], ['옮겨', 12], ['정확하게', 9]],
+    [['번역하고', 57], ['번역해', 28], ['옮기고', 10], ['바꾸고', 5]],
+    [['원문의', 44], ['전문', 22], ['문장', 19], ['뜻은', 15]],
+    [['어조는', 51], ['뜻은', 27], ['문체는', 14], ['형식은', 8]],
+    [['그대로', 77], ['살려서', 12], ['최대한', 8], ['잘', 3]],
+    [['유지해', 69], ['살려', 19], ['두고', 8], ['지켜', 4]],
+    [['줘', 74], ['주세요', 16], ['봐', 7], ['.', 3]]
   ];
-  var sent = $('s6sent'), list = $('s6list'), cands = $('s6cands'), words = GIVEN.slice();
-  function drawSent(pending) {
-    sent.innerHTML = words.map(function (w, i) { return '<span class="w' + (i >= GIVEN.length ? ' new' : '') + '">' + w + '</span>'; }).join('') + (pending ? '<span class="cur"></span>' : '');
+  var sent = $('s6sent'), list = $('s6list');
+  function drawSent(n) {
+    var words = GIVEN.concat(STEPS.slice(0, n).map(function (s) { return s[0][0]; }));
+    sent.innerHTML = words.map(function (w, i) { return '<span class="w' + (i >= GIVEN.length ? ' new' : '') + (i === words.length - 1 && n > 0 ? ' last' : '') + '">' + w + '</span>'; }).join('') + (n < STEPS.length ? '<span class="cur"></span>' : '');
   }
   function drawCands(i) {
-    if (i < 0 || i >= STEPS.length) { list.innerHTML = ''; return; }
-    list.innerHTML = STEPS[i].map(function (c, j) { return '<div class="cand' + (j === 0 ? ' top' : '') + '"><span>' + c[0] + '</span><div class="b"><i data-w="' + c[1] + '"></i></div><span class="p">' + c[1] + '%</span></div>'; }).join('');
-    later(function () { $$('#s6list .b i').forEach(function (b) { b.style.width = b.dataset.w + '%'; }); }, 30);
+    list.innerHTML = STEPS[i].map(function (c, j) { return '<div class="cand' + (j === 0 ? ' top' : '') + '"><span>' + c[0] + '</span><div class="b"><i style="--w:' + c[1] + '%"></i></div><span class="p">' + c[1] + '%</span></div>'; }).join('');
+    later(function () { list.classList.add('up'); }, 30);
   }
   HOOK.s6 = {
-    reset: function () { words = GIVEN.slice(); cands.classList.remove('gone'); drawSent(true); drawCands(0); },
+    reset: function () { clearTimers(); list.classList.remove('up'); drawSent(0); drawCands(0); },
     step: function (k) {
-      clearTimers();
+      clearTimers(); list.classList.remove('up');
       var n = Math.min(k, STEPS.length);
-      words = GIVEN.concat(STEPS.slice(0, Math.max(0, n - 1)).map(function (s) { return s[0][0]; }));
-      cands.classList.remove('gone');
-      if (n === 0) { drawSent(true); drawCands(0); return; }
-      drawSent(true); drawCands(n - 1);
-      later(function () { cands.classList.add('gone'); words.push(STEPS[n - 1][0][0]); drawSent(n < STEPS.length); }, 900);
-      later(function () { if (n < STEPS.length) { cands.classList.remove('gone'); drawCands(n); } }, 1500);
+      drawSent(n); drawCands(Math.min(n, STEPS.length - 1));
     }
   };
 })();
 
-/* S7 · 토큰 조각. 예시이며 실제 조각은 모델마다 다르다 */
+/* S7 · 토큰 상자. 상자 하나가 토큰 하나. 어절 하나 안팎이며 짧은 어절은 묶인다 */
 (function () {
-  var KO = ['이', ' 영어', ' 글', '을', ' 한국어', '로', ' 자연', '스럽게', ' 번역', '하고', ' 원문', '의', ' 어조', '는', ' 그대로', ' 유지', '해', ' 줘', '.'];
-  function render(id, arr) {
-    var groups = [];
-    arr.forEach(function (p, i) {
-      if (p.charAt(0) === ' ' || !groups.length) groups.push([]);
-      groups[groups.length - 1].push('<span class="tk c' + (i % 2) + '">' + p.trim() + '</span>');
-    });
-    $(id).innerHTML = groups.map(function (g) { return '<span class="w">' + g.join('') + '</span>'; }).join(' ');
-  }
-  render('s7ko', KO);
+  var T = ['이 영어', '글을', '한국어로', '자연스럽게', '번역하고', '원문의', '어조는', '그대로', '유지해 줘.', '전문 용어는', '원어를', '괄호 안에', '함께 적고,', '분량은', '원문과', '비슷하게', '맞춰 줘.', '번역이 끝나면', '핵심 내용을', '세 줄로', '요약해 줘.'];
+  $('s7ko').innerHTML = T.map(function (t) { return '<span class="tk">' + t + '</span>'; }).join(' ');
   HOOK.s7 = { step: function (k) { $('s7tok').classList.toggle('split', k >= 1); } };
 })();
 
-/* S9 · 이전 대화 강조 */
-HOOK.s9 = { step: function (k) { ['s9p1', 's9p2'].forEach(function (id) { $(id).style.opacity = k >= 3 ? 1 : .6; }); } };
+/* S8 · S9 · 장부 막대는 줄이 나타날 때 자란다 (CSS) */
 
-/* S10 · 라인업. 파라미터 점과 모델 고르기 */
+/* S10 · 라인업. 등급이 오를수록 노드가 많아진다 */
 (function () {
   var M = [
-    { n: 'Haiku <b>4.5</b>', t: '가장 빠른 모델', d: ['가장 저렴하고 빠른 모델이며 일상적인 Q&A나 검색은 Haiku로도 충분', '지금은 잘 쓰이지 않고 버전 업데이트도 1년 가까이 정체'], p: 40 },
-    { n: 'Sonnet <b>5</b>', t: '속도와 지능의 균형', d: ['기본 모델', '속도와 성능의 균형이 가장 잘 잡힌 모델'], p: 120 },
-    { n: 'Opus <b>5</b>', t: '복잡한 작업과 업무용', d: ['조금 더 복잡한 문제를 해결하기 위한 모델', '비싼 요금제를 쓰는 사람들은 거의 기본 모델처럼 사용'], p: 240 },
-    { n: 'Fable <b>5</b>', t: '가장 높은 등급', d: ['Mythos 모델을 일반 사용자가 쓸 수 있도록 안전장치를 씌운 모델', '현존하는 모든 AI 모델 중 가장 성능이 좋다고 알려짐'], p: 400 }
+    { n: 'Haiku <b>4.5</b>', t: '가장 빠른 모델', d: ['가장 저렴하고 빠른 모델이며 일상적인 Q&A나 검색은 Haiku로도 충분', '지금은 잘 쓰이지 않고 버전 업데이트도 1년 가까이 정체'], c: [3, 4, 3], g: 96, r: 14 },
+    { n: 'Sonnet <b>5</b>', t: '속도와 지능의 균형', d: ['기본 모델', '속도와 성능의 균형이 가장 잘 잡힌 모델'], c: [4, 6, 6, 4], g: 72, r: 12 },
+    { n: 'Opus <b>5</b>', t: '복잡한 작업과 업무용', d: ['조금 더 복잡한 문제를 해결하기 위한 모델', '비싼 요금제를 쓰는 사람들은 거의 기본 모델처럼 사용'], c: [5, 8, 9, 8, 5], g: 56, r: 10 },
+    { n: 'Fable <b>5</b>', t: '가장 높은 등급', d: ['Mythos 모델을 일반 사용자가 쓸 수 있도록 안전장치를 씌운 모델', '현존하는 모든 AI 모델 중 가장 성능이 좋다고 알려짐'], c: [6, 10, 12, 12, 10, 6], g: 44, r: 8 }
   ];
-  var g = $('s10g'); for (var i = 0; i < 400; i++) { var e = document.createElement('i'); g.appendChild(e); }
-  var dots = $$('#s10g i'), sel = -1;
+  var sel = -1, box = $('s10nn');
   function render() {
     $$('#s10pick button').forEach(function (b, i) { b.classList.toggle('sel', i === sel); });
     var m = sel >= 0 ? M[sel] : null;
-    dots.forEach(function (d, i) { d.classList.toggle('on', m ? i < m.p : false); });
+    if (m) { nn(box, m.c, { w: 600, h: 600, gapY: m.g, r: m.r }); box.classList.remove('fade'); void box.offsetWidth; box.classList.add('fade'); } else box.innerHTML = '';
     $('s10pd').innerHTML = m ? '<div class="pn">' + m.n + '</div><div class="pt">' + m.t + '</div><ul class="bullets">' + m.d.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ul>' : '';
   }
   $$('#s10pick button').forEach(function (b) { b.addEventListener('click', function (e) { e.stopPropagation(); sel = +b.dataset.i; render(); b.blur(); }); });
   HOOK.s10 = { reset: function () { sel = -1; render(); }, step: function (k) { sel = k >= 1 ? Math.min(3, k - 1) : -1; render(); } };
 })();
 
-/* S12 · 메뉴 항목 짚기 */
+/* S12 · 메뉴 항목 짚기. 1단계 모델 줄, 2단계 Effort 줄 */
 HOOK.s12 = { step: function (k) {
   $('s12n').classList.toggle('focus', k >= 1);
   $$('#s12n .it').forEach(function (n, i) { n.classList.toggle('lit', i + 1 === k); });
   $('s12k').classList.toggle('focus', k >= 1);
   $('s12model').classList.toggle('hot', k === 1);
+  $$('#s12menu .mi.md').forEach(function (m) { m.classList.toggle('hot', k === 1); });
   $('s12effort').classList.toggle('hot', k === 2); $$('#s12sub .mi').forEach(function (m) { m.classList.toggle('hot', k === 2); });
-  $('s12think').classList.toggle('hot', k === 3);
 } };
 
-/* S13 · Effort 고르기 */
+/* S13 · Effort 고르기. 세로 게이지 */
 (function () {
   var LV = ['Low', 'Medium', 'High', 'Extra high', 'Max'], G = [[8, 45], [20, 60], [45, 75], [70, 90], [100, 100]];
   var lv = 2;
   function render() {
     $$('#s13lv .l').forEach(function (l) { l.classList.toggle('sel', +l.dataset.i === lv); });
     $('s13en').textContent = LV[lv];
-    $('s13g1').style.width = G[lv][0] + '%'; $('s13g2').style.width = G[lv][1] + '%';
+    $('s13g1').style.height = G[lv][0] + '%'; $('s13g2').style.height = G[lv][1] + '%';
   }
   $$('#s13lv .l').forEach(function (l) { l.addEventListener('click', function (e) { e.stopPropagation(); lv = +l.dataset.i; render(); }); });
   HOOK.s13 = { reset: function () { lv = 2; render(); }, step: function (k) { lv = k === 1 ? 4 : k === 2 ? 0 : 2; render(); } };
   render();
 })();
 
-/* S14 · 모른다 영역 */
-HOOK.s14 = { step: function (k) { $$('#s14ax .unk').forEach(function (u) { u.classList.toggle('on', k >= 2); }); } };
+/* S14 · 모르는 구간 */
+HOOK.s14 = { step: function (k) { $$('#s14ax .unk').forEach(function (u) { u.classList.toggle('on', k >= 1); }); } };
 
 /* S17 · 컨텍스트 윈도우. 대본 순서대로 채운다 */
 (function () {
   var IT = [
-    { n: '시스템 프롬프트를 포함한 설정 파일', w: '확인할 일 없음', d: '기본 지시와 도구 사용 규칙이며 우리가 볼 일은 없다', t: 4200, c: 'var(--n6)' },
-    { n: '메모리', w: '설정 > 메모리', d: 'Claude가 이전 대화에서 스스로 정리해 둔 것', t: 680, c: 'var(--n5)' },
-    { n: '도구 정보(MCP)', w: '설정 > 커넥터', d: '연결된 커넥터가 할 수 있는 일의 목록', t: 1200, c: 'var(--n4)' },
-    { n: '스킬 설명', w: '설정 > 스킬', d: '어떤 스킬이 있고 언제 쓰는지의 설명이며 본문은 쓸 때만 들어온다', t: 450, c: 'var(--n3)' },
-    { n: '프로필 지침', w: '설정 > 일반', d: '내 모든 대화에 적용', t: 320, c: 'var(--n2)' },
-    { n: '프로젝트 지침', w: '프로젝트 > 지침', d: '그 프로젝트 안의 대화에만 적용', t: 1800, c: 'var(--n1)' },
-    { n: '프롬프트', w: '채팅창에 보낼 때마다 직접 쓰는 입력', d: '매번 직접 쓰는 것이며 앞의 것들 뒤에 붙는다', t: 45, c: 'var(--n7)' }
+    { n: '시스템 프롬프트를 포함한 설정 파일', w: '확인할 일 없음', t: 4200, c: 'var(--n6)' },
+    { n: '메모리', w: '설정 > 메모리', t: 680, c: 'var(--n5)' },
+    { n: '도구 정보(MCP)', w: '설정 > 커넥터', t: 1200, c: 'var(--n4)' },
+    { n: '스킬 설명', w: '설정 > 스킬', t: 450, c: 'var(--n3)' },
+    { n: '프로필 지침', w: '설정 > 일반', t: 320, c: 'var(--n2)' },
+    { n: '프로젝트 지침', w: '프로젝트 > 지침', t: 1800, c: 'var(--n1)' },
+    { n: '프롬프트', w: '채팅창에 보낼 때마다 직접 쓰는 입력', t: 45, c: 'var(--n7)' }
   ];
   var MAX = 12000, bar = $('s17bar'), lg = $('s17lg'), insp = $('s17i'), n = 0, hover = -1;
   bar.innerHTML = IT.map(function (it, i) { return '<i data-i="' + i + '" style="background:' + it.c + '"></i>'; }).join('');
@@ -187,8 +185,8 @@ HOOK.s14 = { step: function (k) { $$('#s14ax .unk').forEach(function (u) { u.cla
   HOOK.s17 = { reset: function () { n = 1; hover = -1; render(); }, step: function (k) { n = Math.min(7, k + 1); hover = -1; render(); } };
 })();
 
-/* S18 · 가이드 지우기 */
-HOOK.s18 = { step: function (k) { $('s18g').classList.toggle('x', k >= 1); } };
+/* S18 · 가이드 표를 회색으로 눌러 버린다 */
+HOOK.s18 = { step: function (k) { $('s18g').classList.toggle('dim', k >= 1); } };
 
 /* S22 · 문단에서 나타나는 순서대로 번호를 붙인다 */
 HOOK.s22 = { step: function (k) {
@@ -200,43 +198,36 @@ HOOK.s22 = { step: function (k) {
 HOOK.s23 = { step: function (k) { $('s23st').classList.toggle('focus', k >= 1); } };
 HOOK.s24 = { step: function (k) { $('s24st').classList.add('focus'); $('s24row').classList.toggle('hot', k <= 1); $('s24sw').classList.toggle('hot', k === 2); $('s24sw2').classList.toggle('hot', k === 2); $('s24new').classList.toggle('hot', k === 3); } };
 
-/* S26 · 지식과 지침 짚기 */
-HOOK.s26 = { step: function (k) { $('s26pj').classList.toggle('focus', k === 1); $('s26k').classList.toggle('hot', k === 1); $('s26i').classList.toggle('hot', k === 1); } };
+/* S26 · 지침 → 프로젝트 지식 순서로 짚기 */
+HOOK.s26 = { step: function (k) { $('s26pj').classList.toggle('focus', k >= 1 && k <= 2); $('s26i').classList.toggle('hot', k === 1); $('s26k').classList.toggle('hot', k === 2); } };
 
-/* S27 · 격자 */
+/* S34 · 스킬 시연. 진행 표시와 브리프 열기 */
 (function () {
-  var g = $('s27g'); for (var i = 0; i < 100; i++) { var e = document.createElement('i'); g.appendChild(e); }
-  var cells = $$('#s27g i');
-  HOOK.s27 = { step: function (k) { cells.forEach(function (c, i) { c.classList.toggle('gone', k >= 1 && i >= 10); c.classList.toggle('mine', k >= 1 && i < 10); }); $('s27n').textContent = k >= 1 ? '한 번' : '열 번'; $('s27l').textContent = k >= 1 ? '한 번만 잘 만들어 두고 공유해서 쓰기' : '각자 처음부터 만들면 같은 일을 열 번 반복'; } };
-})();
-
-/* S33 · 진행 표시와 브리프 열기 */
-(function () {
-  var rows = $$('#s33st div');
-  HOOK.s33 = {
+  var rows = $$('#s34st div');
+  HOOK.s34 = {
     reset: function () { rows.forEach(function (r) { r.classList.remove('ok'); }); },
     step: function (k) { if (k >= 1) rows.forEach(function (r, i) { later(function () { r.classList.add('ok'); }, 350 * i); }); else rows.forEach(function (r) { r.classList.remove('ok'); }); }
   };
-  $('s33card').addEventListener('click', function (e) { e.stopPropagation(); if (state().step < 3) window.finish(); });
+  $('s34card').addEventListener('click', function (e) { e.stopPropagation(); if (state().step < 3) window.finish(); });
 })();
 
-/* S34 · 개선 루프. 왼쪽은 운에 따라 오르내리고 오른쪽은 고친 만큼 쌓인다 */
+/* S35 · 개선 루프. 왼쪽은 운에 따라 오르내리고 오른쪽은 고친 만큼 쌓인다 */
 (function () {
   var a = 0, f = 0, LUCK = [1, 3, 0, 2, 1, 4, 0, 2];
   function render() {
     var L = a === 0 ? 0 : LUCK[(a - 1) % LUCK.length];
-    $$('#s34mL i').forEach(function (i, k) { i.classList.toggle('on', k <= L); });
-    $$('#s34mR i').forEach(function (i, k) { i.classList.toggle('on', k <= Math.min(f, 4)); });
+    $$('#s35mL i').forEach(function (i, k) { i.classList.toggle('on', k <= L); });
+    $$('#s35mR i').forEach(function (i, k) { i.classList.toggle('on', k <= Math.min(f, 4)); });
   }
-  $('s34again').addEventListener('click', function (e) { e.stopPropagation(); a++; render(); this.blur(); });
-  $('s34fix').addEventListener('click', function (e) { e.stopPropagation(); if (f < 4) f++; render(); this.blur(); });
-  HOOK.s34 = { reset: function () { a = 0; f = 0; render(); }, step: function (k) { if (k >= 1 && a < 1) { a = 2; render(); } if (k >= 2 && f < 1) { f = 3; render(); } } };
+  $('s35again').addEventListener('click', function (e) { e.stopPropagation(); a++; render(); this.blur(); });
+  $('s35fix').addEventListener('click', function (e) { e.stopPropagation(); if (f < 4) f++; render(); this.blur(); });
+  HOOK.s35 = { reset: function () { a = 0; f = 0; render(); }, step: function (k) { if (k >= 1 && a < 1) { a = 2; render(); } if (k >= 2 && f < 1) { f = 3; render(); } } };
   render();
 })();
 
-/* S35 · 허브. 선마다 화살촉 하나씩이며 둘째 단계에 반대 방향 하나가 더 붙는다 */
+/* S36 · 허브. 선마다 화살촉 하나씩이며 둘째 단계에 반대 방향 하나가 더 붙는다 */
 (function () {
-  var host = $('s35hub'), W = 1000, H = 600, cx = W / 2, cy = H / 2, SV = ['Google Drive', 'Gmail', 'GitHub', 'Slack', 'Microsoft 365'];
+  var host = $('s36hub'), W = 1000, H = 600, cx = W / 2, cy = H / 2, SV = ['Google Drive', 'Gmail', 'GitHub', 'Slack', 'Microsoft 365'];
   var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '">', nodes = '';
   SV.forEach(function (n, i) { var ang = -Math.PI / 2 + i * 2 * Math.PI / 5; var x = cx + 370 * Math.cos(ang), y = cy + 240 * Math.sin(ang);
     svg += '<line class="ln" x1="' + cx + '" y1="' + cy + '" x2="' + x + '" y2="' + y + '"/>';
@@ -247,9 +238,8 @@ HOOK.s26 = { step: function (k) { $('s26pj').classList.toggle('focus', k === 1);
     nodes += '<div class="sv" style="left:' + x + 'px;top:' + y + 'px">' + n + '</div>'; });
   svg += '</svg>';
   host.innerHTML = svg + nodes + '<div class="c">Claude</div>';
-  HOOK.s35 = { step: function (k) { $$('#s35hub .sv').forEach(function (s) { s.classList.add('on'); }); $$('#s35hub line').forEach(function (l) { l.classList.add('on'); l.classList.toggle('two', k >= 2); }); $$('#s35hub .arr').forEach(function (a) { a.classList.toggle('on', a.classList.contains('in') ? k >= 1 : k >= 2); }); } };
+  HOOK.s36 = { step: function (k) { $$('#s36hub .sv').forEach(function (s) { s.classList.add('on'); }); $$('#s36hub line').forEach(function (l) { l.classList.add('on'); l.classList.toggle('two', k >= 2); }); $$('#s36hub .arr').forEach(function (a) { a.classList.toggle('on', a.classList.contains('in') ? k >= 1 : k >= 2); }); } };
 })();
 
 /* 시작 */
 var h0 = parseInt((location.hash || '#1').slice(1), 10); show(isNaN(h0) ? 0 : h0 - 1);
-document.addEventListener('click', function (e) { if (e.target.closest('button, .lv .l, .pills, .file, #s17bar, #s17lg')) return; next(); });
