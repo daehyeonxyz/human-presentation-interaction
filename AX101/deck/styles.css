@@ -70,6 +70,9 @@ b { font-weight: 800; }
 .eye { font-size: var(--t-cap); line-height: var(--l-cap); font-weight: 700; color: var(--acc); letter-spacing: .02em; }
 .h { font-size: var(--t-h); line-height: var(--l-h); font-weight: 800; letter-spacing: -.02em; }
 .h .no { color: var(--acc); }
+.h .sw { display: inline-block; width: 22px; height: 22px; border-radius: 50%; margin: 0 2px 0 var(--gap-2xs); vertical-align: 8px; }
+.h .sw.c1, .no.c1 { background: var(--c1); } .h .sw.c2 { background: var(--c2); } .h .sw.c3, .no.c3 { background: var(--c3); } .h .sw.c4 { background: var(--c4); }
+.items .it .t .no.c1 { background: none; color: var(--c1); } .items .it .t .no.c3 { background: none; color: var(--c3); }
 .h .hs { font-size: var(--t-h2); line-height: var(--l-h2); font-weight: 600; letter-spacing: 0; margin-left: var(--gap-xs); }
 .h2 { font-size: var(--t-h2); line-height: var(--l-h2); font-weight: 700; letter-spacing: -.015em; }
 .body { font-size: var(--t-body); line-height: var(--l-body); }
@@ -410,6 +413,7 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 .pj.focus > *:not(.hot) { opacity: .35; }
 .pj.focus .side { opacity: 1; }
 .pj.focus .side .box:not(.hot) { opacity: .35; }
+#s26i.hot { box-shadow: 0 0 0 3px var(--c3); } #s26k.hot { box-shadow: 0 0 0 3px var(--c4); }
 /* 프로젝트 목록 카드 · 제품 꼴 (27장) */
 .pcells { display: flex; gap: var(--gap-sm); align-items: stretch; }
 .pcell { flex: 1; border-radius: 18px; padding: 32px 36px; background: var(--k-bg); border: 1px solid var(--k-bd); color: var(--k-ink); display: flex; flex-direction: column; gap: 16px; }
@@ -435,7 +439,7 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 .lay .hd span { display: inline-block; padding: var(--gap-2xs) var(--gap-sm); border-radius: 999px; background: var(--white); box-shadow: var(--shadow); font-size: var(--t-h2); line-height: var(--l-h2); font-weight: 800; }
 .lay .rl { display: flex; align-items: center; font-size: var(--t-h2); line-height: var(--l-h2); font-weight: 800; }
 .lay .cell { border-radius: var(--r-card); display: flex; align-items: center; justify-content: center; text-align: center; font-size: var(--t-body); line-height: var(--l-body); font-weight: 700; color: var(--white); padding: var(--gap-sm); }
-.lay .c-ins { background: var(--n2); } .lay .c-mem { background: var(--n4); } .lay .c-pr { background: var(--n7); } .lay .c-kn { background: var(--n3); }
+.lay .c-ins { background: var(--c1); } .lay .c-mem { background: var(--c2); } .lay .c-pr { background: var(--c5); } .lay .c-kn { background: var(--c4); }
 
 /* 34장 · 브리프 (딜 스킬의 디자인 계약) */
 .brief { position: absolute; inset: 0; background: #F1F1F7; border-radius: 20px; padding: 44px 52px; display: grid; grid-template-columns: 38fr 62fr; gap: 48px; color: #121212; overflow: hidden; box-shadow: 0 24px 80px rgba(18,18,18,.18); z-index: 3; }
