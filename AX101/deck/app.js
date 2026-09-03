@@ -197,7 +197,7 @@ HOOK.s22 = { step: function (k) {
 
 /* S23 · S24 · 설정 화면에서 짚기 */
 HOOK.s23 = { step: function (k) { $('s23st').classList.toggle('focus', k >= 1); } };
-HOOK.s24 = { step: function (k) { $('s24st').classList.add('focus'); $('s24row').classList.toggle('hot', k <= 1); $('s24sw').classList.toggle('hot', k === 2); $('s24sw2').classList.toggle('hot', k === 2); $('s24new').classList.toggle('hot', k === 3); } };
+HOOK.s24 = { step: function (k) { $('s24st').classList.add('focus'); $('s24row').classList.toggle('hot', k === 0); $('s24sw').classList.toggle('hot', k === 1); $('s24sw2').classList.toggle('hot', k === 1); $('s24new').classList.toggle('hot', k === 2); } };
 
 /* S26 · 지침 → 프로젝트 지식 순서로 짚기 */
 HOOK.s26 = { step: function (k) { $('s26pj').classList.toggle('focus', k >= 1 && k <= 2); $('s26i').classList.toggle('hot', k === 1); $('s26k').classList.toggle('hot', k === 2); } };

@@ -158,7 +158,7 @@
 
 <!-- S11 모델 선택과 노력 수준 -->
 <section class="s" id="s11" data-steps="1" data-sec="Model">
-  <div class="head"><div class="eye">Model</div><div class="h">모델 선택과 노력 수준 <span class="hs">: 모델에 대해 우리가 정할 수 있는 두 가지</span></div></div>
+  <div class="head"><div class="eye">Model</div><div class="h">모델 선택과 노력 수준 <span class="hs">: 모델에 대해 우리가 정할 수 있는 것</span></div></div>
   <div class="main mid items big">
     <div class="it"><div class="t"><span class="no">1.</span>어떤 모델을 쓸 것인가</div></div>
     <div class="it" data-step="1"><div class="t"><span class="no">2.</span>그 모델을 얼마나 노력하게 할 것인가</div></div>
@@ -225,11 +225,11 @@
   <div class="head"><div class="eye">Model</div><div class="h"><span class="no">5.</span> Knowledge cutoff <span class="hs">: 학습이 끝난 시점</span></div></div>
   <div class="main">
     <div class="axis" id="s14ax">
-      <div class="ticks"><div class="lgd"><span><i class="pt"></i>지식 컷오프</span><span><i class="rl"></i>출시</span></div><span style="--x:0%">25.01</span><span style="--x:30%">25.07</span><span style="--x:60%">26.01</span><span style="--x:90%">26.07</span><span style="--x:100%" class="end">오늘</span></div>
-      <span class="nm">Haiku 4.5</span><div class="tr"><span class="unk" style="--x:5%"><span class="in">모름</span></span><span class="pt" style="--x:5%"></span><span class="dt" style="--x:5%">25.02</span><span class="rl" style="--x:45%"></span><span class="dr" style="--x:45%">25.10 출시</span></div>
-      <span class="nm">Sonnet 5</span><div class="tr"><span class="unk" style="--x:60%"></span><span class="pt" style="--x:60%"></span><span class="dt" style="--x:60%">26.01</span><span class="rl" style="--x:90%"></span><span class="dr" style="--x:90%">26.06 출시</span></div>
-      <span class="nm">Opus 5</span><div class="tr"><span class="unk" style="--x:80%"></span><span class="pt" style="--x:80%"></span><span class="dt" style="--x:80%">26.05</span><span class="rl" style="--x:94%"></span><span class="dr" style="--x:94%">26.07 출시</span></div>
-      <span class="nm">Fable 5</span><div class="tr"><span class="unk" style="--x:60%"></span><span class="pt" style="--x:60%"></span><span class="dt" style="--x:60%">26.01</span><span class="rl" style="--x:86%"></span><span class="dr" style="--x:86%">26.06 출시</span></div>
+      <div class="ticks"><div class="lgd"><span><i class="pt"></i>지식 컷오프</span><span><i class="rl"></i>출시</span><span><i class="uk"></i>모름</span></div><span style="--x:0%">25.01</span><span style="--x:30%">25.07</span><span style="--x:60%">26.01</span><span style="--x:90%">26.07</span><span style="--x:100%" class="end">오늘</span></div>
+      <span class="nm">Haiku 4.5</span><div class="tr"><span class="unk" style="--x:7.5%"></span><span class="pt" style="--x:7.5%"></span><span class="dt" style="--x:7.5%">25.02</span><span class="rl" style="--x:47.5%"></span><span class="dr" style="--x:47.5%">25.10 출시</span></div>
+      <span class="nm">Sonnet 5</span><div class="tr"><span class="unk" style="--x:62.5%"></span><span class="pt" style="--x:62.5%"></span><span class="dt" style="--x:62.5%">26.01</span><span class="rl" style="--x:87.5%"></span><span class="dr" style="--x:87.5%">26.06 출시</span></div>
+      <span class="nm">Opus 5</span><div class="tr"><span class="unk" style="--x:82.5%"></span><span class="pt" style="--x:82.5%"></span><span class="dt" style="--x:82.5%">26.05</span><span class="rl" style="--x:92.5%"></span><span class="dr" style="--x:92.5%">26.07 출시</span></div>
+      <span class="nm">Fable 5</span><div class="tr"><span class="unk" style="--x:62.5%"></span><span class="pt" style="--x:62.5%"></span><span class="dt" style="--x:62.5%">26.01</span><span class="rl" style="--x:87.5%"></span><span class="dr" style="--x:87.5%">26.06 출시</span></div>
     </div>
     <div class="close-line body"><div>모델 학습에 사용한 데이터가 최대 어느 시점까지 포함되었는가를 나타내는 <b>시간적 기준선</b></div><div data-step="1">학습이 끝난 시점 이후의 정보는 <b>모델이 알 수 없음</b></div></div>
   </div>
@@ -253,7 +253,7 @@
 </section>
 
 <!-- S17 컨텍스트 윈도우 -->
-<section class="s" id="s17" data-steps="8" data-sec="Input">
+<section class="s" id="s17" data-steps="7" data-sec="Input">
   <div class="head"><div class="eye">Input</div><div class="h">컨텍스트 윈도우 <span class="hs">: 모델의 작업 기억 공간 (입력 공간)</span></div></div>
   <div class="main">
     <div class="cw" id="s17cw">
@@ -268,7 +268,7 @@
       </div>
       <div class="col">
         <div class="cwi" id="s17i"><div class="n"><i></i><span></span></div><div class="w"></div></div>
-        <div class="close-line body" data-step="8"><b>컨텍스트 엔지니어링</b> : 컨텍스트 윈도우에 필요한 정보, 도구, 메모리, 외부 데이터 등을<br>체계적으로 넣고 최적화하는 기술</div>
+        <div class="close-line body" data-step="7"><b>컨텍스트 엔지니어링</b> : 컨텍스트 윈도우에 필요한 정보, 도구, 메모리, 외부 데이터 등을<br>체계적으로 넣고 최적화하는 기술</div>
       </div>
     </div>
   </div>
@@ -379,7 +379,7 @@
 </section>
 
 <!-- S24 메모리 -->
-<section class="s" id="s24" data-steps="3" data-sec="Input">
+<section class="s" id="s24" data-steps="2" data-sec="Input">
   <div class="head"><div class="eye">Input</div><div class="h"><span class="no">3.</span> 메모리 <span class="hs">: Claude가 대화에서 스스로 뽑아 쌓아 두는 입력</span></div></div>
   <div class="main cols side" style="--side:600px">
     <div class="st" id="s24st">
@@ -396,37 +396,37 @@
         <div class="row"><div><div class="l">다른 AI 제공업체에서 메모리 가져오기</div><div class="d">다른 AI 제공업체의 관련 컨텍스트와 데이터를 Claude로 가져오세요.</div></div><span class="btn-k">가져오기 시작</span></div>
         <div class="sec">나</div>
         <div class="mrow" id="s24row"><span class="n">Profile</span><span class="v">삼성벤처투자에서 인턴으로 근무하며 AX TF에서 사내 AI 도입을 …</span><span class="t">24시간 전 업데이트됨</span></div>
-        <div class="mrow" id="s24new" data-step="3"><span class="n">A사 딜</span><span class="v">A사 딜은 9월 투자심의 안건</span><span class="t">방금 추가됨</span></div>
+        <div class="mrow" id="s24new" data-step="2"><span class="n">A사 딜</span><span class="v">A사 딜은 9월 투자심의 안건</span><span class="t">방금 추가됨</span></div>
         <div class="kin"><span>변경하거나 제거할 내용을 Claude에게 알려주세요</span><i><svg><use href="#i-up"/></svg></i></div>
       </div>
     </div>
     <div class="col wide mid">
       <ul class="bullets">
         <li>여러 대화에 걸쳐 반복해서 나온 내용을 정리해 두고 <b>다음 대화에서 참조</b></li>
-        <li data-step="2">설정에서 <b>켜고 끌 수 있고</b> 무엇이 쌓였는지 직접 확인하고 지울 수도 있음</li>
-        <li data-step="3">대화 중에 <b>“이건 기억해 줘”</b>라고 말해서 바로 추가</li>
+        <li data-step="1">설정에서 <b>켜고 끌 수 있고</b> 무엇이 쌓였는지 직접 확인하고 지울 수도 있음</li>
+        <li data-step="2">대화 중에 <b>“이건 기억해 줘”</b>라고 말해서 바로 추가</li>
       </ul>
     </div>
   </div>
 </section>
 
 <!-- S25 파일 · RAG -->
-<section class="s" id="s25" data-steps="3" data-sec="Input">
+<section class="s" id="s25" data-steps="2" data-sec="Input">
   <div class="head"><div class="eye">Input</div><div class="h"><span class="no">4.</span> 파일 <span class="hs">: 검색 증강 생성 (RAG)</span></div></div>
   <div class="main cols side" style="--side:640px">
     <div class="k fill">
       <div class="k-msgs">
         <div class="swap">
-          <div data-out="2"><div class="u">미리내로보틱스의 시범 도입 고객이 몇 곳인지 알려 줘</div><div class="a">공개 자료에서는 확인할 수 없습니다</div></div>
-          <div data-step="2"><div class="u"><span class="chip"><svg><use href="#i-file"/></svg>미리내로보틱스_회사소개.md</span><br>미리내로보틱스의 시범 도입 고객이 몇 곳인지 알려 줘</div><div class="a">회사 소개 문서 기준으로 시범 도입 고객은 <b>세 곳</b>입니다.<br>물류 두 곳과 병원 한 곳<br><span class="badge"><b>출처</b> 회사소개.md 고객 절</span></div></div>
+          <div data-out="1"><div class="u">미리내로보틱스의 시범 도입 고객이 몇 곳인지 알려 줘</div><div class="a">공개 자료에서는 확인할 수 없습니다</div></div>
+          <div data-step="1"><div class="u"><span class="chip"><svg><use href="#i-file"/></svg>미리내로보틱스_회사소개.md</span><br>미리내로보틱스의 시범 도입 고객이 몇 곳인지 알려 줘</div><div class="a">회사 소개 문서 기준으로 시범 도입 고객은 <b>세 곳</b>입니다.<br>물류 두 곳과 병원 한 곳<br><span class="badge"><b>출처</b> 회사소개.md 고객 절</span></div></div>
         </div>
       </div>
       <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
     </div>
     <div class="col mid">
       <ul class="bullets"><li>답변을 만들기 전에 외부 문서에서 관련 정보를 <b>먼저 찾아보고</b> 그 정보를 기반으로 응답을 생성</li></ul>
-      <div class="flow" data-step="2"><span class="n">질문</span><span class="ar">↓</span><span class="n hi">문서에서 먼저 찾기</span><span class="ar">↓</span><span class="n">찾은 정보 + 질문</span><span class="ar">↓</span><span class="n">응답</span></div>
-      <div class="col" data-step="3"><div class="h2">넓은 의미로는 다 RAG</div><div class="pills"><span class="pill">파일 첨부</span><span class="pill">웹 검색</span><span class="pill">프로젝트 지식</span></div></div>
+      <div class="flow" data-step="1"><span class="n">질문</span><span class="ar">↓</span><span class="n hi">문서에서 먼저 찾기</span><span class="ar">↓</span><span class="n">찾은 정보 + 질문</span><span class="ar">↓</span><span class="n">응답</span></div>
+      <div class="col" data-step="2"><div class="h2">넓은 의미로는 다 RAG</div><div class="pills"><span class="pill">파일 첨부</span><span class="pill">웹 검색</span><span class="pill">프로젝트 지식</span></div></div>
     </div>
   </div>
 </section>
@@ -456,15 +456,15 @@
 </section>
 
 <!-- S27 프로젝트 사용하는 법 -->
-<section class="s" id="s27" data-steps="2" data-sec="Input">
+<section class="s" id="s27" data-steps="1" data-sec="Input">
   <div class="head"><div class="eye">Input</div><div class="h">프로젝트 사용하는 법 <span class="hs">: 나누는 기준은 산출물이 아니라 입력</span></div></div>
   <div class="main cols">
-    <div class="panel card mid" data-step="1">
+    <div class="panel card mid">
       <div class="h2">산출물 기준</div>
       <div class="pcells"><div class="pcell"><div class="pn">보고서 만들기</div><div class="f one"><svg><use href="#i-file"/></svg>A사 자료</div></div><div class="pcell"><div class="pn">PPT 만들기</div><div class="f one"><svg><use href="#i-file"/></svg>A사 자료</div></div></div>
       <div class="body why">같은 회사 자료를 두 프로젝트에 <b>중복</b>으로 넣게 됨</div>
     </div>
-    <div class="panel card mid" data-step="2">
+    <div class="panel card mid" data-step="1">
       <div class="h2">입력 기준</div>
       <div class="pcells"><div class="pcell"><div class="pn">반도체</div><div class="f"><svg><use href="#i-file"/></svg>반도체 시장 자료</div></div><div class="pcell"><div class="pn">바이오</div><div class="f"><svg><use href="#i-file"/></svg>바이오 규제 자료</div></div><div class="pcell"><div class="pn">특정 딜</div><div class="f one"><svg><use href="#i-file"/></svg>A사 자료</div></div></div>
       <div class="body why">프로젝트는 <b>입력을 담는 곳</b><br>산출물의 형식은 뒤에 나올 <b>스킬</b>이 맡음</div>
@@ -495,7 +495,7 @@
 
 <!-- S29 입력 레이어 정리 -->
 <section class="s" id="s29" data-steps="4" data-sec="Input">
-  <div class="head"><div class="eye">Input</div><div class="h">입력 레이어 정리 <span class="hs">: 각 층이 언제 컨텍스트 윈도우에 들어가는가</span></div></div>
+  <div class="head"><div class="eye">Input</div><div class="h">입력 레이어 정리 <span class="hs">: 각 층이 컨텍스트 윈도우에 들어가는 시점</span></div></div>
   <div class="main lay">
     <div class="hd"></div><div class="hd" data-step="1">대화 시작</div><div class="hd" data-step="2">메시지 1</div><div class="hd" data-step="3">메시지 2</div><div class="hd" data-step="4">메시지 3</div>
     <div class="rl"><b>지침</b><small>사람이 미리 적어 둠</small></div><div class="cell c-ins" data-step="1">자동으로 들어감</div><div></div><div></div><div></div>
@@ -518,12 +518,12 @@
     <div class="cols" style="flex:1">
       <div class="col wide">
         <div class="h2"><span class="no">1.</span> 자세한 프롬프트</div>
-        <div class="k"><div class="k-msgs"><div class="u">A사 투자 검토 보고서를 만들어 줘. 표지에는 회사명과 날짜를 넣고, 1장은 개요를 다섯 줄로, 2장은 시장 규모를 표로, 3장은 경쟁사 세 곳을 비교해 줘. 수치마다 출처와 기준 연도를 같이 적고, 말투는 개조식으로, 분량은 A4 두 장 안에서, 표 제목은 굵게, 그리고 …</div></div></div>
+        <div class="k fill"><div class="k-msgs"><div class="u">A사 투자 검토 보고서를 만들어 줘. 표지에는 회사명과 날짜를 넣고, 1장은 개요를 다섯 줄로, 2장은 시장 규모를 표로, 3장은 경쟁사 세 곳을 비교해 줘. 수치마다 출처와 기준 연도를 같이 적고, 말투는 개조식으로, 분량은 A4 두 장 안에서, 표 제목은 굵게, 그리고 …</div></div><div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div></div>
         <ul class="bullets cap" data-step="1"><li>보고서 양식처럼 지켜야 할 게 많으면 말로 설명하는 데 한계</li></ul>
       </div>
       <div class="col wide">
         <div class="h2"><span class="no">2.</span> 예시 보여주기</div>
-        <div class="k"><div class="k-msgs"><div class="u"><span class="chip"><svg><use href="#i-file"/></svg>보고서_예시_1.docx</span> <span class="chip"><svg><use href="#i-file"/></svg>보고서_예시_2.docx</span> <span class="chip"><svg><use href="#i-file"/></svg>보고서_예시_3.docx</span><br>이 예시들처럼 A사 투자 검토 보고서를 만들어 줘</div></div></div>
+        <div class="k fill"><div class="k-msgs"><div class="u"><span class="chip"><svg><use href="#i-file"/></svg>보고서_예시_1.docx</span> <span class="chip"><svg><use href="#i-file"/></svg>보고서_예시_2.docx</span> <span class="chip"><svg><use href="#i-file"/></svg>보고서_예시_3.docx</span><br>이 예시들처럼 A사 투자 검토 보고서를 만들어 줘</div></div><div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div></div>
         <ul class="bullets cap" data-step="2"><li>계속 보여주면 컨텍스트 윈도우를 너무 잡아먹음</li><li>예시의 종류에 따라 일관된 작업물이 나오지 않을 수도 있음</li></ul>
       </div>
     </div>
@@ -533,7 +533,7 @@
 
 <!-- S32 양식을 알려 주는 법 -->
 <section class="s" id="s32" data-steps="2" data-sec="Output">
-  <div class="head"><div class="eye">Output</div><div class="h">사람에게 양식을 알려 주는 방법 <span class="hs">: 직원에게 사내 보고서 양식을 알려 준다면</span></div></div>
+  <div class="head"><div class="eye">Output</div><div class="h">직원에게 보고서 양식을 알려 주는 방법 <span class="hs">: 말, 예시, 템플릿</span></div></div>
   <div class="main mid items big">
     <div class="it"><div class="t"><span class="no">1.</span>말로 설명하고 예시를 옆에</div><div class="d">어느 정도는 함</div></div>
     <div class="it" data-step="1"><div class="t"><span class="no">2.</span>템플릿 자체를 주고 쓰는 법을 알려 주기</div><div class="d">가장 좋은 방법</div></div>

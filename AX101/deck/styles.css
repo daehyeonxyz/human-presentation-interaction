@@ -284,6 +284,7 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 .axis .lgd { position: absolute; right: 0; bottom: calc(100% + var(--gap-xs)); display: flex; gap: var(--gap); justify-content: flex-end; font-size: var(--t-cap); line-height: var(--l-cap); font-weight: 600; }
 .axis .lgd span { display: inline-flex; align-items: center; gap: var(--gap-2xs); }
 .axis .lgd i.pt, .axis .lgd i.rl { position: static; transform: none; }
+.axis .lgd i.uk { width: 44px; height: 16px; background: repeating-linear-gradient(-45deg, var(--red) 0 4px, transparent 4px 9px); opacity: .7; }
 .axis .ticks { grid-column: 2; position: relative; height: 64px; border-top: 2px solid var(--ink); margin-top: calc(var(--l-cap) + var(--gap-xs)); }
 .axis .ticks > span { position: absolute; left: var(--x); top: 20px; transform: translateX(-50%); font-size: var(--t-cap); line-height: var(--l-cap); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .axis .ticks > span::before { content: ''; position: absolute; left: 50%; top: -20px; width: 2px; height: 12px; background: var(--ink); }
@@ -361,12 +362,12 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 .pj .crumb { font-size: 16px; line-height: 22px; color: var(--k-sub); margin-bottom: 14px; }
 .pj .pn { font-size: 36px; line-height: 44px; font-weight: 700; }
 .pj .pdesc { color: var(--k-sub); font-size: 19px; line-height: 26px; margin-top: 8px; }
-.pj .pin { margin-top: 32px; background: var(--k-el); border: 1px solid var(--k-bd); border-radius: 18px; padding: 16px 20px; color: var(--k-sub); font-size: 20px; line-height: 28px; min-height: 104px; display: flex; flex-direction: column; justify-content: space-between; }
+.pj .pin { margin-top: 24px; background: var(--k-el); border: 1px solid var(--k-bd); border-radius: 18px; padding: 16px 20px; color: var(--k-sub); font-size: 20px; line-height: 28px; min-height: 104px; display: flex; flex-direction: column; justify-content: space-between; }
 .pj .pin .row { display: flex; align-items: center; gap: 12px; font-size: 16px; }
 .pj .pin .row .send { margin-left: auto; width: 32px; height: 32px; border-radius: 50%; background: var(--k-send); color: var(--white); display: flex; align-items: center; justify-content: center; }
 .pj .pin .row .send svg { width: 16px; height: 16px; }
 .pj .pin .row svg.chev { width: 14px; height: 14px; }
-.pj .chats { margin-top: 36px; display: flex; flex-direction: column; }
+.pj .chats { margin-top: 24px; display: flex; flex-direction: column; }
 .pj .chats h6 { font-size: 15px; line-height: 20px; color: var(--k-sub); font-weight: 600; margin-bottom: 8px; }
 .pj .chats .c { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--k-bd); font-size: 19px; line-height: 26px; }
 .pj .chats .c b { font-weight: 500; }
@@ -488,6 +489,6 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 .hub svg .arr.on { opacity: 1; }
 
 /* 37장 · 꾸러미 하나에 상자 셋 */
-.pkg { align-self: start; display: flex; flex-direction: column; gap: var(--gap-sm); }
+.pkg { align-self: center; display: flex; flex-direction: column; gap: var(--gap-sm); }
 .pkg .pk { font-size: var(--t-cap); line-height: var(--l-cap); font-weight: 700; color: var(--mute); letter-spacing: .02em; }
 .pkg .bi { font-size: var(--t-h2); line-height: var(--l-h2); font-weight: 800; padding: var(--gap-sm) var(--gap); border-radius: var(--r-ctl); background: var(--acc-soft); }
