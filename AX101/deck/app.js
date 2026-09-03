@@ -13,7 +13,7 @@ function clearTimers() { timers.forEach(clearTimeout); timers = []; }
 slides.forEach(function (s, i) {
   if (s.hasAttribute('data-nofoot')) return;
   var f = document.createElement('div'); f.className = 'foot';
-  f.innerHTML = '<span class="sec">' + (s.dataset.sec || '') + '</span><span>' + String(i + 1).padStart(2, '0') + ' / ' + slides.length + '</span>';
+  f.textContent = String(i + 1).padStart(2, '0') + ' / ' + slides.length;
   s.appendChild(f);
 });
 function apply(s, k) {
@@ -59,12 +59,41 @@ function nn(el, cols, opt) {
   el.innerHTML = html;
 }
 
+/* 입력 · 모델 · 출력. 모델 원을 입력(왼쪽 반원)과 출력(오른쪽 반원)이 감싼다 */
+function orb(el) {
+  var c = 380, R = 352, r = 226, rc = 168;
+  function half(sweepOuter, sweepInner) {
+    return 'M' + c + ',' + (c - R) + ' A' + R + ',' + R + ' 0 0 ' + sweepOuter + ' ' + c + ',' + (c + R) + ' L' + c + ',' + (c + r) + ' A' + r + ',' + r + ' 0 0 ' + sweepInner + ' ' + c + ',' + (c - r) + ' Z';
+  }
+  el.innerHTML = '<svg viewBox="0 0 760 760">' +
+    '<path class="seg in" d="' + half(0, 1) + '"/><path class="seg out" d="' + half(1, 0) + '"/>' +
+    '<circle class="core" cx="' + c + '" cy="' + c + '" r="' + rc + '"/>' +
+    '<text class="t-seg t-in" x="' + (c - (R + r) / 2) + '" y="' + c + '">입력</text>' +
+    '<text class="t-seg t-out" x="' + (c + (R + r) / 2) + '" y="' + c + '">출력</text>' +
+    '<text class="t-core" x="' + c + '" y="' + c + '">모델</text></svg>';
+}
+['s4orb', 's5orb', 's16orb', 's30orb'].forEach(function (id) { orb($(id)); });
+HOOK.s16 = { step: function (k) { $('s16orb').classList.toggle('lit-model', k < 1); $('s16orb').classList.toggle('lit-in', k >= 1); } };
+HOOK.s30 = { step: function (k) { $('s30orb').classList.toggle('lit-in', k < 1); $('s30orb').classList.toggle('lit-out', k >= 1); } };
+
 /* S2 */
 HOOK.s2 = { step: function (k) { $('s2q').classList.toggle('is-dim', k >= 2); } };
 
-/* S3 · 인터페이스가 모델을 품는다 */
-nn($('s3nn'), [4, 6, 6, 3]);
-HOOK.s3 = { step: function (k) { $('s3cards').classList.toggle('nest', k >= 3); } };
+/* S3 · 인터페이스가 모델을 품고, 모델 카드와 채팅의 주황 점을 선으로 잇는다 */
+(function () {
+  nn($('s3nn'), [4, 6, 6, 3]);
+  var cards = $('s3cards'), link = $('s3link');
+  function pos(el) { var x = 0, y = 0; while (el && el !== cards) { x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; } return { x: x, y: y }; }
+  function draw() {
+    var m = cards.querySelector('.card.model'), a = $('s3a');
+    var x1 = m.offsetLeft + m.offsetWidth, y1 = m.offsetTop + m.offsetHeight / 2;
+    var p = pos(a), x2 = p.x + 14, y2 = p.y + 17;
+    link.setAttribute('viewBox', '0 0 ' + cards.offsetWidth + ' ' + cards.offsetHeight);
+    link.innerHTML = '<circle cx="' + x1 + '" cy="' + y1 + '" r="10"/><line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '"/>';
+  }
+  cards.querySelector('.card.model').addEventListener('transitionend', function (e) { if (e.propertyName === 'left' && cards.classList.contains('nest')) draw(); });
+  HOOK.s3 = { step: function (k) { cards.classList.toggle('nest', k >= 3); if (k < 3) link.innerHTML = ''; } };
+})();
 
 /* S6 · 프롬프트에 답하는 출력을 한 낱말씩 고른다. Space 한 번에 후보 게이지가 한 번 오르고 고른 낱말이 문장에 붙는다 */
 (function () {
@@ -105,7 +134,8 @@ HOOK.s3 = { step: function (k) { $('s3cards').classList.toggle('nest', k >= 3); 
   HOOK.s7 = { step: function (k) { $('s7tok').classList.toggle('split', k >= 1); } };
 })();
 
-/* S8 · S9 · 장부 막대는 줄이 나타날 때 자란다 (CSS) */
+/* S8 · S9 · 장부 막대는 줄이 나타날 때 자란다 (CSS). 9장 3단계에 앞의 문답과 줄이 '이전 입력' 색이 된다 */
+HOOK.s9 = { step: function (k) { $('s9k').classList.toggle('prev', k >= 3); $('s9bill').classList.toggle('prev', k >= 3); } };
 
 /* S10 · 라인업. 등급이 오를수록 노드가 많아진다 */
 (function () {
@@ -164,26 +194,27 @@ HOOK.s14 = { step: function (k) { $$('#s14ax .unk').forEach(function (u) { u.cla
     { n: '프로젝트 지침', w: '프로젝트 > 지침', t: 1800, c: 'var(--n1)' },
     { n: '프롬프트', w: '채팅창에 보낼 때마다 직접 쓰는 입력', t: 45, c: 'var(--n7)' }
   ];
-  var MAX = 12000, bar = $('s17bar'), lg = $('s17lg'), insp = $('s17i'), n = 0, hover = -1;
+  var CE = { n: '컨텍스트 엔지니어링', w: '컨텍스트 윈도우에 필요한 정보, 도구, 메모리, 외부 데이터 등을 체계적으로 넣고 최적화하는 기술', c: 'var(--ink)' };
+  var MAX = 12000, bar = $('s17bar'), lg = $('s17lg'), insp = $('s17i'), n = 0, hover = -1, ce = false;
   bar.innerHTML = IT.map(function (it, i) { return '<i data-i="' + i + '" style="background:' + it.c + '"></i>'; }).join('');
   lg.innerHTML = IT.map(function (it, i) { return '<span data-i="' + i + '"><i style="background:' + it.c + '"></i>' + it.n + '</span>'; }).join('');
   function showInsp(i) {
-    var it = i >= 0 ? IT[i] : null;
+    var it = i === 'ce' ? CE : i >= 0 ? IT[i] : null;
     insp.querySelector('.n i').style.background = it ? it.c : 'transparent';
     insp.querySelector('.n span').textContent = it ? it.n : '';
     insp.querySelector('.w').textContent = it ? it.w : '';
   }
   function render() {
-    $$('#s17bar i').forEach(function (s, i) { var on = i < n; s.style.width = on ? (IT[i].t / MAX * 100) + '%' : '0'; s.classList.toggle('hot', i === hover); });
+    $$('#s17bar i').forEach(function (s, i) { var on = i < n; s.style.width = on ? (IT[i].t / MAX * 100) + '%' : '0'; s.classList.toggle('on', on); s.classList.toggle('hot', i === hover); });
     $$('#s17lg span').forEach(function (s, i) { s.classList.toggle('on', i < n); });
     bar.classList.toggle('focus', hover >= 0);
     $('s17ph').textContent = n >= 7 ? 'A사 회사소개 자료 기준으로 시범 도입 고객 수를 정리해 줘' : 'Claude에게 메시지 보내기';
     $('s17ph').style.color = n >= 7 ? 'var(--k-ink)' : '';
-    showInsp(hover >= 0 ? hover : n - 1);
+    showInsp(hover >= 0 ? hover : ce ? 'ce' : n - 1);
   }
   function bind(sel) { $$(sel).forEach(function (el) { el.addEventListener('mouseenter', function () { var i = +el.dataset.i; if (i < n) { hover = i; render(); } }); el.addEventListener('mouseleave', function () { hover = -1; render(); }); }); }
   bind('#s17bar i'); bind('#s17lg span');
-  HOOK.s17 = { reset: function () { n = 1; hover = -1; render(); }, step: function (k) { n = Math.min(7, k + 1); hover = -1; render(); } };
+  HOOK.s17 = { reset: function () { n = 1; hover = -1; ce = false; render(); }, step: function (k) { n = Math.min(7, k + 1); ce = k >= 7; hover = -1; render(); } };
 })();
 
 /* S18 · 가이드 표를 회색으로 눌러 버린다 */
@@ -191,8 +222,7 @@ HOOK.s18 = { step: function (k) { $('s18g').classList.toggle('dim', k >= 1); } }
 
 /* S22 · 문단에서 나타나는 순서대로 번호를 붙인다 */
 HOOK.s22 = { step: function (k) {
-  var order = ['mem', 'prof', 'proj'];
-  order.forEach(function (c, i) { $$('#s22p .g.' + c).forEach(function (g) { g.classList.toggle('on', i + 1 <= k); }); $$('#s22 .labels .lb.' + c).forEach(function (l) { l.classList.toggle('on', i + 1 <= k); }); });
+  for (var i = 1; i <= 5; i++) { $$('#s22p .g.c' + i).forEach(function (g) { g.classList.toggle('on', i <= k); }); $$('#s22 .labels .lb.c' + i).forEach(function (l) { l.classList.toggle('on', i <= k); }); }
 } };
 
 /* S23 · S24 · 설정 화면에서 짚기 */
@@ -212,34 +242,46 @@ HOOK.s26 = { step: function (k) { $('s26pj').classList.toggle('focus', k >= 1 &&
   $('s34card').addEventListener('click', function (e) { e.stopPropagation(); if (state().step < 3) window.finish(); });
 })();
 
-/* S35 · 개선 루프. 왼쪽은 운에 따라 오르내리고 오른쪽은 고친 만큼 쌓인다 */
+/* S35 · 보고서 생성. 왼쪽은 만들 때마다 판이 달라지고 오른쪽은 양식이 같고 줄 길이만 조금 흔들린다 */
 (function () {
-  var a = 0, f = 0, LUCK = [1, 3, 0, 2, 1, 4, 0, 2];
-  function render() {
-    var L = a === 0 ? 0 : LUCK[(a - 1) % LUCK.length];
-    $$('#s35mL i').forEach(function (i, k) { i.classList.toggle('on', k <= L); });
-    $$('#s35mR i').forEach(function (i, k) { i.classList.toggle('on', k <= Math.min(f, 4)); });
+  var L = $('s35dL'), Rr = $('s35dR');
+  function rnd(a, b) { return a + Math.random() * (b - a); }
+  function pct(v) { return 'width:' + Math.round(v) + '%'; }
+  function line(w) { return '<div class="l" style="' + pct(w) + '"></div>'; }
+  function table() { var s = '<div class="tb">'; for (var i = 0; i < 6; i++) s += '<i></i>'; return s + '</div>'; }
+  function left() {
+    var h = '<div class="t" style="' + pct(rnd(30, 80)) + (Math.random() < .4 ? ';align-self:center' : '') + '"></div>';
+    var secs = 2 + Math.floor(Math.random() * 2), img = false;
+    for (var s = 0; s < secs; s++) {
+      var kind = Math.random();
+      if (Math.random() < .7) h += '<div class="h" style="' + pct(rnd(18, 45)) + '"></div>';
+      if (kind < .25 && !img) { img = true; h += '<div class="img" style="' + pct(rnd(40, 100)) + '"></div>'; }
+      else if (kind < .45) h += table();
+      else { var n = 1 + Math.floor(Math.random() * 2); for (var i = 0; i < n; i++) h += line(rnd(35, 100)); }
+    }
+    L.innerHTML = h;
   }
-  $('s35again').addEventListener('click', function (e) { e.stopPropagation(); a++; render(); this.blur(); });
-  $('s35fix').addEventListener('click', function (e) { e.stopPropagation(); if (f < 4) f++; render(); this.blur(); });
-  HOOK.s35 = { reset: function () { a = 0; f = 0; render(); }, step: function (k) { if (k >= 1 && a < 1) { a = 2; render(); } if (k >= 2 && f < 1) { f = 3; render(); } } };
-  render();
+  function right() {
+    var h = '<div class="t" style="' + pct(52) + '"></div>';
+    for (var s = 0; s < 3; s++) { h += '<div class="h" style="' + pct(28) + '"></div>'; for (var i = 0; i < 3; i++) h += line([96, 88, 62][i] + rnd(-6, 6)); }
+    h += '<div class="h" style="' + pct(28) + '"></div>' + table();
+    Rr.innerHTML = h;
+  }
+  function gen() { left(); right(); }
+  $('s35gen').addEventListener('click', function (e) { e.stopPropagation(); gen(); this.blur(); });
+  HOOK.s35 = { reset: gen };
+  gen();
 })();
 
-/* S36 · 허브. 선마다 화살촉 하나씩이며 둘째 단계에 반대 방향 하나가 더 붙는다 */
+/* S36 · 허브. 여섯 서비스가 Claude 둘레에 선으로 이어진다 */
 (function () {
-  var host = $('s36hub'), W = 1000, H = 600, cx = W / 2, cy = H / 2, SV = ['Google Drive', 'Gmail', 'GitHub', 'Slack', 'Microsoft 365'];
+  var host = $('s36hub'), W = 1000, H = 600, cx = W / 2, cy = H / 2, SV = ['Google Drive', 'Gmail', 'PowerPoint', 'File System', 'Excel', 'Word'];
   var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '">', nodes = '';
-  SV.forEach(function (n, i) { var ang = -Math.PI / 2 + i * 2 * Math.PI / 5; var x = cx + 370 * Math.cos(ang), y = cy + 240 * Math.sin(ang);
-    svg += '<line class="ln" x1="' + cx + '" y1="' + cy + '" x2="' + x + '" y2="' + y + '"/>';
-    var ux = (x - cx), uy = (y - cy), L = Math.hypot(ux, uy); ux /= L; uy /= L;
-    var px = -uy, py = ux;
-    function tri(ox, oy, dir, cls) { var tip = [ox + ux * 14 * dir, oy + uy * 14 * dir], b1 = [ox - ux * 8 * dir + px * 9, oy - uy * 8 * dir + py * 9], b2 = [ox - ux * 8 * dir - px * 9, oy - uy * 8 * dir - py * 9]; return '<polygon class="' + cls + '" points="' + tip.join(',') + ' ' + b1.join(',') + ' ' + b2.join(',') + '"/>'; }
-    svg += tri(cx + ux * 122, cy + uy * 122, -1, 'arr in') + tri(x - ux * 150, y - uy * 150, 1, 'arr out');
-    nodes += '<div class="sv" style="left:' + x + 'px;top:' + y + 'px">' + n + '</div>'; });
+  SV.forEach(function (n, i) { var ang = -Math.PI / 2 + i * Math.PI / 3; var x = cx + 370 * Math.cos(ang), y = cy + 230 * Math.sin(ang);
+    svg += '<line x1="' + cx + '" y1="' + cy + '" x2="' + x + '" y2="' + y + '"/>';
+    nodes += '<div class="sv on" style="left:' + x + 'px;top:' + y + 'px">' + n + '</div>'; });
   svg += '</svg>';
   host.innerHTML = svg + nodes + '<div class="c">Claude</div>';
-  HOOK.s36 = { step: function (k) { $$('#s36hub .sv').forEach(function (s) { s.classList.add('on'); }); $$('#s36hub line').forEach(function (l) { l.classList.add('on'); l.classList.toggle('two', k >= 2); }); $$('#s36hub .arr').forEach(function (a) { a.classList.toggle('on', a.classList.contains('in') ? k >= 1 : k >= 2); }); } };
 })();
 
 /* 시작 */
