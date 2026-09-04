@@ -301,10 +301,10 @@ HOOK.s26 = { step: function (k) {
   function delay(html) { var i = 0; return html.replace(/<div class="(t|h|l|tb|bento)"/g, function (m) { return m.replace('"', '" data-i="' + (i++) + '"'); }); }
   function left() {
     var h = '<div class="t" style="' + pct(rnd(30, 80)) + (Math.random() < .4 ? ';align-self:center' : '') + '"></div>';
-    if (Math.random() < .5) h += table(2 + Math.floor(Math.random() * 5));
-    var secs = 1 + Math.floor(Math.random() * 2);
+    if (Math.random() < .5) h += table(2 + Math.floor(Math.random() * 3));
+    var secs = 1;
     for (var s = 0; s < secs; s++) { h += '<div class="h" style="' + pct(rnd(18, 45)) + '"></div>'; var n = 1 + Math.floor(Math.random() * 3); for (var i = 0; i < n; i++) h += line(rnd(35, 100)); }
-    h += bento(1 + Math.floor(Math.random() * 3), 8 + Math.floor(Math.random() * 4), false);
+    h += bento(2 + Math.floor(Math.random() * 2), 6 + Math.floor(Math.random() * 4), false);
     return h;
   }
   function right() {

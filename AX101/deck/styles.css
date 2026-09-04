@@ -814,7 +814,7 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 .doc > * { opacity: 0; filter: blur(4px); transition: opacity 300ms var(--ease-out) var(--d, 0ms), filter 300ms var(--ease-out) var(--d, 0ms); }
 .doc.up > * { opacity: 1; filter: none; }
 .doc .bento { display: grid; gap: 6px; }
-.doc .bento i { display: block; height: 34px; border-radius: 6px; background: var(--paper-2); }
+.doc .bento i { display: block; height: 24px; border-radius: 5px; background: var(--paper-2); }
 .doc .bento i.ov { background: var(--acc-soft); }
 .docs { padding-top: 0; }
 .docs .dochead { top: -68px; }
@@ -841,3 +841,4 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 .k.big.b2 .u { padding: 18px 28px; max-width: 78%; }
 .pcells .pcell, .pcells .pcell .pn, .pcells .pcell .f { color: var(--ink); opacity: 1; }
 .pcells .pcell .f svg { color: var(--mute); }
+.doc .bento { gap: 4px; }

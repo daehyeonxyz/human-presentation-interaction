@@ -818,7 +818,7 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 .doc > * { opacity: 0; filter: blur(4px); transition: opacity 300ms var(--ease-out) var(--d, 0ms), filter 300ms var(--ease-out) var(--d, 0ms); }
 .doc.up > * { opacity: 1; filter: none; }
 .doc .bento { display: grid; gap: 6px; }
-.doc .bento i { display: block; height: 34px; border-radius: 6px; background: var(--paper-2); }
+.doc .bento i { display: block; height: 24px; border-radius: 5px; background: var(--paper-2); }
 .doc .bento i.ov { background: var(--acc-soft); }
 .docs { padding-top: 0; }
 .docs .dochead { top: -68px; }
@@ -845,6 +845,7 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 .k.big.b2 .u { padding: 18px 28px; max-width: 78%; }
 .pcells .pcell, .pcells .pcell .pn, .pcells .pcell .f { color: var(--ink); opacity: 1; }
 .pcells .pcell .f svg { color: var(--mute); }
+.doc .bento { gap: 4px; }
 
 </style></head>
 <body>
@@ -1831,10 +1832,10 @@ HOOK.s26 = { step: function (k) {
   function delay(html) { var i = 0; return html.replace(/<div class="(t|h|l|tb|bento)"/g, function (m) { return m.replace('"', '" data-i="' + (i++) + '"'); }); }
   function left() {
     var h = '<div class="t" style="' + pct(rnd(30, 80)) + (Math.random() < .4 ? ';align-self:center' : '') + '"></div>';
-    if (Math.random() < .5) h += table(2 + Math.floor(Math.random() * 5));
-    var secs = 1 + Math.floor(Math.random() * 2);
+    if (Math.random() < .5) h += table(2 + Math.floor(Math.random() * 3));
+    var secs = 1;
     for (var s = 0; s < secs; s++) { h += '<div class="h" style="' + pct(rnd(18, 45)) + '"></div>'; var n = 1 + Math.floor(Math.random() * 3); for (var i = 0; i < n; i++) h += line(rnd(35, 100)); }
-    h += bento(1 + Math.floor(Math.random() * 3), 8 + Math.floor(Math.random() * 4), false);
+    h += bento(2 + Math.floor(Math.random() * 2), 6 + Math.floor(Math.random() * 4), false);
     return h;
   }
   function right() {
