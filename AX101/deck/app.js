@@ -69,7 +69,7 @@ function figure(el, labels) {
     '</svg>' + (labels === false ? '' : '<div class="fl"><span class="t-model">모델</span><span class="t-if">인터페이스</span></div>');
 }
 ['s4fig', 's5fig', 's16fig'].forEach(function (id) { figure($(id)); });
-['s13bf1', 's13bf2'].forEach(function (id) { figure($(id), false); });
+['s13bf1', 's13bf2', 's16afig', 's16bfig'].forEach(function (id) { figure($(id), false); });
 HOOK.s16 = { step: function (k) { $('s16fig').classList.toggle('lit-model', k < 1); $('s16fig').classList.toggle('lit-if', k >= 1); } };
 
 /* S2 */
@@ -91,47 +91,49 @@ HOOK.s2 = { step: function (k) { $('s2q').classList.toggle('is-dim', k >= 2); } 
   HOOK.s3 = { step: function (k) { cards.classList.toggle('nest', k >= 3); if (k < 3) link.innerHTML = ''; } };
 })();
 
-/* S6 · 프롬프트에 답하는 출력을 한 낱말씩 고른다. Space 한 번에 후보 게이지가 한 번 오르고 고른 낱말이 문장에 붙는다 */
+/* S6 · 채팅 안에서 답이 한 토큰씩 자란다. 오른쪽 후보 판은 한 번에 서고, 고르는 건 최고 확률만이 아니다 */
 (function () {
   var GIVEN = ['벤처캐피탈은'];
   var STEPS = [
-    [['초기', 41], ['유망한', 33], ['성장', 18], ['기술', 8]],
-    [['스타트업에', 63], ['기업에', 21], ['단계의', 11], ['회사에', 5]],
-    [['투자하고', 58], ['투자해', 24], ['자금을', 12], ['돈을', 6]],
-    [['성장을', 46], ['경영을', 27], ['상장까지', 15], ['회수를', 12]],
-    [['도와', 52], ['지원해', 31], ['함께', 12], ['이끌어', 5]],
-    [['수익을', 49], ['지분', 28], ['기업', 14], ['투자금을', 9]],
-    [['얻는', 57], ['내는', 22], ['회수하는', 14], ['남기는', 7]],
-    [['회사입니다', 66], ['투자사입니다', 19], ['곳입니다', 11], ['기관입니다', 4]]
+    { c: [['초기', 41], ['유망한', 33], ['성장', 18], ['기술', 8]], pick: 0 },
+    { c: [['스타트업에', 63], ['기업에', 21], ['단계의', 11], ['회사에', 5]], pick: 1 },
+    { c: [['투자하고', 58], ['투자해', 24], ['자금을', 12], ['돈을', 6]], pick: 0 },
+    { c: [['성장을', 46], ['경영을', 27], ['상장까지', 15], ['회수를', 12]], pick: 2 },
+    { c: [['도와', 52], ['지원해', 31], ['함께', 12], ['이끌어', 5]], pick: 0 }
   ];
-  var sent = $('s6sent'), list = $('s6list');
-  function drawSent(n) {
-    var words = GIVEN.concat(STEPS.slice(0, n).map(function (s) { return s[0][0]; }));
-    sent.innerHTML = words.map(function (w, i) { return '<span class="w' + (i >= GIVEN.length ? ' new' : '') + (i === words.length - 1 && n > 0 ? ' last' : '') + '">' + w + '</span>'; }).join('');
+  var REST = ['수익을', '얻는', '회사입니다'];
+  var ans = $('s6a'), list = $('s6list');
+  function drawSent(n, full) {
+    var words = GIVEN.concat(STEPS.slice(0, n).map(function (st) { return st.c[st.pick][0]; }));
+    if (full) words = words.concat(REST);
+    ans.innerHTML = words.map(function (w, i) { return '<span class="w' + (i === words.length - 1 && n > 0 && !full ? ' new' : '') + '">' + w + '</span>'; }).join(' ');
   }
   function drawCands(i) {
-    list.innerHTML = STEPS[i].map(function (c, j) { return '<div class="cand' + (j === 0 ? ' top' : '') + '"><span>' + c[0] + '</span><div class="b"><i style="--w:' + c[1] + '%"></i></div><span class="p">' + c[1] + '%</span></div>'; }).join('');
-    later(function () { list.classList.add('up'); }, 30);
+    if (i < 0) { list.innerHTML = '<div class="ch">다음 토큰 후보와 확률</div>' + STEPS[0].c.map(function (c) { return '<div class="cand"><span>' + c[0] + '</span><div class="b"><i style="--w:' + c[1] + '%"></i></div><span class="p">' + c[1] + '%</span></div>'; }).join(''); return; }
+    if (i >= STEPS.length) { list.innerHTML = '<div class="ch">다음 토큰 후보와 확률</div><div class="done">문장이 끝날 때까지 같은 일을 반복</div>'; return; }
+    var st = STEPS[i];
+    list.innerHTML = '<div class="ch">다음 토큰 후보와 확률</div>' + st.c.map(function (c, j) { return '<div class="cand' + (j === st.pick ? ' pick' : '') + '"><span>' + c[0] + '</span><div class="b"><i style="--w:' + c[1] + '%"></i></div><span class="p">' + c[1] + '%</span></div>'; }).join('');
   }
   HOOK.s6 = {
-    reset: function () { clearTimers(); list.classList.remove('up'); drawSent(0); drawCands(0); },
+    reset: function () { drawSent(0, false); drawCands(-1); },
     step: function (k) {
-      clearTimers(); list.classList.remove('up');
-      var n = Math.min(k, STEPS.length);
-      drawSent(n); drawCands(Math.min(n, STEPS.length - 1));
+      if (k >= 6) { drawSent(5, true); drawCands(6); return; }
+      drawSent(k, false); drawCands(k - 1 < 0 ? -1 : k - 1);
     }
   };
 })();
 
-/* S7 · 토큰 상자. 상자 하나가 토큰 하나. 어절 하나 안팎이며 짧은 어절은 묶인다 */
+/* S7 · 같은 채팅. 어절 하나가 토큰 하나. Space 1 상자, Space 2 토큰 수 꼬리표 */
 (function () {
-  var T = ['이 영어', '글을', '한국어로', '자연스럽게', '번역하고', '원문의', '어조는', '그대로', '유지해 줘.', '전문 용어는', '원어를', '괄호 안에', '함께 적고,', '분량은', '원문과', '비슷하게', '맞춰 줘.', '번역이 끝나면', '핵심 내용을', '세 줄로', '요약해 줘.'];
-  $('s7ko').innerHTML = T.map(function (t) { return '<span class="tk">' + t + '</span>'; }).join(' ');
-  HOOK.s7 = { step: function (k) { $('s7tok').classList.toggle('split', k >= 1); } };
+  function chips(el) { var t = el.textContent.trim().split(/\s+/); el.innerHTML = t.map(function (w) { return '<span class="tk">' + w + '</span>'; }).join(' '); return t.length; }
+  var nu = chips($('s7u')), na = chips($('s7a'));
+  $('s7u').insertAdjacentHTML('beforeend', ' <span class="tt in" data-step="2">' + nu + '토큰</span>');
+  $('s7a').insertAdjacentHTML('beforeend', ' <span class="tt out" data-step="2">' + na + '토큰</span>');
+  HOOK.s7 = { step: function (k) { $('s7k').classList.toggle('split', k >= 1); } };
 })();
 
 /* S8 · S9 · 장부 막대는 줄이 나타날 때 자란다 (CSS). 9장 3단계에 앞의 문답과 줄이 '이전 입력' 색이 된다 */
-HOOK.s9 = { step: function (k) { $('s9k').classList.toggle('prev', k >= 3); $('s9bill').classList.toggle('prev', k >= 3); } };
+HOOK.s9 = { step: function (k) { $('s9k').classList.toggle('prev', k >= 4); $('s9bill').classList.toggle('prev', k >= 4); } };
 
 /* S10 · 라인업. 등급이 오를수록 노드가 많아진다 */
 (function () {
@@ -211,7 +213,7 @@ HOOK.s14 = { step: function (k) { $$('#s14ax .unk').forEach(function (u) { u.cla
   }
   function bind(sel) { $$(sel).forEach(function (el) { el.addEventListener('mouseenter', function () { var i = +el.dataset.i; if (i < n) { hover = i; render(); } }); el.addEventListener('mouseleave', function () { hover = -1; render(); }); }); }
   bind('#s17bar i'); bind('#s17lg span');
-  HOOK.s17 = { reset: function () { n = 1; hover = -1; ce = false; render(); }, step: function (k) { n = Math.min(7, k + 1); ce = k >= 7; hover = -1; render(); } };
+  HOOK.s17 = { reset: function () { n = 1; hover = -1; ce = false; render(); }, step: function (k) { n = Math.min(7, k + 1); ce = k === 7; hover = k >= 8 ? 6 : -1; render(); } };
 })();
 
 /* S18 · 가이드 표를 회색으로 눌러 버린다 */
@@ -270,16 +272,8 @@ HOOK.s26 = { step: function (k) { $('s26pj').classList.toggle('focus', k >= 1 &&
   gen();
 })();
 
-/* S36 · 허브. 여섯 서비스가 Claude 둘레에 선으로 이어진다 */
-(function () {
-  var host = $('s36hub'), W = 1000, H = 520, cx = W / 2, cy = H / 2, SV = ['Google Drive', 'Gmail', 'Google Calendar', 'Slack', 'GitHub', 'Microsoft 365'];
-  var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '">', nodes = '';
-  SV.forEach(function (n, i) { var ang = -Math.PI / 2 + i * Math.PI / 3; var x = cx + 370 * Math.cos(ang), y = cy + 200 * Math.sin(ang);
-    svg += '<line x1="' + cx + '" y1="' + cy + '" x2="' + x + '" y2="' + y + '"/>';
-    nodes += '<div class="sv on" style="left:' + x + 'px;top:' + y + 'px">' + n + '</div>'; });
-  svg += '</svg>';
-  host.innerHTML = svg + nodes + '<div class="c">Claude</div>';
-})();
+/* S36 · 커넥터. 마지막 Space에 관리자 승인 행만 남긴다 */
+HOOK.s36 = { step: function (k) { $('s36st').classList.toggle('focus', k >= 3); } };
 
 /* 시작 */
 var h0 = parseInt((location.hash || '#1').slice(1), 10); show(isNaN(h0) ? 0 : h0 - 1);

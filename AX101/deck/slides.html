@@ -28,16 +28,15 @@
   <div class="end"><span></span><div class="who">삼성벤처투자 김대현<br>2026. 09</div></div>
 </section>
 <!-- S2 인공지능? -->
-<section class="s" id="s2" data-steps="3" data-hook="2" data-sec="Background">
+<section class="s" id="s2" data-steps="2" data-sec="Background">
   <div class="main mid center">
     <div class="swap"><div class="decl-lg q" id="s2q">인공지능?</div><div class="decl-lg" data-step="2">인공지능 <span>서비스</span></div></div>
     <div class="trio" data-step="1"><span>ChatGPT</span><span>Gemini</span><span>Claude</span></div>
   </div>
-  <div class="thread" data-step="3"><span class="a">Claude는 인공지능이 아니라 인공지능 서비스</span><span class="b">AI 서비스는 무엇으로 구성되어 있는가</span></div>
 </section>
 <!-- S3 구성 요소 · 모델은 왼쪽, 인터페이스가 넓어져 모델을 품고 채팅의 주황 점과 이어진다 -->
-<section class="s" id="s3" data-steps="4" data-hook="3" data-sec="Background">
-  <div class="head"><div class="eye">Background</div><div class="h">AI 서비스의 구성 요소</div></div>
+<section class="s" id="s3" data-steps="3" data-sec="Background">
+  <div class="head"><div class="h">AI 서비스의 구성 요소</div></div>
   <div class="main cards" id="s3cards">
     <div class="card model"><div><div class="cn">모델</div><div class="cd">사람의 뇌를 모방하여 만든 컴퓨터 시스템<br>요즘 AI라고 하면 보통 LLM</div></div>
       <div class="cb" data-step="1"><svg class="nn" id="s3nn" viewBox="0 0 420 300" fill="none"></svg></div></div>
@@ -49,7 +48,6 @@
     </div>
     <svg class="link" id="s3link"></svg>
   </div>
-  <div class="thread" data-step="4"><span class="a">인터페이스의 기능은 모두 모델의 특성을 활용하기 위해 만들어진 것</span><span class="b">그래서 모델과 인터페이스 둘로 나누어 이해</span></div>
 </section>
 <!-- S4 AX 101 -->
 <section class="s blue" id="s4" data-steps="1" data-nofoot>
@@ -62,28 +60,67 @@
 <section class="s blue" id="s5" data-steps="0" data-nofoot>
   <div class="main tri"><div class="fig lit-model" id="s5fig"></div></div>
 </section>
-<!-- S6 LLM · 프롬프트에 답하는 출력을 한 낱말씩 -->
-<section class="s" id="s6" data-steps="9" data-hook="8" data-sec="Model">
-  <div class="head"><div class="eye">Model</div><div class="h"><span class="no">1.</span> LLM <span class="hs">: 다음 단어를 확률적으로 예측하는 모델</span></div></div>
-  <div class="main mid gen">
-    <div class="ask"><span>벤처캐피탈이 하는 일을 한 문장으로 설명해 줘</span></div>
-    <div class="sent" id="s6sent"></div>
-    <div class="cands" id="s6list"></div>
+<!-- S6 LLM · 채팅 안에서 답이 한 토큰씩 자란다. 오른쪽은 다음 토큰 후보 -->
+<section class="s" id="s6" data-steps="6">
+  <div class="head"><div class="h"><span class="no">1.</span> LLM</div><div class="lead">텍스트를 입력받아 텍스트를 출력하는 모델</div></div>
+  <div class="main cols side vmid" style="--side:640px">
+    <div class="k big" id="s6k">
+      <div class="k-msgs"><div class="u">벤처캐피탈이 하는 일을 한 문장으로 설명해 줘</div><div class="a" id="s6a"></div></div>
+      <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
+    </div>
+    <div class="col mid"><div class="cands" id="s6list"></div></div>
   </div>
-  <div class="thread" data-step="9"><span class="a">앞 문장을 포함해 다음 단어를 확률로 선택</span><span class="b">그런데 AI가 생성하는 것은 단어가 아니라 토큰</span></div>
 </section>
-<!-- S7 토큰 -->
-<section class="s" id="s7" data-steps="3" data-hook="2" data-sec="Model">
-  <div class="head"><div class="eye">Model</div><div class="h"><span class="no">2.</span> 토큰 <span class="hs">: 입출력의 단위</span></div></div>
-  <div class="main tok" id="s7tok">
-    <div class="col mid" style="flex:1"><div class="tl" id="s7ko"></div></div>
-    <ul class="bullets" data-step="2"><li>모델이 텍스트를 읽고 처리하는 가장 작은 기본 단위</li><li>단어 하나일 수도, 단어의 조각일 수도, 글자 하나일 수도 있음</li><li>사용량은 토큰 기반으로 청구</li></ul>
+<!-- S7 토큰 · 같은 채팅. Space 1 토큰 상자, Space 2 토큰 수 꼬리표 -->
+<section class="s" id="s7" data-steps="2">
+  <div class="head"><div class="h"><span class="no">2.</span> 토큰</div><div class="lead">입출력의 단위</div></div>
+  <div class="main mid">
+    <div class="k big" id="s7k">
+      <div class="k-msgs"><div class="u" id="s7u">벤처캐피탈이 하는 일을 한 문장으로 설명해 줘</div><div class="a" id="s7a">벤처캐피탈은 초기 기업에 투자하고 상장까지 도와 수익을 얻는 회사입니다</div></div>
+      <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
+    </div>
   </div>
-  <div class="thread" data-step="3"><span class="a">입력과 출력은 토큰 단위</span><span class="b">비용도 토큰을 기준으로 청구</span></div>
+</section>
+<!-- S14 지식 컷오프 · 정의는 제목 아래, 시간축은 모델마다 한 줄 -->
+<section class="s" id="s14" data-steps="2" data-sec="Model">
+  <div class="head"><div class="h"><span class="no">3.</span> Knowledge cutoff</div><div class="lead">학습이 끝난 시점</div>
+    <div class="body">모델은 입력을 받아 출력할 때 <b>원래 학습된 정보</b>만 가지고 응답<br><span data-step="1">학습에 사용한 데이터가 어느 시점까지 포함되었는가를 나타내는 <b>시간적 기준선</b>. 그 이후의 정보는 <b>알 수 없음</b></span><br><span data-step="2">아인슈타인의 뇌는 살아 있던 <b>1900년대 초중반</b>까지의 정보만 학습, 그 이후의 정보는 알 수 없음</span></div>
+  </div>
+  <div class="main mid">
+    <div class="axis" id="s14ax">
+      <div class="ticks"><div class="lgd"><span><i class="pt"></i>지식 컷오프</span><span><i class="rl"></i>출시</span></div><span style="--x:0%">25.01</span><span style="--x:30%">25.07</span><span style="--x:60%">26.01</span><span style="--x:90%">26.07</span><span style="--x:100%" class="end">오늘</span></div>
+      <span class="nm">Haiku 4.5</span><div class="tr"><span class="unk" style="--x:7.5%"></span><span class="pt" style="--x:7.5%"></span><span class="dt" style="--x:7.5%">25.02</span><span class="rl" style="--x:47.5%"></span><span class="dt" style="--x:47.5%">25.10</span></div>
+      <span class="nm">Sonnet 5</span><div class="tr"><span class="unk" style="--x:62.5%"></span><span class="pt" style="--x:62.5%"></span><span class="dt" style="--x:62.5%">26.01</span><span class="rl" style="--x:87.5%"></span><span class="dt" style="--x:87.5%">26.06</span></div>
+      <span class="nm">Opus 5</span><div class="tr"><span class="unk" style="--x:82.5%"></span><span class="pt" style="--x:82.5%"></span><span class="dt" style="--x:82.5%">26.05</span><span class="rl" style="--x:92.5%"></span><span class="dt" style="--x:92.5%">26.07</span></div>
+      <span class="nm">Fable 5</span><div class="tr"><span class="unk" style="--x:62.5%"></span><span class="pt" style="--x:62.5%"></span><span class="dt" style="--x:62.5%">26.01</span><span class="rl" style="--x:87.5%"></span><span class="dt" style="--x:87.5%">26.06</span></div>
+    </div>
+  </div>
+</section>
+<!-- S10 이름 읽는 법 → 라인업 -->
+<section class="s" id="s10" data-steps="4" data-sec="Model">
+  <div class="stack">
+    <div class="layer" data-out="1">
+      <div class="head"><div class="h"><span class="no">4.</span> 모델 이름 읽는 법</div><div class="lead">등급과 버전</div></div>
+      <div class="main cols" style="--cols:600px 1fr">
+        <div class="nnbox"><svg class="nn" id="s10nn0" viewBox="0 0 600 600" fill="none"></svg></div>
+        <div class="col wide nmcol"><div class="nm-ex"><span>Sonnet<small>이름은 등급</small></span><span>5<small>숫자는 버전</small></span></div></div>
+      </div>
+    </div>
+    <div class="layer" data-step="1">
+      <div class="head"><div class="h"><span class="no">4.</span> Claude 모델 라인업</div><div class="lead">지능과 속도와 비용</div></div>
+      <div class="main cols" style="--cols:600px 1fr">
+        <div class="nnbox"><svg class="nn" id="s10nn" viewBox="0 0 600 600" fill="none"></svg></div>
+        <div class="col wide">
+          <div class="pills" id="s10pick"><button class="pill" data-i="0">Haiku 4.5</button><button class="pill" data-i="1">Sonnet 5</button><button class="pill" data-i="2">Opus 5</button><button class="pill" data-i="3">Fable 5</button></div>
+          <div class="pd" id="s10pd"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 <!-- S8 비용 · case 1. 입력은 남색, 출력은 주황 -->
-<section class="s" id="s8" data-steps="5" data-hook="4" data-sec="Model">
-  <div class="head"><div class="eye">Model</div><div class="h"><span class="no">2.</span> 토큰과 비용 <span class="hs">: case 1 빈 채팅창</span></div></div>
+<section class="s" id="s8" data-steps="4" data-sec="Model">
+  <div class="head"><div class="h"><span class="no">5.</span> 비용</div><div class="lead">case 1 빈 채팅창</div></div>
   <div class="main cols side" style="--side:760px">
     <div class="k fill">
       <div class="k-msgs">
@@ -99,11 +136,10 @@
       <ul class="bullets" data-step="4"><li>출력 토큰이 입력 토큰보다 <b>5배</b> 정도 비쌈</li><li>이해보다 생성에 쓰이는 연산이 더 어렵고 비쌈</li></ul>
     </div>
   </div>
-  <div class="thread" data-step="5"><span class="a">출력 토큰이 입력 토큰보다 5배 비쌈</span><span class="b">같은 채팅창에 이어서 보내면 어떻게 되는가</span></div>
 </section>
 <!-- S9 비용 · case 2 · 같은 채팅창에 이어서. 3단계에서 앞의 입력과 출력이 모두 '이전 입력' 색이 된다 -->
-<section class="s" id="s9" data-steps="5" data-hook="4" data-sec="Model">
-  <div class="head"><div class="eye">Model</div><div class="h"><span class="no">2.</span> 토큰과 비용 <span class="hs">: case 2 같은 채팅창에 이어서</span></div></div>
+<section class="s" id="s9" data-steps="5" data-sec="Model">
+  <div class="head"><div class="h"><span class="no">5.</span> 비용</div><div class="lead">case 2 같은 채팅창에 이어서</div></div>
   <div class="main cols side" style="--side:760px">
     <div class="k fill" id="s9k">
       <div class="k-msgs">
@@ -115,51 +151,35 @@
       <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
     </div>
     <div class="bill" id="s9bill">
-      <div class="lrow"><span class="bl swap"><span data-out="3">입력</span><span data-step="3">이전 입력</span></span><div class="bar"><i class="in p1" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx swap"><span data-out="3">× 1원</span><span data-step="3">× 0.1원</span></span><span class="bp swap"><span data-out="3">100원</span><span data-step="3">10원</span></span></div>
-      <div class="lrow"><span class="bl swap"><span data-out="3">출력</span><span data-step="3">이전 출력</span></span><div class="bar"><i class="out p1" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx swap"><span data-out="3">× 5원</span><span data-step="3">× 0.1원</span></span><span class="bp swap"><span data-out="3">500원</span><span data-step="3">10원</span></span></div>
-      <div class="lrow" data-step="1"><span class="bl">새 입력</span><div class="bar"><i class="in" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx">× 1원</span><span class="bp">100원</span></div>
-      <div class="lrow" data-step="2"><span class="bl">출력</span><div class="bar"><i class="out" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx">× 5원</span><span class="bp">500원</span></div>
-      <div class="lsum"><span class="bl">합계</span><span class="bt swap"><span data-out="3">200토큰</span><span data-step="3">400토큰</span></span><span class="bp swap"><span data-out="3">600원</span><span data-step="3">620원</span></span></div>
-      <ul class="bullets" data-step="4"><li>이전의 입력과 출력을 <b>새로운 입력</b>으로 받아 연산</li><li>이전 입력 토큰은 연산 결과를 저장해 두어 <b>10%</b>만 청구</li><li>복잡한 문제라면 추론 과정도 모두 출력 토큰</li></ul>
+      <div class="lrow"><span class="bl swap"><span data-out="4">입력</span><span data-step="4">이전 입력</span></span><div class="bar"><i class="in p1" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx" data-step="4">× 0.1원</span><span class="bp" data-step="4">10원</span></div>
+      <div class="lrow"><span class="bl swap"><span data-out="4">출력</span><span data-step="4">이전 출력</span></span><div class="bar"><i class="out p1" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx" data-step="4">× 0.1원</span><span class="bp" data-step="4">10원</span></div>
+      <div class="lrow" data-step="1"><span class="bl">새 입력</span><div class="bar"><i class="in" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx" data-step="4">× 1원</span><span class="bp" data-step="4">100원</span></div>
+      <div class="lrow" data-step="2"><span class="bl">출력</span><div class="bar"><i class="out" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx" data-step="4">× 5원</span><span class="bp" data-step="4">500원</span></div>
+      <div class="lsum"><span class="bl">합계</span><span class="bt swap"><span data-out="3">200토큰</span><span data-step="3">400토큰</span></span><span class="bp" data-step="4">620원</span></div>
+      <ul class="bullets" data-step="5"><li>이전의 입력과 출력을 <b>새로운 입력</b>으로 받아 연산</li><li>이전 입력 토큰은 연산 결과를 저장해 두어 <b>10%</b>만 청구</li><li>복잡한 문제라면 추론 과정도 모두 출력 토큰</li></ul>
     </div>
   </div>
-  <div class="thread" data-step="5"><span class="a">이전의 입력과 출력이 모두 다시 들어가서 채팅이 길수록 비용 증가</span><span class="b">그렇다면 채팅창의 Sonnet, Opus는 무엇인가</span></div>
 </section>
-<!-- S10 이름 읽는 법 → 라인업 -->
-<section class="s" id="s10" data-steps="5" data-hook="4" data-sec="Model">
-  <div class="stack">
-    <div class="layer" data-out="1">
-      <div class="head"><div class="eye">Model</div><div class="h"><span class="no">3.</span> 모델 이름 읽는 법 <span class="hs">: 등급과 버전</span></div></div>
-      <div class="main cols" style="--cols:600px 1fr">
-        <div class="nnbox"><svg class="nn" id="s10nn0" viewBox="0 0 600 600" fill="none"></svg></div>
-        <div class="col wide nmcol"><div class="nm-ex"><span>Sonnet<small>이름은 등급</small></span><span>5<small>숫자는 버전</small></span></div></div>
-      </div>
-    </div>
-    <div class="layer" data-step="1">
-      <div class="head"><div class="eye">Model</div><div class="h"><span class="no">3.</span> Claude 모델 라인업 <span class="hs">: 지능과 속도와 비용</span></div></div>
-      <div class="main cols" style="--cols:600px 1fr">
-        <div class="nnbox"><svg class="nn" id="s10nn" viewBox="0 0 600 600" fill="none"></svg></div>
-        <div class="col wide">
-          <div class="pills" id="s10pick"><button class="pill" data-i="0">Haiku 4.5</button><button class="pill" data-i="1">Sonnet 5</button><button class="pill" data-i="2">Opus 5</button><button class="pill" data-i="3">Fable 5</button></div>
-          <div class="pd" id="s10pd"></div>
-        </div>
-      </div>
-    </div>
+<!-- S15 그렇다면 -->
+<section class="s" id="s15" data-steps="3" data-sec="Model">
+  <div class="head"><div class="h">그렇다면, 모델을 어떻게 써야 하는가?</div></div>
+  <div class="main mid bridge">
+    <div class="row" data-step="1"><span class="no">1</span><div>뇌는 정해져 있음. 우리는 <b>어떤 뇌를 얼마나 노력하게 할지</b> 고름</div></div>
+    <div class="row" data-step="2"><span class="no">2</span><div>뇌는 과거만 앎. 우리는 <b>맥락과 지시</b>를 넣어 줌</div></div>
+    <div class="row" data-step="3"><span class="no">3</span><div>고르는 것도 넣는 것도 <b>인터페이스</b>에서</div></div>
   </div>
-  <div class="thread" data-step="5"><span class="a">이름이 다르면 뇌 자체가 다름. 등급이 높을수록 더 깊이 생각하고 더 느리고 더 비쌈</span><span class="b">모델 자체는 손댈 수 없음. 우리가 정할 수 있는 것은 두 가지</span></div>
 </section>
-<!-- S11 모델 선택과 노력 수준 -->
-<section class="s" id="s11" data-steps="2" data-hook="1" data-sec="Model">
-  <div class="head"><div class="eye">Model</div><div class="h">모델 선택과 노력 수준 <span class="hs">: 모델에 대해 우리가 정할 수 있는 것</span></div></div>
-  <div class="main mid center items big">
-    <div class="it"><div class="t"><span class="no">1.</span>어떤 모델을 쓸 것인가</div></div>
-    <div class="it" data-step="1"><div class="t"><span class="no">2.</span>그 모델을 얼마나 노력하게 할 것인가</div></div>
-  </div>
-  <div class="thread" data-step="2"><span class="a">어떤 모델을 쓸 것인가, 얼마나 노력하게 할 것인가</span><span class="b">노력은 추상적인 것이 아니라 구체적인 메뉴로 있음</span></div>
+<!-- S16 섹션 · 인터페이스. 모델에서 인터페이스로 초점이 옮겨 간다 -->
+<section class="s blue" id="s16" data-steps="1" data-nofoot>
+  <div class="main tri"><div class="fig lit-model" id="s16fig"></div></div>
+</section>
+<!-- S16a 간지 · 고르기 -->
+<section class="s blue" id="s16a" data-steps="0" data-nofoot>
+  <div class="main tri"><div class="divd"><div class="fig sm lit-if" id="s16afig"></div><div class="dt"><small>인터페이스 1</small><b>고르기</b><span>모델과 Effort</span></div></div></div>
 </section>
 <!-- S12 메뉴 -->
-<section class="s" id="s12" data-steps="3" data-hook="2" data-sec="Model">
-  <div class="head"><div class="eye">Model</div><div class="h"><span class="no">4.</span> Effort <span class="hs">: 노력 수준을 고르는 메뉴</span></div></div>
+<section class="s" id="s12" data-steps="2" data-sec="Model">
+  <div class="head"><div class="h"><span class="no">1.</span> 모델과 Effort</div><div class="lead">모델에 대해 우리가 정할 수 있는 두 가지</div></div>
   <div class="main cols side" style="--side:600px">
     <div class="k fill" id="s12k">
       <div class="k-msgs"></div>
@@ -185,11 +205,10 @@
       <div class="it" data-step="2"><div class="t"><span class="no">2.</span>Effort</div><div class="d lvls"><span>Low</span><span>Medium</span><span>High</span><span>xhigh</span><span>Max</span></div></div>
     </div>
   </div>
-  <div class="thread" data-step="3"><span class="a">모델은 이름을 눌러 변경, Effort는 다섯 단계</span><span class="b">Effort는 무엇을 조정하는가</span></div>
 </section>
 <!-- S13 Effort -->
-<section class="s" id="s13" data-steps="3" data-hook="2" data-sec="Model">
-  <div class="head"><div class="eye">Model</div><div class="h"><span class="no">4.</span> Effort <span class="hs">: 사고를 조정하는 주요 수단</span></div>
+<section class="s" id="s13" data-steps="2" data-sec="Model">
+  <div class="head"><div class="h"><span class="no">1.</span> Effort</div><div class="lead">사고를 조정하는 주요 수단</div>
     <ul class="bullets cap sub">
       <li>Effort를 높이면 답이 더 <b>꼼꼼</b>해지지만 시간이 더 걸리고 토큰을 더 많이 사용하는 경향이 있음</li>
       <li>토큰 예산이 아니라 <b>“이 정도의 노력을 들여서 일해라”</b>라는 소프트한 신호</li>
@@ -210,11 +229,10 @@
       <div class="vg"><div class="vt"><i id="s13g2"></i></div><span>어려운 질문</span></div>
     </div>
   </div>
-  <div class="thread" data-step="3"><span class="a">Effort는 모델을 바꾸지 않고 얼마나 깊이 생각할지를 정함</span><span class="b">그렇다면 모델과 Effort를 어떻게 조합하는가</span></div>
 </section>
 <!-- S13b 모델과 Effort · 대학생의 뇌와 아인슈타인의 뇌 -->
-<section class="s" id="s13b" data-steps="3" data-hook="2" data-sec="Model">
-  <div class="head"><div class="eye">Model</div><div class="h"><span class="no">4.</span> 모델과 Effort <span class="hs">: 대학생의 뇌와 아인슈타인의 뇌</span></div></div>
+<section class="s" id="s13b" data-steps="2" data-sec="Model">
+  <div class="head"><div class="h"><span class="no">1.</span> 모델과 Effort</div><div class="lead">대학생의 뇌와 아인슈타인의 뇌</div></div>
   <div class="main mid">
     <div class="duo">
       <div class="who">
@@ -234,40 +252,14 @@
     </div>
     <div class="rule" data-step="2">아무리 <b>Max</b>로 노력 수준을 높여도 대학생이 풀 수 없는 문제는 존재<br>그런 문제는 노력 수준을 높이는 게 아니라 <b>모델을 변경</b></div>
   </div>
-  <div class="thread" data-step="3"><span class="a">노력 수준으로 풀리지 않는 문제는 모델을 변경</span><span class="b">그 뇌는 언제까지의 정보를 학습했는가</span></div>
 </section>
-<!-- S14 지식 컷오프 · 정의는 제목 아래, 시간축은 모델마다 한 줄 -->
-<section class="s" id="s14" data-steps="3" data-hook="2" data-sec="Model">
-  <div class="head"><div class="eye">Model</div><div class="h"><span class="no">5.</span> Knowledge cutoff <span class="hs">: 학습이 끝난 시점</span></div>
-    <div class="body">모델 학습에 사용한 데이터가 최대 어느 시점까지 포함되었는가를 나타내는 <b>시간적 기준선</b><br><span data-step="1">학습이 끝난 시점 이후의 정보는 <b>모델이 알 수 없음</b></span><br><span data-step="2">아인슈타인의 뇌는 살아 있던 <b>1900년대 초중반</b>까지의 정보만 학습, 그 이후의 정보는 알 수 없음</span></div>
-  </div>
-  <div class="main mid">
-    <div class="axis" id="s14ax">
-      <div class="ticks"><div class="lgd"><span><i class="pt"></i>지식 컷오프</span><span><i class="rl"></i>출시</span></div><span style="--x:0%">25.01</span><span style="--x:30%">25.07</span><span style="--x:60%">26.01</span><span style="--x:90%">26.07</span><span style="--x:100%" class="end">오늘</span></div>
-      <span class="nm">Haiku 4.5</span><div class="tr"><span class="unk" style="--x:7.5%"></span><span class="pt" style="--x:7.5%"></span><span class="dt" style="--x:7.5%">25.02</span><span class="rl" style="--x:47.5%"></span><span class="dt" style="--x:47.5%">25.10</span></div>
-      <span class="nm">Sonnet 5</span><div class="tr"><span class="unk" style="--x:62.5%"></span><span class="pt" style="--x:62.5%"></span><span class="dt" style="--x:62.5%">26.01</span><span class="rl" style="--x:87.5%"></span><span class="dt" style="--x:87.5%">26.06</span></div>
-      <span class="nm">Opus 5</span><div class="tr"><span class="unk" style="--x:82.5%"></span><span class="pt" style="--x:82.5%"></span><span class="dt" style="--x:82.5%">26.05</span><span class="rl" style="--x:92.5%"></span><span class="dt" style="--x:92.5%">26.07</span></div>
-      <span class="nm">Fable 5</span><div class="tr"><span class="unk" style="--x:62.5%"></span><span class="pt" style="--x:62.5%"></span><span class="dt" style="--x:62.5%">26.01</span><span class="rl" style="--x:87.5%"></span><span class="dt" style="--x:87.5%">26.06</span></div>
-    </div>
-  </div>
-  <div class="thread" data-step="3"><span class="a">모델은 학습이 끝난 시점까지의 정보만 앎</span><span class="b">그렇다면 모델을 어떻게 써야 하는가</span></div>
-</section>
-<!-- S15 그렇다면 -->
-<section class="s" id="s15" data-steps="3" data-sec="Model">
-  <div class="head"><div class="eye">Model</div><div class="h">그렇다면, 모델을 어떻게 써야 하는가?</div></div>
-  <div class="main mid bridge">
-    <div class="row" data-step="1"><span class="no">1</span><div>모델 자체는 <b>과거의 정보를 학습한 뇌</b>라는 것을 인지하고 사용</div></div>
-    <div class="row" data-step="2"><span class="no">2</span><div>그렇기 때문에 모델에게 <b>우리의 맥락과 지시</b>를 명확히 전달</div></div>
-    <div class="row" data-step="3"><span class="no">3</span><div>그 두 가지를 효과적으로 달성하기 위한 <b>인터페이스</b>를 숙지</div></div>
-  </div>
-</section>
-<!-- S16 섹션 · 인터페이스. 모델에서 인터페이스로 초점이 옮겨 간다 -->
-<section class="s blue" id="s16" data-steps="1" data-nofoot>
-  <div class="main tri"><div class="fig lit-model" id="s16fig"></div></div>
+<!-- S16b 간지 · 쌓기 -->
+<section class="s blue" id="s16b" data-steps="0" data-nofoot>
+  <div class="main tri"><div class="divd"><div class="fig sm lit-if" id="s16bfig"></div><div class="dt"><small>인터페이스 2</small><b>쌓기</b><span>컨텍스트 윈도우에 넣는 것</span></div></div></div>
 </section>
 <!-- S17 컨텍스트 윈도우 -->
-<section class="s" id="s17" data-steps="8" data-hook="7" data-sec="Interface">
-  <div class="head"><div class="eye">Interface</div><div class="h">컨텍스트 윈도우 <span class="hs">: 모델의 작업 기억 공간 (입력 공간)</span></div></div>
+<section class="s" id="s17" data-steps="8" data-sec="Interface">
+  <div class="head"><div class="h"><span class="no">2.</span> 컨텍스트 윈도우</div><div class="lead">모델의 작업 기억 공간 (입력 공간)</div></div>
   <div class="main">
     <div class="cw" id="s17cw">
       <div class="lbl">하나의 대화가 시작되면 프롬프트와 <b>함께</b> 컨텍스트 윈도우에 들어가는 것. 지금 모델은 <b>100만 토큰</b>까지</div>
@@ -284,11 +276,10 @@
       </div>
     </div>
   </div>
-  <div class="thread" data-step="8"><span class="a">모든 입출력은 컨텍스트 윈도우에 쌓이고 모델은 그 안의 정보로 답함</span><span class="b">그 안에 무엇을 넣느냐에 따라 출력이 바뀜. 가장 기본은 프롬프트</span></div>
 </section>
 <!-- S18 프롬프트 · 한 장 전체가 가이드 -->
-<section class="s" id="s18" data-steps="2" data-hook="1" data-sec="Interface">
-  <div class="head"><div class="eye">Interface</div><div class="h"><span class="no">1.</span> 프롬프트 <span class="hs">: 보낼 때마다 직접 쓰는 입력</span></div><div class="body">AI에게 특정 작업을 지시하기 위해 입력하는 명령어, 질문, 요청 텍스트</div></div>
+<section class="s" id="s18" data-steps="1" data-sec="Interface">
+  <div class="head"><div class="h"><span class="no">3.</span> 프롬프트</div><div class="lead">보낼 때마다 직접 쓰는 입력</div></div>
   <div class="main guidebox">
     <div class="guide" id="s18g">
       <div class="gt"><span>프롬프트 엔지니어링 가이드</span><span>항목</span><span>무엇을 적는가</span><span>이렇게</span></div>
@@ -303,19 +294,17 @@
     </div>
     <div class="over" data-step="1">이걸 다 외워야 할까…?</div>
   </div>
-  <div class="thread" data-step="2"><span class="a">가이드의 항목은 많지만 외울 것이 아님</span><span class="b">전부 한 문장으로 수렴함. 사람에게 지시하듯</span></div>
 </section>
 <!-- S19 사람에게 지시하듯 -->
-<section class="s" id="s19" data-steps="1" data-hook="0" data-sec="Interface">
+<section class="s" id="s19" data-steps="0" data-sec="Interface">
   <div class="main mid center">
     <div class="h2 soft">물론 AI 서비스에서 새로 모델을 출시할 때마다<br>그 특성에 맞게 프롬프트 가이드를 주긴 하지만…</div>
     <div class="h one"><span class="soft">기본적으로</span> 사람에게 지시하듯 프롬프팅해야 함!</div>
   </div>
-  <div class="thread" data-step="1"><span class="a">사람에게 지시하듯</span><span class="b">왜 그런가. AI의 상황을 이해해 보면 바로 느낄 수 있음</span></div>
 </section>
 <!-- S20 AI의 상황 · 맥락이 없을 때 -->
-<section class="s" id="s20" data-steps="3" data-hook="2" data-sec="Interface">
-  <div class="head"><div class="eye">Interface</div><div class="h">AI의 상황을 이해해보기</div><div class="body">AI의 입장이 되어 보면 어떻게 프롬프트를 넣어야 할지 알 수 있음</div></div>
+<section class="s" id="s20" data-steps="2" data-sec="Interface">
+  <div class="head"><div class="h">AI의 상황을 이해해보기</div><div class="lead">AI의 입장이 되어 보면 어떻게 프롬프트를 넣어야 할지 알 수 있음</div></div>
   <div class="main">
     <div class="state">이 회사가 어떤 회사인지, 내 상사가 누구인지, 나는 무슨 업무를 해야 하는지 하나도 모르는 상태</div>
     <div class="k fill">
@@ -326,11 +315,10 @@
       <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
     </div>
   </div>
-  <div class="thread" data-step="3"><span class="a">맥락이 없으면 가장 일반적인 응답을 준비하고 목적을 되물음</span><span class="b">그런데 친절한 상사가 와서 말해 준다면</span></div>
 </section>
 <!-- S21 AI의 상황 · 친절한 상사 -->
-<section class="s" id="s21" data-steps="2" data-hook="1" data-sec="Interface">
-  <div class="head"><div class="eye">Interface</div><div class="h">AI의 상황을 이해해보기</div><div class="body">AI의 입장이 되어 보면 어떻게 프롬프트를 넣어야 할지 알 수 있음</div></div>
+<section class="s" id="s21" data-steps="1" data-sec="Interface">
+  <div class="head"><div class="h">AI의 상황을 이해해보기</div><div class="lead">AI의 입장이 되어 보면 어떻게 프롬프트를 넣어야 할지 알 수 있음</div></div>
   <div class="main">
     <div class="state">그런데 친절한 상사가 와서 이렇게 말을 해 준다면</div>
     <div class="k fill">
@@ -341,11 +329,10 @@
       <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
     </div>
   </div>
-  <div class="thread" data-step="2"><span class="a">맥락과 지시가 있으면 모델 성능이 낮아도 요구사항대로 작업</span><span class="b">이 프롬프트를 매번 입력해야 하는가</span></div>
 </section>
 <!-- S22 프롬프트에서 입력 인터페이스로 · 말풍선을 다섯 가지 색으로 가른다 -->
-<section class="s" id="s22" data-steps="6" data-hook="5" data-sec="Interface">
-  <div class="head"><div class="eye">Interface</div><div class="h">프롬프트에서 인터페이스로 <span class="hs">: 업무가 달라져도 변하지 않는 부분</span></div></div>
+<section class="s" id="s22" data-steps="5" data-sec="Interface">
+  <div class="head"><div class="h">프롬프트에서 인터페이스로</div><div class="lead">업무가 달라져도 변하지 않는 부분</div></div>
   <div class="main mid">
     <div class="bub" id="s22p"><span class="g c2">우리 회사는 삼성벤처투자야. 우리 회사는 이런이런 업무를 하고, 나는 어떤 일을 하는 누구고,</span> <span class="g c1">너는 무슨 업무를 맡은 어떤 직책을 가지고 있고,</span> <span class="g c3">지금은 무슨 프로젝트를 하고 있고, 이 프로젝트의 맥락은 이런 거고,</span> <span class="g c5">당장 지금 해야 할 일은 앤트로픽에 대한 조사인데, 이런 부분을 이 수준까지 조사한 뒤에 워드 형태로 정리해 줘.</span> <span class="g c1">출력할 때는 보고서 형식의 문어체를 항상 쓰고,</span> <span class="g c4">우리는 이런 식으로 워드 보고서를 작성하니까 참고하고,</span> <span class="g c1">결론을 먼저 말하고 핵심 위주로 논리를 전개해 줘.</span></div>
     <div class="labels five">
@@ -356,11 +343,10 @@
       <div class="lb c5"><i>5</i><div><b>프롬프트</b><small>매번 직접</small></div></div>
     </div>
   </div>
-  <div class="thread" data-step="6"><span class="a">반복되는 부분은 지침, 메모리, 프로젝트로 분리</span><span class="b">각각이 어떻게 구성되어 있는지 하나씩</span></div>
 </section>
 <!-- S23 지침 -->
-<section class="s" id="s23" data-steps="3" data-hook="2" data-sec="Interface">
-  <div class="head"><div class="eye">Interface</div><div class="h"><span class="no">2.</span> 지침 <i class="sw c1"></i><i class="sw c3"></i><span class="hs">: 모든 대화에 자동으로 들어가는 입력</span></div></div>
+<section class="s" id="s23" data-steps="2" data-sec="Interface">
+  <div class="head"><div class="h"><span class="no">4.</span> 지침 <i class="sw c1"></i><i class="sw c3"></i></div><div class="lead">모든 대화에 자동으로 들어가는 입력</div></div>
   <div class="main cols side" style="--side:600px">
     <div class="st" id="s23st">
       <div class="nav"><div class="search">검색</div>
@@ -396,11 +382,10 @@
       <div class="col" data-step="2"><div class="h2">Claude 지침에 보통 넣는 것</div><ul class="bullets"><li>AI의 역할, 말투, 응답 톤, 출력 형식</li><li>처음부터 다 넣을 필요 없이 차츰차츰 내게 맞는 지침을 찾아 나가기</li></ul><div class="note">조직 지침은 관리자가 정하고 개인 지침보다 우선</div></div>
     </div>
   </div>
-  <div class="thread" data-step="3"><span class="a">한 번 적어 두면 모든 대화에 자동으로 들어감. 사람이 씀</span><span class="b">Claude가 스스로 쌓아 두는 입력도 있음</span></div>
 </section>
 <!-- S24 메모리 -->
-<section class="s" id="s24" data-steps="3" data-hook="2" data-sec="Interface">
-  <div class="head"><div class="eye">Interface</div><div class="h"><span class="no">3.</span> 메모리 <i class="sw c2"></i><span class="hs">: Claude가 대화에서 스스로 뽑아 쌓아 두는 입력</span></div></div>
+<section class="s" id="s24" data-steps="2" data-sec="Interface">
+  <div class="head"><div class="h"><span class="no">5.</span> 메모리 <i class="sw c2"></i></div><div class="lead">Claude가 대화에서 스스로 뽑아 쌓아 두는 입력</div></div>
   <div class="main cols side" style="--side:600px">
     <div class="st" id="s24st">
       <div class="nav"><div class="search">검색</div>
@@ -429,11 +414,10 @@
       <div class="note" data-step="1">엔터프라이즈는 기본 꺼짐. 관리자가 켜야 개인이 켤 수 있음</div>
     </div>
   </div>
-  <div class="thread" data-step="3"><span class="a">반복해서 나온 내용을 Claude가 스스로 항목으로 정리하고 대화 중에 갱신</span><span class="b">지식과 지침을 한 작업 단위로 묶어 두려면</span></div>
 </section>
 <!-- S26 프로젝트 -->
-<section class="s" id="s26" data-steps="4" data-hook="3" data-sec="Interface">
-  <div class="head"><div class="eye">Interface</div><div class="h"><span class="no">4.</span> 프로젝트 <i class="sw c3"></i><i class="sw c4"></i><span class="hs">: 지식과 지침을 묶어 둔 작업 공간</span></div></div>
+<section class="s" id="s26" data-steps="3" data-sec="Interface">
+  <div class="head"><div class="h"><span class="no">6.</span> 프로젝트 <i class="sw c3"></i><i class="sw c4"></i></div><div class="lead">지식과 지침을 묶어 둔 작업 공간</div></div>
   <div class="main">
     <div class="pj" id="s26pj">
       <div class="pl">
@@ -453,11 +437,10 @@
     </div>
     <div class="close-line center" data-step="3">자료를 올려 두면 그 프로젝트 안의 <b>모든 채팅</b>이 그 자료를 씀</div>
   </div>
-  <div class="thread" data-step="4"><span class="a">자료를 올려 두면 프로젝트 안의 모든 채팅이 그 자료를 씀</span><span class="b">그렇다면 프로젝트는 무엇을 기준으로 나누는가</span></div>
 </section>
 <!-- S27 프로젝트 사용하는 법 · 좌우 대칭 -->
-<section class="s" id="s27" data-steps="2" data-hook="1" data-sec="Interface">
-  <div class="head"><div class="eye">Interface</div><div class="h">프로젝트 사용하는 법 <span class="hs">: 나누는 기준은 산출물이 아니라 입력</span></div></div>
+<section class="s" id="s27" data-steps="1" data-sec="Interface">
+  <div class="head"><div class="h">프로젝트 사용하는 법</div><div class="lead">나누는 기준은 산출물이 아니라 입력</div></div>
   <div class="main cols split mid">
     <div class="col wide mid">
       <div class="h2">산출물 기준</div>
@@ -470,60 +453,64 @@
       <div class="body">자료는 <b>한 곳</b>에, 산출물의 형식은 <b>스킬</b>이 맡음</div>
     </div>
   </div>
-  <div class="thread" data-step="2"><span class="a">프로젝트는 입력을 담는 곳이므로 입력 기준으로 나눔</span><span class="b">지금까지의 레이어가 컨텍스트 윈도우에 들어가는 시점을 정리</span></div>
 </section>
 <!-- S29 입력 레이어 정리 -->
-<section class="s" id="s29" data-steps="5" data-hook="4" data-sec="Interface">
-  <div class="head"><div class="eye">Interface</div><div class="h">레이어 정리 <span class="hs">: 각 레이어가 컨텍스트 윈도우에 들어가는 시점</span></div></div>
+<section class="s" id="s29" data-steps="4" data-sec="Interface">
+  <div class="head"><div class="h">레이어 정리</div><div class="lead">각 레이어가 컨텍스트 윈도우에 들어가는 시점</div></div>
   <div class="main lay">
-    <div></div><div class="hd" data-step="1"><span>메시지 1</span></div><div class="hd" data-step="1"><span>메시지 2</span></div><div class="hd" data-step="1"><span>메시지 3</span></div>
-    <div class="rl">지침</div><div class="cell c-ins" data-step="1">자동으로 들어감</div><div class="cell c-ins" data-step="1">자동으로 들어감</div><div class="cell c-ins" data-step="1">자동으로 들어감</div>
-    <div class="rl">메모리</div><div class="cell c-mem" data-step="1">읽고 갱신</div><div class="cell c-mem" data-step="1">읽고 갱신</div><div class="cell c-mem" data-step="1">읽고 갱신</div>
-    <div class="rl">프롬프트</div><div class="cell c-pr" data-step="2">직접 작성</div><div class="cell c-pr" data-step="3">직접 작성</div><div class="cell c-pr" data-step="4">직접 작성</div>
-    <div class="rl">프로젝트 지식</div><div class="cell c-kn" data-step="2">전체가 들어감</div><div class="cell c-kn" data-step="3">전체가 들어감</div><div class="cell c-kn" data-step="4">커지면 검색되어 들어감</div>
+    <div></div><div class="hd" data-step="1"><span>대화 시작</span></div><div class="hd" data-step="2"><span>메시지 1</span></div><div class="hd" data-step="3"><span>메시지 2</span></div><div class="hd" data-step="4"><span>메시지 3</span></div>
+    <div class="rl">지침</div><div class="cell c-ins" data-step="1">자동으로 들어감</div><div></div><div></div><div></div>
+    <div class="rl">메모리</div><div class="cell c-mem" data-step="1">자동으로 들어감</div><div></div><div></div><div></div>
+    <div class="rl">프로젝트 지식</div><div class="cell c-kn" data-step="1">전체가 들어감<small>커지면 필요한 부분만 검색</small></div><div></div><div></div><div></div>
+    <div class="rl">프롬프트</div><div></div><div class="cell c-pr" data-step="2">직접 작성</div><div class="cell c-pr" data-step="3">직접 작성</div><div class="cell c-pr" data-step="4">직접 작성</div>
   </div>
-  <div class="thread" data-step="5"><span class="a">지침과 메모리는 자동으로, 프롬프트는 매번 직접, 프로젝트 지식은 전체가 들어가고 커지면 검색</span><span class="b">모델이 원래 모르던 정보를 넣는 방법이 파일과 검색</span></div>
 </section>
-<!-- S25 파일 · RAG -->
-<section class="s" id="s25" data-steps="3" data-hook="2" data-sec="Interface">
-  <div class="head"><div class="eye">Interface</div><div class="h"><span class="no">5.</span> 파일 <i class="sw c4"></i><span class="hs">: 검색 증강 생성 (RAG)</span></div></div>
+<!-- S25 자료 들여오기 · 사람이 넣는 길과 도구가 가져오는 길이 컨텍스트 윈도우로 모인다 -->
+<section class="s" id="s25" data-steps="3">
+  <div class="head"><div class="h"><span class="no">7.</span> 자료 들여오기</div><div class="lead">모델이 모르는 정보를 컨텍스트 윈도우에 넣는 두 길</div></div>
+  <div class="main mid">
+    <div class="intake">
+      <div class="src"><div class="h2">사람이 넣는다</div><div class="it">프롬프트에 직접 씀</div><div class="it">파일을 첨부함</div></div>
+      <div class="conn" data-step="1"></div>
+      <div class="cwb"><div class="cwt">컨텍스트 윈도우</div>
+        <div class="slot" data-step="1"><span class="p h">프롬프트</span><span class="p h">첨부한 파일</span></div>
+        <div class="slot" data-step="2"><span class="p t">웹 검색 결과</span><span class="p t">프로젝트 지식에서 찾은 부분</span><span class="p t">커넥터로 가져온 자료</span></div>
+      </div>
+      <div class="conn r" data-step="2"></div>
+      <div class="src"><div class="h2">모델이 도구로 가져온다</div><div class="it">웹 검색</div><div class="it">프로젝트 지식 검색</div><div class="it">커넥터</div></div>
+    </div>
+    <div class="close-line body center" data-step="3">찾아서 넣고 답하는 방식을 <b>RAG</b>(검색 증강 생성)라고 부름</div>
+  </div>
+</section>
+<!-- S36 커넥터 · 채팅에서 Drive를 검색해 답하고, 오른쪽은 커넥터 설정 -->
+<section class="s" id="s36" data-steps="3">
+  <div class="head"><div class="h"><span class="no">8.</span> 커넥터</div><div class="lead">외부 서비스와 Claude를 잇는 통로</div></div>
   <div class="main cols side" style="--side:640px">
     <div class="k fill">
       <div class="k-msgs">
-        <div class="swap">
-          <div data-out="1"><div class="u">미리내로보틱스의 시범 도입 고객이 몇 곳인지 알려 줘</div><div class="a">공개 자료에서는 확인할 수 없습니다</div></div>
-          <div data-step="1"><div class="u"><span class="chip"><svg><use href="#i-file"/></svg>미리내로보틱스_회사소개.md</span><br>미리내로보틱스의 시범 도입 고객이 몇 곳인지 알려 줘</div><div class="a">회사 소개 문서 기준으로 시범 도입 고객은 <b>세 곳</b>입니다.<br>물류 두 곳과 병원 한 곳<br><span class="badge"><b>출처</b> 회사소개.md 고객 절</span></div></div>
-        </div>
+        <div class="u">Drive에서 A사 IR 자료 찾아서 요약해 줘</div>
+        <div class="a" data-step="1"><span class="badge"><b>Google Drive</b> 검색 "A사 IR"</span><div class="tool"><svg><use href="#i-file"/></svg><div><b>A사_IR_2026H1.pdf</b><small>공유 드라이브 / 딜 검토 / A사</small></div></div><div class="ans" data-step="2">A사 IR 자료 기준으로 요약하면, 반도체 검사 장비를 만드는 시리즈 B 단계 회사입니다.<br>상반기 매출은 전년 대비 늘었고, 이번 라운드 목표는 …</div></div>
       </div>
       <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
     </div>
-    <div class="col mid">
-      <ul class="bullets"><li>답변을 만들기 전에 외부 문서에서 관련 정보를 <b>먼저 찾아보고</b> 그 정보를 기반으로 응답을 생성</li></ul>
-      <div class="flow" data-step="1"><span class="n">질문</span><span class="ar">↓</span><span class="n hi">문서에서 먼저 찾기</span><span class="ar">↓</span><span class="n">찾은 정보 + 질문</span><span class="ar">↓</span><span class="n">응답</span></div>
-      <div class="col" data-step="2"><div class="h2">넓은 의미로는 다 RAG</div><div class="pills"><span class="pill">파일 첨부</span><span class="pill">웹 검색</span><span class="pill">프로젝트 지식</span></div></div>
+    <div class="st cn" id="s36st">
+      <div class="pane">
+        <h4>커넥터</h4>
+        <div class="d">MCP라는 공개 표준 위에서 동작합니다. 연결한 서비스의 자료를 읽어 오고, 그 안에 실제로 쓸 수도 있습니다. 연결한 사람이 볼 수 있는 것만 Claude도 봅니다.</div>
+        <div class="crow"><b>Google Drive</b><span>연결됨</span><i class="tg"></i></div>
+        <div class="crow"><b>Gmail</b><span>연결됨</span><i class="tg"></i></div>
+        <div class="crow"><b>Google Calendar</b><span>연결 안 됨</span><i class="tg off"></i></div>
+        <div class="crow"><b>Slack</b><span>연결 안 됨</span><i class="tg off"></i></div>
+        <div class="crow"><b>GitHub</b><span>연결 안 됨</span><i class="tg off"></i></div>
+        <div class="crow adm" data-step="3"><b>Microsoft 365</b><span>관리자 승인 필요</span><i class="tg off"></i></div>
+        <div class="foot-d" data-step="3">조직 설정에서 관리자가 허용한 커넥터만 보입니다</div>
+      </div>
     </div>
   </div>
-  <div class="thread" data-step="3"><span class="a">첨부, 웹 검색, 프로젝트 지식은 넓은 의미로 다 RAG</span><span class="b">커넥터는 그 연장선이면서 한 걸음 더</span></div>
-</section>
-<!-- S36 커넥터 -->
-<section class="s" id="s36" data-steps="4" data-hook="3" data-sec="Interface">
-  <div class="head"><div class="eye">Interface</div><div class="h"><span class="no">6.</span> 커넥터 <span class="hs">: 외부 서비스와 Claude를 잇는 통로</span></div></div>
-  <div class="main cols" style="--cols:1000px 1fr">
-    <div class="hub" id="s36hub"></div>
-    <div class="col wide mid">
-      <ul class="bullets">
-        <li><b>MCP</b>라는 공개 표준 위에서 동작</li>
-        <li data-step="1">읽어 오는 것과 실제로 쓰는 것<br><b>둘 다</b> 가능</li>
-        <li data-step="2">연결하면 <b>내 권한 안에서만</b> 동작</li>
-        <li data-step="3">어떤 커넥터를 열지는 <b>관리자</b>가 정함</li>
-      </ul>
-    </div>
-  </div>
-  <div class="thread" data-step="4"><span class="a">읽어 오기만 하는 게 아니라 결과를 저쪽에 반영</span><span class="b">팀이 같이 보는 자료는 어디에 두는가</span></div>
 </section>
 <!-- S28 팀이 같이 쓰는 자료 · 프로젝트 지식 또는 공유 폴더 -->
-<section class="s" id="s28" data-steps="2" data-hook="1" data-sec="Interface">
-  <div class="head"><div class="eye">Interface</div><div class="h">팀이 같이 쓰는 자료 <span class="hs">: 프로젝트를 공유하거나 드라이브를 잇거나</span></div></div>
+<section class="s" id="s28" data-steps="1" data-sec="Interface">
+  <div class="head"><div class="h">팀이 같이 쓰는 자료</div><div class="lead">프로젝트를 공유하거나 드라이브를 잇거나</div></div>
   <div class="main cols split mid">
     <div class="col wide mid">
       <div class="h2">프로젝트 공유</div>
@@ -550,11 +537,10 @@
       <div class="body">팀 드라이브에 두면 <b>커넥터</b>로 Claude가 읽음</div>
     </div>
   </div>
-  <div class="thread" data-step="2"><span class="a">같은 조사를 열 번 반복하지 않도록 한 번 만들어 공유</span><span class="b">입력을 아무리 잘 넣어도 나오는 형태가 매번 다르면 쓰기 어려움</span></div>
 </section>
 <!-- S31 기본적인 방법 -->
-<section class="s" id="s31" data-steps="3" data-hook="2" data-sec="Interface">
-  <div class="head"><div class="eye">Interface</div><div class="h">결과물의 형식을 알려 주는 방법 <span class="hs">: 자세한 프롬프트와 예시</span></div><div class="body">입력을 아무리 잘 넣어도 나오는 형태가 매번 다르면 쓰기 어려움</div></div>
+<section class="s" id="s31" data-steps="2" data-sec="Interface">
+  <div class="head"><div class="h">결과물의 형식을 알려 주는 방법</div><div class="lead">자세한 프롬프트와 예시</div><div class="body">입력을 아무리 잘 넣어도 나오는 형태가 매번 다르면 쓰기 어려움</div></div>
   <div class="main">
    <div class="cols">
     <div class="col wide">
@@ -568,11 +554,10 @@
    </div>
    <div class="lines"><div data-step="1">둘 다 Anthropic이 권하는 방법. 형식을 명확히 지시하고 예시를 서너 개 보여주면 형식과 톤이 안정됨</div><div data-step="2">그런데 대화를 새로 열 때마다 <b>처음부터 다시 설명하고 다시 첨부</b>해야 함</div></div>
   </div>
-  <div class="thread" data-step="3"><span class="a">자세한 지시와 예시는 맞는 방법이지만 대화마다 반복됨</span><span class="b">반복되는 것은 옮겨 둔다. 지침과 같은 원리로, 스킬</span></div>
 </section>
 <!-- S33 스킬 -->
-<section class="s" id="s33" data-steps="3" data-hook="2" data-sec="Interface">
-  <div class="head"><div class="eye">Interface</div><div class="h"><span class="no">7.</span> 스킬 <span class="hs">: 지침과 스크립트와 자료를 묶어 둔 폴더</span></div></div>
+<section class="s" id="s33" data-steps="2" data-sec="Interface">
+  <div class="head"><div class="h"><span class="no">9.</span> 스킬</div><div class="lead">지침과 스크립트와 자료를 묶어 둔 폴더</div></div>
   <div class="main cols" style="--cols:640px 1fr">
     <div class="folder col mid">
       <div class="fn"><svg><use href="#i-folder"/></svg>deal-sourcing</div>
@@ -591,11 +576,10 @@
       <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
     </div>
   </div>
-  <div class="thread" data-step="3"><span class="a">스킬은 이름과 설명만 항상 들어 있다가 맞는 작업이 오면 본문을 읽음</span><span class="b">실제로 어떻게 쓰이는가</span></div>
 </section>
 <!-- S34 스킬 시연 -->
-<section class="s" id="s34" data-steps="4" data-hook="3" data-sec="Interface">
-  <div class="head"><div class="eye">Interface</div><div class="h">스킬 시연 <span class="hs">: deal-sourcing</span></div></div>
+<section class="s" id="s34" data-steps="3" data-sec="Interface">
+  <div class="head"><div class="h">스킬 시연</div><div class="lead">deal-sourcing</div></div>
   <div class="main cols side" style="--side:600px;position:relative">
     <div class="k fill">
       <div class="k-msgs">
@@ -641,11 +625,10 @@
       </div>
     </div>
   </div>
-  <div class="thread" data-step="4"><span class="a">자동 호출과 직접 호출</span><span class="b">스킬을 만들어 두면 좋은 점은 일관된 품질</span></div>
 </section>
 <!-- S35 스킬을 사용해야 하는 이유 · 보고서 두 장을 다시 만들어 본다 -->
-<section class="s" id="s35" data-steps="4" data-hook="3" data-sec="Interface">
-  <div class="head"><div class="eye">Interface</div><div class="h">스킬을 사용해야 하는 이유 <span class="hs">: 일관성과 재현성</span></div></div>
+<section class="s" id="s35" data-steps="3" data-sec="Interface">
+  <div class="head"><div class="h">스킬을 사용해야 하는 이유</div><div class="lead">일관성과 재현성</div></div>
   <div class="main">
     <div class="cols">
       <div class="col">
@@ -663,16 +646,14 @@
       <div class="doc" id="s35dR"></div>
     </div>
   </div>
-  <div class="thread" data-step="4"><span class="a">결과를 고정하면 고칠 지점이 명확해짐</span><span class="b">스킬과 커넥터를 팀 단위로 한 번에 맞추려면</span></div>
 </section>
 <!-- S37 플러그인 · 스킬과 커넥터 -->
-<section class="s" id="s37" data-steps="1" data-hook="0" data-sec="Interface">
-  <div class="head"><div class="eye">Interface</div><div class="h"><span class="no">8.</span> 플러그인 <span class="hs">: 스킬과 커넥터를 하나로 묶어 둔 패키지</span></div></div>
+<section class="s" id="s37" data-steps="0" data-sec="Interface">
+  <div class="head"><div class="h"><span class="no">10.</span> 플러그인</div><div class="lead">스킬과 커넥터를 하나로 묶어 둔 패키지</div></div>
   <div class="main cols" style="--cols:640px 1fr">
     <div class="pkg card"><div class="pk">플러그인</div><div class="bi">스킬</div><div class="bi">커넥터</div><div class="bi">서브에이전트</div></div>
     <div class="col wide mid"><ul class="bullets"><li>플러그인 하나를 설치하면 그 안에 든 구성이 <b>한 번에</b> 들어옴</li><li>팀 단위로 같은 작업 환경을 맞춰야 할 때 <b>관리자</b>가 배포</li></ul></div>
   </div>
-  <div class="thread" data-step="1"><span class="a">필요한 걸 하나씩 설정하는 대신 플러그인 하나로 구성이 한 번에</span><span class="b">오늘 내용은 Claude에만 해당하지 않음</span></div>
 </section>
 <!-- S38 마무리 -->
 <section class="s dark cover" id="s38" data-steps="0" data-nofoot style="background-image:url('../assets/cover-bg.jpg')">
@@ -683,5 +664,7 @@
   </div>
   <div class="end"><span></span><div class="who">삼성벤처투자<br>김대현</div></div>
 </section>
+
+
 
 </div></div>
