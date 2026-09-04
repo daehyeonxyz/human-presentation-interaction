@@ -19,7 +19,7 @@ slides.forEach(function (s, i) {
 function apply(s, k) {
   $$('[data-step]', s).forEach(function (el) { el.classList.toggle('on', +el.dataset.step <= k); });
   $$('[data-out]', s).forEach(function (el) { el.classList.toggle('off', +el.dataset.out <= k); });
-  var h = HOOK[s.id]; if (h && h.step) h.step(k);
+  var h = HOOK[s.id]; if (h && h.step) h.step(s.dataset.hook ? Math.min(k, +s.dataset.hook) : k);
 }
 function show(n) {
   n = Math.max(0, Math.min(slides.length - 1, n));
@@ -272,9 +272,9 @@ HOOK.s26 = { step: function (k) { $('s26pj').classList.toggle('focus', k >= 1 &&
 
 /* S36 · 허브. 여섯 서비스가 Claude 둘레에 선으로 이어진다 */
 (function () {
-  var host = $('s36hub'), W = 1000, H = 600, cx = W / 2, cy = H / 2, SV = ['Google Drive', 'Gmail', 'PowerPoint', 'File System', 'Excel', 'Word'];
+  var host = $('s36hub'), W = 1000, H = 520, cx = W / 2, cy = H / 2, SV = ['Google Drive', 'Gmail', 'Google Calendar', 'Slack', 'GitHub', 'Microsoft 365'];
   var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '">', nodes = '';
-  SV.forEach(function (n, i) { var ang = -Math.PI / 2 + i * Math.PI / 3; var x = cx + 370 * Math.cos(ang), y = cy + 230 * Math.sin(ang);
+  SV.forEach(function (n, i) { var ang = -Math.PI / 2 + i * Math.PI / 3; var x = cx + 370 * Math.cos(ang), y = cy + 200 * Math.sin(ang);
     svg += '<line x1="' + cx + '" y1="' + cy + '" x2="' + x + '" y2="' + y + '"/>';
     nodes += '<div class="sv on" style="left:' + x + 'px;top:' + y + 'px">' + n + '</div>'; });
   svg += '</svg>';
