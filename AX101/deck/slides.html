@@ -53,12 +53,12 @@
 <section class="s blue" id="s4" data-steps="1" data-nofoot>
   <div class="stack">
     <div class="layer tri" data-out="1"><div class="big">AX 101</div></div>
-    <div class="layer tri" data-step="1"><div class="orb lit-model lit-if" id="s4orb"></div></div>
+    <div class="layer tri" data-step="1"><div class="fig lit-model lit-if" id="s4fig"></div></div>
   </div>
 </section>
 <!-- S5 섹션 · 모델 -->
 <section class="s blue" id="s5" data-steps="0" data-nofoot>
-  <div class="main tri"><div class="orb lit-model" id="s5orb"></div></div>
+  <div class="main tri"><div class="fig lit-model" id="s5fig"></div></div>
 </section>
 <!-- S6 LLM · 프롬프트에 답하는 출력을 한 낱말씩 -->
 <section class="s" id="s6" data-steps="8" data-sec="Model">
@@ -202,10 +202,33 @@
     </div>
   </div>
 </section>
+<!-- S13b 모델과 Effort · 대학생의 뇌와 아인슈타인의 뇌 -->
+<section class="s" id="s13b" data-steps="2" data-sec="Model">
+  <div class="head"><div class="eye">Model</div><div class="h"><span class="no">4.</span> 모델과 Effort <span class="hs">: 대학생의 뇌와 아인슈타인의 뇌</span></div></div>
+  <div class="main mid">
+    <div class="duo">
+      <div class="who">
+        <div class="fig ink brain-s" id="s13bf1"></div>
+        <div class="wt">
+          <div class="nm">대학생의 뇌<small>Sonnet 5</small></div>
+          <div class="case" data-step="1"><div class="q">“대학생에게 시켜도 되지만 시간을 좀 드려야겠다”</div><div class="set">Sonnet 5 · Max</div></div>
+        </div>
+      </div>
+      <div class="who">
+        <div class="fig ink brain-l" id="s13bf2"></div>
+        <div class="wt">
+          <div class="nm">아인슈타인의 뇌<small>Fable 5</small></div>
+          <div class="case" data-step="1"><div class="q">“똑똑하니까 조금만 생각하면 바로 해결될 문제”</div><div class="set">Fable 5 · Low</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="rule" data-step="2">아무리 <b>Max</b>로 노력 수준을 높여도 대학생이 풀 수 없는 문제는 존재<br>그런 문제는 노력 수준을 높이는 게 아니라 <b>모델을 변경</b></div>
+  </div>
+</section>
 <!-- S14 지식 컷오프 · 정의는 제목 아래, 시간축은 모델마다 한 줄 -->
-<section class="s" id="s14" data-steps="1" data-sec="Model">
+<section class="s" id="s14" data-steps="2" data-sec="Model">
   <div class="head"><div class="eye">Model</div><div class="h"><span class="no">5.</span> Knowledge cutoff <span class="hs">: 학습이 끝난 시점</span></div>
-    <div class="body">모델 학습에 사용한 데이터가 최대 어느 시점까지 포함되었는가를 나타내는 <b>시간적 기준선</b><br><span data-step="1">학습이 끝난 시점 이후의 정보는 <b>모델이 알 수 없음</b></span></div>
+    <div class="body">모델 학습에 사용한 데이터가 최대 어느 시점까지 포함되었는가를 나타내는 <b>시간적 기준선</b><br><span data-step="1">학습이 끝난 시점 이후의 정보는 <b>모델이 알 수 없음</b></span><br><span data-step="2">아인슈타인의 뇌는 살아 있던 <b>1900년대 초중반</b>까지의 정보만 학습, 그 이후의 정보는 알 수 없음</span></div>
   </div>
   <div class="main mid">
     <div class="axis" id="s14ax">
@@ -228,7 +251,7 @@
 </section>
 <!-- S16 섹션 · 인터페이스. 모델에서 인터페이스로 초점이 옮겨 간다 -->
 <section class="s blue" id="s16" data-steps="1" data-nofoot>
-  <div class="main tri"><div class="orb lit-model" id="s16orb"></div></div>
+  <div class="main tri"><div class="fig lit-model" id="s16fig"></div></div>
 </section>
 <!-- S17 컨텍스트 윈도우 -->
 <section class="s" id="s17" data-steps="7" data-sec="Interface">

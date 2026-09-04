@@ -59,17 +59,18 @@ function nn(el, cols, opt) {
   el.innerHTML = html;
 }
 
-/* 모델과 인터페이스. 모델 원을 인터페이스 고리가 감싼다 (4 · 5 · 16장) */
-function orb(el) {
-  var c = 380, R = 352, r = 226, rc = 168;
-  el.innerHTML = '<svg viewBox="0 0 760 760">' +
-    '<path class="seg" fill-rule="evenodd" d="M' + c + ',' + (c - R) + ' A' + R + ',' + R + ' 0 1 1 ' + c + ',' + (c + R) + ' A' + R + ',' + R + ' 0 1 1 ' + c + ',' + (c - R) + ' Z M' + c + ',' + (c - r) + ' A' + r + ',' + r + ' 0 1 0 ' + c + ',' + (c + r) + ' A' + r + ',' + r + ' 0 1 0 ' + c + ',' + (c - r) + ' Z"/>' +
-    '<circle class="core" cx="' + c + '" cy="' + c + '" r="' + rc + '"/>' +
-    '<text class="t-seg t-if" x="' + c + '" y="' + (c - (R + r) / 2) + '">인터페이스</text>' +
-    '<text class="t-core" x="' + c + '" y="' + c + '">모델</text></svg>';
+/* 모델과 인터페이스. 사람의 머리와 어깨 실루엣 안에 뇌. 모델이면 뇌가, 인터페이스면 몸이 켜진다 (4 · 5 · 16장) */
+function figure(el, labels) {
+  el.innerHTML = '<svg viewBox="0 0 600 900">' +
+    '<path class="body" d="M40,900 V720 C40,620 120,560 210,530 C238,520 250,500 250,470 V400 H350 V470 C350,500 362,520 390,530 C480,560 560,620 560,720 V900 Z"/>' +
+    '<circle class="body head" cx="300" cy="230" r="172"/>' +
+    '<g class="brain"><path d="M300,120 C250,110 205,140 200,190 C170,200 165,250 195,270 C190,310 230,335 270,325 C285,340 315,340 330,325 C370,335 410,310 405,270 C435,250 430,200 400,190 C395,140 350,110 300,120 Z"/>' +
+    '<path class="gy" d="M300,124 V326 M215,200 C240,190 255,210 250,240 M385,200 C360,190 345,210 350,240 M235,290 C255,270 275,285 268,305 M365,290 C345,270 325,285 332,305 M262,150 C275,170 262,190 245,190 M338,150 C325,170 338,190 355,190"/></g>' +
+    '</svg>' + (labels === false ? '' : '<div class="fl"><span class="t-model">모델</span><span class="t-if">인터페이스</span></div>');
 }
-['s4orb', 's5orb', 's16orb'].forEach(function (id) { orb($(id)); });
-HOOK.s16 = { step: function (k) { $('s16orb').classList.toggle('lit-model', k < 1); $('s16orb').classList.toggle('lit-if', k >= 1); } };
+['s4fig', 's5fig', 's16fig'].forEach(function (id) { figure($(id)); });
+['s13bf1', 's13bf2'].forEach(function (id) { figure($(id), false); });
+HOOK.s16 = { step: function (k) { $('s16fig').classList.toggle('lit-model', k < 1); $('s16fig').classList.toggle('lit-if', k >= 1); } };
 
 /* S2 */
 HOOK.s2 = { step: function (k) { $('s2q').classList.toggle('is-dim', k >= 2); } };

@@ -115,15 +115,33 @@ b { font-weight: 800; }
 .tri .bx.lit { background: var(--white); color: var(--acc); }
 .tri .ar { font-size: var(--t-h); line-height: var(--l-h); color: rgba(255,255,255,.55); }
 
-/* 입력 · 모델 · 출력 · 모델 원을 입력과 출력 반원이 감싼다 (4 · 5 · 16 · 30장) */
-.orb { width: 760px; height: 760px; }
-.orb svg { width: 100%; height: 100%; display: block; overflow: visible; }
-.orb .seg { fill: rgba(255,255,255,.14); stroke: none; transition: fill var(--dur); }
-.orb .core { fill: rgba(255,255,255,.14); stroke: var(--acc); stroke-width: 14; transition: fill var(--dur); }
-.orb text { fill: rgba(255,255,255,.55); font-weight: 800; letter-spacing: -.03em; transition: fill var(--dur); text-anchor: middle; dominant-baseline: central; }
-.orb .t-core { font-size: 96px; line-height: 1; } .orb .t-seg { font-size: 64px; line-height: 1; }
-.orb.lit-if .seg, .orb.lit-model .core { fill: var(--white); }
-.orb.lit-if .t-if, .orb.lit-model .t-core { fill: var(--acc); }
+/* 모델과 인터페이스 · 머리와 어깨 실루엣 안의 뇌 (4 · 5 · 16장) */
+.fig { display: flex; align-items: center; gap: var(--gap-xl); height: 760px; }
+.fig svg { height: 100%; width: auto; display: block; overflow: visible; }
+.fig .body { fill: rgba(255,255,255,.14); transition: fill var(--dur); }
+.fig .brain path { fill: var(--acc); stroke: rgba(255,255,255,.55); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; transition: fill var(--dur), stroke var(--dur); }
+.fig .brain .gy { fill: none; }
+.fig.lit-if .body { fill: var(--white); }
+.fig.lit-model .brain path { fill: var(--white); stroke: var(--acc); }
+.fig.lit-model .brain .gy { fill: none; }
+.fig .fl { display: flex; flex-direction: column; gap: var(--gap-lg); }
+.fig .fl span { font-size: var(--t-decl-lg); line-height: var(--l-decl-lg); font-weight: 800; letter-spacing: -.03em; color: rgba(255,255,255,.35); transition: color var(--dur); white-space: nowrap; }
+.fig.lit-model .t-model, .fig.lit-if .t-if { color: var(--white); }
+/* 종이 위의 작은 흉상. 뇌 크기가 곧 등급이다 */
+.fig.ink { height: 420px; }
+.fig.ink .body { fill: var(--paper-3); }
+.fig.ink .brain path { fill: var(--acc); stroke: var(--white); stroke-width: 6; }
+.fig .brain { transform-box: fill-box; transform-origin: center; }
+.fig.brain-s .brain { transform: scale(.78); }
+.fig.brain-l .brain { transform: scale(1.14); }
+.duo { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-xl); }
+.duo .who { display: flex; align-items: center; gap: var(--gap); }
+.duo .wt { display: flex; flex-direction: column; gap: var(--gap-sm); }
+.duo .nm { font-size: var(--t-h); line-height: var(--l-h); font-weight: 800; letter-spacing: -.02em; }
+.duo .nm small { display: block; font-size: var(--t-h2); line-height: var(--l-h2); font-weight: 600; letter-spacing: 0; color: var(--mute); }
+.duo .case .q { font-size: var(--t-body); line-height: var(--l-body); }
+.duo .case .set { font-size: var(--t-h2); line-height: var(--l-h2); font-weight: 800; margin-top: var(--gap-3xs); }
+.rule { border-top: 2px solid var(--line); padding-top: var(--gap); font-size: var(--t-h2); line-height: var(--l-h2); font-weight: 500; }
 .fin { gap: var(--gap-lg); }
 .fin .p { font-size: var(--t-h3); line-height: var(--l-h3); font-weight: 300; }
 
