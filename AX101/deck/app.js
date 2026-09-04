@@ -59,22 +59,17 @@ function nn(el, cols, opt) {
   el.innerHTML = html;
 }
 
-/* 입력 · 모델 · 출력. 모델 원을 입력(왼쪽 반원)과 출력(오른쪽 반원)이 감싼다 */
+/* 모델과 인터페이스. 모델 원을 인터페이스 고리가 감싼다 (4 · 5 · 16장) */
 function orb(el) {
   var c = 380, R = 352, r = 226, rc = 168;
-  function half(sweepOuter, sweepInner) {
-    return 'M' + c + ',' + (c - R) + ' A' + R + ',' + R + ' 0 0 ' + sweepOuter + ' ' + c + ',' + (c + R) + ' L' + c + ',' + (c + r) + ' A' + r + ',' + r + ' 0 0 ' + sweepInner + ' ' + c + ',' + (c - r) + ' Z';
-  }
   el.innerHTML = '<svg viewBox="0 0 760 760">' +
-    '<path class="seg in" d="' + half(0, 1) + '"/><path class="seg out" d="' + half(1, 0) + '"/>' +
+    '<path class="seg" fill-rule="evenodd" d="M' + c + ',' + (c - R) + ' A' + R + ',' + R + ' 0 1 1 ' + c + ',' + (c + R) + ' A' + R + ',' + R + ' 0 1 1 ' + c + ',' + (c - R) + ' Z M' + c + ',' + (c - r) + ' A' + r + ',' + r + ' 0 1 0 ' + c + ',' + (c + r) + ' A' + r + ',' + r + ' 0 1 0 ' + c + ',' + (c - r) + ' Z"/>' +
     '<circle class="core" cx="' + c + '" cy="' + c + '" r="' + rc + '"/>' +
-    '<text class="t-seg t-in" x="' + (c - (R + r) / 2) + '" y="' + c + '">입력</text>' +
-    '<text class="t-seg t-out" x="' + (c + (R + r) / 2) + '" y="' + c + '">출력</text>' +
+    '<text class="t-seg t-if" x="' + c + '" y="' + (c - (R + r) / 2) + '">인터페이스</text>' +
     '<text class="t-core" x="' + c + '" y="' + c + '">모델</text></svg>';
 }
-['s4orb', 's5orb', 's16orb', 's30orb'].forEach(function (id) { orb($(id)); });
-HOOK.s16 = { step: function (k) { $('s16orb').classList.toggle('lit-model', k < 1); $('s16orb').classList.toggle('lit-in', k >= 1); } };
-HOOK.s30 = { step: function (k) { $('s30orb').classList.toggle('lit-in', k < 1); $('s30orb').classList.toggle('lit-out', k >= 1); } };
+['s4orb', 's5orb', 's16orb'].forEach(function (id) { orb($(id)); });
+HOOK.s16 = { step: function (k) { $('s16orb').classList.toggle('lit-model', k < 1); $('s16orb').classList.toggle('lit-if', k >= 1); } };
 
 /* S2 */
 HOOK.s2 = { step: function (k) { $('s2q').classList.toggle('is-dim', k >= 2); } };

@@ -118,12 +118,12 @@ b { font-weight: 800; }
 /* 입력 · 모델 · 출력 · 모델 원을 입력과 출력 반원이 감싼다 (4 · 5 · 16 · 30장) */
 .orb { width: 760px; height: 760px; }
 .orb svg { width: 100%; height: 100%; display: block; overflow: visible; }
-.orb .seg { fill: rgba(255,255,255,.14); stroke: var(--acc); stroke-width: 14; transition: fill var(--dur); }
+.orb .seg { fill: rgba(255,255,255,.14); stroke: none; transition: fill var(--dur); }
 .orb .core { fill: rgba(255,255,255,.14); stroke: var(--acc); stroke-width: 14; transition: fill var(--dur); }
 .orb text { fill: rgba(255,255,255,.55); font-weight: 800; letter-spacing: -.03em; transition: fill var(--dur); text-anchor: middle; dominant-baseline: central; }
 .orb .t-core { font-size: 96px; line-height: 1; } .orb .t-seg { font-size: 64px; line-height: 1; }
-.orb.lit-in .seg.in, .orb.lit-out .seg.out, .orb.lit-model .core { fill: var(--white); }
-.orb.lit-in .t-in, .orb.lit-out .t-out, .orb.lit-model .t-core { fill: var(--acc); }
+.orb.lit-if .seg, .orb.lit-model .core { fill: var(--white); }
+.orb.lit-if .t-if, .orb.lit-model .t-core { fill: var(--acc); }
 .fin { gap: var(--gap-lg); }
 .fin .p { font-size: var(--t-h3); line-height: var(--l-h3); font-weight: 300; }
 
