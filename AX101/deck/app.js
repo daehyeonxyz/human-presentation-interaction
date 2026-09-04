@@ -9,6 +9,16 @@ function $$(sel, root) { return [].slice.call((root || document).querySelectorAl
 var slides = $$('.s'), cur = 0, step = 0, HOOK = {}, timers = [];
 function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
 function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+/* 말풍선 본문을 .tx로 감싼다. 점이 먼저, 글이 나중에 켜지도록 */
+$$('.k .a[data-step]').forEach(function (a) {
+  var frag = [], cur = null;
+  [].slice.call(a.childNodes).forEach(function (nd) {
+    var isText = nd.nodeType === 3 || (nd.nodeType === 1 && (nd.tagName === 'BR' || nd.tagName === 'B' || nd.tagName === 'SPAN' && !nd.classList.contains('tt') && !nd.classList.contains('badge') && !nd.classList.contains('tx')));
+    if (isText) { if (!cur) { cur = document.createElement('span'); cur.className = 'tx'; frag.push(cur); } cur.appendChild(nd); }
+    else { cur = null; frag.push(nd); }
+  });
+  a.innerHTML = ''; frag.forEach(function (n) { a.appendChild(n); });
+});
 /* 꼬리표 */
 slides.forEach(function (s, i) {
   if (s.hasAttribute('data-nofoot')) return;
@@ -17,16 +27,27 @@ slides.forEach(function (s, i) {
   s.appendChild(f);
 });
 function apply(s, k) {
-  $$('[data-step]', s).forEach(function (el) { el.classList.toggle('on', +el.dataset.step <= k); });
+  var seen = {};
+  $$('[data-step]', s).forEach(function (el) {
+    var on = +el.dataset.step <= k, was = el.classList.contains('on');
+    if (on && !was) {
+      var g = el.closest('[data-stagger]');
+      if (g) { var key = g.id + ':' + el.dataset.step; seen[key] = seen[key] || 0; el.style.setProperty('--d', (seen[key]++ * (+g.dataset.stagger || 80)) + 'ms'); }
+    }
+    if (!on) el.style.removeProperty('--d');
+    el.classList.toggle('on', on);
+  });
   $$('[data-out]', s).forEach(function (el) { el.classList.toggle('off', +el.dataset.out <= k); });
   var h = HOOK[s.id]; if (h && h.step) h.step(s.dataset.hook ? Math.min(k, +s.dataset.hook) : k);
 }
+function swapText(el, fn) { el.classList.add('sw'); later(function () { fn(); void el.offsetWidth; el.classList.remove('sw'); }, 140); }
 function show(n) {
   n = Math.max(0, Math.min(slides.length - 1, n));
   var prev = slides[cur];
   clearTimers();
   cur = n; step = 0;
-  slides.forEach(function (s, i) { s.classList.toggle('active', i === n); });
+  slides.forEach(function (s, i) { s.classList.toggle('active', i === n); s.classList.remove('leaving'); });
+  if (prev !== slides[n]) { prev.classList.add('leaving'); setTimeout(function () { prev.classList.remove('leaving'); }, 400); }
   viewport.classList.toggle('dark', slides[n].classList.contains('dark')); viewport.classList.toggle('blue', slides[n].classList.contains('blue'));
   var h = HOOK[slides[n].id]; if (h && h.reset) h.reset();
   apply(slides[n], 0);
@@ -91,7 +112,7 @@ HOOK.s2 = { step: function (k) { $('s2q').classList.toggle('is-dim', k >= 2); } 
   HOOK.s3 = { step: function (k) { cards.classList.toggle('nest', k >= 3); if (k < 3) link.innerHTML = ''; } };
 })();
 
-/* S6 · 채팅 안에서 답이 한 토큰씩 자란다. 오른쪽 후보 판은 한 번에 서고, 고르는 건 최고 확률만이 아니다 */
+/* S6 · 한 Space 한 박자. 후보 넷이 60ms 계단으로 서고 막대가 자란 뒤, 뽑힌 행이 짙어지고, 300ms 뒤 낱말이 말풍선에 내려앉는다 */
 (function () {
   var GIVEN = ['벤처캐피탈은'];
   var STEPS = [
@@ -103,36 +124,45 @@ HOOK.s2 = { step: function (k) { $('s2q').classList.toggle('is-dim', k >= 2); } 
   ];
   var REST = ['수익을', '얻는', '회사입니다'];
   var ans = $('s6a'), list = $('s6list');
-  function drawSent(n, full) {
-    var words = GIVEN.concat(STEPS.slice(0, n).map(function (st) { return st.c[st.pick][0]; }));
-    if (full) words = words.concat(REST);
-    ans.innerHTML = words.map(function (w, i) { return '<span class="w' + (i === words.length - 1 && n > 0 && !full ? ' new' : '') + '">' + w + '</span>'; }).join(' ');
+  function words(n, full) { var w = GIVEN.concat(STEPS.slice(0, n).map(function (st) { return st.c[st.pick][0]; })); return full ? w.concat(REST) : w; }
+  function drawSent(n, full, land) {
+    var w = words(n, full), base = words(land ? n - (full ? 0 : 1) : n, false).length;
+    if (full && land) base = words(n, false).length;
+    ans.innerHTML = w.map(function (x, i) { var isNew = i >= base; return '<span class="w' + (isNew ? ' new' : ' on') + '" style="--d:' + ((i - base) * 80) + 'ms">' + x + '</span>'; }).join(' ');
+    if (land) later(function () { $$('#s6a .w.new').forEach(function (e) { e.classList.add('on'); }); }, 20);
   }
+  function header() { return '<div class="ch">다음 토큰 후보와 확률</div>'; }
   function drawCands(i) {
-    if (i < 0) { list.innerHTML = '<div class="ch">다음 토큰 후보와 확률</div>' + STEPS[0].c.map(function (c) { return '<div class="cand"><span>' + c[0] + '</span><div class="b"><i style="--w:' + c[1] + '%"></i></div><span class="p">' + c[1] + '%</span></div>'; }).join(''); return; }
-    if (i >= STEPS.length) { list.innerHTML = '<div class="ch">다음 토큰 후보와 확률</div><div class="done">문장이 끝날 때까지 같은 일을 반복</div>'; return; }
+    list.classList.remove('up');
+    if (i < 0) { list.innerHTML = header(); return; }
     var st = STEPS[i];
-    list.innerHTML = '<div class="ch">다음 토큰 후보와 확률</div>' + st.c.map(function (c, j) { return '<div class="cand' + (j === st.pick ? ' pick' : '') + '"><span>' + c[0] + '</span><div class="b"><i style="--w:' + c[1] + '%"></i></div><span class="p">' + c[1] + '%</span></div>'; }).join('');
+    list.innerHTML = header() + st.c.map(function (c, j) { return '<div class="cand" style="--d:' + (j * 60) + 'ms"><span>' + c[0] + '</span><div class="b"><i style="--w:' + c[1] + '%"></i></div><span class="p">' + c[1] + '%</span></div>'; }).join('');
+    later(function () { list.classList.add('up'); }, 30);
+    later(function () { var r = $$('#s6list .cand')[st.pick]; if (r) r.classList.add('pick'); }, 60 * 3 + 500 + 250);
   }
   HOOK.s6 = {
-    reset: function () { drawSent(0, false); drawCands(-1); },
+    reset: function () { clearTimers(); drawSent(0, false, false); drawCands(-1); },
     step: function (k) {
-      if (k >= 6) { drawSent(5, true); drawCands(6); return; }
-      drawSent(k, false); drawCands(k - 1 < 0 ? -1 : k - 1);
+      clearTimers();
+      if (k >= 6) { swapText(list, function () { drawCands(-1); }); drawSent(5, true, true); return; }
+      swapText(list, function () { drawCands(k - 1); });
+      later(function () { drawSent(k, false, true); }, 60 * 3 + 500 + 250 + 300);
     }
   };
 })();
 
 /* S7 · 같은 채팅. 어절 하나가 토큰 하나. Space 1 상자, Space 2 토큰 수 꼬리표 */
 (function () {
-  function chips(el) { var t = el.textContent.trim().split(/\s+/); el.innerHTML = t.map(function (w) { return '<span class="tk">' + w + '</span>'; }).join(' '); return t.length; }
-  var nu = chips($('s7u')), na = chips($('s7a'));
+  function chips(el) { var t = el.textContent.trim().split(/\s+/); el.innerHTML = t.map(function (w, i) { return '<span class="tk" style="--i:' + (i + (el.dataset.off | 0)) + '">' + w + '</span>'; }).join(' '); return t.length; }
+  var nu = chips($('s7u')); $('s7a').dataset.off = nu; var na = chips($('s7a'));
   $('s7u').insertAdjacentHTML('beforeend', ' <span class="tt in" data-step="2">' + nu + '토큰</span>');
   $('s7a').insertAdjacentHTML('beforeend', ' <span class="tt out" data-step="2">' + na + '토큰</span>');
   HOOK.s7 = { step: function (k) { $('s7k').classList.toggle('split', k >= 1); } };
 })();
 
 /* S8 · S9 · 장부 막대는 줄이 나타날 때 자란다 (CSS). 9장 3단계에 앞의 문답과 줄이 '이전 입력' 색이 된다 */
+function countUp(el, to, ms) { var t0 = performance.now(); function f(t) { var p = Math.min(1, (t - t0) / ms); p = 1 - Math.pow(1 - p, 3); el.textContent = Math.round(to * p) + '원'; if (p < 1) requestAnimationFrame(f); } requestAnimationFrame(f); }
+HOOK.s8 = { step: function (k) { if (k === 5) countUp($('s8sum'), 600, 700); } };
 HOOK.s9 = { step: function (k) { $('s9k').classList.toggle('prev', k >= 4); $('s9bill').classList.toggle('prev', k >= 4); } };
 
 /* S10 · 라인업. 등급이 오를수록 노드가 많아진다 */
@@ -150,7 +180,7 @@ HOOK.s9 = { step: function (k) { $('s9k').classList.toggle('prev', k >= 4); $('s
     $$('#s10pick button').forEach(function (b, i) { b.classList.toggle('sel', i === sel); });
     var m = sel >= 0 ? M[sel] : null;
     if (m) { nn(box, m.c, { w: 600, h: 600, gapY: m.g, r: m.r }); box.classList.remove('fade'); void box.offsetWidth; box.classList.add('fade'); } else box.innerHTML = '';
-    $('s10pd').innerHTML = m ? '<div class="pn">' + m.n + '</div><div class="pt">' + m.t + '</div><ul class="bullets">' + m.d.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ul>' : '';
+    swapText($('s10pd'), function () { $('s10pd').innerHTML = m ? '<div class="pn">' + m.n + '</div><div class="pt">' + m.t + '</div><ul class="bullets">' + m.d.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ul>' : ''; });
   }
   $$('#s10pick button').forEach(function (b) { b.addEventListener('click', function (e) { e.stopPropagation(); sel = +b.dataset.i; render(); b.blur(); }); });
   HOOK.s10 = { reset: function () { sel = -1; render(); }, step: function (k) { sel = k >= 1 ? Math.min(3, k - 1) : -1; render(); } };
@@ -172,7 +202,7 @@ HOOK.s12 = { step: function (k) {
   var lv = 2;
   function render() {
     $$('#s13lv .l').forEach(function (l) { l.classList.toggle('sel', +l.dataset.i === lv); });
-    $('s13en').textContent = LV[lv];
+    if ($('s13en').textContent !== LV[lv]) swapText($('s13en'), function () { $('s13en').textContent = LV[lv]; });
     $('s13g1').style.height = G[lv][0] + '%'; $('s13g2').style.height = G[lv][1] + '%';
   }
   $$('#s13lv .l').forEach(function (l) { l.addEventListener('click', function (e) { e.stopPropagation(); lv = +l.dataset.i; render(); }); });
@@ -181,7 +211,7 @@ HOOK.s12 = { step: function (k) {
 })();
 
 /* S14 · 모르는 구간 */
-HOOK.s14 = { step: function (k) { $$('#s14ax .unk').forEach(function (u) { u.classList.toggle('on', k >= 1); }); } };
+HOOK.s14 = { step: function (k) { $$('#s14ax .unk').forEach(function (u, i) { u.style.transitionDelay = k >= 1 ? (i * 90) + 'ms' : '0ms'; u.classList.toggle('on', k >= 1); }); } };
 
 /* S17 · 컨텍스트 윈도우. 대본 순서대로 채운다 */
 (function () {
@@ -198,18 +228,22 @@ HOOK.s14 = { step: function (k) { $$('#s14ax .unk').forEach(function (u) { u.cla
   var MAX = 12000, bar = $('s17bar'), lg = $('s17lg'), insp = $('s17i'), n = 0, hover = -1, ce = false;
   bar.innerHTML = IT.map(function (it, i) { return '<i data-i="' + i + '" style="background:' + it.c + '"></i>'; }).join('');
   lg.innerHTML = IT.map(function (it, i) { return '<span data-i="' + i + '"><i style="background:' + it.c + '"></i>' + it.n + '</span>'; }).join('');
+  var lastInsp = null;
   function showInsp(i) {
     var it = i === 'ce' ? CE : i >= 0 ? IT[i] : null;
-    insp.querySelector('.n i').style.background = it ? it.c : 'transparent';
-    insp.querySelector('.n span').textContent = it ? it.n : '';
-    insp.querySelector('.w').textContent = it ? it.w : '';
+    if (it === lastInsp) return; lastInsp = it;
+    swapText(insp, function () {
+      insp.querySelector('.n i').style.background = it ? it.c : 'transparent';
+      insp.querySelector('.n span').textContent = it ? it.n : '';
+      insp.querySelector('.w').textContent = it ? it.w : '';
+    });
   }
   function render() {
     $$('#s17bar i').forEach(function (s, i) { var on = i < n; s.style.width = on ? (IT[i].t / MAX * 100) + '%' : '0'; s.classList.toggle('on', on); s.classList.toggle('hot', i === hover); });
     $$('#s17lg span').forEach(function (s, i) { s.classList.toggle('on', i < n); });
-    bar.classList.toggle('focus', hover >= 0);
-    $('s17ph').textContent = n >= 7 ? 'A사 회사소개 자료 기준으로 시범 도입 고객 수를 정리해 줘' : 'Claude에게 메시지 보내기';
-    $('s17ph').style.color = n >= 7 ? 'var(--k-ink)' : '';
+    bar.classList.toggle('focus', hover >= 0); $('s17cw').classList.toggle('dimlg', hover >= 0); $$('#s17lg span').forEach(function (sp, i) { sp.classList.toggle('hot', i === hover); });
+    var ph = n >= 7 ? 'A사 회사소개 자료 기준으로 시범 도입 고객 수를 정리해 줘' : 'Claude에게 메시지 보내기';
+    if ($('s17ph').textContent !== ph) swapText($('s17ph'), function () { $('s17ph').textContent = ph; $('s17ph').style.color = n >= 7 ? 'var(--k-ink)' : ''; });
     showInsp(hover >= 0 ? hover : ce ? 'ce' : n - 1);
   }
   function bind(sel) { $$(sel).forEach(function (el) { el.addEventListener('mouseenter', function () { var i = +el.dataset.i; if (i < n) { hover = i; render(); } }); el.addEventListener('mouseleave', function () { hover = -1; render(); }); }); }
@@ -218,19 +252,33 @@ HOOK.s14 = { step: function (k) { $$('#s14ax .unk').forEach(function (u) { u.cla
 })();
 
 /* S18 · 가이드 표를 회색으로 눌러 버린다 */
+HOOK.s20 = { step: function (k) { var ph = $('s20ph'); var typed = k < 1; if ((ph.textContent === '앤트로픽에 대해 조사해줘') !== typed) swapText(ph, function () { ph.textContent = typed ? '앤트로픽에 대해 조사해줘' : 'Claude에게 메시지 보내기'; ph.style.color = typed ? 'var(--k-ink)' : ''; }); } };
 HOOK.s18 = { step: function (k) { $('s18g').classList.toggle('dim', k >= 1); } };
 
 /* S22 · 문단에서 나타나는 순서대로 번호를 붙인다 */
 HOOK.s22 = { step: function (k) {
-  for (var i = 1; i <= 5; i++) { $$('#s22p .g.c' + i).forEach(function (g) { g.classList.toggle('on', i <= k); }); $$('#s22 .labels .lb.c' + i).forEach(function (l) { l.classList.toggle('on', i <= k); }); }
+  $('s22k').classList.toggle('only5', k >= 5);
+  for (var i = 1; i <= 5; i++) {
+    var gs = $$('#s22p .g.c' + i);
+    gs.forEach(function (g, j) { g.style.transitionDelay = (i === k ? j * 80 : 0) + 'ms'; g.classList.toggle('on', i <= k); });
+    $$('#s22 .labels .lb.c' + i).forEach(function (l) { l.style.transitionDelay = (i === k ? gs.length * 80 + 150 : 0) + 'ms'; l.classList.toggle('on', i <= k); });
+  }
 } };
 
 /* S23 · S24 · 설정 화면에서 짚기 */
-HOOK.s23 = { step: function (k) { $('s23st').classList.toggle('focus', k >= 1); } };
-HOOK.s24 = { step: function (k) { $('s24st').classList.add('focus'); $('s24row').classList.toggle('hot', k === 0); $('s24sw').classList.toggle('hot', k === 1); $('s24sw2').classList.toggle('hot', k === 1); $('s24new').classList.toggle('hot', k === 2); } };
+HOOK.s23 = { step: function (k) { $('s23st').classList.toggle('focus', k >= 1 && k < 3); } };
+HOOK.s24 = { step: function (k) {
+  $('s24st').classList.add('focus'); $('s24row').classList.toggle('hot', k === 0); $('s24sw').classList.toggle('hot', k === 1); $('s24sw2').classList.toggle('hot', k === 1); $('s24new').classList.toggle('hot', k === 2);
+  $$('#s24sw .tg, #s24sw2 .tg').forEach(function (t) { t.classList.toggle('off', k < 1); });
+  var kin = $('s24kin'), typed = k >= 2; if ((kin.textContent !== '변경하거나 제거할 내용을 Claude에게 알려주세요') !== typed) swapText(kin, function () { kin.textContent = typed ? 'A사 딜은 9월 투자심의 안건이야, 기억해 줘' : '변경하거나 제거할 내용을 Claude에게 알려주세요'; kin.classList.toggle('typed', typed); });
+  $('s24kin').parentNode.classList.toggle('hot', k >= 2);
+} };
 
 /* S26 · 지침 → 프로젝트 지식 순서로 짚기 */
-HOOK.s26 = { step: function (k) { $('s26pj').classList.toggle('focus', k >= 1 && k <= 2); $('s26i').classList.toggle('hot', k === 1); $('s26k').classList.toggle('hot', k === 2); } };
+HOOK.s26 = { step: function (k) {
+  $('s26pj').classList.toggle('focus', k >= 1 && k <= 2); $('s26i').classList.toggle('hot', k === 1); $('s26k').classList.toggle('hot', k === 2);
+  var pin = $('s26pin'), typed = k >= 3; if ((pin.textContent !== '이 프로젝트에서 새 채팅') !== typed) swapText(pin, function () { pin.textContent = typed ? 'A사 시장 규모 확인해 줘' : '이 프로젝트에서 새 채팅'; pin.classList.toggle('typed', typed); });
+} };
 
 /* S34 · 스킬 시연. 진행 표시와 브리프 열기 */
 (function () {
@@ -242,38 +290,38 @@ HOOK.s26 = { step: function (k) { $('s26pj').classList.toggle('focus', k >= 1 &&
   $('s34card').addEventListener('click', function (e) { e.stopPropagation(); if (state().step < 3) window.finish(); });
 })();
 
-/* S35 · 보고서 생성. 왼쪽은 만들 때마다 판이 달라지고 오른쪽은 양식이 같고 줄 길이만 조금 흔들린다 */
+/* S35 · 보고서 생성. 오른쪽은 36장 브리프의 블록(제목·수치 여섯·벤토 열한 칸)이 매번 같은 자리에, 왼쪽은 같은 재료가 다른 판으로 */
 (function () {
   var L = $('s35dL'), Rr = $('s35dR');
   function rnd(a, b) { return a + Math.random() * (b - a); }
   function pct(v) { return 'width:' + Math.round(v) + '%'; }
   function line(w) { return '<div class="l" style="' + pct(w) + '"></div>'; }
-  function table() { var s = '<div class="tb">'; for (var i = 0; i < 6; i++) s += '<i></i>'; return s + '</div>'; }
+  function table(n) { var t = '<div class="tb">'; for (var i = 0; i < n; i++) t += '<i></i>'; return t + '</div>'; }
+  function bento(cols, n, ov) { var t = '<div class="bento" style="grid-template-columns:repeat(' + cols + ',1fr)">'; for (var i = 0; i < n; i++) t += '<i' + (ov && i === 0 ? ' class="ov"' : '') + '></i>'; return t + '</div>'; }
+  function delay(html) { var i = 0; return html.replace(/<div class="(t|h|l|tb|bento)"/g, function (m) { return m.replace('"', '" data-i="' + (i++) + '"'); }); }
   function left() {
     var h = '<div class="t" style="' + pct(rnd(30, 80)) + (Math.random() < .4 ? ';align-self:center' : '') + '"></div>';
-    var secs = 2 + Math.floor(Math.random() * 2), img = false;
-    for (var s = 0; s < secs; s++) {
-      var kind = Math.random();
-      if (Math.random() < .7) h += '<div class="h" style="' + pct(rnd(18, 45)) + '"></div>';
-      if (kind < .25 && !img) { img = true; h += '<div class="img" style="' + pct(rnd(40, 100)) + '"></div>'; }
-      else if (kind < .45) h += table();
-      else { var n = 1 + Math.floor(Math.random() * 2); for (var i = 0; i < n; i++) h += line(rnd(35, 100)); }
-    }
-    L.innerHTML = h;
+    if (Math.random() < .5) h += table(2 + Math.floor(Math.random() * 5));
+    var secs = 1 + Math.floor(Math.random() * 2);
+    for (var s = 0; s < secs; s++) { h += '<div class="h" style="' + pct(rnd(18, 45)) + '"></div>'; var n = 1 + Math.floor(Math.random() * 3); for (var i = 0; i < n; i++) h += line(rnd(35, 100)); }
+    h += bento(1 + Math.floor(Math.random() * 3), 8 + Math.floor(Math.random() * 4), false);
+    return h;
   }
   function right() {
-    var h = '<div class="t" style="' + pct(52) + '"></div>';
-    for (var s = 0; s < 3; s++) { h += '<div class="h" style="' + pct(28) + '"></div>'; for (var i = 0; i < 3; i++) h += line([96, 88, 62][i] + rnd(-6, 6)); }
-    h += '<div class="h" style="' + pct(28) + '"></div>' + table();
-    Rr.innerHTML = h;
+    var h = '<div class="t" style="' + pct(52) + '"></div>' + table(6);
+    h += '<div class="h" style="' + pct(28) + '"></div>' + line(96) + line(88);
+    h += bento(3, 11, true);
+    return h;
   }
-  function gen() { left(); right(); }
+  function paint(el, html) { el.classList.remove('up'); el.innerHTML = html; $$('*', el).forEach(function (n, i) { if (n.parentNode === el) n.style.setProperty('--d', (i * 40) + 'ms'); }); void el.offsetWidth; el.classList.add('up'); }
+  function gen() { paint(L, left()); paint(Rr, right()); }
   $('s35gen').addEventListener('click', function (e) { e.stopPropagation(); gen(); this.blur(); });
-  HOOK.s35 = { reset: gen };
-  gen();
+  HOOK.s35 = { reset: gen, step: function (k) { if (k >= 4) gen(); } };
 })();
 
 /* S36 · 커넥터. 마지막 Space에 관리자 승인 행만 남긴다 */
+HOOK.s33 = { step: function (k) { var f = $('s33f'); $$('#s33f .fi').forEach(function (r, i) { r.style.setProperty('--d', (i * 120) + 'ms'); }); f.classList.toggle('open', k >= 2); } };
+HOOK.s31 = { step: function (k) { $$('#s31c .k.rep').forEach(function (kk) { kk.classList.toggle('dim1', k >= 1); }); } };
 HOOK.s36 = { step: function (k) { $('s36st').classList.toggle('focus', k >= 3); } };
 
 /* 시작 */
