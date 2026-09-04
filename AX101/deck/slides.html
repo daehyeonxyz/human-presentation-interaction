@@ -81,18 +81,20 @@
     </div>
   </div>
 </section>
-<!-- S14 지식 컷오프 · 정의는 제목 아래, 시간축은 모델마다 한 줄 -->
-<section class="s" id="s14" data-steps="2" data-sec="Model">
-  <div class="head"><div class="h"><span class="no">3.</span> Knowledge cutoff</div><div class="lead">학습이 끝난 시점</div>
-    <div class="body">모델은 입력을 받아 출력할 때 <b>원래 학습된 정보</b>만 가지고 응답<br><span data-step="1">학습에 사용한 데이터가 어느 시점까지 포함되었는가를 나타내는 <b>시간적 기준선</b>. 그 이후의 정보는 <b>알 수 없음</b></span><br><span data-step="2">아인슈타인의 뇌는 살아 있던 <b>1900년대 초중반</b>까지의 정보만 학습, 그 이후의 정보는 알 수 없음</span></div>
-  </div>
+<!-- S10a 모델 학습 · 데이터가 신경망으로 들어가고, 학습에서 등급·버전·컷오프가 갈라진다 -->
+<section class="s" id="s10a" data-steps="4">
+  <div class="head"><div class="h"><span class="no">3.</span> 모델 학습</div><div class="lead">방대한 텍스트 데이터로 다음 토큰을 고르는 뇌를 만드는 일</div></div>
   <div class="main mid">
-    <div class="axis" id="s14ax">
-      <div class="ticks"><div class="lgd"><span><i class="pt"></i>지식 컷오프</span><span><i class="rl"></i>출시</span></div><span style="--x:0%">25.01</span><span style="--x:30%">25.07</span><span style="--x:60%">26.01</span><span style="--x:90%">26.07</span><span style="--x:100%" class="end">오늘</span></div>
-      <span class="nm">Haiku 4.5</span><div class="tr"><span class="unk" style="--x:7.5%"></span><span class="pt" style="--x:7.5%"></span><span class="dt" style="--x:7.5%">25.02</span><span class="rl" style="--x:47.5%"></span><span class="dt" style="--x:47.5%">25.10</span></div>
-      <span class="nm">Sonnet 5</span><div class="tr"><span class="unk" style="--x:62.5%"></span><span class="pt" style="--x:62.5%"></span><span class="dt" style="--x:62.5%">26.01</span><span class="rl" style="--x:87.5%"></span><span class="dt" style="--x:87.5%">26.06</span></div>
-      <span class="nm">Opus 5</span><div class="tr"><span class="unk" style="--x:82.5%"></span><span class="pt" style="--x:82.5%"></span><span class="dt" style="--x:82.5%">26.05</span><span class="rl" style="--x:92.5%"></span><span class="dt" style="--x:92.5%">26.07</span></div>
-      <span class="nm">Fable 5</span><div class="tr"><span class="unk" style="--x:62.5%"></span><span class="pt" style="--x:62.5%"></span><span class="dt" style="--x:62.5%">26.01</span><span class="rl" style="--x:87.5%"></span><span class="dt" style="--x:87.5%">26.06</span></div>
+    <div class="train">
+      <div class="data"><div class="h2">학습 데이터</div><div class="pile"><i></i><i></i><i></i></div><div class="cap">책, 웹, 코드, 대화 …</div></div>
+      <div class="conn" data-step="1"></div>
+      <div class="nnbox"><svg class="nn" id="s10ann" viewBox="0 0 600 600" fill="none"></svg></div>
+      <div class="conn r" data-step="2"></div>
+      <div class="outs">
+        <div class="out" data-step="2"><b>등급</b><span>얼마나 크게, 얼마나 많이 학습했는가</span><em>Haiku, Sonnet, Opus, Fable</em></div>
+        <div class="out" data-step="3"><b>버전</b><span>같은 등급을 새로 학습한 세대</span><em>4.5, 5</em></div>
+        <div class="out" data-step="4"><b>Knowledge cutoff</b><span>학습한 데이터가 언제까지인가</span><em>2026. 01</em></div>
+      </div>
     </div>
   </div>
 </section>
@@ -118,9 +120,24 @@
     </div>
   </div>
 </section>
+<!-- S14 지식 컷오프 · 정의는 제목 아래, 시간축은 모델마다 한 줄 -->
+<section class="s" id="s14" data-steps="2" data-sec="Model">
+  <div class="head"><div class="h"><span class="no">5.</span> Knowledge cutoff</div><div class="lead">학습이 끝난 시점</div>
+    <div class="body">모델은 입력을 받아 출력할 때 <b>원래 학습된 정보</b>만 가지고 응답<br><span data-step="1">학습에 사용한 데이터가 어느 시점까지 포함되었는가를 나타내는 <b>시간적 기준선</b>. 그 이후의 정보는 <b>알 수 없음</b></span><br><span data-step="2">아인슈타인의 뇌는 살아 있던 <b>1900년대 초중반</b>까지의 정보만 학습, 그 이후의 정보는 알 수 없음</span></div>
+  </div>
+  <div class="main mid">
+    <div class="axis" id="s14ax">
+      <div class="ticks"><div class="lgd"><span><i class="pt"></i>지식 컷오프</span><span><i class="rl"></i>출시</span></div><span style="--x:0%">25.01</span><span style="--x:30%">25.07</span><span style="--x:60%">26.01</span><span style="--x:90%">26.07</span><span style="--x:100%" class="end">오늘</span></div>
+      <span class="nm">Haiku 4.5</span><div class="tr"><span class="unk" style="--x:7.5%"></span><span class="pt" style="--x:7.5%"></span><span class="dt" style="--x:7.5%">25.02</span><span class="rl" style="--x:47.5%"></span><span class="dt" style="--x:47.5%">25.10</span></div>
+      <span class="nm">Sonnet 5</span><div class="tr"><span class="unk" style="--x:62.5%"></span><span class="pt" style="--x:62.5%"></span><span class="dt" style="--x:62.5%">26.01</span><span class="rl" style="--x:87.5%"></span><span class="dt" style="--x:87.5%">26.06</span></div>
+      <span class="nm">Opus 5</span><div class="tr"><span class="unk" style="--x:82.5%"></span><span class="pt" style="--x:82.5%"></span><span class="dt" style="--x:82.5%">26.05</span><span class="rl" style="--x:92.5%"></span><span class="dt" style="--x:92.5%">26.07</span></div>
+      <span class="nm">Fable 5</span><div class="tr"><span class="unk" style="--x:62.5%"></span><span class="pt" style="--x:62.5%"></span><span class="dt" style="--x:62.5%">26.01</span><span class="rl" style="--x:87.5%"></span><span class="dt" style="--x:87.5%">26.06</span></div>
+    </div>
+  </div>
+</section>
 <!-- S8 비용 · case 1. 입력은 남색, 출력은 주황 -->
 <section class="s" id="s8" data-steps="4" data-sec="Model">
-  <div class="head"><div class="h"><span class="no">5.</span> 비용</div><div class="lead">case 1 빈 채팅창</div></div>
+  <div class="head"><div class="h"><span class="no">6.</span> 비용</div><div class="lead">case 1 빈 채팅창</div></div>
   <div class="main cols side" style="--side:760px">
     <div class="k fill">
       <div class="k-msgs">
@@ -139,7 +156,7 @@
 </section>
 <!-- S9 비용 · case 2 · 같은 채팅창에 이어서. 3단계에서 앞의 입력과 출력이 모두 '이전 입력' 색이 된다 -->
 <section class="s" id="s9" data-steps="5" data-sec="Model">
-  <div class="head"><div class="h"><span class="no">5.</span> 비용</div><div class="lead">case 2 같은 채팅창에 이어서</div></div>
+  <div class="head"><div class="h"><span class="no">6.</span> 비용</div><div class="lead">case 2 같은 채팅창에 이어서</div></div>
   <div class="main cols side" style="--side:760px">
     <div class="k fill" id="s9k">
       <div class="k-msgs">

@@ -145,6 +145,7 @@ HOOK.s9 = { step: function (k) { $('s9k').classList.toggle('prev', k >= 4); $('s
   ];
   var sel = -1, box = $('s10nn');
   nn($('s10nn0'), M[1].c, { w: 600, h: 600, gapY: M[1].g, r: M[1].r });
+  nn($('s10ann'), M[2].c, { w: 600, h: 600, gapY: M[2].g, r: M[2].r });
   function render() {
     $$('#s10pick button').forEach(function (b, i) { b.classList.toggle('sel', i === sel); });
     var m = sel >= 0 ? M[sel] : null;
