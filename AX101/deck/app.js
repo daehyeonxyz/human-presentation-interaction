@@ -139,11 +139,9 @@ function netGraph(svg, size) {
 }
 function figure(el, labels) {
   el.innerHTML = '<svg viewBox="0 0 600 900">' +
-    '<path class="body" d="M40,900 V760 C40,600 160,510 300,510 C440,510 560,600 560,760 V900 Z"/>' +
-    '<circle class="body head" cx="300" cy="250" r="200"/>' +
-    '<svg class="nn fnn" x="175" y="135" width="250" height="180" viewBox="0 0 420 300"></svg>' +
+    '<path class="body" d="M0,900 V740 C0,570 140,470 300,470 C460,470 600,570 600,740 V900 Z"/>' +
+    '<circle class="model head" cx="300" cy="240" r="200"/>' +
     '</svg>' + (labels === false ? '' : '<div class="fl"><span class="t-model">모델</span><span class="t-if">인터페이스</span></div>');
-  netGraph(el.querySelector('svg.fnn'), el.classList.contains('brain-l') ? 'l' : el.classList.contains('brain-s') ? 's' : 'm');
 }
 $$('.fig').forEach(function (el) { figure(el, el.classList.contains('ink') ? false : undefined); });
 HOOK.s16 = { step: function (k) { $('s16fig').classList.toggle('lit-model', k < 1); $('s16fig').classList.toggle('lit-if', k >= 1); } };
@@ -210,8 +208,6 @@ HOOK.s2 = { step: function (k) { $('s2q').classList.toggle('is-dim', k >= 2); } 
 (function () {
   function chips(el) { var raw = el.textContent.trim(); var t = raw.indexOf('|') >= 0 ? raw.split('|') : raw.split(/\s+/); el.innerHTML = t.map(function (w, i) { return '<span class="tk" style="--i:' + (i + (el.dataset.off | 0)) + '">' + w + '</span>'; }).join(' '); return t.length; }
   var nu = chips($('s7u')); $('s7a').dataset.off = nu; var na = chips($('s7a'));
-  $('s7u').insertAdjacentHTML('beforeend', '<span class="tt in" data-step="2">' + nu + '토큰</span>');
-  $('s7a').insertAdjacentHTML('beforeend', '<span class="tt out" data-step="2">' + na + '토큰</span>');
   HOOK.s7 = { step: function (k) { $('s7k').classList.toggle('split', k >= 1); } };
 })();
 
@@ -436,3 +432,24 @@ var h0 = parseInt((location.hash || '#1').slice(1), 10); show(isNaN(h0) ? 0 : h0
 })();
 
 HOOK.s27 = { step: function (k) { $('s27r').classList.toggle('lit', k >= 1); } };
+
+/* S32b · 스킬로 묶기. 세 장이 폴더의 세 줄 자리로 날아가 작아지며 사라지고, 그 자리에 줄이 선다 */
+(function () {
+  var busy = [];
+  function fly() {
+    busy.forEach(function (a) { a.cancel(); }); busy = [];
+    var st = document.getElementById('stage').getBoundingClientRect(), kk = st.width / 1920;
+    var cols = $$('#s32bt > .col'), rows = $$('#s32bf .fi');
+    cols.forEach(function (col, i) {
+      var box = col.querySelector('.k, .man'), a = box.getBoundingClientRect(), b = rows[i].getBoundingClientRect();
+      var dx = (b.left + b.width * .2 - (a.left + a.width / 2)) / kk, dy = (b.top + b.height / 2 - (a.top + a.height / 2)) / kk;
+      var sx = Math.max(.12, b.width * .4 / a.width), sy = Math.max(.08, b.height / a.height);
+      busy.push(box.animate([{ transform: 'none', opacity: 1 }, { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(' + sx + ',' + sy + ')', opacity: 0 }], { duration: 640, delay: i * 80, easing: EASE, fill: 'forwards' }));
+      col.querySelector('.h2').animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, delay: i * 80, easing: EASE, fill: 'forwards' });
+    });
+    rows.forEach(function (r, i) { r.style.setProperty('--d', (620 + i * 80) + 'ms'); });
+    var t = $('s32bt'); busy.push(t.animate([{ height: t.offsetHeight + 'px' }, { height: '0px' }], { duration: 480, delay: 520, easing: EASE, fill: 'forwards' }));
+  }
+  function back() { busy.forEach(function (a) { a.cancel(); }); busy = []; $$('#s32bt, #s32bt .k, #s32bt .man, #s32bt .h2').forEach(function (el) { el.getAnimations().forEach(function (a) { a.cancel(); }); }); }
+  HOOK.s32b = { reset: back, step: function (k) { if (k >= 4) fly(); else back(); } };
+})();

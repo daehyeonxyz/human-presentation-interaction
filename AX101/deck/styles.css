@@ -128,24 +128,16 @@ b { font-weight: 800; }
 .fig { display: flex; align-items: center; gap: var(--gap-lg); height: 760px; padding-left: 360px; align-self: stretch; }
 .fig svg { height: 100%; width: auto; display: block; overflow: visible; }
 .fig .body { fill: rgba(255,255,255,.22); transition: fill 400ms var(--ease-smooth); }
-.fig svg.fnn { overflow: visible; width: 250px; height: 180px; }
-.fig svg.fnn line { stroke: rgba(255,255,255,.35); stroke-width: 3; transition: stroke 400ms var(--ease-smooth); }
-.fig svg.fnn circle { fill: var(--acc); stroke: none; stroke-width: 0; transition: fill 400ms var(--ease-smooth), stroke 400ms var(--ease-smooth); }
+.fig .model { fill: rgba(255,255,255,.22); transition: fill 400ms var(--ease-smooth); }
+.fig.lit-model .model { fill: var(--white); }
+.fig.ink .model { fill: var(--acc); }
 .fig.lit-if .body { fill: var(--white); }
-.fig.lit-if svg.fnn line { stroke: var(--acc); }
-.fig.lit-if svg.fnn circle { fill: var(--acc); }
-.fig.lit-model svg.fnn line { stroke: rgba(255,255,255,.85); }
-.fig.lit-model svg.fnn circle { fill: var(--white); }
-.fig.lit-if.lit-model svg.fnn line { stroke: var(--acc); }
-.fig.lit-if.lit-model svg.fnn circle { fill: var(--acc); }
 .fig .fl { display: flex; flex-direction: column; gap: var(--gap-lg); }
 .fig .fl span { font-size: var(--t-decl-lg); line-height: var(--l-decl-lg); font-weight: 800; letter-spacing: -.03em; color: rgba(255,255,255,.45); transition: color var(--dur); white-space: nowrap; }
 .fig.lit-model .t-model, .fig.lit-if .t-if { color: var(--white); }
 /* 종이 위의 작은 흉상. 뇌 크기가 곧 등급이다 */
 .fig.ink { height: 440px; padding-left: 0; align-self: auto; }
 .fig.ink .body { fill: var(--paper-3); }
-.fig.ink svg.fnn line { stroke: var(--acc); stroke-width: 3; }
-.fig.ink svg.fnn circle { fill: var(--acc); }
 .duo { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-xl); }
 .duo .who { display: flex; align-items: center; gap: var(--gap); }
 .duo .wt { display: flex; flex-direction: column; gap: var(--gap-sm); }
@@ -705,6 +697,7 @@ svg.nn.fade { animation: nnin 200ms var(--ease-out); }
 .k .a .w { opacity: 0; filter: blur(var(--blur)); transition: opacity 200ms var(--ease-out) var(--d, 0ms), filter 200ms var(--ease-out) var(--d, 0ms), color var(--t-state); }
 .k .a .w.on { opacity: 1; filter: none; }
 /* 7장 토큰은 면으로 */
+.k .tk { line-height: 1.05; vertical-align: baseline; }
 .k.split .tk { padding: 0; margin: 0; border-radius: 4px; background: rgba(255,255,255,.13); box-shadow: 0 0 0 2px rgba(255,255,255,.13); }
 .k.split .u .tk { background: rgba(255,255,255,.15); box-shadow: 0 0 0 2px rgba(255,255,255,.15); }
 .k .tt[data-step] { transition-delay: calc(var(--d, 0ms) + var(--d-tag)); }
@@ -1056,4 +1049,13 @@ svg.nn.morph path { fill: none; stroke: var(--n5); stroke-width: 1.5; transition
 .skl .man { flex: 1; background: var(--white); border-radius: var(--r-card); box-shadow: var(--shadow); padding: var(--gap-sm) var(--gap); font-size: var(--t-cap); line-height: var(--l-cap); white-space: pre-wrap; }
 .skl .man b { display: block; font-size: var(--t-body); line-height: var(--l-body); margin-bottom: var(--gap-2xs); }
 .skl .folder { align-self: start; width: 640px; }
-.skl.focus .three { opacity: var(--dim); }
+
+/* 64차 */
+#s8k .u .tt, #s8k .a .tt, #s9k .u .tt, #s9k .a .tt { position: absolute; top: 50%; transform: translateY(-50%); margin: 0; }
+#s8k .u .tt, #s9k .u .tt { right: calc(100% + 14px); }
+#s8k .a .tt, #s9k .a .tt { left: calc(100% + 14px); }
+#s8k .a, #s9k .a { max-width: 80%; }
+#s8bill .lrow, #s9bill .lrow { grid-template-columns: 1fr 120px 120px 150px; }
+#s8bill .lsum, #s9bill .lsum { grid-template-columns: 1fr 120px 120px 150px; }
+#s32bt { overflow: hidden; }
+.skl { justify-content: center; }
