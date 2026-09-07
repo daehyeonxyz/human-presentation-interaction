@@ -132,7 +132,7 @@ b { font-weight: 800; }
 .fig { display: flex; align-items: center; gap: var(--gap-lg); height: 760px; padding-left: 360px; align-self: stretch; }
 .fig svg { height: 100%; width: auto; display: block; overflow: visible; }
 .fig .body { fill: rgba(255,255,255,.22); transition: fill 400ms var(--ease-smooth); }
-.fig svg.fnn { overflow: visible; width: 360px; height: 260px; }
+.fig svg.fnn { overflow: visible; width: 250px; height: 180px; }
 .fig svg.fnn line { stroke: rgba(255,255,255,.35); stroke-width: 3; transition: stroke 400ms var(--ease-smooth); }
 .fig svg.fnn circle { fill: var(--acc); stroke: none; stroke-width: 0; transition: fill 400ms var(--ease-smooth), stroke 400ms var(--ease-smooth); }
 .fig.lit-if .body { fill: var(--white); }
@@ -709,8 +709,8 @@ svg.nn.fade { animation: nnin 200ms var(--ease-out); }
 .k .a .w { opacity: 0; filter: blur(var(--blur)); transition: opacity 200ms var(--ease-out) var(--d, 0ms), filter 200ms var(--ease-out) var(--d, 0ms), color var(--t-state); }
 .k .a .w.on { opacity: 1; filter: none; }
 /* 7장 토큰은 면으로 */
-.k.split .tk { padding: 0; margin: 0; border-radius: 6px; background: rgba(255,255,255,.13); box-shadow: 0 0 0 4px rgba(255,255,255,.13); }
-.k.split .u .tk { background: rgba(255,255,255,.15); box-shadow: 0 0 0 4px rgba(255,255,255,.15); }
+.k.split .tk { padding: 0; margin: 0; border-radius: 4px; background: rgba(255,255,255,.13); box-shadow: 0 0 0 2px rgba(255,255,255,.13); }
+.k.split .u .tk { background: rgba(255,255,255,.15); box-shadow: 0 0 0 2px rgba(255,255,255,.15); }
 .k .tt[data-step] { transition-delay: calc(var(--d, 0ms) + var(--d-tag)); }
 /* 8장 척추 */
 /* 9장 알약 hover */
@@ -1029,6 +1029,38 @@ svg.nn.morph path { fill: none; stroke: var(--n5); stroke-width: 1.5; transition
 #s27r.lit { opacity: 1; }
 .intake .rag .pill { background: var(--ink); color: var(--white); }
 #s37 .main.cols { align-items: center; }
+
+/* 63차 */
+.cwb2 { display: flex; flex-direction: column; gap: var(--gap-xs); justify-content: center; }
+.cwb2 .cwt { font-size: var(--t-cap); line-height: var(--l-cap); font-weight: 800; letter-spacing: .02em; }
+.cwb2 .cw .bar i { width: var(--w); }
+.cwb2 .cw .bar i[data-step]:not(.on) { width: 0; min-width: 0; }
+.cwb2 .cw .bar i.on { min-width: 28px; }
+.cwb2 .legend { display: flex; flex-direction: column; gap: var(--gap-2xs); margin-top: var(--gap-2xs); font-size: var(--t-body); line-height: var(--l-body); }
+.cwb2 .legend span { display: inline-flex; align-items: center; gap: var(--gap-xs); font-weight: 600; }
+.cwb2 .legend span i { width: 18px; height: 18px; border-radius: var(--r-dot); flex: none; }
+#s25k .a .trow { margin-bottom: 10px; }
+#s25k .a .tx { display: block; margin-top: 12px; }
+.pj .pans { display: none; margin-top: 24px; gap: 16px; align-items: flex-start; font-size: 20px; line-height: 28px; color: var(--k-ink); }
+.pj .pans.on { display: flex; }
+.pj .pans .dot { width: 28px; height: 28px; border-radius: 50%; background: var(--k-send); flex: none; margin-top: 2px; }
+.pj .pans .trow { display: flex; align-items: center; gap: 10px; color: var(--k-sub); margin-bottom: 8px; }
+.pj .pans .trow b { color: var(--k-ink); font-weight: 600; }
+.pj .pans .trow .ic { width: 24px; height: 24px; border-radius: 6px; background: var(--k-el2); border: 1px solid var(--k-bd); display: inline-flex; align-items: center; justify-content: center; }
+.pj .pans .trow .ic svg { width: 14px; height: 14px; }
+.pj .pans .tx { color: var(--k-ink); }
+.pj .box .f.hot { color: var(--k-ink); box-shadow: 0 0 0 3px var(--c4); border-radius: 8px; }
+.k .u .skc { color: var(--k-blue); font-weight: 600; }
+.skl { display: flex; flex-direction: column; gap: var(--gap); }
+.skl .three { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--gap); height: 460px; }
+.skl .three .col { min-height: 0; }
+.skl .three .k { flex: 1; min-height: 0; }
+.skl .three .k .k-msgs { padding: 24px; }
+.skl .three .k .u { max-width: 100%; }
+.skl .man { flex: 1; background: var(--white); border-radius: var(--r-card); box-shadow: var(--shadow); padding: var(--gap-sm) var(--gap); font-size: var(--t-cap); line-height: var(--l-cap); white-space: pre-wrap; }
+.skl .man b { display: block; font-size: var(--t-body); line-height: var(--l-body); margin-bottom: var(--gap-2xs); }
+.skl .folder { align-self: start; width: 640px; }
+.skl.focus .three { opacity: var(--dim); }
 
 </style></head>
 <body>
@@ -1458,13 +1490,14 @@ svg.nn.morph path { fill: none; stroke: var(--n5); stroke-width: 1.5; transition
   </div>
 </section>
 <!-- S26 프로젝트 -->
-<section class="s" id="s26" data-steps="3" data-sec="Interface">
+<section class="s" id="s26" data-steps="4" data-sec="Interface">
   <div class="head"><div class="h"><span class="no">6.</span> 프로젝트 <i class="sw c3"></i><i class="sw c4"></i></div><div class="lead">지식과 지침을 묶어 둔 작업 공간</div></div>
   <div class="main">
     <div class="pj" id="s26pj">
       <div class="pl">
         <div class="crumb">프로젝트 ›</div><div class="pn">반도체</div><div class="pdesc">반도체 섹터 딜 검토</div>
         <div class="pin"><span id="s26pin">이 프로젝트에서 새 채팅</span><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg class="chev"><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
+        <div class="pans" data-step="4"><i class="dot"></i><div><div class="trow"><i class="ic"><svg><use href="#i-book"/></svg></i><b>프로젝트 지식</b> 검색함<span>반도체_시장_2026.md</span><em>1건</em></div><div class="tx">반도체_시장_2026.md 기준으로 A사가 속한 검사 장비 시장은 2026년 …</div></div></div>
         <div class="chats"><h6>최근 채팅</h6>
           <div class="c"><b>반도체 장비 업체 비교</b><span>어제</span></div>
           <div class="c"><b>2분기 업황 요약</b><span>3일 전</span></div>
@@ -1503,19 +1536,26 @@ svg.nn.morph path { fill: none; stroke: var(--n5); stroke-width: 1.5; transition
     <div class="legend" id="s29lg"></div>
   </div>
 </section>
-<section class="s" id="s25" data-steps="3">
-  <div class="head"><div class="h"><span class="no">7.</span> 자료 들여오기</div><div class="lead">모델이 모르는 정보를 컨텍스트 윈도우에 넣는 두 길</div></div>
-  <div class="main">
-    <div class="intake" id="s25in" data-stagger="40">
-      <div class="src"><div class="h2">사람이 넣는다</div><div class="it">프롬프트에 직접 씀</div><div class="it">파일을 첨부함</div></div>
-      <div class="conn" data-step="1"></div>
-      <div class="cwb"><div class="cwt">컨텍스트 윈도우</div>
-        <div class="slot"><span class="p h" data-step="1">프롬프트</span><span class="p h" data-step="1">첨부한 파일</span></div>
-        <div class="slot"><span class="p t" data-step="2">웹 검색 결과</span><span class="p t kn" data-step="2">프로젝트 지식에서 찾은 부분</span><span class="p t" data-step="2">커넥터로 가져온 자료</span></div>
-        <div class="rag" data-step="3"><i></i><span class="pill">RAG</span></div>
+<!-- S25 자료 들여오기 · 한 답 안에 첨부와 검색과 커넥터. 오른쪽 막대에 그것들이 들어간다 -->
+<section class="s" id="s25" data-steps="3" data-sec="Interface">
+  <div class="head"><div class="h"><span class="no">7.</span> 자료 들여오기</div><div class="lead">첨부와 검색과 커넥터</div></div>
+  <div class="main cols side" style="--side:640px">
+    <div class="k fill" id="s25k">
+      <div class="k-msgs">
+        <div class="u" data-step="1"><span class="chip"><svg><use href="#i-file"/></svg>A사_IR자료.pdf</span><br>A사의 최근 투자 유치를 IR 자료와 비교해 정리해 줘</div>
+        <div class="a" data-step="2">
+          <div class="trow"><i class="ic"><svg><use href="#i-zap"/></svg></i><b>웹 검색</b> 검색함<span>"A사 투자 유치 2026"</span><em>4건</em><svg class="chev"><use href="#i-chev"/></svg></div>
+          <div class="trow"><i class="ic"><svg><use href="#i-book"/></svg></i><b>프로젝트 지식</b> 검색함<span>반도체_시장_2026.md</span><em>1건</em><svg class="chev"><use href="#i-chev"/></svg></div>
+          <div class="trow"><i class="ic"><svg><use href="#i-drive"/></svg></i><b>Google Drive</b> 검색함<span>"딜 검토 A사"</span><em>1건</em><svg class="chev"><use href="#i-chev"/></svg></div>
+          <span class="tx" data-step="3">IR 자료의 시리즈 B까지와 이후 보도를 맞춰 보면 A사는 올해 시리즈 C를 준비 중이고, 검토 메모의 밸류에이션 기준과는 …</span>
+        </div>
       </div>
-      <div class="conn r" data-step="2"></div>
-      <div class="src"><div class="h2">모델이 도구로 가져온다</div><div class="it">웹 검색</div><div class="it">프로젝트 지식 검색</div><div class="it">커넥터</div></div>
+      <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
+    </div>
+    <div class="col cwb2" id="s25cw" data-stagger="40">
+      <div class="cwt">컨텍스트 윈도우</div>
+      <div class="cw"><div class="bar"><i class="on" style="background:var(--c5);--w:3%" data-step="1"></i><i class="on" style="background:var(--c4);--w:16%" data-step="1"></i><i class="on hatch" style="background:var(--g4);--w:9%" data-step="2"></i><i class="on hatch" style="background:var(--c4);--w:8%" data-step="2"></i><i class="on hatch" style="background:var(--g4);--w:11%" data-step="2"></i></div></div>
+      <div class="legend"><span data-step="1"><i style="background:var(--c5)"></i>프롬프트</span><span data-step="1"><i style="background:var(--c4)"></i>첨부한 파일</span><span data-step="2"><i class="hatch" style="background:var(--g4)"></i>웹 검색 결과</span><span data-step="2"><i class="hatch" style="background:var(--c4)"></i>프로젝트 지식에서 찾은 부분</span><span data-step="2"><i class="hatch" style="background:var(--g4)"></i>커넥터로 가져온 자료</span></div>
     </div>
   </div>
 </section>
@@ -1586,6 +1626,27 @@ svg.nn.morph path { fill: none; stroke: var(--n5); stroke-width: 1.5; transition
     </div>
   </div>
 </section>
+<!-- S32b 스킬 · 33장의 두 채팅과 매뉴얼이 34장의 폴더 하나로 묶인다 -->
+<section class="s" id="s32b" data-steps="4" data-sec="Interface">
+  <div class="head"><div class="h"><span class="no">9.</span> 스킬</div><div class="lead">자세한 설명과 템플릿과 매뉴얼을 하나로 묶은 것</div></div>
+  <div class="main skl">
+    <div class="three" id="s32bt" data-stagger="40">
+      <div class="col" data-step="1"><div class="h2">자세한 설명</div><div class="k fill"><div class="k-msgs"><div class="u">A사 투자 검토 보고서를 만들어 줘. 표지에는 회사명과 날짜를 넣고, 1장은 개요를 다섯 줄로, 2장은 시장 규모를 표로, 3장은 경쟁사 세 곳을 비교해 줘. 수치마다 출처와 기준 연도를 같이 적고, 말투는 개조식으로 …</div></div></div></div>
+      <div class="col" data-step="2"><div class="h2">템플릿과 예시</div><div class="k fill"><div class="k-msgs"><div class="u"><span class="chip"><svg><use href="#i-file"/></svg>보고서_예시_1.docx</span> <span class="chip"><svg><use href="#i-file"/></svg>보고서_예시_2.docx</span> <span class="chip"><svg><use href="#i-file"/></svg>brief-template.html</span><br>이 예시들처럼 A사 투자 검토 보고서를 만들어 줘</div></div></div></div>
+      <div class="col" data-step="3"><div class="h2">매뉴얼</div><div class="man"><b># deal-sourcing</b>
+언제: 회사 자료를 받고 초기 분석을 요청받을 때
+순서: 자료 읽기 → 웹 리서치 → 11페이지 브리프 조립 → 검사
+규칙: references/writing-rule.md
+양식: assets/brief-template.html</div></div>
+    </div>
+    <div class="folder open" id="s32bf" data-step="4">
+      <div class="fn"><svg><use href="#i-folder"/></svg>deal-sourcing</div>
+      <div class="fi"><svg><use href="#i-file"/></svg><code>SKILL.md</code><span>지침</span></div>
+      <div class="fi"><svg><use href="#i-file"/></svg><code>references/content-example.json</code><span>예시</span></div>
+      <div class="fi"><svg><use href="#i-file"/></svg><code>assets/brief-template.html</code><span>템플릿</span></div>
+    </div>
+  </div>
+</section>
 <!-- S33 스킬 -->
 <section class="s" id="s33" data-steps="2" data-sec="Interface">
   <div class="head"><div class="h"><span class="no">9.</span> 스킬</div><div class="lead">지침과 스크립트와 자료를 묶어 둔 폴더</div></div>
@@ -1601,7 +1662,7 @@ svg.nn.morph path { fill: none; stroke: var(--n5); stroke-width: 1.5; transition
     </div>
     <div class="k fill">
       <div class="k-msgs">
-        <div class="u" data-step="1"><span class="chip"><svg><use href="#i-file"/></svg>Core Automation_IR.pdf</span><br>Core Automation 초기 분석 자료 만들어 줘</div>
+        <div class="u" data-step="1"><span class="chip"><svg><use href="#i-file"/></svg>Core Automation_IR.pdf</span><br><span class="skc">/deal-sourcing</span> 초기 분석 자료 만들어 줘</div>
         <div class="a" data-step="2"><div class="trow"><i class="ic sk"><svg><use href="#i-spark"/></svg></i><b>deal-sourcing</b> 스킬 사용<svg class="chev"><use href="#i-chev"/></svg></div><span class="tx" style="--d:700ms">첨부한 IR 덱을 읽고 기술 실사 브리프를 만들겠습니다</span></div>
       </div>
       <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
@@ -1893,7 +1954,7 @@ function figure(el, labels) {
   el.innerHTML = '<svg viewBox="0 0 600 900">' +
     '<path class="body" d="M40,900 V760 C40,600 160,510 300,510 C440,510 560,600 560,760 V900 Z"/>' +
     '<circle class="body head" cx="300" cy="250" r="200"/>' +
-    '<svg class="nn fnn" x="120" y="120" width="360" height="260" viewBox="0 0 420 300"></svg>' +
+    '<svg class="nn fnn" x="175" y="135" width="250" height="180" viewBox="0 0 420 300"></svg>' +
     '</svg>' + (labels === false ? '' : '<div class="fl"><span class="t-model">모델</span><span class="t-if">인터페이스</span></div>');
   netGraph(el.querySelector('svg.fnn'), el.classList.contains('brain-l') ? 'l' : el.classList.contains('brain-s') ? 's' : 'm');
 }
@@ -2094,6 +2155,7 @@ HOOK.s24 = { step: function (k) {
 HOOK.s26 = { step: function (k) {
   $('s26pj').classList.toggle('focus', k >= 1 && k <= 2); $('s26i').classList.toggle('hot', k === 1); $('s26k').classList.toggle('hot', k === 2);
   var pin = $('s26pin'), typed = k >= 3; if ((pin.textContent !== '이 프로젝트에서 새 채팅') !== typed) swapText(pin, function () { pin.textContent = typed ? 'A사 시장 규모 확인해 줘' : '이 프로젝트에서 새 채팅'; pin.classList.toggle('typed', typed); });
+  $$('#s26k .f').forEach(function (f, i) { f.classList.toggle('hot', k >= 4 && i === 0); });
 } };
 
 /* S34 · 스킬 시연. 진행 표시와 브리프 열기 */

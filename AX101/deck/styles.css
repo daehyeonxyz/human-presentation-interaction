@@ -128,7 +128,7 @@ b { font-weight: 800; }
 .fig { display: flex; align-items: center; gap: var(--gap-lg); height: 760px; padding-left: 360px; align-self: stretch; }
 .fig svg { height: 100%; width: auto; display: block; overflow: visible; }
 .fig .body { fill: rgba(255,255,255,.22); transition: fill 400ms var(--ease-smooth); }
-.fig svg.fnn { overflow: visible; width: 360px; height: 260px; }
+.fig svg.fnn { overflow: visible; width: 250px; height: 180px; }
 .fig svg.fnn line { stroke: rgba(255,255,255,.35); stroke-width: 3; transition: stroke 400ms var(--ease-smooth); }
 .fig svg.fnn circle { fill: var(--acc); stroke: none; stroke-width: 0; transition: fill 400ms var(--ease-smooth), stroke 400ms var(--ease-smooth); }
 .fig.lit-if .body { fill: var(--white); }
@@ -705,8 +705,8 @@ svg.nn.fade { animation: nnin 200ms var(--ease-out); }
 .k .a .w { opacity: 0; filter: blur(var(--blur)); transition: opacity 200ms var(--ease-out) var(--d, 0ms), filter 200ms var(--ease-out) var(--d, 0ms), color var(--t-state); }
 .k .a .w.on { opacity: 1; filter: none; }
 /* 7장 토큰은 면으로 */
-.k.split .tk { padding: 0; margin: 0; border-radius: 6px; background: rgba(255,255,255,.13); box-shadow: 0 0 0 4px rgba(255,255,255,.13); }
-.k.split .u .tk { background: rgba(255,255,255,.15); box-shadow: 0 0 0 4px rgba(255,255,255,.15); }
+.k.split .tk { padding: 0; margin: 0; border-radius: 4px; background: rgba(255,255,255,.13); box-shadow: 0 0 0 2px rgba(255,255,255,.13); }
+.k.split .u .tk { background: rgba(255,255,255,.15); box-shadow: 0 0 0 2px rgba(255,255,255,.15); }
 .k .tt[data-step] { transition-delay: calc(var(--d, 0ms) + var(--d-tag)); }
 /* 8장 척추 */
 /* 9장 알약 hover */
@@ -1025,3 +1025,35 @@ svg.nn.morph path { fill: none; stroke: var(--n5); stroke-width: 1.5; transition
 #s27r.lit { opacity: 1; }
 .intake .rag .pill { background: var(--ink); color: var(--white); }
 #s37 .main.cols { align-items: center; }
+
+/* 63차 */
+.cwb2 { display: flex; flex-direction: column; gap: var(--gap-xs); justify-content: center; }
+.cwb2 .cwt { font-size: var(--t-cap); line-height: var(--l-cap); font-weight: 800; letter-spacing: .02em; }
+.cwb2 .cw .bar i { width: var(--w); }
+.cwb2 .cw .bar i[data-step]:not(.on) { width: 0; min-width: 0; }
+.cwb2 .cw .bar i.on { min-width: 28px; }
+.cwb2 .legend { display: flex; flex-direction: column; gap: var(--gap-2xs); margin-top: var(--gap-2xs); font-size: var(--t-body); line-height: var(--l-body); }
+.cwb2 .legend span { display: inline-flex; align-items: center; gap: var(--gap-xs); font-weight: 600; }
+.cwb2 .legend span i { width: 18px; height: 18px; border-radius: var(--r-dot); flex: none; }
+#s25k .a .trow { margin-bottom: 10px; }
+#s25k .a .tx { display: block; margin-top: 12px; }
+.pj .pans { display: none; margin-top: 24px; gap: 16px; align-items: flex-start; font-size: 20px; line-height: 28px; color: var(--k-ink); }
+.pj .pans.on { display: flex; }
+.pj .pans .dot { width: 28px; height: 28px; border-radius: 50%; background: var(--k-send); flex: none; margin-top: 2px; }
+.pj .pans .trow { display: flex; align-items: center; gap: 10px; color: var(--k-sub); margin-bottom: 8px; }
+.pj .pans .trow b { color: var(--k-ink); font-weight: 600; }
+.pj .pans .trow .ic { width: 24px; height: 24px; border-radius: 6px; background: var(--k-el2); border: 1px solid var(--k-bd); display: inline-flex; align-items: center; justify-content: center; }
+.pj .pans .trow .ic svg { width: 14px; height: 14px; }
+.pj .pans .tx { color: var(--k-ink); }
+.pj .box .f.hot { color: var(--k-ink); box-shadow: 0 0 0 3px var(--c4); border-radius: 8px; }
+.k .u .skc { color: var(--k-blue); font-weight: 600; }
+.skl { display: flex; flex-direction: column; gap: var(--gap); }
+.skl .three { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--gap); height: 460px; }
+.skl .three .col { min-height: 0; }
+.skl .three .k { flex: 1; min-height: 0; }
+.skl .three .k .k-msgs { padding: 24px; }
+.skl .three .k .u { max-width: 100%; }
+.skl .man { flex: 1; background: var(--white); border-radius: var(--r-card); box-shadow: var(--shadow); padding: var(--gap-sm) var(--gap); font-size: var(--t-cap); line-height: var(--l-cap); white-space: pre-wrap; }
+.skl .man b { display: block; font-size: var(--t-body); line-height: var(--l-body); margin-bottom: var(--gap-2xs); }
+.skl .folder { align-self: start; width: 640px; }
+.skl.focus .three { opacity: var(--dim); }

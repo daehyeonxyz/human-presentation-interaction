@@ -141,7 +141,7 @@ function figure(el, labels) {
   el.innerHTML = '<svg viewBox="0 0 600 900">' +
     '<path class="body" d="M40,900 V760 C40,600 160,510 300,510 C440,510 560,600 560,760 V900 Z"/>' +
     '<circle class="body head" cx="300" cy="250" r="200"/>' +
-    '<svg class="nn fnn" x="120" y="120" width="360" height="260" viewBox="0 0 420 300"></svg>' +
+    '<svg class="nn fnn" x="175" y="135" width="250" height="180" viewBox="0 0 420 300"></svg>' +
     '</svg>' + (labels === false ? '' : '<div class="fl"><span class="t-model">모델</span><span class="t-if">인터페이스</span></div>');
   netGraph(el.querySelector('svg.fnn'), el.classList.contains('brain-l') ? 'l' : el.classList.contains('brain-s') ? 's' : 'm');
 }
@@ -342,6 +342,7 @@ HOOK.s24 = { step: function (k) {
 HOOK.s26 = { step: function (k) {
   $('s26pj').classList.toggle('focus', k >= 1 && k <= 2); $('s26i').classList.toggle('hot', k === 1); $('s26k').classList.toggle('hot', k === 2);
   var pin = $('s26pin'), typed = k >= 3; if ((pin.textContent !== '이 프로젝트에서 새 채팅') !== typed) swapText(pin, function () { pin.textContent = typed ? 'A사 시장 규모 확인해 줘' : '이 프로젝트에서 새 채팅'; pin.classList.toggle('typed', typed); });
+  $$('#s26k .f').forEach(function (f, i) { f.classList.toggle('hot', k >= 4 && i === 0); });
 } };
 
 /* S34 · 스킬 시연. 진행 표시와 브리프 열기 */

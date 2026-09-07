@@ -424,13 +424,14 @@
   </div>
 </section>
 <!-- S26 프로젝트 -->
-<section class="s" id="s26" data-steps="3" data-sec="Interface">
+<section class="s" id="s26" data-steps="4" data-sec="Interface">
   <div class="head"><div class="h"><span class="no">6.</span> 프로젝트 <i class="sw c3"></i><i class="sw c4"></i></div><div class="lead">지식과 지침을 묶어 둔 작업 공간</div></div>
   <div class="main">
     <div class="pj" id="s26pj">
       <div class="pl">
         <div class="crumb">프로젝트 ›</div><div class="pn">반도체</div><div class="pdesc">반도체 섹터 딜 검토</div>
         <div class="pin"><span id="s26pin">이 프로젝트에서 새 채팅</span><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg class="chev"><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
+        <div class="pans" data-step="4"><i class="dot"></i><div><div class="trow"><i class="ic"><svg><use href="#i-book"/></svg></i><b>프로젝트 지식</b> 검색함<span>반도체_시장_2026.md</span><em>1건</em></div><div class="tx">반도체_시장_2026.md 기준으로 A사가 속한 검사 장비 시장은 2026년 …</div></div></div>
         <div class="chats"><h6>최근 채팅</h6>
           <div class="c"><b>반도체 장비 업체 비교</b><span>어제</span></div>
           <div class="c"><b>2분기 업황 요약</b><span>3일 전</span></div>
@@ -469,19 +470,26 @@
     <div class="legend" id="s29lg"></div>
   </div>
 </section>
-<section class="s" id="s25" data-steps="3">
-  <div class="head"><div class="h"><span class="no">7.</span> 자료 들여오기</div><div class="lead">모델이 모르는 정보를 컨텍스트 윈도우에 넣는 두 길</div></div>
-  <div class="main">
-    <div class="intake" id="s25in" data-stagger="40">
-      <div class="src"><div class="h2">사람이 넣는다</div><div class="it">프롬프트에 직접 씀</div><div class="it">파일을 첨부함</div></div>
-      <div class="conn" data-step="1"></div>
-      <div class="cwb"><div class="cwt">컨텍스트 윈도우</div>
-        <div class="slot"><span class="p h" data-step="1">프롬프트</span><span class="p h" data-step="1">첨부한 파일</span></div>
-        <div class="slot"><span class="p t" data-step="2">웹 검색 결과</span><span class="p t kn" data-step="2">프로젝트 지식에서 찾은 부분</span><span class="p t" data-step="2">커넥터로 가져온 자료</span></div>
-        <div class="rag" data-step="3"><i></i><span class="pill">RAG</span></div>
+<!-- S25 자료 들여오기 · 한 답 안에 첨부와 검색과 커넥터. 오른쪽 막대에 그것들이 들어간다 -->
+<section class="s" id="s25" data-steps="3" data-sec="Interface">
+  <div class="head"><div class="h"><span class="no">7.</span> 자료 들여오기</div><div class="lead">첨부와 검색과 커넥터</div></div>
+  <div class="main cols side" style="--side:640px">
+    <div class="k fill" id="s25k">
+      <div class="k-msgs">
+        <div class="u" data-step="1"><span class="chip"><svg><use href="#i-file"/></svg>A사_IR자료.pdf</span><br>A사의 최근 투자 유치를 IR 자료와 비교해 정리해 줘</div>
+        <div class="a" data-step="2">
+          <div class="trow"><i class="ic"><svg><use href="#i-zap"/></svg></i><b>웹 검색</b> 검색함<span>"A사 투자 유치 2026"</span><em>4건</em><svg class="chev"><use href="#i-chev"/></svg></div>
+          <div class="trow"><i class="ic"><svg><use href="#i-book"/></svg></i><b>프로젝트 지식</b> 검색함<span>반도체_시장_2026.md</span><em>1건</em><svg class="chev"><use href="#i-chev"/></svg></div>
+          <div class="trow"><i class="ic"><svg><use href="#i-drive"/></svg></i><b>Google Drive</b> 검색함<span>"딜 검토 A사"</span><em>1건</em><svg class="chev"><use href="#i-chev"/></svg></div>
+          <span class="tx" data-step="3">IR 자료의 시리즈 B까지와 이후 보도를 맞춰 보면 A사는 올해 시리즈 C를 준비 중이고, 검토 메모의 밸류에이션 기준과는 …</span>
+        </div>
       </div>
-      <div class="conn r" data-step="2"></div>
-      <div class="src"><div class="h2">모델이 도구로 가져온다</div><div class="it">웹 검색</div><div class="it">프로젝트 지식 검색</div><div class="it">커넥터</div></div>
+      <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
+    </div>
+    <div class="col cwb2" id="s25cw" data-stagger="40">
+      <div class="cwt">컨텍스트 윈도우</div>
+      <div class="cw"><div class="bar"><i class="on" style="background:var(--c5);--w:3%" data-step="1"></i><i class="on" style="background:var(--c4);--w:16%" data-step="1"></i><i class="on hatch" style="background:var(--g4);--w:9%" data-step="2"></i><i class="on hatch" style="background:var(--c4);--w:8%" data-step="2"></i><i class="on hatch" style="background:var(--g4);--w:11%" data-step="2"></i></div></div>
+      <div class="legend"><span data-step="1"><i style="background:var(--c5)"></i>프롬프트</span><span data-step="1"><i style="background:var(--c4)"></i>첨부한 파일</span><span data-step="2"><i class="hatch" style="background:var(--g4)"></i>웹 검색 결과</span><span data-step="2"><i class="hatch" style="background:var(--c4)"></i>프로젝트 지식에서 찾은 부분</span><span data-step="2"><i class="hatch" style="background:var(--g4)"></i>커넥터로 가져온 자료</span></div>
     </div>
   </div>
 </section>
@@ -552,6 +560,27 @@
     </div>
   </div>
 </section>
+<!-- S32b 스킬 · 33장의 두 채팅과 매뉴얼이 34장의 폴더 하나로 묶인다 -->
+<section class="s" id="s32b" data-steps="4" data-sec="Interface">
+  <div class="head"><div class="h"><span class="no">9.</span> 스킬</div><div class="lead">자세한 설명과 템플릿과 매뉴얼을 하나로 묶은 것</div></div>
+  <div class="main skl">
+    <div class="three" id="s32bt" data-stagger="40">
+      <div class="col" data-step="1"><div class="h2">자세한 설명</div><div class="k fill"><div class="k-msgs"><div class="u">A사 투자 검토 보고서를 만들어 줘. 표지에는 회사명과 날짜를 넣고, 1장은 개요를 다섯 줄로, 2장은 시장 규모를 표로, 3장은 경쟁사 세 곳을 비교해 줘. 수치마다 출처와 기준 연도를 같이 적고, 말투는 개조식으로 …</div></div></div></div>
+      <div class="col" data-step="2"><div class="h2">템플릿과 예시</div><div class="k fill"><div class="k-msgs"><div class="u"><span class="chip"><svg><use href="#i-file"/></svg>보고서_예시_1.docx</span> <span class="chip"><svg><use href="#i-file"/></svg>보고서_예시_2.docx</span> <span class="chip"><svg><use href="#i-file"/></svg>brief-template.html</span><br>이 예시들처럼 A사 투자 검토 보고서를 만들어 줘</div></div></div></div>
+      <div class="col" data-step="3"><div class="h2">매뉴얼</div><div class="man"><b># deal-sourcing</b>
+언제: 회사 자료를 받고 초기 분석을 요청받을 때
+순서: 자료 읽기 → 웹 리서치 → 11페이지 브리프 조립 → 검사
+규칙: references/writing-rule.md
+양식: assets/brief-template.html</div></div>
+    </div>
+    <div class="folder open" id="s32bf" data-step="4">
+      <div class="fn"><svg><use href="#i-folder"/></svg>deal-sourcing</div>
+      <div class="fi"><svg><use href="#i-file"/></svg><code>SKILL.md</code><span>지침</span></div>
+      <div class="fi"><svg><use href="#i-file"/></svg><code>references/content-example.json</code><span>예시</span></div>
+      <div class="fi"><svg><use href="#i-file"/></svg><code>assets/brief-template.html</code><span>템플릿</span></div>
+    </div>
+  </div>
+</section>
 <!-- S33 스킬 -->
 <section class="s" id="s33" data-steps="2" data-sec="Interface">
   <div class="head"><div class="h"><span class="no">9.</span> 스킬</div><div class="lead">지침과 스크립트와 자료를 묶어 둔 폴더</div></div>
@@ -567,7 +596,7 @@
     </div>
     <div class="k fill">
       <div class="k-msgs">
-        <div class="u" data-step="1"><span class="chip"><svg><use href="#i-file"/></svg>Core Automation_IR.pdf</span><br>Core Automation 초기 분석 자료 만들어 줘</div>
+        <div class="u" data-step="1"><span class="chip"><svg><use href="#i-file"/></svg>Core Automation_IR.pdf</span><br><span class="skc">/deal-sourcing</span> 초기 분석 자료 만들어 줘</div>
         <div class="a" data-step="2"><div class="trow"><i class="ic sk"><svg><use href="#i-spark"/></svg></i><b>deal-sourcing</b> 스킬 사용<svg class="chev"><use href="#i-chev"/></svg></div><span class="tx" style="--d:700ms">첨부한 IR 덱을 읽고 기술 실사 브리프를 만들겠습니다</span></div>
       </div>
       <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
