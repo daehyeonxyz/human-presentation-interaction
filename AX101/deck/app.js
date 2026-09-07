@@ -244,8 +244,6 @@ HOOK.s14 = { step: function (k) { $$('#s14ax .unk').forEach(function (u, i) { u.
     $$('#s17bar i').forEach(function (s, i) { var on = i < n; s.style.width = on ? (IT[i].t / MAX * 100) + '%' : '0'; s.classList.toggle('on', on); s.classList.toggle('hot', i === hover); });
     $$('#s17lg span').forEach(function (s, i) { s.classList.toggle('on', i < n); });
     bar.classList.toggle('focus', hover >= 0); $('s17cw').classList.toggle('dimlg', hover >= 0); $$('#s17lg span').forEach(function (sp, i) { sp.classList.toggle('hot', i === hover); });
-    var ph = n >= 7 ? 'A사 회사소개 자료 기준으로 시범 도입 고객 수를 정리해 줘' : 'Claude에게 메시지 보내기';
-    if ($('s17ph').textContent !== ph) swapText($('s17ph'), function () { $('s17ph').textContent = ph; $('s17ph').style.color = n >= 7 ? 'var(--k-ink)' : ''; });
     showInsp(hover >= 0 ? hover : ce ? 'ce' : n - 1);
   }
   function bind(sel) { $$(sel).forEach(function (el) { el.addEventListener('mouseenter', function () { var i = +el.dataset.i; if (i < n) { hover = i; render(); } }); el.addEventListener('mouseleave', function () { hover = -1; render(); }); }); }
@@ -270,7 +268,7 @@ HOOK.s22 = { step: function (k) {
 /* S23 · S24 · 설정 화면에서 짚기 */
 HOOK.s23 = { step: function (k) { $('s23st').classList.toggle('focus', k >= 1 && k < 3); } };
 HOOK.s24 = { step: function (k) {
-  $('s24st').classList.add('focus'); $('s24row').classList.toggle('hot', k === 0); $('s24sw').classList.toggle('hot', k === 1); $('s24sw2').classList.toggle('hot', k === 1); $('s24new').classList.toggle('hot', k === 2);
+  $('s24st').classList.toggle('focus', k >= 1); $('s24row').classList.toggle('hot', k === 0); $('s24sw').classList.toggle('hot', k === 1); $('s24sw2').classList.toggle('hot', k === 1); $('s24new').classList.toggle('hot', k === 2);
   $$('#s24sw .tg, #s24sw2 .tg').forEach(function (t) { t.classList.toggle('off', k < 1); });
   var kin = $('s24kin'), typed = k >= 2; if ((kin.textContent !== '변경하거나 제거할 내용을 Claude에게 알려주세요') !== typed) swapText(kin, function () { kin.textContent = typed ? 'A사 딜은 9월 투자심의 안건이야, 기억해 줘' : '변경하거나 제거할 내용을 Claude에게 알려주세요'; kin.classList.toggle('typed', typed); });
   $('s24kin').parentNode.classList.toggle('hot', k >= 2);

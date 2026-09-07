@@ -14,6 +14,12 @@
   <symbol id="i-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></symbol>
   <symbol id="i-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></symbol>
   <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></symbol>
+  <symbol id="i-drive" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M8 3h8l6 11H2z"/><path d="M2 14l4 7h12l4-7"/><path d="M8 3l4 11"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></symbol>
+  <symbol id="i-slack" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 4v7M15 13v7M4 9h7M13 15h7"/><path d="M9 11h2M13 13h2M11 13v2M13 11v-2"/></symbol>
+  <symbol id="i-git" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M6 9v6M18 9a6 6 0 0 1-6 6H9"/></symbol>
+  <symbol id="i-m365" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/></symbol>
   <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></symbol>
 </svg>
 <div class="viewport dark" id="viewport"><div class="stage" id="stage">
@@ -30,7 +36,7 @@
 <!-- S2 인공지능? -->
 <section class="s" id="s2" data-steps="2" data-sec="Background">
   <div class="main mid center">
-    <div class="decl-lg" id="s2q">인공지능<span class="tail"><span data-out="2">?</span><span data-step="2"> 서비스</span></span></div>
+    <div class="decl-lg" id="s2q">인공지능<span class="tail"><span data-out="2">?</span><span data-step="2">&nbsp;서비스</span></span></div>
     <div class="trio" id="s2trio" data-stagger="40"><span data-step="1">ChatGPT</span><span data-step="1">Gemini</span><span data-step="1">Claude</span></div>
   </div>
 </section>
@@ -41,7 +47,7 @@
     <div class="card model"><div><div class="cn">모델</div><div class="cd">사람의 뇌를 모방하여 만든 컴퓨터 시스템<br>요즘 AI라고 하면 보통 LLM</div></div>
       <div class="cb" data-step="1"><svg class="nn" id="s3nn" viewBox="0 0 420 300" fill="none"></svg></div></div>
     <div class="card iface"><div><div class="cn">인터페이스</div><div class="cd">AI 모델을 비개발자도 사용할 수 있도록 만든 형태<br>가장 대표적인 형태가 채팅</div></div>
-      <div class="cb" data-step="2"><div class="k" id="s3k" style="width:640px">
+      <div class="cb" data-step="2"><div class="k" id="s3k" style="width:100%;max-width:1040px">
         <div class="k-msgs"><div class="u">이 회사의 강점을 세 줄로 정리해 줘</div><div class="a" id="s3a">세 가지로 정리하면 첫째 …</div></div>
         <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
         </div></div>
@@ -143,7 +149,7 @@
 <section class="s" id="s8" data-steps="6" data-sec="Model">
   <div class="head"><div class="h"><span class="no">6.</span> 비용</div><div class="lead">case 1 빈 채팅창</div></div>
   <div class="main cols side" style="--side:760px">
-    <div class="k fit">
+    <div class="k fit big">
       <div class="k-msgs">
         <div class="u" data-step="1">이 영어 글을 한국어로 번역해 줘 <span class="tt in">100토큰</span></div>
         <div class="a" data-step="2">다음은 한국어 번역입니다. … <span class="tt out">100토큰</span></div>
@@ -162,7 +168,7 @@
 <section class="s" id="s9" data-steps="5" data-sec="Model">
   <div class="head"><div class="h"><span class="no">6.</span> 비용</div><div class="lead">case 2 같은 채팅창에 이어서</div></div>
   <div class="main cols side" style="--side:760px">
-    <div class="k fit" id="s9k">
+    <div class="k fit big" id="s9k">
       <div class="k-msgs">
         <div class="u">이 영어 글을 한국어로 번역해 줘 <span class="tt in p1">100토큰</span></div>
         <div class="a">다음은 한국어 번역입니다. … <span class="tt out p1">100토큰</span></div>
@@ -207,7 +213,7 @@
       <div class="k-in" style="position:relative">
         <div class="ph">Claude에게 메시지 보내기</div>
         <div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model" id="s12model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div>
-        <div class="menu" id="s12menu" data-step="1" style="right:16px;bottom:76px;width:420px">
+        <div class="menu" id="s12menu" data-step="1" style="right:16px;bottom:76px;width:480px">
           <div class="mh">모델</div>
           <div class="mi md">Haiku 4.5<span>가장 빠른</span></div>
           <div class="mi md sel">Sonnet 5<span>균형 ✓</span></div>
@@ -216,7 +222,7 @@
           <div class="hr"></div>
           <div class="mi" id="s12effort">Effort<span>High <svg><use href="#i-chev"/></svg></span></div>
         </div>
-        <div class="menu" id="s12sub" data-step="2" style="right:448px;bottom:24px;width:230px">
+        <div class="menu" id="s12sub" data-step="2" style="right:508px;bottom:130px;width:250px">
           <div class="mi">Low</div><div class="mi">Medium</div><div class="mi sel">High ✓</div><div class="mi">xhigh</div><div class="mi">Max</div>
         </div>
       </div>
@@ -289,7 +295,7 @@
     </div>
     <div class="cols side" style="--side:760px;flex:1;min-height:0">
       <div class="k fill">
-      <div class="k-msgs"></div>
+      <div class="k-msgs"><div class="u" data-step="7">A사 회사소개 자료 기준으로 시범 도입 고객 수를 정리해 줘</div></div>
       <div class="k-in"><div class="ph" id="s17ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
       </div>
       <div class="col"><div class="cwi" id="s17i"><div class="n"><i></i><span></span></div><div class="w"></div></div></div>
@@ -436,7 +442,6 @@
       <div class="pl">
         <div class="crumb">프로젝트 ›</div><div class="pn">반도체</div><div class="pdesc">반도체 섹터 딜 검토</div>
         <div class="pin"><span id="s26pin">이 프로젝트에서 새 채팅</span><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg class="chev"><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
-        <div class="pans" data-step="3"><div class="f"><svg><use href="#i-file"/></svg>반도체_시장_2026.md</div><div class="tx">반도체 시장 자료 기준으로 A사가 속한 검사 장비 시장은 2026년 …</div></div>
         <div class="chats"><h6>최근 채팅</h6>
           <div class="c"><b>반도체 장비 업체 비교</b><span>어제</span></div>
           <div class="c"><b>2분기 업황 요약</b><span>3일 전</span></div>
@@ -500,7 +505,7 @@
     <div class="k big fill">
       <div class="k-msgs">
         <div class="u">Drive에서 A사 IR 자료 찾아서 요약해 줘</div>
-        <div class="a" data-step="1"><div class="trow"><i class="ic"></i><b>Google Drive</b> 검색함<span>"A사 IR"</span><em>1건</em><svg class="chev"><use href="#i-chev"/></svg></div><div class="tool"><svg><use href="#i-file"/></svg><div><b>A사_IR_2026H1.pdf</b><small>공유 드라이브 / 딜 검토 / A사</small></div></div><div class="ans" data-step="2"><span class="tx">A사 IR 자료 기준으로 요약하면, 반도체 검사 장비를 만드는 시리즈 B 단계 회사입니다.</span><span class="tx">상반기 매출은 전년 대비 늘었고, 이번 라운드 목표는 …</span></div></div>
+        <div class="a" data-step="1"><div class="trow"><i class="ic"><svg><use href="#i-drive"/></svg></i><b>Google Drive</b> 검색함<span>"A사 IR"</span><em>1건</em><svg class="chev"><use href="#i-chev"/></svg></div><div class="tool"><svg><use href="#i-file"/></svg><div><b>A사_IR_2026H1.pdf</b><small>공유 드라이브 / 딜 검토 / A사</small></div></div><div class="ans" data-step="2"><span class="tx">A사 IR 자료 기준으로 요약하면, 반도체 검사 장비를 만드는 시리즈 B 단계 회사입니다.</span><span class="tx">상반기 매출은 전년 대비 늘었고, 이번 라운드 목표는 …</span></div></div>
       </div>
       <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
     </div>
@@ -508,12 +513,12 @@
       <div class="pane">
         <h4>커넥터</h4>
         <div class="d">MCP라는 공개 표준 위에서 동작합니다. 연결한 서비스의 자료를 읽어 오고, 그 안에 실제로 쓸 수도 있습니다. 연결한 사람이 볼 수 있는 것만 Claude도 봅니다.</div>
-        <div class="crow"><i class="ic"></i><b>Google Drive</b><span>연결됨</span><em>⋯</em></div>
-        <div class="crow"><i class="ic"></i><b>Gmail</b><span>연결됨</span><em>⋯</em></div>
-        <div class="crow"><i class="ic"></i><b>Google Calendar</b><span></span><u class="btn-k">연결</u></div>
-        <div class="crow"><i class="ic"></i><b>Slack</b><span></span><u class="btn-k">연결</u></div>
-        <div class="crow"><i class="ic"></i><b>GitHub</b><span></span><u class="btn-k">연결</u></div>
-        <div class="crow adm hot" data-step="3"><i class="ic"></i><b>Microsoft 365</b><span>관리자 승인 필요</span><em class="lock"></em></div>
+        <div class="crow"><i class="ic"><svg><use href="#i-drive"/></svg></i><b>Google Drive</b><span>연결됨</span><em>⋯</em></div>
+        <div class="crow"><i class="ic"><svg><use href="#i-mail"/></svg></i><b>Gmail</b><span>연결됨</span><em>⋯</em></div>
+        <div class="crow"><i class="ic"><svg><use href="#i-cal"/></svg></i><b>Google Calendar</b><span></span><u class="btn-k">연결</u></div>
+        <div class="crow"><i class="ic"><svg><use href="#i-slack"/></svg></i><b>Slack</b><span></span><u class="btn-k">연결</u></div>
+        <div class="crow"><i class="ic"><svg><use href="#i-git"/></svg></i><b>GitHub</b><span></span><u class="btn-k">연결</u></div>
+        <div class="crow adm hot" data-step="3"><i class="ic"><svg><use href="#i-m365"/></svg></i><b>Microsoft 365</b><span>관리자 승인 필요</span><em class="lock"></em></div>
         <div class="foot-d hot" data-step="3">조직 설정에서 관리자가 허용한 커넥터만 보입니다</div>
       </div>
     </div>
@@ -539,7 +544,7 @@
       <div class="k" data-step="1">
         <div class="k-msgs">
           <div class="u">딜 검토 폴더에서 A사 자료 찾아 줘</div>
-          <div class="a"><div class="trow"><i class="ic"></i><b>Google Drive</b> 검색함<span>"딜 검토 A사"</span><em>2건</em><svg class="chev"><use href="#i-chev"/></svg></div><div class="tool"><svg><use href="#i-file"/></svg><div><b>A사_조사요약.md</b><small>공유 드라이브 / 딜 검토 / A사</small></div></div><div class="tool"><svg><use href="#i-file"/></svg><div><b>A사_IR자료.pdf</b><small>공유 드라이브 / 딜 검토 / A사</small></div></div></div>
+          <div class="a"><div class="trow"><i class="ic"><svg><use href="#i-drive"/></svg></i><b>Google Drive</b> 검색함<span>"딜 검토 A사"</span><em>2건</em><svg class="chev"><use href="#i-chev"/></svg></div><div class="tool"><svg><use href="#i-file"/></svg><div><b>A사_조사요약.md</b><small>공유 드라이브 / 딜 검토 / A사</small></div></div><div class="tool"><svg><use href="#i-file"/></svg><div><b>A사_IR자료.pdf</b><small>공유 드라이브 / 딜 검토 / A사</small></div></div></div>
         </div>
         <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
       </div>
@@ -576,7 +581,7 @@
     <div class="k fill">
       <div class="k-msgs">
         <div class="u" data-step="1"><span class="chip"><svg><use href="#i-file"/></svg>Core Automation_IR.pdf</span><br>Core Automation 초기 분석 자료 만들어 줘</div>
-        <div class="a" data-step="2"><div class="trow"><i class="ic sk"></i><b>deal-sourcing</b> 스킬 사용<svg class="chev"><use href="#i-chev"/></svg></div><span class="tx" style="--d:700ms">첨부한 IR 덱을 읽고 기술 실사 브리프를 만들겠습니다</span></div>
+        <div class="a" data-step="2"><div class="trow"><i class="ic sk"><svg><use href="#i-spark"/></svg></i><b>deal-sourcing</b> 스킬 사용<svg class="chev"><use href="#i-chev"/></svg></div><span class="tx" style="--d:700ms">첨부한 IR 덱을 읽고 기술 실사 브리프를 만들겠습니다</span></div>
       </div>
       <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
     </div>
@@ -593,7 +598,7 @@
     <div class="k fill">
       <div class="k-msgs">
         <div class="u"><span class="chip"><svg><use href="#i-file"/></svg>Core Automation_IR.pdf</span><br>Core Automation 초기 분석 자료 만들어 줘</div>
-        <div class="a"><div class="trow"><i class="ic sk"></i><b>deal-sourcing</b> 스킬 사용<svg class="chev"><use href="#i-chev"/></svg></div>첨부한 IR 덱을 읽고 기술 실사 브리프를 만들겠습니다
+        <div class="a"><div class="trow"><i class="ic sk"><svg><use href="#i-spark"/></svg></i><b>deal-sourcing</b> 스킬 사용<svg class="chev"><use href="#i-chev"/></svg></div>첨부한 IR 덱을 읽고 기술 실사 브리프를 만들겠습니다
           <div class="steps" id="s34st">
             <div>첨부 자료 읽기와 이미지 추출</div>
             <div>웹 리서치</div>
@@ -659,7 +664,7 @@
     <div class="pkg card" id="s37pkg" data-stagger="40">
       <div class="pk">플러그인 · deal-sourcing</div>
       <div class="ob" data-step="1"><small>스킬</small><div class="fn"><svg><use href="#i-folder"/></svg>deal-sourcing</div></div>
-      <div class="ob" data-step="1"><small>커넥터</small><div class="crow"><i class="ic"></i><b>Google Drive</b><span>연결됨</span></div></div>
+      <div class="ob" data-step="1"><small>커넥터</small><div class="crow"><i class="ic"><svg><use href="#i-drive"/></svg></i><b>Google Drive</b><span>연결됨</span></div></div>
       <div class="ob" data-step="1"><small>서브에이전트</small><div class="mini"><span>리서치 에이전트</span><i></i></div></div>
     </div>
     <div class="col wide"><ul class="bullets"><li>플러그인 하나를 설치하면 그 안에 든 구성이 <b>한 번에</b> 들어옴</li><li>팀 단위로 같은 작업 환경을 맞춰야 할 때 <b>관리자</b>가 배포</li></ul></div>
