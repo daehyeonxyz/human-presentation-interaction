@@ -28,11 +28,11 @@
   --k-bg: #262624; --k-bg2: #1E1D1B; --k-nav: #1A1917; --k-el: #30302C; --k-el2: #2A2926; --k-bd: #3D3C38; --k-ink: #ECEAE3; --k-sub: #9C988E; --k-user: #3A3936; --k-send: #C96442; --k-blue: #2F7CF6;
   --font: "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
   /* 모션. 등장은 길고 느리게 멎고, 상태 변화는 짧고 고르게, 퇴장은 짧게 */
-  --t-in: 260ms; --t-in-lg: 340ms; --t-out: 140ms; --t-state: 220ms; --t-fill: 520ms; --t-gauge: 460ms; --t-cand: 380ms; --t-page: 220ms; --t-dot: 140ms; --d-bubble: 120ms;
-  --stg: 50ms; --stg-tk: 28ms;
-  --ease-out: cubic-bezier(.16, 1, .3, 1); --ease-std: cubic-bezier(.4, 0, .2, 1); --ease-in: cubic-bezier(.4, 0, 1, 1);
-  --blur: 10px; --blur-lg: 4px; --dim: .35;
-  --dur: var(--t-state); --ease: var(--ease-std);
+  --t-in: 180ms; --t-in-lg: 220ms; --t-out: 100ms; --t-state: 160ms; --t-fill: 300ms; --t-gauge: 300ms; --t-cand: 260ms; --t-page: 0ms; --t-dot: 100ms; --d-bubble: 60ms; --d-para: 80ms; --d-tag: 80ms;
+  --stg: 40ms; --stg-tk: 16ms;
+  --ease-out: cubic-bezier(.16, 1, .3, 1); --ease-std: var(--ease-out); --ease-in: var(--ease-out); --ease-move: cubic-bezier(.77, 0, .175, 1);
+  --blur: 6px; --blur-lg: 2px; --dim: .35;
+  --dur: var(--t-state); --ease: var(--ease-out);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; overflow: hidden; background: var(--paper); }
@@ -48,9 +48,9 @@ b { font-weight: 800; }
 
 /* 화면 골격: 머리 → 본문 → 맺음 */
 .s { position: absolute; inset: 0; padding: var(--pad); display: flex; flex-direction: column; gap: var(--gap); opacity: 0; visibility: hidden; transition: opacity var(--dur) var(--ease), visibility 0s linear var(--dur); }
-.s.active { opacity: 1; visibility: visible; transition: opacity var(--t-page) var(--ease-out); z-index: 2; }
-.s.leaving { opacity: 0; visibility: hidden; transition: none; z-index: 1; }
-.viewport { transition: background var(--t-page) var(--ease-std); }
+.s.active { opacity: 1; visibility: visible; transition: none; z-index: 2; }
+.s.still [data-step], .s.still [data-step] > *, .s.still .k .a[data-step]::before, .s.still .k .a .w { transition: none !important; }
+.viewport { transition: none; }
 .s.dark { color: var(--white); background: var(--night) center / cover no-repeat; }
 .s.blue { background: var(--acc); color: var(--white); }
 .main { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: var(--gap); }
@@ -132,7 +132,7 @@ b { font-weight: 800; }
 /* 모델과 인터페이스 · 머리와 어깨 실루엣 안의 뇌 (4 · 5 · 16장) */
 .fig { display: flex; align-items: center; gap: var(--gap-lg); height: 760px; padding-left: 360px; align-self: stretch; }
 .fig svg { height: 100%; width: auto; display: block; overflow: visible; }
-.fig .body { fill: rgba(255,255,255,.24); transition: fill 600ms var(--ease-out) 100ms; }
+.fig .body { fill: rgba(255,255,255,.24); transition: fill 240ms var(--ease-out); }
 .fig .brain path { fill: var(--acc); stroke: rgba(255,255,255,.55); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; transition: fill var(--dur), stroke var(--dur); }
 .fig .brain .gy { fill: none; }
 .fig.lit-if .body { fill: var(--white); }
@@ -180,7 +180,7 @@ b { font-weight: 800; }
 svg.nn { display: block; width: 100%; height: 100%; }
 svg.nn line { stroke: var(--n5); stroke-width: 1.5; }
 svg.nn circle { fill: var(--white); stroke: var(--ink); stroke-width: 2.5; }
-svg.nn.fade { animation: nnin 500ms var(--ease); }
+svg.nn.fade { animation: nnin 200ms var(--ease-out); }
 @keyframes nnin { from { opacity: 0; } to { opacity: 1; } }
 .nnbox { width: 520px; height: 520px; align-self: start; }
 
@@ -301,10 +301,10 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 .bill .bx { text-align: right; color: var(--mute); white-space: nowrap; }
 .bill .bp { text-align: right; font-weight: 800; }
 .bill .bar { height: 16px; background: var(--paper-2); border-radius: var(--r-dot); overflow: hidden; }
-.bill .bar i { display: block; height: 100%; width: 0; background: var(--acc); transition: width 600ms var(--ease), background var(--dur); }
+.bill .bar i { display: block; height: 100%; width: var(--w); transform: scaleX(0); transform-origin: 0 50%; background: var(--acc); transition: transform var(--t-fill) var(--ease-out), background var(--dur); }
 .bill .bar i.in { background: var(--acc); } .bill .bar i.out { background: var(--k-send); }
 .bill.prev .bar i.p1 { background: var(--n5); }
-.bill .lrow.on .bar i, .bill .lrow:not([data-step]) .bar i { width: var(--w); }
+.bill .lrow.on .bar i, .bill .lrow:not([data-step]) .bar i { transform: none; }
 .bill .bullets { margin-top: var(--gap-sm); gap: var(--gap-xs); }
 .bill .bullets li { font-size: var(--t-cap); line-height: var(--l-cap); padding-left: var(--gap-sm); }
 .bill .bullets li::before { top: 14px; width: 8px; height: 8px; }
@@ -332,7 +332,7 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 .vgs .en { grid-column: 1 / -1; font-size: var(--t-h); line-height: var(--l-h); font-weight: 800; letter-spacing: -.02em; text-align: center; }
 .vg { display: flex; flex-direction: column; align-items: center; gap: var(--gap-xs); min-height: 0; }
 .vg .vt { flex: 1; width: 96px; border-radius: var(--r-ctl); background: var(--paper-3); overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; }
-.vg .vt i { display: block; width: 100%; height: 0; background: var(--acc); transition: height 500ms var(--ease); }
+.vg .vt i { display: block; width: 100%; height: var(--h, 0%); transform-origin: 50% 100%; background: var(--acc); transition: height var(--t-gauge) var(--ease-out); }
 .vg span { font-size: var(--t-cap); line-height: var(--l-cap); font-weight: 700; white-space: nowrap; }
 
 /* 14장 · 시간축. 가로 위치만 자료값(--x) */
@@ -364,7 +364,7 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 .cw { flex: none; }
 .cw .lbl { font-size: var(--t-body); line-height: var(--l-body); margin-bottom: var(--gap-xs); }
 .cw .bar { height: 64px; background: var(--paper-2); border-radius: var(--r-ctl); overflow: hidden; display: flex; gap: 6px; padding: 6px; }
-.cw .bar i { display: block; height: 100%; width: 0; min-width: 0; border-radius: var(--r-dot); transition: width 500ms var(--ease), min-width 500ms var(--ease), opacity var(--dur); cursor: pointer; }
+.cw .bar i { display: block; height: 100%; width: 0; min-width: 0; border-radius: var(--r-dot); transition: width 300ms var(--ease-out), min-width 300ms var(--ease-out), opacity var(--dur); cursor: pointer; }
 .cw .bar i.on { min-width: 28px; }
 .cw .bar.focus i.hot { opacity: 1; }
 .cw .legend { display: flex; flex-wrap: wrap; gap: var(--gap-xs) var(--gap-sm); margin-top: var(--gap-xs); font-size: var(--t-cap); line-height: var(--l-cap); }
@@ -502,7 +502,7 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 /* 3장 · 모델 카드는 왼쪽에 그대로, 인터페이스 카드가 넓어져 품는다. 모델은 주황 테두리, 채팅의 주황 점과 선으로 잇는다 */
 .cards { position: relative; }
 .cards .card { position: absolute; top: 0; height: 100%; width: calc(50% - var(--gap) / 2); display: flex; flex-direction: column; gap: var(--gap-sm);
-  transition: left 700ms var(--ease), width 700ms var(--ease), height 700ms var(--ease), top 700ms var(--ease), background var(--dur), box-shadow var(--dur) 500ms; }
+  transition: left 420ms var(--ease-move), width 420ms var(--ease-move), height 420ms var(--ease-move), top 420ms var(--ease-move), background var(--dur), box-shadow var(--dur) 300ms; }
 .cards .cn { font-size: var(--t-h2); line-height: var(--l-h2); font-weight: 800; }
 .cards .cd { font-size: var(--t-body); line-height: var(--l-body); transition: opacity var(--dur); }
 .cards .cb { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; transition: padding 700ms var(--ease); }
@@ -545,7 +545,7 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 .docs { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-xl); position: relative; padding-top: calc(56px + var(--gap-sm)); }
 .docs .dochead { position: absolute; right: 0; top: 0; }
 .doc { background: var(--white); border-radius: var(--r-card); box-shadow: var(--shadow); padding: 16px 24px; overflow: hidden; display: flex; flex-direction: column; gap: 6px; min-height: 0; }
-.doc > * { flex: none; transition: width 400ms var(--ease); }
+.doc > * { flex: none; transition: width 240ms var(--ease); }
 .doc .t { height: 16px; background: var(--ink); border-radius: 4px; }
 .doc .h { height: 10px; background: var(--n4); border-radius: 4px; margin-top: 6px; }
 .doc .l { height: 8px; background: var(--paper-3); border-radius: 3px; }
@@ -583,7 +583,7 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 .k .a .w { transition: color var(--dur); }
 .k .a .w.new { color: var(--k-send); font-weight: 600; }
 /* 7장 토큰 상자는 채팅 안에서 갈라진다 */
-.k .tk { display: inline-block; white-space: nowrap; border-radius: 8px; padding: 0; margin: 0; box-shadow: inset 0 0 0 0 transparent; transition: padding 320ms var(--ease-out), margin 320ms var(--ease-out), box-shadow 320ms var(--ease-out), background 320ms var(--ease-out); }
+.k .tk { display: inline-block; white-space: nowrap; border-radius: 8px; padding: 0; margin: 0; box-shadow: inset 0 0 0 0 transparent; transition: padding 200ms var(--ease-out), margin 200ms var(--ease-out), box-shadow 200ms var(--ease-out), background 200ms var(--ease-out); }
 .k.split .tk { box-shadow: inset 0 0 0 2px var(--k-sub); }
 .k.split .u .tk { background: rgba(255,255,255,.06); }
 /* 9장 마지막에 모델 칩 */
@@ -664,12 +664,13 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 .k .a[data-step].on::before { opacity: 1; }
 .k .a[data-step] > * { opacity: 0; filter: blur(var(--blur)); transition: opacity var(--t-in) var(--ease-out), filter var(--t-in) var(--ease-out); }
 .k .a[data-step].on > * { opacity: 1; filter: none; transition-delay: calc(var(--d, 0ms) + var(--d-bubble)); }
-.k .a[data-step].on > * + * { transition-delay: calc(var(--d, 0ms) + var(--d-bubble) + 120ms); }
-.k .a[data-step].on > * + * + * { transition-delay: calc(var(--d, 0ms) + var(--d-bubble) + 240ms); }
+.k .a[data-step].on > * + * { transition-delay: calc(var(--d, 0ms) + var(--d-bubble) + var(--d-para)); }
+.k .a[data-step].on > * + * + * { transition-delay: calc(var(--d, 0ms) + var(--d-bubble) + var(--d-para) * 2); }
 .k .a[data-step] > [data-step]:not(.on) { opacity: 0 !important; }
 /* 글 교체는 140ms 꺼졌다가 새 글로 켜진다 */
-.sw { opacity: 0 !important; filter: blur(var(--blur)); transition: opacity 140ms var(--ease-in), filter 140ms var(--ease-in) !important; }
-.cwi, .pd, .vgs .en, .cands, .doc { transition: opacity var(--t-in) var(--ease-out), filter var(--t-in) var(--ease-out); }
+.sw { opacity: 0 !important; filter: blur(2px); transition: opacity 80ms var(--ease-out), filter 80ms var(--ease-out) !important; }
+.cwi, .pd, .vgs .en, .doc, .k .k-in .ph, .st .kin span, .pj .pin span { transition: opacity var(--t-in) var(--ease-out), filter var(--t-in) var(--ease-out); }
+.cands { transition: opacity var(--t-in) var(--ease-out); }
 /* 링과 초점 */
 .k .k-in .model, .pj .box, .st .row, .st .blk { transition: opacity var(--t-state) var(--ease-std), box-shadow var(--t-state) var(--ease-std); }
 .cw .bar.focus i { opacity: var(--dim); }
@@ -686,7 +687,7 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 /* 검수 반영 · 전역 */
 .bridge .row { font-size: var(--t-h3); line-height: var(--l-h3); }
 .bridge .row .no { width: 64px; transition-delay: 0ms; }
-.bridge .row > div { transition-delay: 100ms; }
+.bridge .row > div { transition-delay: 60ms; }
 .k .k-msgs, .k .k-in { max-width: 1160px; width: 100%; margin-inline: auto; box-sizing: border-box; }
 .k .k-in { margin: 0 auto 24px; width: calc(100% - 48px); }
 .k.bare .k-msgs { display: none; }
@@ -704,14 +705,14 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 /* 6장 후보 판 박자 */
 .cands .cand { opacity: 0; filter: blur(var(--blur)); transition: opacity var(--t-in) var(--ease-out) var(--d, 0ms), filter var(--t-in) var(--ease-out) var(--d, 0ms), color var(--t-state); }
 .cands.up .cand { opacity: 1; filter: none; }
-.cands .cand .b i { transition: width var(--t-cand) var(--ease-out) calc(var(--d, 0ms) + 120ms), background var(--t-state); }
+.cands .cand .b i { transition: width var(--t-cand) var(--ease-out) calc(var(--d, 0ms) + 40ms), background var(--t-state); }
 .cands .ch { border-bottom: 1px solid var(--line); }
-.k .a .w { opacity: 0; filter: blur(var(--blur)); transition: opacity 300ms var(--ease-out) var(--d, 0ms), filter 300ms var(--ease-out) var(--d, 0ms), color var(--t-state); }
+.k .a .w { opacity: 0; filter: blur(var(--blur)); transition: opacity 200ms var(--ease-out) var(--d, 0ms), filter 200ms var(--ease-out) var(--d, 0ms), color var(--t-state); }
 .k .a .w.on { opacity: 1; filter: none; }
 /* 7장 토큰은 면으로 */
 .k.split .tk { padding: 2px 12px; margin: 3px 2px; background: var(--k-el2); box-shadow: inset 0 0 0 2px rgba(236,234,227,.75); }
 .k.split .u .tk { background: var(--k-bg); }
-.k .tt[data-step] { transition-delay: calc(var(--d, 0ms) + 200ms); }
+.k .tt[data-step] { transition-delay: calc(var(--d, 0ms) + var(--d-tag)); }
 /* 8장 척추 */
 .train .pile i::before, .train .pile i::after { display: none; }
 /* 9장 알약 hover */
@@ -738,14 +739,14 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 /* 19장 */
 .body.soft { color: var(--mute); text-align: center; }
 /* 22장 형광펜 획. 밑줄은 그어지고 라벨은 그 뒤에 켜진다 */
-.k .u .g { --gc: transparent; text-decoration: underline; text-decoration-thickness: 5px; text-underline-offset: 8px; text-decoration-color: transparent; background-image: linear-gradient(var(--gc), var(--gc)); background-size: 0% 100%; background-repeat: no-repeat; background-position: left; border-radius: 4px; padding: 2px 0; transition: background-size 400ms var(--ease-out), text-decoration-color var(--t-state), opacity var(--t-state); }
+.k .u .g { --gc: transparent; text-decoration: underline; text-decoration-thickness: 5px; text-underline-offset: 8px; text-decoration-color: transparent; background-image: linear-gradient(var(--gc), var(--gc)); background-size: 0% 100%; background-repeat: no-repeat; background-position: left; border-radius: 4px; padding: 2px 0; transition: background-size 240ms var(--ease-out), text-decoration-color var(--t-state), opacity var(--t-state); }
 .k .u .g.c1 { --gc: rgba(20,40,160,.5); } .k .u .g.c2 { --gc: rgba(14,124,134,.5); } .k .u .g.c3 { --gc: rgba(109,76,179,.5); } .k .u .g.c4 { --gc: rgba(181,84,28,.5); } .k .u .g.c5 { --gc: rgba(255,255,255,.14); }
 .k .u .g.on { background-size: 100% 100%; }
 .k .u .g.c1.on { text-decoration-color: var(--c1); } .k .u .g.c2.on { text-decoration-color: var(--c2); } .k .u .g.c3.on { text-decoration-color: var(--c3); } .k .u .g.c4.on { text-decoration-color: var(--c4); } .k .u .g.c5.on { text-decoration-color: var(--white); }
 .k.only5 .u .g:not(.c5) { opacity: .35; }
 #s22 .labels { margin-top: var(--gap-sm); }
 /* 24장 토글은 움직인다 */
-.st .tg::after { right: auto; left: 21px; transition: left 200ms var(--ease-std); }
+.st .tg::after { right: auto; left: 21px; transition: left 160ms var(--ease-out); }
 .st .tg.off { background: #4A4945; } .st .tg.off::after { left: 3px; }
 .st .kin span.typed { color: var(--k-ink); }
 /* 26장 프로젝트 답 */
@@ -773,8 +774,8 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 .lay .nb.c1 { background: var(--c1); } .lay .nb.c2 { background: var(--c2); } .lay .nb.c3 { background: var(--c3); } .lay .nb.c4 { background: var(--c4); } .lay .nb.c5 { background: var(--c5); }
 .lay .c-pi { background: var(--c3); }
 .lay .cell.bd { background: none; justify-content: center; }
-.lay .cell.bd i { display: block; width: 0; height: 8px; border-radius: 4px; opacity: .45; transition: width 400ms var(--ease-out) var(--d, 0ms); }
-.lay .cell.bd i.on { width: calc(100% + var(--gap-sm)); }
+.lay .cell.bd i { display: block; width: calc(100% + var(--gap-sm)); height: 8px; border-radius: 4px; opacity: .45; transform: scaleX(0); transform-origin: 0 50%; transition: transform 260ms var(--ease-out) var(--d, 0ms), opacity var(--t-state); }
+.lay .cell.bd i.on { transform: none; }
 .lay .cell.bd.c-ins i { background: var(--c1); } .lay .cell.bd.c-mem i { background: var(--c2); } .lay .cell.bd.c-pi i { background: var(--c3); } .lay .cell.bd.c-kn i { background: var(--c4); }
 .lay .cell.bd i[data-step] { opacity: 0; filter: none; }
 .lay .cell.bd i[data-step].on { opacity: .45; }
@@ -817,7 +818,7 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 .brief .wbar i { font-style: normal; font-size: 22px; }
 /* 37장 문서는 브리프의 블록 */
 .doc .h { background: #C4C7D4; }
-.doc > * { opacity: 0; filter: blur(4px); transition: opacity 300ms var(--ease-out) var(--d, 0ms), filter 300ms var(--ease-out) var(--d, 0ms); }
+.doc > * { opacity: 0; filter: blur(4px); transition: opacity 200ms var(--ease-out) var(--d, 0ms), filter 200ms var(--ease-out) var(--d, 0ms); }
 .doc.up > * { opacity: 1; filter: none; }
 .doc .bento { display: grid; gap: 6px; }
 .doc .bento i { display: block; height: 24px; border-radius: 5px; background: var(--paper-2); }
@@ -848,6 +849,8 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 .pcells .pcell, .pcells .pcell .pn, .pcells .pcell .f { color: var(--ink); opacity: 1; }
 .pcells .pcell .f svg { color: var(--mute); }
 .doc .bento { gap: 4px; }
+
+@media (prefers-reduced-motion: reduce) { .stage * { transition-duration: 1ms !important; animation-duration: 1ms !important; } }
 
 </style></head>
 <body>
@@ -884,7 +887,7 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 <section class="s" id="s2" data-steps="2" data-sec="Background">
   <div class="main mid center">
     <div class="decl-lg" id="s2q">인공지능<span class="tail"><span data-out="2">?</span><span data-step="2"> 서비스</span></span></div>
-    <div class="trio" id="s2trio" data-stagger="90"><span data-step="1">ChatGPT</span><span data-step="1">Gemini</span><span data-step="1">Claude</span></div>
+    <div class="trio" id="s2trio" data-stagger="40"><span data-step="1">ChatGPT</span><span data-step="1">Gemini</span><span data-step="1">Claude</span></div>
   </div>
 </section>
 <!-- S3 구성 요소 · 모델은 왼쪽, 인터페이스가 넓어져 모델을 품고 채팅의 주황 점과 이어진다 -->
@@ -932,7 +935,7 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
       <div class="k-msgs"><div class="u" id="s7u">벤처캐피탈이 하는 일을 한 문장으로 설명해 줘</div><div class="a" id="s7a">벤처캐피탈은 초기 기업에 투자하고 상장까지 도와 수익을 얻는 회사입니다</div></div>
       <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
     </div>
-    <div class="bill" id="s7bill" data-stagger="80">
+    <div class="bill" id="s7bill" data-stagger="40">
       <div class="lrow" data-step="2"><span class="bl">입력</span><div class="bar"><i class="in" style="--w:7%"></i></div><span class="bt">7토큰</span></div>
       <div class="lrow" data-step="2"><span class="bl">출력</span><div class="bar"><i class="out" style="--w:9%"></i></div><span class="bt">9토큰</span></div>
     </div>
@@ -947,7 +950,7 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
       <div class="conn" data-step="1"></div>
       <div class="nnbox"><svg class="nn" id="s10ann" viewBox="0 0 600 600" fill="none"></svg></div>
       <div class="conn r" data-step="2"></div>
-      <div class="outs" id="s10aouts" data-stagger="80">
+      <div class="outs" id="s10aouts" data-stagger="40">
         <div class="out" data-step="2"><b>등급</b><span>얼마나 크게, 얼마나 많이 학습했는가</span><em>Haiku, Sonnet, Opus, Fable</em></div>
         <div class="out" data-step="3"><b>버전</b><span>같은 등급을 새로 학습한 세대</span><em>4.5, 5</em></div>
         <div class="out" data-step="4"><b>Knowledge cutoff</b><span>학습한 데이터가 언제까지인가</span><em>2026. 01</em></div>
@@ -1003,7 +1006,7 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
       </div>
       <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
     </div>
-    <div class="bill" id="s8bill" data-stagger="80">
+    <div class="bill" id="s8bill" data-stagger="40">
       <div class="lrow" data-step="1"><span class="bl">입력</span><div class="bar"><i class="in" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx" data-step="4">× 1원</span><span class="bp" data-step="5">100원</span></div>
       <div class="lrow" data-step="2"><span class="bl">출력</span><div class="bar"><i class="out" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx" data-step="4">× 5원</span><span class="bp" data-step="5">500원</span></div>
       <div class="lsum" data-step="3"><span class="bl">합계</span><span class="bt">200토큰</span><span class="bp" id="s8sum" data-step="5">600원</span></div>
@@ -1024,7 +1027,7 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
       </div>
       <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
     </div>
-    <div class="bill" id="s9bill" data-stagger="80">
+    <div class="bill" id="s9bill" data-stagger="40">
       <div class="lrow"><span class="bl swap"><span data-out="4">입력</span><span data-step="4">이전 입력</span></span><div class="bar"><i class="in p1" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx" data-step="4">× 0.1원</span><span class="bp" data-step="4">10원</span></div>
       <div class="lrow"><span class="bl swap"><span data-out="4">출력</span><span data-step="4">이전 출력</span></span><div class="bar"><i class="out p1" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx" data-step="4">× 0.1원</span><span class="bp" data-step="4">10원</span></div>
       <div class="lrow" data-step="1"><span class="bl">새 입력</span><div class="bar"><i class="in" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx" data-step="4">× 1원</span><span class="bp" data-step="4">100원</span></div>
@@ -1241,7 +1244,7 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
       </div>
     </div>
     <div class="col wide mid">
-      <div class="items" id="s23items" data-stagger="120">
+      <div class="items" id="s23items" data-stagger="40">
         <div class="it" data-step="1"><div class="t"><span class="no c1">1.</span>Claude 지침</div><div class="d">설정 &gt; 일반, <b>내 모든 대화</b>에 적용</div></div>
         <div class="it" data-step="2"><div class="t"><span class="no c3">2.</span>프로젝트 지침</div><div class="d">프로젝트 &gt; 지침, <b>프로젝트 내부 대화</b>에만 적용</div></div>
       </div>
@@ -1267,7 +1270,7 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
         <div class="row"><div><div class="l">다른 AI 제공업체에서 메모리 가져오기</div><div class="d">다른 AI 제공업체의 관련 컨텍스트와 데이터를 Claude로 가져오세요.</div></div><span class="btn-k">가져오기 시작</span></div>
         <div class="sec">나</div>
         <div class="mrow" id="s24row"><span class="n">Profile</span><span class="v">우리 회사는 삼성벤처투자. 우리 회사는 이런이런 업무를 하고, 나는 어떤 일을 하는 누구</span><span class="t">24시간 전 업데이트됨</span></div>
-        <div class="mrow" id="s24new" data-step="2" style="--d:400ms"><span class="n">A사 딜</span><span class="v">A사 딜은 9월 투자심의 안건</span><span class="t">방금 추가됨</span></div>
+        <div class="mrow" id="s24new" data-step="2" style="--d:120ms"><span class="n">A사 딜</span><span class="v">A사 딜은 9월 투자심의 안건</span><span class="t">방금 추가됨</span></div>
         <div class="kin"><span id="s24kin">변경하거나 제거할 내용을 Claude에게 알려주세요</span><i><svg><use href="#i-up"/></svg></i></div>
       </div>
     </div>
@@ -1311,7 +1314,7 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
       <div class="h2">산출물 기준</div>
       <div class="pcells"><div class="pcell"><div class="pn">보고서 만들기</div><div class="f"><svg><use href="#i-file"/></svg>A사_회사소개.md</div><div class="f"><svg><use href="#i-file"/></svg>A사_IR자료.pdf</div><div class="f"><svg><use href="#i-file"/></svg>경쟁사_비교.csv</div></div><div class="pcell"><div class="pn">PPT 만들기</div><div class="f"><svg><use href="#i-file"/></svg>A사_회사소개.md</div><div class="f"><svg><use href="#i-file"/></svg>A사_IR자료.pdf</div><div class="f"><svg><use href="#i-file"/></svg>경쟁사_비교.csv</div></div></div>
     </div>
-    <div class="col wide" id="s27r" data-stagger="100">
+    <div class="col wide" id="s27r" data-stagger="40">
       <div class="h2" data-step="1">입력 기준</div>
       <div class="pcells" data-step="1"><div class="pcell"><div class="pn">반도체</div><div class="f"><svg><use href="#i-file"/></svg>A사_회사소개.md</div><div class="f"><svg><use href="#i-file"/></svg>A사_IR자료.pdf</div><div class="f"><svg><use href="#i-file"/></svg>경쟁사_비교.csv</div></div><div class="pcell"><div class="pn">바이오</div><div class="f"><svg><use href="#i-file"/></svg>B사_회사소개.md</div><div class="f"><svg><use href="#i-file"/></svg>B사_임상데이터.pdf</div><div class="f"><svg><use href="#i-file"/></svg>바이오_규제_2026.md</div></div></div>
     </div>
@@ -1320,7 +1323,7 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 <!-- S29 레이어 정리 · 다섯 층. 자동 층은 시작에 서고 메시지마다 띠로 이어진다 -->
 <section class="s" id="s29" data-steps="4">
   <div class="head"><div class="h">레이어 정리</div><div class="lead">각 레이어가 컨텍스트 윈도우에 들어가는 시점</div></div>
-  <div class="main lay five" id="s29lay" data-stagger="70">
+  <div class="main lay five" id="s29lay" data-stagger="40">
     <div></div><div class="hd" data-step="1"><span>대화 시작</span></div><div class="hd" data-step="2"><span>메시지 1</span></div><div class="hd" data-step="3"><span>메시지 2</span></div><div class="hd" data-step="4"><span>메시지 3</span></div>
     <div class="rl"><i class="nb c1">1</i>Claude 지침</div><div class="cell c-ins" data-step="1"></div><div class="cell bd c-ins"><i data-step="2"></i></div><div class="cell bd c-ins"><i data-step="3"></i></div><div class="cell bd c-ins"><i data-step="4"></i></div>
     <div class="rl"><i class="nb c2">2</i>메모리</div><div class="cell c-mem" data-step="1"></div><div class="cell bd c-mem"><i data-step="2"></i></div><div class="cell bd c-mem"><i data-step="3"></i></div><div class="cell bd c-mem"><i data-step="4"></i></div>
@@ -1333,7 +1336,7 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 <section class="s" id="s25" data-steps="3">
   <div class="head"><div class="h"><span class="no">7.</span> 자료 들여오기</div><div class="lead">모델이 모르는 정보를 컨텍스트 윈도우에 넣는 두 길</div></div>
   <div class="main">
-    <div class="intake" id="s25in" data-stagger="80">
+    <div class="intake" id="s25in" data-stagger="40">
       <div class="src"><div class="h2">사람이 넣는다</div><div class="it">프롬프트에 직접 씀</div><div class="it">파일을 첨부함</div></div>
       <div class="conn" data-step="1"></div>
       <div class="cwb"><div class="cwt">컨텍스트 윈도우</div>
@@ -1387,7 +1390,7 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
         <div class="f"><svg><use href="#i-file"/></svg> 보고서_양식.md</div>
       </div>
     </div>
-    <div class="col wide" id="s28r" data-stagger="100">
+    <div class="col wide" id="s28r" data-stagger="40">
       <div class="h2" data-step="1">드라이브 커넥터</div>
       <div class="k" data-step="1">
         <div class="k-msgs">
@@ -1509,7 +1512,7 @@ svg.nn.fade { animation: nnin 500ms var(--ease); }
 <section class="s" id="s37" data-steps="1">
   <div class="head"><div class="h"><span class="no">10.</span> 플러그인</div><div class="lead">스킬과 커넥터를 하나로 묶어 둔 패키지</div></div>
   <div class="main cols" style="--cols:760px 1fr">
-    <div class="pkg card" id="s37pkg" data-stagger="120">
+    <div class="pkg card" id="s37pkg" data-stagger="40">
       <div class="pk">플러그인 · deal-sourcing</div>
       <div class="ob" data-step="1"><small>스킬</small><div class="fn"><svg><use href="#i-folder"/></svg>deal-sourcing</div></div>
       <div class="ob" data-step="1"><small>커넥터</small><div class="crow"><i class="ic"></i><b>Google Drive</b><span>연결됨</span></div></div>
@@ -1567,7 +1570,7 @@ function apply(s, k) {
     var on = +el.dataset.step <= k, was = el.classList.contains('on');
     if (on && !was) {
       var g = el.closest('[data-stagger]');
-      if (g) { var key = g.id + ':' + el.dataset.step; seen[key] = seen[key] || 0; el.style.setProperty('--d', (seen[key]++ * (+g.dataset.stagger || 80)) + 'ms'); }
+      if (g) { var key = g.id + ':' + el.dataset.step; seen[key] = seen[key] || 0; el.style.setProperty('--d', (seen[key]++ * Math.min(+g.dataset.stagger || 40, 60)) + 'ms'); }
     }
     if (!on) el.style.removeProperty('--d');
     el.classList.toggle('on', on);
@@ -1575,18 +1578,20 @@ function apply(s, k) {
   $$('[data-out]', s).forEach(function (el) { el.classList.toggle('off', +el.dataset.out <= k); });
   var h = HOOK[s.id]; if (h && h.step) h.step(s.dataset.hook ? Math.min(k, +s.dataset.hook) : k);
 }
-function swapText(el, fn) { el.classList.add('sw'); later(function () { fn(); void el.offsetWidth; el.classList.remove('sw'); }, 140); }
+function swapText(el, fn) { clearTimeout(el._sw); el.classList.add('sw'); el._sw = setTimeout(function () { fn(); void el.offsetWidth; el.classList.remove('sw'); }, 80); }
+function raf2(fn) { requestAnimationFrame(function () { requestAnimationFrame(fn); }); }
 function show(n) {
   n = Math.max(0, Math.min(slides.length - 1, n));
   var prev = slides[cur];
   clearTimers();
   cur = n; step = 0;
-  slides.forEach(function (s, i) { s.classList.toggle('active', i === n); s.classList.remove('leaving'); });
-  if (prev !== slides[n]) { prev.classList.add('leaving'); setTimeout(function () { prev.classList.remove('leaving'); }, 250); }
+  slides[n].classList.add('still');
+  slides.forEach(function (s, i) { s.classList.toggle('active', i === n); });
   viewport.classList.toggle('dark', slides[n].classList.contains('dark')); viewport.classList.toggle('blue', slides[n].classList.contains('blue'));
   var h = HOOK[slides[n].id]; if (h && h.reset) h.reset();
   apply(slides[n], 0);
-  if (prev !== slides[n]) { var ph = HOOK[prev.id]; setTimeout(function () { if (ph && ph.reset) ph.reset(); apply(prev, 0); }, 400); }
+  if (prev !== slides[n]) { var ph = HOOK[prev.id]; if (ph && ph.reset) ph.reset(); apply(prev, 0); $$('.sw', prev).forEach(function (e) { clearTimeout(e._sw); e.classList.remove('sw'); }); }
+  raf2(function () { slides[n].classList.remove('still'); });
   location.hash = String(n + 1);
 }
 function next() {
@@ -1663,17 +1668,17 @@ HOOK.s2 = { step: function (k) { $('s2q').classList.toggle('is-dim', k >= 2); } 
   function drawSent(n, full, land) {
     var w = words(n, full), base = words(land ? n - (full ? 0 : 1) : n, false).length;
     if (full && land) base = words(n, false).length;
-    ans.innerHTML = w.map(function (x, i) { var isNew = i >= base; return '<span class="w' + (isNew ? ' new' : ' on') + '" style="--d:' + ((i - base) * 80) + 'ms">' + x + '</span>'; }).join(' ');
-    if (land) later(function () { $$('#s6a .w.new').forEach(function (e) { e.classList.add('on'); }); }, 20);
+    ans.innerHTML = w.map(function (x, i) { var isNew = i >= base; return '<span class="w' + (isNew ? ' new' : ' on') + '" style="--d:' + ((i - base) * 60) + 'ms">' + x + '</span>'; }).join(' ');
+    if (land) raf2(function () { $$('#s6a .w.new').forEach(function (e) { e.classList.add('on'); }); });
   }
   function header() { return '<div class="ch">다음 토큰 후보와 확률</div>'; }
   function drawCands(i) {
     list.classList.remove('up');
     if (i < 0) { list.innerHTML = header(); return; }
     var st = STEPS[i];
-    list.innerHTML = header() + st.c.map(function (c, j) { return '<div class="cand" style="--d:' + (j * 50) + 'ms"><span>' + c[0] + '</span><div class="b"><i style="--w:' + c[1] + '%"></i></div><span class="p">' + c[1] + '%</span></div>'; }).join('');
-    later(function () { list.classList.add('up'); }, 30);
-    later(function () { var r = $$('#s6list .cand')[st.pick]; if (r) r.classList.add('pick'); }, 50 * 3 + 380 + 160);
+    list.innerHTML = header() + st.c.map(function (c, j) { return '<div class="cand" style="--d:' + (j * 40) + 'ms"><span>' + c[0] + '</span><div class="b"><i style="--w:' + c[1] + '%"></i></div><span class="p">' + c[1] + '%</span></div>'; }).join('');
+    raf2(function () { list.classList.add('up'); });
+    later(function () { var r = $$('#s6list .cand')[st.pick]; if (r) r.classList.add('pick'); }, 260);
   }
   HOOK.s6 = {
     reset: function () { clearTimers(); drawSent(0, false, false); drawCands(-1); },
@@ -1681,7 +1686,7 @@ HOOK.s2 = { step: function (k) { $('s2q').classList.toggle('is-dim', k >= 2); } 
       clearTimers();
       if (k >= 6) { swapText(list, function () { drawCands(-1); }); drawSent(5, true, true); return; }
       swapText(list, function () { drawCands(k - 1); });
-      later(function () { drawSent(k, false, true); }, 50 * 3 + 380 + 160 + 200);
+      later(function () { drawSent(k, false, true); }, 380);
     }
   };
 })();
@@ -1697,7 +1702,7 @@ HOOK.s2 = { step: function (k) { $('s2q').classList.toggle('is-dim', k >= 2); } 
 
 /* S8 · S9 · 장부 막대는 줄이 나타날 때 자란다 (CSS). 9장 3단계에 앞의 문답과 줄이 '이전 입력' 색이 된다 */
 function countUp(el, to, ms) { var t0 = performance.now(); function f(t) { var p = Math.min(1, (t - t0) / ms); p = 1 - Math.pow(1 - p, 3); el.textContent = Math.round(to * p) + '원'; if (p < 1) requestAnimationFrame(f); } requestAnimationFrame(f); }
-HOOK.s8 = { step: function (k) { if (k === 5) countUp($('s8sum'), 600, 700); } };
+HOOK.s8 = { step: function (k) { if (k === 5) countUp($('s8sum'), 600, 400); } };
 HOOK.s9 = { step: function (k) { $('s9k').classList.toggle('prev', k >= 4); $('s9bill').classList.toggle('prev', k >= 4); } };
 
 /* S10 · 라인업. 등급이 오를수록 노드가 많아진다 */
@@ -1738,7 +1743,7 @@ HOOK.s12 = { step: function (k) {
   function render() {
     $$('#s13lv .l').forEach(function (l) { l.classList.toggle('sel', +l.dataset.i === lv); });
     if ($('s13en').textContent !== LV[lv]) swapText($('s13en'), function () { $('s13en').textContent = LV[lv]; });
-    $('s13g1').style.height = G[lv][0] + '%'; $('s13g2').style.height = G[lv][1] + '%';
+    $('s13g1').style.setProperty('--h', G[lv][0] + '%'); $('s13g2').style.setProperty('--h', G[lv][1] + '%');
   }
   $$('#s13lv .l').forEach(function (l) { l.addEventListener('click', function (e) { e.stopPropagation(); lv = +l.dataset.i; render(); }); });
   HOOK.s13 = { reset: function () { lv = 2; render(); }, step: function (k) { lv = k === 1 ? 4 : k === 2 ? 0 : 2; render(); } };
@@ -1746,7 +1751,7 @@ HOOK.s12 = { step: function (k) {
 })();
 
 /* S14 · 모르는 구간 */
-HOOK.s14 = { step: function (k) { $$('#s14ax .unk').forEach(function (u, i) { u.style.transitionDelay = k >= 1 ? (i * 90) + 'ms' : '0ms'; u.classList.toggle('on', k >= 1); }); } };
+HOOK.s14 = { step: function (k) { $$('#s14ax .unk').forEach(function (u, i) { u.style.transitionDelay = k >= 1 ? (i * 40) + 'ms' : '0ms'; u.classList.toggle('on', k >= 1); }); } };
 
 /* S17 · 컨텍스트 윈도우. 대본 순서대로 채운다 */
 (function () {
@@ -1795,8 +1800,8 @@ HOOK.s22 = { step: function (k) {
   $('s22k').classList.toggle('only5', k >= 5);
   for (var i = 1; i <= 5; i++) {
     var gs = $$('#s22p .g.c' + i);
-    gs.forEach(function (g, j) { g.style.transitionDelay = (i === k ? j * 80 : 0) + 'ms'; g.classList.toggle('on', i <= k); });
-    $$('#s22 .labels .lb.c' + i).forEach(function (l) { l.style.transitionDelay = (i === k ? gs.length * 80 + 150 : 0) + 'ms'; l.classList.toggle('on', i <= k); });
+    gs.forEach(function (g, j) { g.style.transitionDelay = (i === k ? j * 40 : 0) + 'ms'; g.classList.toggle('on', i <= k); });
+    $$('#s22 .labels .lb.c' + i).forEach(function (l) { l.style.transitionDelay = (i === k ? gs.length * 40 + 60 : 0) + 'ms'; l.classList.toggle('on', i <= k); });
   }
 } };
 
@@ -1820,7 +1825,7 @@ HOOK.s26 = { step: function (k) {
   var rows = $$('#s34st div');
   HOOK.s34 = {
     reset: function () { rows.forEach(function (r) { r.classList.remove('ok'); }); },
-    step: function (k) { if (k >= 1) rows.forEach(function (r, i) { later(function () { r.classList.add('ok'); }, 350 * i); }); else rows.forEach(function (r) { r.classList.remove('ok'); }); }
+    step: function (k) { if (k >= 1) rows.forEach(function (r, i) { later(function () { r.classList.add('ok'); }, 180 * i); }); else rows.forEach(function (r) { r.classList.remove('ok'); }); }
   };
   $('s34card').addEventListener('click', function (e) { e.stopPropagation(); if (state().step < 3) window.finish(); });
 })();
@@ -1848,14 +1853,14 @@ HOOK.s26 = { step: function (k) {
     h += bento(3, 11, true);
     return h;
   }
-  function paint(el, html) { el.classList.remove('up'); el.innerHTML = html; $$('*', el).forEach(function (n, i) { if (n.parentNode === el) n.style.setProperty('--d', (i * 40) + 'ms'); }); void el.offsetWidth; el.classList.add('up'); }
+  function paint(el, html) { el.classList.remove('up'); el.innerHTML = html; $$('*', el).forEach(function (n, i) { if (n.parentNode === el) n.style.setProperty('--d', (i * 30) + 'ms'); }); void el.offsetWidth; el.classList.add('up'); }
   function gen() { paint(L, left()); paint(Rr, right()); }
   $('s35gen').addEventListener('click', function (e) { e.stopPropagation(); gen(); this.blur(); });
   HOOK.s35 = { reset: gen, step: function (k) { if (k >= 4) gen(); } };
 })();
 
 /* S36 · 커넥터. 마지막 Space에 관리자 승인 행만 남긴다 */
-HOOK.s33 = { step: function (k) { var f = $('s33f'); $$('#s33f .fi').forEach(function (r, i) { r.style.setProperty('--d', (i * 120) + 'ms'); }); f.classList.toggle('open', k >= 2); } };
+HOOK.s33 = { step: function (k) { var f = $('s33f'); $$('#s33f .fi').forEach(function (r, i) { r.style.setProperty('--d', (i * 40) + 'ms'); }); f.classList.toggle('open', k >= 2); } };
 HOOK.s31 = { step: function (k) { $$('#s31c .k.rep').forEach(function (kk) { kk.classList.toggle('dim1', k >= 1); }); } };
 HOOK.s36 = { step: function (k) { $('s36st').classList.toggle('focus', k >= 3); } };
 

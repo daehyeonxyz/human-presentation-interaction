@@ -32,7 +32,7 @@ function apply(s, k) {
     var on = +el.dataset.step <= k, was = el.classList.contains('on');
     if (on && !was) {
       var g = el.closest('[data-stagger]');
-      if (g) { var key = g.id + ':' + el.dataset.step; seen[key] = seen[key] || 0; el.style.setProperty('--d', (seen[key]++ * (+g.dataset.stagger || 80)) + 'ms'); }
+      if (g) { var key = g.id + ':' + el.dataset.step; seen[key] = seen[key] || 0; el.style.setProperty('--d', (seen[key]++ * Math.min(+g.dataset.stagger || 40, 60)) + 'ms'); }
     }
     if (!on) el.style.removeProperty('--d');
     el.classList.toggle('on', on);
@@ -40,18 +40,20 @@ function apply(s, k) {
   $$('[data-out]', s).forEach(function (el) { el.classList.toggle('off', +el.dataset.out <= k); });
   var h = HOOK[s.id]; if (h && h.step) h.step(s.dataset.hook ? Math.min(k, +s.dataset.hook) : k);
 }
-function swapText(el, fn) { el.classList.add('sw'); later(function () { fn(); void el.offsetWidth; el.classList.remove('sw'); }, 140); }
+function swapText(el, fn) { clearTimeout(el._sw); el.classList.add('sw'); el._sw = setTimeout(function () { fn(); void el.offsetWidth; el.classList.remove('sw'); }, 80); }
+function raf2(fn) { requestAnimationFrame(function () { requestAnimationFrame(fn); }); }
 function show(n) {
   n = Math.max(0, Math.min(slides.length - 1, n));
   var prev = slides[cur];
   clearTimers();
   cur = n; step = 0;
-  slides.forEach(function (s, i) { s.classList.toggle('active', i === n); s.classList.remove('leaving'); });
-  if (prev !== slides[n]) { prev.classList.add('leaving'); setTimeout(function () { prev.classList.remove('leaving'); }, 250); }
+  slides[n].classList.add('still');
+  slides.forEach(function (s, i) { s.classList.toggle('active', i === n); });
   viewport.classList.toggle('dark', slides[n].classList.contains('dark')); viewport.classList.toggle('blue', slides[n].classList.contains('blue'));
   var h = HOOK[slides[n].id]; if (h && h.reset) h.reset();
   apply(slides[n], 0);
-  if (prev !== slides[n]) { var ph = HOOK[prev.id]; setTimeout(function () { if (ph && ph.reset) ph.reset(); apply(prev, 0); }, 400); }
+  if (prev !== slides[n]) { var ph = HOOK[prev.id]; if (ph && ph.reset) ph.reset(); apply(prev, 0); $$('.sw', prev).forEach(function (e) { clearTimeout(e._sw); e.classList.remove('sw'); }); }
+  raf2(function () { slides[n].classList.remove('still'); });
   location.hash = String(n + 1);
 }
 function next() {
@@ -128,17 +130,17 @@ HOOK.s2 = { step: function (k) { $('s2q').classList.toggle('is-dim', k >= 2); } 
   function drawSent(n, full, land) {
     var w = words(n, full), base = words(land ? n - (full ? 0 : 1) : n, false).length;
     if (full && land) base = words(n, false).length;
-    ans.innerHTML = w.map(function (x, i) { var isNew = i >= base; return '<span class="w' + (isNew ? ' new' : ' on') + '" style="--d:' + ((i - base) * 80) + 'ms">' + x + '</span>'; }).join(' ');
-    if (land) later(function () { $$('#s6a .w.new').forEach(function (e) { e.classList.add('on'); }); }, 20);
+    ans.innerHTML = w.map(function (x, i) { var isNew = i >= base; return '<span class="w' + (isNew ? ' new' : ' on') + '" style="--d:' + ((i - base) * 60) + 'ms">' + x + '</span>'; }).join(' ');
+    if (land) raf2(function () { $$('#s6a .w.new').forEach(function (e) { e.classList.add('on'); }); });
   }
   function header() { return '<div class="ch">다음 토큰 후보와 확률</div>'; }
   function drawCands(i) {
     list.classList.remove('up');
     if (i < 0) { list.innerHTML = header(); return; }
     var st = STEPS[i];
-    list.innerHTML = header() + st.c.map(function (c, j) { return '<div class="cand" style="--d:' + (j * 50) + 'ms"><span>' + c[0] + '</span><div class="b"><i style="--w:' + c[1] + '%"></i></div><span class="p">' + c[1] + '%</span></div>'; }).join('');
-    later(function () { list.classList.add('up'); }, 30);
-    later(function () { var r = $$('#s6list .cand')[st.pick]; if (r) r.classList.add('pick'); }, 50 * 3 + 380 + 160);
+    list.innerHTML = header() + st.c.map(function (c, j) { return '<div class="cand" style="--d:' + (j * 40) + 'ms"><span>' + c[0] + '</span><div class="b"><i style="--w:' + c[1] + '%"></i></div><span class="p">' + c[1] + '%</span></div>'; }).join('');
+    raf2(function () { list.classList.add('up'); });
+    later(function () { var r = $$('#s6list .cand')[st.pick]; if (r) r.classList.add('pick'); }, 260);
   }
   HOOK.s6 = {
     reset: function () { clearTimers(); drawSent(0, false, false); drawCands(-1); },
@@ -146,7 +148,7 @@ HOOK.s2 = { step: function (k) { $('s2q').classList.toggle('is-dim', k >= 2); } 
       clearTimers();
       if (k >= 6) { swapText(list, function () { drawCands(-1); }); drawSent(5, true, true); return; }
       swapText(list, function () { drawCands(k - 1); });
-      later(function () { drawSent(k, false, true); }, 50 * 3 + 380 + 160 + 200);
+      later(function () { drawSent(k, false, true); }, 380);
     }
   };
 })();
@@ -162,7 +164,7 @@ HOOK.s2 = { step: function (k) { $('s2q').classList.toggle('is-dim', k >= 2); } 
 
 /* S8 · S9 · 장부 막대는 줄이 나타날 때 자란다 (CSS). 9장 3단계에 앞의 문답과 줄이 '이전 입력' 색이 된다 */
 function countUp(el, to, ms) { var t0 = performance.now(); function f(t) { var p = Math.min(1, (t - t0) / ms); p = 1 - Math.pow(1 - p, 3); el.textContent = Math.round(to * p) + '원'; if (p < 1) requestAnimationFrame(f); } requestAnimationFrame(f); }
-HOOK.s8 = { step: function (k) { if (k === 5) countUp($('s8sum'), 600, 700); } };
+HOOK.s8 = { step: function (k) { if (k === 5) countUp($('s8sum'), 600, 400); } };
 HOOK.s9 = { step: function (k) { $('s9k').classList.toggle('prev', k >= 4); $('s9bill').classList.toggle('prev', k >= 4); } };
 
 /* S10 · 라인업. 등급이 오를수록 노드가 많아진다 */
@@ -203,7 +205,7 @@ HOOK.s12 = { step: function (k) {
   function render() {
     $$('#s13lv .l').forEach(function (l) { l.classList.toggle('sel', +l.dataset.i === lv); });
     if ($('s13en').textContent !== LV[lv]) swapText($('s13en'), function () { $('s13en').textContent = LV[lv]; });
-    $('s13g1').style.height = G[lv][0] + '%'; $('s13g2').style.height = G[lv][1] + '%';
+    $('s13g1').style.setProperty('--h', G[lv][0] + '%'); $('s13g2').style.setProperty('--h', G[lv][1] + '%');
   }
   $$('#s13lv .l').forEach(function (l) { l.addEventListener('click', function (e) { e.stopPropagation(); lv = +l.dataset.i; render(); }); });
   HOOK.s13 = { reset: function () { lv = 2; render(); }, step: function (k) { lv = k === 1 ? 4 : k === 2 ? 0 : 2; render(); } };
@@ -211,7 +213,7 @@ HOOK.s12 = { step: function (k) {
 })();
 
 /* S14 · 모르는 구간 */
-HOOK.s14 = { step: function (k) { $$('#s14ax .unk').forEach(function (u, i) { u.style.transitionDelay = k >= 1 ? (i * 90) + 'ms' : '0ms'; u.classList.toggle('on', k >= 1); }); } };
+HOOK.s14 = { step: function (k) { $$('#s14ax .unk').forEach(function (u, i) { u.style.transitionDelay = k >= 1 ? (i * 40) + 'ms' : '0ms'; u.classList.toggle('on', k >= 1); }); } };
 
 /* S17 · 컨텍스트 윈도우. 대본 순서대로 채운다 */
 (function () {
@@ -260,8 +262,8 @@ HOOK.s22 = { step: function (k) {
   $('s22k').classList.toggle('only5', k >= 5);
   for (var i = 1; i <= 5; i++) {
     var gs = $$('#s22p .g.c' + i);
-    gs.forEach(function (g, j) { g.style.transitionDelay = (i === k ? j * 80 : 0) + 'ms'; g.classList.toggle('on', i <= k); });
-    $$('#s22 .labels .lb.c' + i).forEach(function (l) { l.style.transitionDelay = (i === k ? gs.length * 80 + 150 : 0) + 'ms'; l.classList.toggle('on', i <= k); });
+    gs.forEach(function (g, j) { g.style.transitionDelay = (i === k ? j * 40 : 0) + 'ms'; g.classList.toggle('on', i <= k); });
+    $$('#s22 .labels .lb.c' + i).forEach(function (l) { l.style.transitionDelay = (i === k ? gs.length * 40 + 60 : 0) + 'ms'; l.classList.toggle('on', i <= k); });
   }
 } };
 
@@ -285,7 +287,7 @@ HOOK.s26 = { step: function (k) {
   var rows = $$('#s34st div');
   HOOK.s34 = {
     reset: function () { rows.forEach(function (r) { r.classList.remove('ok'); }); },
-    step: function (k) { if (k >= 1) rows.forEach(function (r, i) { later(function () { r.classList.add('ok'); }, 350 * i); }); else rows.forEach(function (r) { r.classList.remove('ok'); }); }
+    step: function (k) { if (k >= 1) rows.forEach(function (r, i) { later(function () { r.classList.add('ok'); }, 180 * i); }); else rows.forEach(function (r) { r.classList.remove('ok'); }); }
   };
   $('s34card').addEventListener('click', function (e) { e.stopPropagation(); if (state().step < 3) window.finish(); });
 })();
@@ -313,14 +315,14 @@ HOOK.s26 = { step: function (k) {
     h += bento(3, 11, true);
     return h;
   }
-  function paint(el, html) { el.classList.remove('up'); el.innerHTML = html; $$('*', el).forEach(function (n, i) { if (n.parentNode === el) n.style.setProperty('--d', (i * 40) + 'ms'); }); void el.offsetWidth; el.classList.add('up'); }
+  function paint(el, html) { el.classList.remove('up'); el.innerHTML = html; $$('*', el).forEach(function (n, i) { if (n.parentNode === el) n.style.setProperty('--d', (i * 30) + 'ms'); }); void el.offsetWidth; el.classList.add('up'); }
   function gen() { paint(L, left()); paint(Rr, right()); }
   $('s35gen').addEventListener('click', function (e) { e.stopPropagation(); gen(); this.blur(); });
   HOOK.s35 = { reset: gen, step: function (k) { if (k >= 4) gen(); } };
 })();
 
 /* S36 · 커넥터. 마지막 Space에 관리자 승인 행만 남긴다 */
-HOOK.s33 = { step: function (k) { var f = $('s33f'); $$('#s33f .fi').forEach(function (r, i) { r.style.setProperty('--d', (i * 120) + 'ms'); }); f.classList.toggle('open', k >= 2); } };
+HOOK.s33 = { step: function (k) { var f = $('s33f'); $$('#s33f .fi').forEach(function (r, i) { r.style.setProperty('--d', (i * 40) + 'ms'); }); f.classList.toggle('open', k >= 2); } };
 HOOK.s31 = { step: function (k) { $$('#s31c .k.rep').forEach(function (kk) { kk.classList.toggle('dim1', k >= 1); }); } };
 HOOK.s36 = { step: function (k) { $('s36st').classList.toggle('focus', k >= 3); } };
 
