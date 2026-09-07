@@ -505,13 +505,12 @@ svg.nn.fade { animation: nnin 200ms var(--ease-out); }
 .cards .card.model { left: 0; } .cards .card.iface { left: calc(50% + var(--gap) / 2); }
 .cards .card.model .cb { padding: var(--gap-sm) 0; }
 .cards.nest .card.iface { left: 0; width: 100%; background: var(--acc-soft); }
-.cards.nest .card.model { left: var(--gap); top: var(--gap); width: 560px; height: calc(100% - var(--gap) * 2); z-index: 2; box-shadow: 0 0 0 4px var(--k-send); }
-.cards.nest .card.model .cd { display: none; }
-.cards.nest .card.iface .cb, .cards.nest .card.iface > div:first-child { padding-left: calc(560px + var(--gap)); }
+.cards.nest .card.model { left: var(--gap); top: var(--gap); width: calc(50% - var(--gap) / 2); height: calc(100% - var(--gap) * 2); z-index: 2; }
+.cards.nest .card.iface .cb, .cards.nest .card.iface > div:first-child { padding-left: calc(50% + var(--gap) * 1.5); }
 .cards .card.iface > div:first-child { transition: padding 700ms var(--ease); }
 .cards .link { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; opacity: 0; transition: opacity var(--dur); }
 .cards.nest .link { opacity: 1; }
-.cards .link line { stroke: var(--k-send); stroke-width: 4; stroke-dasharray: 12 10; stroke-linecap: round; }
+.cards .link line { stroke: var(--k-send); stroke-width: 3; stroke-linecap: round; }
 .cards .link circle { fill: var(--k-send); }
 
 /* 25장 · 흐름도 */
@@ -675,7 +674,6 @@ svg.nn.fade { animation: nnin 200ms var(--ease-out); }
 .cands .cand .b i { width: 0; transition: width var(--t-cand) var(--ease-out); }
 .cands.up .cand .b i { width: var(--w); }
 /* 3장 모델 설명은 자리를 지킨 채 사라진다 */
-.cards.nest .card.model .cd { position: absolute; opacity: 0; visibility: hidden; transition: opacity var(--t-out) var(--ease-out), visibility 0s linear var(--t-out); }
 /* 7장 토큰 상자는 왼쪽부터 */
 .k .tk { transition-delay: calc(var(--i, 0) * var(--stg-tk)); }
 .k:not(.split) .tk { transition-delay: 0ms; }
@@ -938,3 +936,20 @@ svg.nn.fade { animation: nnin 200ms var(--ease-out); }
 .pkg .ob .crow b { flex: 1; }
 .pkg .ob .mini { font-size: 24px; line-height: 32px; }
 .pkg .ob .mini i { background: var(--acc-soft); }
+
+/* 58차 반영 · 2장 단어 교체 가운데, 7장 설명 열, 9장 위치 */
+.decl-lg.sw2 { display: grid; justify-items: center; text-align: center; }
+.decl-lg.sw2 > span { grid-area: 1 / 1; white-space: nowrap; }
+.tokx { display: flex; flex-direction: column; gap: var(--gap); justify-content: center; }
+.tokx .tx1 { display: flex; flex-direction: column; gap: var(--gap-3xs); }
+.tokx .tx1 > b { font-size: var(--t-h2); line-height: var(--l-h2); font-weight: 800; }
+.tokx .tx1 > span { font-size: var(--t-body); line-height: var(--l-body); }
+.tokx .tx2 { display: flex; gap: var(--gap-lg); }
+.tokx .tx2 > div { display: flex; align-items: baseline; gap: var(--gap-xs); }
+.tokx .tx2 b { font-size: var(--t-decl); line-height: 1; font-weight: 800; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+
+.tokx .tx2 span { font-size: var(--t-body); line-height: var(--l-body); font-weight: 700; }
+#s2 .main { position: relative; justify-content: center; }
+#s2trio { position: absolute; left: 0; right: 0; top: calc(50% + 110px); margin-top: 0; }
+#s10 .main.cols { flex: none; height: 580px; }
+#s10 .nnbox { height: 580px; }

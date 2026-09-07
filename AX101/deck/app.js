@@ -92,7 +92,6 @@ function figure(el, labels) {
     '</svg>' + (labels === false ? '' : '<div class="fl"><span class="t-model">모델</span><span class="t-if">인터페이스</span></div>');
 }
 ['s4fig', 's5fig', 's16fig'].forEach(function (id) { figure($(id)); });
-['s13bf1', 's13bf2', 's16afig', 's16bfig'].forEach(function (id) { figure($(id), false); });
 HOOK.s16 = { step: function (k) { $('s16fig').classList.toggle('lit-model', k < 1); $('s16fig').classList.toggle('lit-if', k >= 1); } };
 
 /* S2 */
@@ -104,11 +103,11 @@ HOOK.s2 = { step: function (k) { $('s2q').classList.toggle('is-dim', k >= 2); } 
   var cards = $('s3cards'), link = $('s3link');
   function pos(el) { var x = 0, y = 0; while (el && el !== cards) { x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; } return { x: x, y: y }; }
   function draw() {
-    var m = cards.querySelector('.card.model'), a = $('s3a');
-    var x1 = m.offsetLeft + m.offsetWidth, y1 = m.offsetTop + m.offsetHeight / 2;
+    var a = $('s3a'), sv = $('s3nn'), cr = cards.getBoundingClientRect(), sr = sv.getBoundingClientRect(), kk = cr.width / cards.offsetWidth;
+    var x1 = (sr.right - cr.left) / kk - 14, y1 = (sr.top + sr.height / 2 - cr.top) / kk;
     var p = pos(a), x2 = p.x + 14, y2 = p.y + 17;
     link.setAttribute('viewBox', '0 0 ' + cards.offsetWidth + ' ' + cards.offsetHeight);
-    link.innerHTML = '<circle cx="' + x1 + '" cy="' + y1 + '" r="10"/><line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '"/>';
+    link.innerHTML = '<circle cx="' + x1 + '" cy="' + y1 + '" r="8"/><line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '"/>';
   }
   cards.querySelector('.card.model').addEventListener('transitionend', function (e) { if (e.propertyName === 'left' && cards.classList.contains('nest')) draw(); });
   HOOK.s3 = { step: function (k) { cards.classList.toggle('nest', k >= 3); if (k < 3) link.innerHTML = ''; } };

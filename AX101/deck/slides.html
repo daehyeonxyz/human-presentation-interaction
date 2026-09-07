@@ -36,7 +36,7 @@
 <!-- S2 인공지능? -->
 <section class="s" id="s2" data-steps="2" data-sec="Background">
   <div class="main mid center">
-    <div class="decl-lg" id="s2q">인공지능<span class="tail"><span data-out="2">?</span><span data-step="2">&nbsp;서비스</span></span></div>
+    <div class="decl-lg sw2" id="s2q"><span data-out="2">인공지능?</span><span data-step="2">인공지능 서비스</span></div>
     <div class="trio" id="s2trio" data-stagger="40"><span data-step="1">ChatGPT</span><span data-step="1">Gemini</span><span data-step="1">Claude</span></div>
   </div>
 </section>
@@ -47,7 +47,7 @@
     <div class="card model"><div><div class="cn">모델</div><div class="cd">사람의 뇌를 모방하여 만든 컴퓨터 시스템<br>요즘 AI라고 하면 보통 LLM</div></div>
       <div class="cb" data-step="1"><svg class="nn" id="s3nn" viewBox="0 0 420 300" fill="none"></svg></div></div>
     <div class="card iface"><div><div class="cn">인터페이스</div><div class="cd">AI 모델을 비개발자도 사용할 수 있도록 만든 형태<br>가장 대표적인 형태가 채팅</div></div>
-      <div class="cb" data-step="2"><div class="k" id="s3k" style="width:100%;max-width:1040px">
+      <div class="cb" data-step="2"><div class="k" id="s3k" style="width:100%">
         <div class="k-msgs"><div class="u">이 회사의 강점을 세 줄로 정리해 줘</div><div class="a" id="s3a">세 가지로 정리하면 첫째 …</div></div>
         <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
         </div></div>
@@ -85,14 +85,16 @@
       <div class="k-msgs"><div class="u" id="s7u">벤처캐피탈이 하는 일을 한 문장으로 설명해 줘</div><div class="a" id="s7a">벤처캐피탈은 초기 기업에 투자하고 상장까지 도와 수익을 얻는 회사입니다</div></div>
       <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
     </div>
-    <div class="bill" id="s7bill" data-stagger="40">
-      <div class="lrow" data-step="2"><span class="bl">입력</span><div class="bar"><i class="in" style="--w:7%"></i></div><span class="bt">7토큰</span></div>
-      <div class="lrow" data-step="2"><span class="bl">출력</span><div class="bar"><i class="out" style="--w:9%"></i></div><span class="bt">9토큰</span></div>
+    <div class="col tokx" id="s7x" data-stagger="40">
+      <div class="tx1"><b>토큰</b><span>모델이 텍스트를 읽고 처리하는 <b>가장 작은 단위</b></span><span>학습할 때도 단어나 문장이 아니라 <b>토큰으로 잘라서</b> 학습</span></div>
+      <div class="tx1" data-step="1"><b>토큰 하나</b><span>단어 하나일 수도, 단어의 조각일 수도, 글자 하나일 수도</span><span>여기서는 <b>어절 하나를 토큰 하나</b>로</span></div>
+      <div class="tx2" data-step="2"><div><b>7</b><span>입력 토큰</span></div><div><b>9</b><span>출력 토큰</span></div></div>
+      <div class="tx1" data-step="2"><span>모델은 <b>토큰을 받아서 토큰을 낸다</b></span></div>
     </div>
   </div>
 </section>
 <!-- S10a 모델 학습 · 데이터가 신경망으로 들어가고, 학습에서 등급·버전·컷오프가 갈라진다 -->
-<section class="s" id="s10a" data-steps="4">
+<section class="s" id="s10a" data-steps="2">
   <div class="head"><div class="h"><span class="no">3.</span> 모델 학습</div><div class="lead">방대한 텍스트 데이터로 다음 토큰을 고르는 뇌를 만드는 일</div></div>
   <div class="main">
     <div class="train">
@@ -101,9 +103,9 @@
       <div class="nnbox"><svg class="nn" id="s10ann" viewBox="0 0 600 600" fill="none"></svg></div>
       <div class="conn r" data-step="2"></div>
       <div class="outs" id="s10aouts" data-stagger="40">
-        <div class="out" data-step="2"><b>등급</b><span>얼마나 크게, 얼마나 많이 학습했는가</span><em>Haiku, Sonnet, Opus, Fable</em></div>
-        <div class="out" data-step="3"><b>버전</b><span>같은 등급을 새로 학습한 세대</span><em>4.5, 5</em></div>
-        <div class="out" data-step="4"><b>Knowledge cutoff</b><span>학습한 데이터가 언제까지인가</span><em>2026. 01</em></div>
+        <div class="out" data-step="2"><b>등급</b><span>모델의 크기. 파라미터가 많을수록 더 복잡한 생각과 더 풍부한 표현</span><em>Haiku, Sonnet, Opus, Fable</em></div>
+        <div class="out" data-step="2"><b>버전</b><span>같은 등급을 다시 학습해 내놓은 순서. 숫자가 클수록 최신</span><em>3.5, 3.7, 4, 4.1, 4.5, 5</em></div>
+        <div class="out" data-step="2"><b>Knowledge cutoff</b><span>학습이 끝난 시점. 그 이후의 정보는 모름</span><em>2026. 01</em></div>
       </div>
     </div>
   </div>
@@ -191,18 +193,14 @@
 <section class="s" id="s15" data-steps="3" data-sec="Model">
   <div class="head"><div class="h">그렇다면, 모델을 어떻게 써야 하는가?</div></div>
   <div class="main bridge">
-    <div class="row" data-step="1"><span class="no">1</span><div>뇌는 정해져 있음. 우리는 <b>어떤 뇌를 얼마나 노력하게 할지</b> 고름</div></div>
-    <div class="row" data-step="2"><span class="no">2</span><div>뇌는 과거만 앎. 우리는 <b>맥락과 지시</b>를 넣어 줌</div></div>
-    <div class="row" data-step="3"><span class="no">3</span><div>고르는 것도 넣는 것도 <b>인터페이스</b>에서</div></div>
+    <div class="row" data-step="1"><span class="no">1</span><div>모델 자체는 <b>과거의 정보를 학습한 뇌</b>라는 것을 인지하고 사용</div></div>
+    <div class="row" data-step="2"><span class="no">2</span><div>그렇기 때문에 모델에게 <b>우리의 맥락과 지시</b>를 명확히 전달</div></div>
+    <div class="row" data-step="3"><span class="no">3</span><div>그 두 가지를 효과적으로 달성하기 위한 <b>인터페이스</b>를 숙지</div></div>
   </div>
 </section>
 <!-- S16 섹션 · 인터페이스. 모델에서 인터페이스로 초점이 옮겨 간다 -->
 <section class="s blue" id="s16" data-steps="1" data-nofoot>
   <div class="main tri"><div class="fig lit-model" id="s16fig"></div></div>
-</section>
-<!-- S16a 간지 · 고르기 -->
-<section class="s blue" id="s16a" data-steps="0" data-nofoot>
-  <div class="main tri"><div class="divd"><div class="fig lit-if" id="s16afig"></div><div class="dt"><small>인터페이스 1</small><b>고르기</b><span>모델과 Effort</span></div></div></div>
 </section>
 <!-- S12 메뉴 -->
 <section class="s" id="s12" data-steps="2" data-sec="Model">
@@ -279,10 +277,6 @@
     </div>
     <div class="rule" data-step="3">아무리 <b>Max</b>로 노력 수준을 높여도 대학생이 풀 수 없는 문제는 존재<br>그런 문제는 노력 수준을 높이는 게 아니라 <b>모델을 변경</b></div>
   </div>
-</section>
-<!-- S16b 간지 · 쌓기 -->
-<section class="s blue" id="s16b" data-steps="0" data-nofoot>
-  <div class="main tri"><div class="divd"><div class="fig lit-if" id="s16bfig"></div><div class="dt"><small>인터페이스 2</small><b>쌓기</b><span>컨텍스트 윈도우에 넣는 것</span></div></div></div>
 </section>
 <!-- S17 컨텍스트 윈도우 -->
 <section class="s" id="s17" data-steps="8" data-sec="Interface">
