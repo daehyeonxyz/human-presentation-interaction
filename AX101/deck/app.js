@@ -201,10 +201,17 @@ HOOK.s2 = { step: function (k) { $('s2q').classList.toggle('is-dim', k >= 2); } 
   HOOK.s7 = { step: function (k) { $('s7k').classList.toggle('split', k >= 1); } };
 })();
 
-/* S8 · S9 · 장부 막대는 줄이 나타날 때 자란다 (CSS). 9장 3단계에 앞의 문답과 줄이 '이전 입력' 색이 된다 */
-function countUp(el, to, ms) { var t0 = performance.now(); function f(t) { var p = Math.min(1, (t - t0) / ms); p = 1 - Math.pow(1 - p, 3); el.textContent = Math.round(to * p) + '원'; if (p < 1) requestAnimationFrame(f); } requestAnimationFrame(f); }
-HOOK.s8 = { step: function (k) { if (k === 5) countUp($('s8sum'), 600, 400); if (k === 6) countUp($('s8sum'), 625, 400); if (k < 5) $('s8sum').textContent = '600원'; } };
-HOOK.s9 = { step: function (k) { $('s9k').classList.toggle('prev', k >= 4); $('s9bill').classList.toggle('prev', k >= 4); } };
+/* S8 · S9 · 장부 막대는 줄이 나타날 때 자란다 (CSS). 합계는 지금 값에서 새 값으로 굴러가고, 바뀐 행만 hot */
+function countUp(el, to, ms) { var from = parseInt(el.textContent, 10) || 0, t0 = performance.now(); function f(t) { var p = Math.min(1, (t - t0) / ms); p = 1 - Math.pow(1 - p, 3); el.textContent = Math.round(from + (to - from) * p) + '원'; if (p < 1) requestAnimationFrame(f); } requestAnimationFrame(f); }
+HOOK.s8 = { step: function (k) {
+  var sum = $('s8sum'); if (k <= 4) sum.textContent = '200원'; if (k === 5) countUp(sum, 600, 400); if (k === 6) countUp(sum, 625, 400);
+  $('s8r2').classList.toggle('hot', k === 5); $('s8r1').classList.toggle('hot', k === 6);
+} };
+HOOK.s9 = { step: function (k) {
+  $('s9k').classList.toggle('now', k >= 1); $('s9bill').classList.toggle('now', k >= 1);
+  var sum = $('s9sum'); if (k <= 2) sum.textContent = '800원'; if (k === 3) countUp(sum, 710, 400); if (k === 4) countUp(sum, 760, 400);
+  $('s9r1').classList.toggle('hot', k === 3); $('s9r2').classList.toggle('hot', k === 4); $('s9r3').classList.toggle('hot', k === 4);
+} };
 
 /* S10 · 라인업. 등급이 오를수록 노드가 많아진다 */
 (function () {

@@ -95,7 +95,7 @@
   </div>
 </section>
 <!-- S8 비용 · 첫 번째 메시지. 입력은 다음 차례를 위해 저장된다 -->
-<section class="s" id="s8" data-steps="7" data-sec="Model">
+<section class="s" id="s8" data-steps="6" data-sec="Model">
   <div class="head"><div class="h"><span class="no">3.</span> 비용</div><div class="lead">첫 번째 메시지</div></div>
   <div class="main cols side" style="--side:840px">
     <div class="k fit big" id="s8k">
@@ -106,33 +106,32 @@
       <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
     </div>
     <div class="bill" id="s8bill" data-stagger="40">
-      <div class="lrow" data-step="1"><span class="bl swap"><span data-out="6">입력</span><span data-step="6">입력 · 캐시 쓰기</span></span><div class="bar"><i class="in" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx swap" data-step="4"><span data-out="6">× 1원</span><span data-step="6">× 1.25원</span></span><span class="bp swap" data-step="5"><span data-out="6">100원</span><span data-step="6">125원</span></span></div>
-      <div class="lrow" data-step="2"><span class="bl">출력</span><div class="bar"><i class="out" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx" data-step="4">× 5원</span><span class="bp" data-step="5">500원</span></div>
-      <div class="lsum" data-step="3"><span class="bl">합계</span><span class="bt">200토큰</span><span class="bp" id="s8sum" data-step="5">600원</span></div>
-      <ul class="bullets" data-step="7"><li>출력 토큰이 입력 토큰보다 <b>5배</b> 정도 비쌈</li><li>이해보다 생성에 쓰이는 연산이 더 어렵고 비쌈</li><li>입력은 다음 차례를 위해 <b>저장</b>하며 그 값이 <b>1.25배</b></li></ul>
+      <div class="lrow i" id="s8r1" data-step="1"><span class="bl swap"><span data-out="6">입력</span><span data-step="6">입력 · 캐시 쓰기</span></span><div class="bar"><i class="in" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx swap" data-step="5"><span data-out="6">× 1원</span><span data-step="6">× 1.25원</span></span><span class="bp swap" data-step="4"><span data-out="6">100원</span><span data-step="6">125원</span></span></div>
+      <div class="lrow o" id="s8r2" data-step="2"><span class="bl">출력</span><div class="bar"><i class="out" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx" data-step="5">× 5원</span><span class="bp swap" data-step="4"><span data-out="5">100원</span><span data-step="5">500원</span></span></div>
+      <div class="lsum" data-step="3"><span class="bl">합계</span><span class="bt">200토큰</span><span class="bp" id="s8sum" data-step="4">200원</span></div>
+      <ul class="bullets"><li data-step="5">출력 토큰이 입력 토큰보다 <b>5배</b> 정도 비쌈</li><li data-step="5">이해보다 생성에 쓰이는 연산이 더 어렵고 비쌈</li><li data-step="6">입력은 다음 차례를 위해 <b>저장</b>하며 그 값이 <b>1.25배</b></li></ul>
     </div>
   </div>
 </section>
 <!-- S9 비용 · 두 번째 메시지. 저장해 둔 이전 입력은 읽고, 이전 출력과 새 입력은 이번에 저장한다 -->
-<section class="s" id="s9" data-steps="5" data-sec="Model">
+<section class="s" id="s9" data-steps="4" data-sec="Model">
   <div class="head"><div class="h"><span class="no">3.</span> 비용</div><div class="lead">두 번째 메시지</div></div>
   <div class="main cols side" style="--side:840px">
     <div class="k fit big" id="s9k">
       <div class="k-msgs">
         <div class="u">이 영어 글을 한국어로 번역해 줘<span class="tt in p1">100토큰</span></div>
         <div class="a"><span class="tx">다음은 한국어 번역입니다. …</span><span class="tt out p1">100토큰</span></div>
-        <div class="u" data-step="1">이 글도 한국어로 번역해 줘<span class="tt in">100토큰</span></div>
-        <div class="a" data-step="2"><span class="tx">이어서 번역했습니다. …</span><span class="tt out">100토큰</span></div>
+        <div class="u">이 글도 한국어로 번역해 줘<span class="tt in">100토큰</span></div>
+        <div class="a"><span class="tx">이어서 번역했습니다. …</span><span class="tt out">100토큰</span></div>
       </div>
       <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
     </div>
     <div class="bill" id="s9bill" data-stagger="40">
-      <div class="lrow"><span class="bl swap"><span data-out="4">입력</span><span data-step="4">이전 입력 · 캐시 읽기</span></span><div class="bar"><i class="in p1" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx" data-step="4">× 0.1원</span><span class="bp" data-step="4">10원</span></div>
-      <div class="lrow"><span class="bl swap"><span data-out="4">출력</span><span data-step="4">이전 출력 · 캐시 쓰기</span></span><div class="bar"><i class="out p1" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx" data-step="4">× 1.25원</span><span class="bp" data-step="4">125원</span></div>
-      <div class="lrow" data-step="1"><span class="bl swap"><span data-out="4">새 입력</span><span data-step="4">새 입력 · 캐시 쓰기</span></span><div class="bar"><i class="in" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx" data-step="4">× 1.25원</span><span class="bp" data-step="4">125원</span></div>
-      <div class="lrow" data-step="2"><span class="bl">출력</span><div class="bar"><i class="out" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx" data-step="4">× 5원</span><span class="bp" data-step="4">500원</span></div>
-      <div class="lsum"><span class="bl">합계</span><span class="bt swap"><span data-out="3">200토큰</span><span data-step="3">400토큰</span></span><span class="bp" data-step="4">760원</span></div>
-      <ul class="bullets" data-step="5"><li>이전의 입력과 출력을 <b>새로운 입력</b>으로 받아 연산</li><li>저장해 둔 이전 입력은 <b>캐시 읽기</b>로 <b>10%</b>만 청구</li><li>이전 출력과 새 입력은 이번에 저장하며 <b>캐시 쓰기 1.25배</b></li></ul>
+      <div class="lrow i" id="s9r1"><span class="bl swap"><span data-out="3">이전 입력</span><span data-step="3">이전 입력 · 캐시 읽기</span></span><div class="bar"><i class="in p1" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx swap" data-step="2"><span data-out="3">× 1원</span><span data-step="3">× 0.1원</span></span><span class="bp swap" data-step="2"><span data-out="3">100원</span><span data-step="3">10원</span></span></div>
+      <div class="lrow i" id="s9r2"><span class="bl swap"><span data-out="4">이전 출력</span><span data-step="4">이전 출력 · 캐시 쓰기</span></span><div class="bar"><i class="out p1" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx swap" data-step="2"><span data-out="4">× 1원</span><span data-step="4">× 1.25원</span></span><span class="bp swap" data-step="2"><span data-out="4">100원</span><span data-step="4">125원</span></span></div>
+      <div class="lrow i" id="s9r3"><span class="bl swap"><span data-out="4">새 입력</span><span data-step="4">새 입력 · 캐시 쓰기</span></span><div class="bar"><i class="in" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx swap" data-step="2"><span data-out="4">× 1원</span><span data-step="4">× 1.25원</span></span><span class="bp swap" data-step="2"><span data-out="4">100원</span><span data-step="4">125원</span></span></div>
+      <div class="lrow o"><span class="bl">출력</span><div class="bar"><i class="out" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx" data-step="2">× 5원</span><span class="bp" data-step="2">500원</span></div>
+      <div class="lsum"><span class="bl">합계</span><span class="bt">400토큰</span><span class="bp" id="s9sum" data-step="2">800원</span></div>
     </div>
   </div>
 </section>
