@@ -84,6 +84,7 @@ function show(n) {
   var prev = slides[cur];
   clearTimers();
   cur = n; step = 0;
+  clearTimeout(slides[n]._lv); slides[n].classList.remove('leaving');
   slides[n].classList.add('still');
   slides.forEach(function (s, i) { s.classList.toggle('active', i === n); });
   viewport.classList.toggle('dark', slides[n].classList.contains('dark')); viewport.classList.toggle('blue', slides[n].classList.contains('blue'));
@@ -124,19 +125,7 @@ function nn(el, cols, opt) {
   el.innerHTML = html;
 }
 
-/* 모델과 인터페이스. 사람의 머리와 어깨 실루엣 안에 뇌. 모델이면 뇌가, 인터페이스면 몸이 켜진다 (4 · 5 · 16장) */
-/* 불규칙 네트워크 그래프. 크기가 다른 점 몇 개와 성긴 선. s 6개, m 9개, l 13개 */
-function netGraph(svg, size) {
-  var P = {
-    s: { n: [[80,150,16],[190,80,10],[250,190,20],[340,110,12],[360,230,9],[160,250,11]], e: [[0,1],[1,2],[1,3],[2,3],[2,4],[3,4],[2,5],[0,5]] },
-    m: { n: [[55,150,15],[150,60,10],[230,125,20],[335,55,11],[365,175,13],[275,225,9],[160,255,12],[80,245,8],[395,265,9]], e: [[0,1],[1,2],[2,3],[2,4],[3,4],[2,5],[4,5],[5,6],[0,6],[6,7],[0,7],[4,8],[5,8],[1,4],[0,2]] },
-    l: { n: [[45,140,14],[120,55,9],[200,110,18],[290,45,10],[335,130,12],[395,70,8],[400,200,14],[300,205,10],[230,265,9],[150,225,12],[70,255,8],[350,270,9],[120,155,7]], e: [[0,1],[1,2],[2,3],[3,4],[2,4],[4,5],[3,5],[4,6],[6,7],[4,7],[2,7],[7,8],[8,9],[2,9],[9,10],[0,10],[0,12],[12,2],[12,9],[6,11],[8,11],[7,11],[1,12]] }
-  }[size || 'm'];
-  var html = '';
-  P.e.forEach(function (e) { var a = P.n[e[0]], b = P.n[e[1]]; html += '<line x1="' + a[0] + '" y1="' + a[1] + '" x2="' + b[0] + '" y2="' + b[1] + '"/>'; });
-  P.n.forEach(function (p) { html += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="' + p[2] + '"/>'; });
-  svg.innerHTML = html;
-}
+/* 모델과 인터페이스. 머리는 원(모델), 몸은 어깨선(인터페이스). 모델이면 머리가, 인터페이스면 몸이 켜진다 (4 · 5 · 16장) */
 function figure(el, labels) {
   el.innerHTML = '<svg viewBox="0 0 600 900">' +
     '<path class="body" d="M0,900 V740 C0,570 140,470 300,470 C460,470 600,570 600,740 V900 Z"/>' +
@@ -312,7 +301,7 @@ HOOK.s14 = { step: function (k) {
 })();
 
 /* S18 · 가이드 표를 회색으로 눌러 버린다 */
-HOOK.s20 = { step: function (k) { var ph = $('s20ph'); var typed = k < 1; if ((ph.textContent === '앤트로픽에 대해 조사해줘') !== typed) swapText(ph, function () { ph.textContent = typed ? '앤트로픽에 대해 조사해줘' : 'Claude에게 메시지 보내기'; ph.style.color = typed ? 'var(--k-ink)' : ''; }); } };
+HOOK.s20 = { step: function (k) { var ph = $('s20ph'); var typed = k < 1; ph.style.color = typed ? 'var(--k-ink)' : ''; if ((ph.textContent === '앤트로픽에 대해 조사해줘') !== typed) swapText(ph, function () { ph.textContent = typed ? '앤트로픽에 대해 조사해줘' : 'Claude에게 메시지 보내기'; }); } };
 HOOK.s18 = { step: function (k) { $('s18g').classList.toggle('dim', k >= 1); } };
 
 /* S22 · 문단에서 나타나는 순서대로 번호를 붙인다 */
