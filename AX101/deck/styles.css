@@ -486,8 +486,6 @@ svg.nn circle { fill: var(--white); stroke: var(--ink); stroke-width: 2.5; }
 /* 36장 · 허브. 꼭짓점 자리는 그림의 값 */
 
 /* 37장 · 꾸러미 하나에 상자 셋 */
-.pkg { align-self: center; display: flex; flex-direction: column; gap: var(--gap-sm); }
-.pkg .pk { font-size: var(--t-cap); line-height: var(--l-cap); font-weight: 700; color: var(--mute); letter-spacing: .02em; }
 
 .note { font-size: var(--t-cap); line-height: var(--l-cap); color: var(--mute); }
 .main > .cols { flex: 1; min-height: 0; }
@@ -706,16 +704,6 @@ svg.nn circle { fill: var(--white); stroke: var(--ink); stroke-width: 2.5; }
 .docs { padding-top: 0; }
 .docs .dochead { top: -68px; }
 /* 38장 플러그인 상자 */
-.pkg { align-self: start; gap: var(--gap-sm); }
-.pkg .ob { background: var(--white); border-radius: var(--r-ctl); padding: var(--gap-xs) var(--gap-sm); box-shadow: var(--shadow); display: flex; flex-direction: column; gap: var(--gap-2xs); }
-.pkg .ob small { font-size: var(--t-cap); line-height: var(--l-cap); color: var(--mute); font-weight: 700; }
-.pkg .ob .fn { display: flex; align-items: center; gap: var(--gap-xs); font-size: var(--t-body); line-height: var(--l-body); font-weight: 800; }
-.pkg .ob .fn svg { width: 28px; height: 28px; }
-.pkg .ob .crow { border: 0; padding: 4px 0; color: var(--ink); }
-.pkg .ob .crow .ic { background: var(--paper-2); border-color: var(--line); color: var(--ink); }
-.pkg .ob .crow span { color: var(--mute); }
-.pkg .ob .mini { display: flex; align-items: center; justify-content: space-between; background: var(--k-bg); color: var(--k-ink); border-radius: 12px; padding: 12px 18px; font-size: 20px; line-height: 28px; }
-.pkg .ob .mini i { width: 28px; height: 28px; border-radius: 50%; background: var(--k-send); }
 /* 39장 마무리 */
 #s38.cover::before { background: radial-gradient(60% 60% at 50% 50%, rgba(4,8,40,.72), transparent); }
 .fin .p { font-weight: 500; }
@@ -812,10 +800,6 @@ svg.nn circle { fill: var(--white); stroke: var(--ink); stroke-width: 2.5; }
 .doc { gap: 10px; }
 .doc .t { height: 26px; } .doc .h { height: 16px; } .doc .l { height: 12px; } .doc .tb i { height: 18px; } .doc .bento i { height: 44px; }
 #s35 .cols { flex: none; }
-.pkg .ob .crow { display: flex; align-items: center; gap: 16px; }
-.pkg .ob .crow b { flex: 1; }
-.pkg .ob .mini { font-size: 24px; line-height: 32px; }
-.pkg .ob .mini i { background: var(--acc-soft); }
 
 /* 58차 반영 · 2장 단어 교체 가운데, 7장 설명 열, 9장 위치 */
 .decl-lg.sw2 { display: grid; justify-items: center; text-align: center; }
@@ -909,6 +893,28 @@ svg.nn.morph path { fill: none; stroke: var(--n5); stroke-width: 1.5; transition
 #s27r.lit { opacity: 1; }
 .intake .rag .pill { background: var(--ink); color: var(--white); }
 #s37 .main.cols { align-items: center; }
+/* 38장 플러그인. 왼쪽은 이야기 세 토막, 오른쪽은 플러그인 틀 안에 스킬 셋과 커넥터 둘. 틀은 마지막에 둘러진다 */
+.story { display: flex; flex-direction: column; gap: var(--gap); }
+.story .sb .cap { font-size: var(--t-cap); line-height: var(--l-cap); color: var(--mute); margin-top: var(--gap-3xs); }
+.plug { position: relative; padding: var(--gap-sm) var(--gap); display: flex; flex-direction: column; gap: var(--gap-sm); }
+.plug .pframe { position: absolute; inset: 0; background: var(--paper-2); border-radius: 24px; }
+.plug > :not(.pframe) { position: relative; }
+.plug .phead { display: flex; align-items: center; gap: var(--gap-xs); font-size: var(--t-body); line-height: var(--l-body); }
+.plug .phead svg { width: 32px; height: 32px; }
+.plug .phead b { font-weight: 800; }
+.plug .phead span { color: var(--mute); font-size: var(--t-cap); line-height: var(--l-cap); }
+.plug .pbody { display: grid; grid-template-columns: 1fr 400px; gap: var(--gap); align-items: start; }
+.plug .pcol { display: flex; flex-direction: column; gap: var(--gap-xs); }
+.plug .pcol small { font-size: var(--t-cap); line-height: var(--l-cap); font-weight: 700; color: var(--mute); }
+.plug .fcard.sk { width: auto; align-self: stretch; }
+.plug .fcard.sk .fn { padding: var(--gap-2xs) var(--gap-sm); }
+.plug .fcard.sk .fn > span { margin-left: auto; font-weight: 500; color: var(--mute); font-size: var(--t-cap); }
+.plug .fcard.sk .fi:last-child { margin-bottom: var(--gap-xs); }
+.plug .crow { display: flex; align-items: center; gap: var(--gap-xs); background: var(--white); border-radius: var(--r-card); box-shadow: var(--shadow); padding: var(--gap-2xs) var(--gap-sm); font-size: var(--t-body); line-height: var(--l-body); }
+.plug .crow .ic { width: 40px; height: 40px; border-radius: 10px; background: var(--paper-2); border: 0; color: var(--ink); }
+.plug .crow b { flex: 1; font-weight: 800; }
+.plug .crow u { text-decoration: none; font-size: var(--t-cap); line-height: var(--l-cap); color: var(--mute); }
+.plug .crow u.btn { background: var(--ink); color: var(--white); border-radius: 8px; padding: 4px 16px; }
 
 /* 63차 */
 .cwb2 { display: flex; flex-direction: column; gap: var(--gap-xs); justify-content: center; }
@@ -940,6 +946,13 @@ svg.nn.morph path { fill: none; stroke: var(--n5); stroke-width: 1.5; transition
 .skl .man { flex: 1; background: var(--white); border-radius: var(--r-card); box-shadow: var(--shadow); padding: var(--gap-sm) var(--gap); font-size: var(--t-cap); line-height: var(--l-cap); white-space: pre-wrap; }
 .skl .man b { display: block; font-size: var(--t-body); line-height: var(--l-body); margin-bottom: var(--gap-2xs); }
 .skl .folder { align-self: start; width: 640px; }
+/* 스킬 카드. 폴더 이름이 머리띠, 파일은 폴더 아이콘 아래로 내려온 안내선에 매달려 폴더 안에 있음을 보인다 (34 · 35장) */
+.folder.fcard { gap: 0; background: var(--white); border-radius: var(--r-card); box-shadow: var(--shadow); overflow: hidden; }
+.folder.fcard .fn { margin: 0; padding: var(--gap-xs) var(--gap-sm); background: var(--paper); border-bottom: 1px solid var(--line); }
+.folder.fcard .fi { margin: 0 var(--gap-sm) 0 40px; padding: var(--gap-2xs) 0 var(--gap-2xs) var(--gap-sm); border-left: 2px solid var(--paper-3); font-size: var(--t-cap); line-height: var(--l-cap); }
+.folder.fcard .fi:nth-of-type(2) { margin-top: var(--gap-xs); }
+.folder.fcard .fi:last-child { margin-bottom: var(--gap-sm); }
+#s33f { align-self: start; margin-top: 242px; } /* 34장 끝 카드 위치와 같게. 카드가 아래로 자라며 나머지 파일이 드러난다 */
 
 /* 64차 */
 #s8k .u .tt, #s8k .a .tt, #s9k .u .tt, #s9k .a .tt { position: absolute; top: 50%; transform: translateY(-50%); margin: 0; }

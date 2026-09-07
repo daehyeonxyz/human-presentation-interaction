@@ -125,11 +125,12 @@ function nn(el, cols, opt) {
   el.innerHTML = html;
 }
 
-/* 모델과 인터페이스. 머리는 원(모델), 몸은 어깨선(인터페이스). 모델이면 머리가, 인터페이스면 몸이 켜진다 (4 · 5 · 16장) */
+/* 모델과 인터페이스. 머리와 어깨선이 인터페이스, 머리 안 위쪽에 붙은 둥근 반원이 모델. 모델이면 반원이, 인터페이스면 머리와 몸이 켜진다 (4 · 5 · 16장) */
 function figure(el, labels) {
   el.innerHTML = '<svg viewBox="0 0 600 900">' +
     '<path class="body" d="M0,900 V740 C0,570 140,470 300,470 C460,470 600,570 600,740 V900 Z"/>' +
-    '<circle class="model head" cx="300" cy="240" r="200"/>' +
+    '<circle class="body head" cx="300" cy="240" r="200"/>' +
+    '<path class="model" d="M144,230 A156,156 0 0 1 456,230 Q456,248 438,248 H162 Q144,248 144,230 Z"/>' +
     '</svg>' + (labels === false ? '' : '<div class="fl"><span class="t-model">모델</span><span class="t-if">인터페이스</span></div>');
 }
 $$('.fig').forEach(function (el) { figure(el, el.classList.contains('ink') ? false : undefined); });
@@ -373,6 +374,8 @@ HOOK.s26 = { step: function (k) {
   HOOK.s35 = { reset: gen, step: function (k) { if (k >= 4) gen(); } };
 })();
 
+/* S37 · 플러그인. 커넥터 둘이 "연결" 단추에서 "연결됨"으로 바뀐다 */
+HOOK.s37 = { step: function (k) { ['s37c1', 's37c2'].forEach(function (id) { var u = $(id), on = k >= 2; if ((u.textContent === '연결됨') !== on) swapText(u, function () { u.textContent = on ? '연결됨' : '연결'; u.classList.toggle('btn', !on); }); else u.classList.toggle('btn', !on); }); } };
 /* S36 · 커넥터. 마지막 Space에 관리자 승인 행만 남긴다 */
 HOOK.s33 = { step: function (k) { var f = $('s33f'); $$('#s33f .fi').forEach(function (r, i) { r.style.setProperty('--d', (i * 40) + 'ms'); }); f.classList.toggle('open', k >= 2); } };
 HOOK.s31 = { step: function (k) {
@@ -437,7 +440,7 @@ HOOK.s27 = { step: function (k) { $('s27r').classList.toggle('lit', k >= 1); } }
       col.querySelector('.h2').animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, delay: i * 80, easing: EASE, fill: 'forwards' });
     });
     rows.forEach(function (r, i) { r.style.setProperty('--d', (620 + i * 80) + 'ms'); });
-    var t = $('s32bt'); busy.push(t.animate([{ height: t.offsetHeight + 'px' }, { height: '0px' }], { duration: 480, delay: 520, easing: EASE, fill: 'forwards' }));
+    var t = $('s32bt'), gap = getComputedStyle(t.parentNode).rowGap; busy.push(t.animate([{ height: t.offsetHeight + 'px', marginBottom: '0px' }, { height: '0px', marginBottom: '-' + gap }], { duration: 480, delay: 520, easing: EASE, fill: 'forwards' }));
   }
   function back() { busy.forEach(function (a) { a.cancel(); }); busy = []; $$('#s32bt, #s32bt .k, #s32bt .man, #s32bt .h2').forEach(function (el) { el.getAnimations().forEach(function (a) { a.cancel(); }); }); }
   HOOK.s32b = { reset: back, step: function (k) { if (k >= 4) fly(); else back(); } };
