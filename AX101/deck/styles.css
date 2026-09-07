@@ -129,23 +129,23 @@ b { font-weight: 800; }
 .fig svg { height: 100%; width: auto; display: block; overflow: visible; }
 .fig .body { fill: rgba(255,255,255,.22); transition: fill 400ms var(--ease-smooth); }
 .fig svg.fnn { overflow: visible; width: 360px; height: 260px; }
-.fig svg.fnn line { stroke: rgba(255,255,255,.35); stroke-width: 2.5; transition: stroke 400ms var(--ease-smooth); }
-.fig svg.fnn circle { fill: var(--acc); stroke: rgba(255,255,255,.45); stroke-width: 3; transition: fill 400ms var(--ease-smooth), stroke 400ms var(--ease-smooth); }
+.fig svg.fnn line { stroke: rgba(255,255,255,.35); stroke-width: 3; transition: stroke 400ms var(--ease-smooth); }
+.fig svg.fnn circle { fill: var(--acc); stroke: none; stroke-width: 0; transition: fill 400ms var(--ease-smooth), stroke 400ms var(--ease-smooth); }
 .fig.lit-if .body { fill: var(--white); }
-.fig.lit-if svg.fnn line { stroke: rgba(20,40,160,.35); }
-.fig.lit-if svg.fnn circle { fill: var(--white); stroke: rgba(20,40,160,.45); }
+.fig.lit-if svg.fnn line { stroke: var(--acc); }
+.fig.lit-if svg.fnn circle { fill: var(--acc); }
 .fig.lit-model svg.fnn line { stroke: rgba(255,255,255,.85); }
-.fig.lit-model svg.fnn circle { fill: var(--white); stroke: var(--white); }
+.fig.lit-model svg.fnn circle { fill: var(--white); }
 .fig.lit-if.lit-model svg.fnn line { stroke: var(--acc); }
-.fig.lit-if.lit-model svg.fnn circle { fill: var(--acc); stroke: var(--acc); }
+.fig.lit-if.lit-model svg.fnn circle { fill: var(--acc); }
 .fig .fl { display: flex; flex-direction: column; gap: var(--gap-lg); }
 .fig .fl span { font-size: var(--t-decl-lg); line-height: var(--l-decl-lg); font-weight: 800; letter-spacing: -.03em; color: rgba(255,255,255,.45); transition: color var(--dur); white-space: nowrap; }
 .fig.lit-model .t-model, .fig.lit-if .t-if { color: var(--white); }
 /* 종이 위의 작은 흉상. 뇌 크기가 곧 등급이다 */
 .fig.ink { height: 440px; padding-left: 0; align-self: auto; }
 .fig.ink .body { fill: #C4C7D6; }
-.fig.ink svg.fnn line { stroke: rgba(20,40,160,.4); }
-.fig.ink svg.fnn circle { fill: var(--acc); stroke: var(--white); stroke-width: 3; }
+.fig.ink svg.fnn line { stroke: var(--acc); stroke-width: 3; }
+.fig.ink svg.fnn circle { fill: var(--acc); }
 .duo { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-xl); }
 .duo .who { display: flex; align-items: center; gap: var(--gap); }
 .duo .wt { display: flex; flex-direction: column; gap: var(--gap-sm); }
@@ -705,8 +705,8 @@ svg.nn.fade { animation: nnin 200ms var(--ease-out); }
 .k .a .w { opacity: 0; filter: blur(var(--blur)); transition: opacity 200ms var(--ease-out) var(--d, 0ms), filter 200ms var(--ease-out) var(--d, 0ms), color var(--t-state); }
 .k .a .w.on { opacity: 1; filter: none; }
 /* 7장 토큰은 면으로 */
-.k.split .tk { padding: 2px 12px; margin: 3px 2px; background: rgba(255,255,255,.12); box-shadow: none; }
-.k.split .u .tk { background: rgba(255,255,255,.14); }
+.k.split .tk { padding: 0; margin: 0; border-radius: 6px; background: rgba(255,255,255,.13); box-shadow: 0 0 0 4px rgba(255,255,255,.13); }
+.k.split .u .tk { background: rgba(255,255,255,.15); box-shadow: 0 0 0 4px rgba(255,255,255,.15); }
 .k .tt[data-step] { transition-delay: calc(var(--d, 0ms) + var(--d-tag)); }
 /* 8장 척추 */
 /* 9장 알약 hover */
@@ -966,7 +966,7 @@ svg.nn.fade { animation: nnin 200ms var(--ease-out); }
 .laybars .legend span { display: inline-flex; align-items: center; gap: var(--gap-2xs); font-weight: 600; }
 .laybars .legend span i { width: 14px; height: 14px; border-radius: var(--r-dot); }
 .cw .bar i.hatch, .laybars .legend span i.hatch { background-image: repeating-linear-gradient(135deg, rgba(255,255,255,.55) 0 6px, transparent 6px 12px); }
-.intake { grid-template-columns: 1fr 96px 640px 96px 1fr; }
+.intake { grid-template-columns: 1fr 96px 600px 96px 1fr; }
 .intake .cwb2 { display: flex; flex-direction: column; gap: var(--gap-xs); }
 .intake .cwb2 .cw .bar i { width: var(--w); }
 .intake .cwb2 .cw .bar i[data-step]:not(.on) { width: 0; min-width: 0; }
@@ -976,8 +976,6 @@ svg.nn.fade { animation: nnin 200ms var(--ease-out); }
 .intake .cwb2 .legend span i { width: 18px; height: 18px; border-radius: var(--r-dot); flex: none; }
 #s31c .k .a .tool { margin-top: 12px; }
 #s31c .k .k-in .ph { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.doc { transition: opacity 220ms var(--ease-smooth); }
-.doc.fade { opacity: 0; }
 .doc > * { opacity: 1; filter: none; transition: none; }
 .recap { display: flex; flex-direction: column; gap: var(--gap-lg); }
 .recap .rc-top { display: flex; flex-direction: column; gap: var(--gap-sm); }
@@ -1006,3 +1004,17 @@ svg.nn.morph path { fill: none; stroke: var(--n5); stroke-width: 1.5; transition
 .s.active { opacity: 1; visibility: visible; transition: none; z-index: 2; }
 .s.leaving { opacity: 0; visibility: visible; z-index: 3; transition: opacity 300ms var(--ease-smooth), visibility 0s linear 300ms; pointer-events: none; }
 .s:not(.active):not(.leaving) { transition: none; }
+
+/* 61차 */
+#s7k .u .tt, #s7k .a .tt { position: absolute; top: 50%; transform: translateY(-50%); margin: 0; }
+#s7k .u .tt { right: calc(100% + 14px); }
+#s7k .a .tt { left: calc(100% + 14px); }
+.axis .pt, .axis .rl, .axis .dt, .axis .unk { transition: left 520ms var(--ease-smooth); }
+.axis .unk { transition: left 520ms var(--ease-smooth), opacity var(--t-in) var(--ease-out); }
+.k .tt.cw { background: transparent; box-shadow: inset 0 0 0 2px var(--k-sub); color: var(--k-ink); margin-left: 6px; }
+.k.prev .tt.cw.p1 { box-shadow: inset 0 0 0 2px var(--n5); color: var(--n5); }
+.bill .bx.swap, .bill .bp.swap { display: grid; }
+.bill .bx.swap > *, .bill .bp.swap > * { grid-area: 1 / 1; text-align: right; }
+.k.prev .tt.cw.p1 { background: transparent; color: var(--n5); }
+#s9 .main.cols.side { --side: 840px; }
+#s9bill .lrow, #s9bill .lsum { grid-template-columns: 1fr 120px 110px 170px; }

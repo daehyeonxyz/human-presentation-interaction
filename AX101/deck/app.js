@@ -125,14 +125,25 @@ function nn(el, cols, opt) {
 }
 
 /* 모델과 인터페이스. 사람의 머리와 어깨 실루엣 안에 뇌. 모델이면 뇌가, 인터페이스면 몸이 켜진다 (4 · 5 · 16장) */
+/* 불규칙 네트워크 그래프. 크기가 다른 점 몇 개와 성긴 선. s 6개, m 9개, l 13개 */
+function netGraph(svg, size) {
+  var P = {
+    s: { n: [[80,150,16],[190,80,10],[250,190,20],[340,110,12],[360,230,9],[160,250,11]], e: [[0,1],[1,2],[1,3],[2,3],[2,4],[3,4],[2,5],[0,5]] },
+    m: { n: [[55,150,15],[150,60,10],[230,125,20],[335,55,11],[365,175,13],[275,225,9],[160,255,12],[80,245,8],[395,265,9]], e: [[0,1],[1,2],[2,3],[2,4],[3,4],[2,5],[4,5],[5,6],[0,6],[6,7],[0,7],[4,8],[5,8],[1,4],[0,2]] },
+    l: { n: [[45,140,14],[120,55,9],[200,110,18],[290,45,10],[335,130,12],[395,70,8],[400,200,14],[300,205,10],[230,265,9],[150,225,12],[70,255,8],[350,270,9],[120,155,7]], e: [[0,1],[1,2],[2,3],[3,4],[2,4],[4,5],[3,5],[4,6],[6,7],[4,7],[2,7],[7,8],[8,9],[2,9],[9,10],[0,10],[0,12],[12,2],[12,9],[6,11],[8,11],[7,11],[1,12]] }
+  }[size || 'm'];
+  var html = '';
+  P.e.forEach(function (e) { var a = P.n[e[0]], b = P.n[e[1]]; html += '<line x1="' + a[0] + '" y1="' + a[1] + '" x2="' + b[0] + '" y2="' + b[1] + '"/>'; });
+  P.n.forEach(function (p) { html += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="' + p[2] + '"/>'; });
+  svg.innerHTML = html;
+}
 function figure(el, labels) {
-  var cols = el.classList.contains('brain-l') ? [3, 4, 3] : [2, 3, 2];
   el.innerHTML = '<svg viewBox="0 0 600 900">' +
     '<path class="body" d="M40,900 V760 C40,600 160,510 300,510 C440,510 560,600 560,760 V900 Z"/>' +
     '<circle class="body head" cx="300" cy="250" r="200"/>' +
     '<svg class="nn fnn" x="120" y="120" width="360" height="260" viewBox="0 0 420 300"></svg>' +
     '</svg>' + (labels === false ? '' : '<div class="fl"><span class="t-model">모델</span><span class="t-if">인터페이스</span></div>');
-  nn(el.querySelector('svg.fnn'), cols, { r: 14, gapY: 64, w: 420, h: 300 });
+  netGraph(el.querySelector('svg.fnn'), el.classList.contains('brain-l') ? 'l' : el.classList.contains('brain-s') ? 's' : 'm');
 }
 $$('.fig').forEach(function (el) { figure(el, el.classList.contains('ink') ? false : undefined); });
 HOOK.s16 = { step: function (k) { $('s16fig').classList.toggle('lit-model', k < 1); $('s16fig').classList.toggle('lit-if', k >= 1); } };
@@ -199,14 +210,14 @@ HOOK.s2 = { step: function (k) { $('s2q').classList.toggle('is-dim', k >= 2); } 
 (function () {
   function chips(el) { var raw = el.textContent.trim(); var t = raw.indexOf('|') >= 0 ? raw.split('|') : raw.split(/\s+/); el.innerHTML = t.map(function (w, i) { return '<span class="tk" style="--i:' + (i + (el.dataset.off | 0)) + '">' + w + '</span>'; }).join(' '); return t.length; }
   var nu = chips($('s7u')); $('s7a').dataset.off = nu; var na = chips($('s7a'));
-  $('s7u').insertAdjacentHTML('beforeend', ' <span class="tt in" data-step="2">' + nu + '토큰</span>');
-  $('s7a').insertAdjacentHTML('beforeend', ' <span class="tt out" data-step="2">' + na + '토큰</span>');
+  $('s7u').insertAdjacentHTML('beforeend', '<span class="tt in" data-step="2">' + nu + '토큰</span>');
+  $('s7a').insertAdjacentHTML('beforeend', '<span class="tt out" data-step="2">' + na + '토큰</span>');
   HOOK.s7 = { step: function (k) { $('s7k').classList.toggle('split', k >= 1); } };
 })();
 
 /* S8 · S9 · 장부 막대는 줄이 나타날 때 자란다 (CSS). 9장 3단계에 앞의 문답과 줄이 '이전 입력' 색이 된다 */
 function countUp(el, to, ms) { var t0 = performance.now(); function f(t) { var p = Math.min(1, (t - t0) / ms); p = 1 - Math.pow(1 - p, 3); el.textContent = Math.round(to * p) + '원'; if (p < 1) requestAnimationFrame(f); } requestAnimationFrame(f); }
-HOOK.s8 = { step: function (k) { if (k === 5) countUp($('s8sum'), 600, 400); } };
+HOOK.s8 = { step: function (k) { if (k === 5) countUp($('s8sum'), 600, 400); if (k === 6) countUp($('s8sum'), 625, 400); if (k < 5) $('s8sum').textContent = '600원'; } };
 HOOK.s9 = { step: function (k) { $('s9k').classList.toggle('prev', k >= 4); $('s9bill').classList.toggle('prev', k >= 4); } };
 
 /* S10 · 라인업. 등급이 오를수록 노드가 많아진다 */
@@ -258,7 +269,13 @@ HOOK.s12 = { step: function (k) {
 })();
 
 /* S14 · 모르는 구간 */
-HOOK.s14 = { step: function (k) { $$('#s14ax .unk').forEach(function (u, i) { u.style.transitionDelay = k >= 1 ? (i * 40) + 'ms' : '0ms'; u.classList.toggle('on', k >= 1); }); } };
+HOOK.s14 = { step: function (k) {
+  $$('#s14ax .unk').forEach(function (u, i) { u.style.transitionDelay = k >= 1 ? (i * 40) + 'ms' : '0ms'; u.classList.toggle('on', k >= 1); });
+  var up = k >= 2, tr = $('s14ft'), sp = $$('span', tr), nm = $('s14fn');
+  var V = up ? ['87.5%', '87.5%', '87.5%', '97%', '97%'] : ['62.5%', '62.5%', '62.5%', '87.5%', '87.5%'], T = up ? ['26.06', '26.09'] : ['26.01', '26.06'];
+  sp.forEach(function (e, i) { e.style.setProperty('--x', V[i]); }); sp[4].style.transform = up ? 'translateX(-85%)' : '';
+  if ((nm.textContent === 'Fable 5.1') !== up) { swapText(nm, function () { nm.textContent = up ? 'Fable 5.1' : 'Fable 5'; }); swapText(sp[2], function () { sp[2].textContent = T[0]; }); swapText(sp[4], function () { sp[4].textContent = T[1]; }); }
+} };
 
 /* S17 · 컨텍스트 윈도우. 대본 순서대로 채운다 */
 (function () {
@@ -295,7 +312,7 @@ HOOK.s14 = { step: function (k) { $$('#s14ax .unk').forEach(function (u, i) { u.
   }
   function bind(sel) { $$(sel).forEach(function (el) { el.addEventListener('mouseenter', function () { var i = +el.dataset.i; if (i < n) { hover = i; render(); } }); el.addEventListener('mouseleave', function () { hover = -1; render(); }); }); }
   bind('#s17bar i'); bind('#s17lg span');
-  HOOK.s17 = { reset: function () { n = 1; hover = -1; ce = false; render(); }, step: function (k) { n = k >= 9 ? 8 : Math.min(7, k + 1); ce = k === 7; hover = k === 8 ? 6 : k >= 9 ? 7 : -1; render(); } };
+  HOOK.s17 = { reset: function () { n = 1; hover = -1; ce = false; render(); }, step: function (k) { n = k >= 8 ? 8 : Math.min(7, k + 1); ce = k === 9; hover = k === 7 ? 6 : k === 8 ? 7 : -1; render(); } };
 })();
 
 /* S18 · 가이드 표를 회색으로 눌러 버린다 */
@@ -364,7 +381,7 @@ HOOK.s26 = { step: function (k) {
     h += bento(3, 11, true);
     return h;
   }
-  function paint(el, html) { el.classList.add('fade'); clearTimeout(el._pt); el._pt = setTimeout(function () { el.innerHTML = html; el.classList.add('up'); void el.offsetWidth; el.classList.remove('fade'); }, 220); }
+  function paint(el, html) { swapText(el, function () { el.innerHTML = html; el.classList.add('up'); }); }
   function gen() { paint(L, left()); paint(Rr, right()); }
   $('s35gen').addEventListener('click', function (e) { e.stopPropagation(); gen(); this.blur(); });
   HOOK.s35 = { reset: gen, step: function (k) { if (k >= 4) gen(); } };
