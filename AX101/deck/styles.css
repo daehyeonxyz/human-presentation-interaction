@@ -44,8 +44,6 @@ b { font-weight: 800; }
 
 /* 화면 골격: 머리 → 본문 → 맺음 */
 .s { position: absolute; inset: 0; padding: var(--pad); display: flex; flex-direction: column; gap: var(--gap); opacity: 0; visibility: hidden; transition: opacity var(--dur) var(--ease), visibility 0s linear var(--dur); }
-.s.active { opacity: 1; visibility: visible; transition: opacity 240ms var(--ease-smooth); z-index: 2; }
-.s:not(.active) { transition: opacity 0s, visibility 0s; }
 .s.still [data-step], .s.still [data-step] > *, .s.still .k .a[data-step]::before, .s.still .k .a .w { transition: none !important; }
 .viewport { transition: none; }
 .s.dark { color: var(--white); background: var(--night) center / cover no-repeat; }
@@ -131,7 +129,7 @@ b { font-weight: 800; }
 .fig svg { height: 100%; width: auto; display: block; overflow: visible; }
 .fig .body { fill: rgba(255,255,255,.22); transition: fill 400ms var(--ease-smooth); }
 .fig svg.fnn { overflow: visible; width: 360px; height: 260px; }
-.fig svg.fnn line { stroke: rgba(255,255,255,.35); stroke-width: 2; transition: stroke 400ms var(--ease-smooth); }
+.fig svg.fnn line { stroke: rgba(255,255,255,.35); stroke-width: 2.5; transition: stroke 400ms var(--ease-smooth); }
 .fig svg.fnn circle { fill: var(--acc); stroke: rgba(255,255,255,.45); stroke-width: 3; transition: fill 400ms var(--ease-smooth), stroke 400ms var(--ease-smooth); }
 .fig.lit-if .body { fill: var(--white); }
 .fig.lit-if svg.fnn line { stroke: rgba(20,40,160,.35); }
@@ -313,7 +311,7 @@ svg.nn.fade { animation: nnin 200ms var(--ease-out); }
 .bullets.cap.two { min-height: calc(var(--l-cap) * 2 + var(--gap-2xs)); }
 
 /* 10장 · 이름 읽는 법. 등급과 버전 밑줄 */
-.nmcol { padding-top: calc(56px + var(--gap)); }
+.nmcol { padding-top: 0; justify-content: center; }
 .nm-ex { display: inline-flex; gap: var(--gap-sm); align-self: start; font-size: var(--t-decl); line-height: 1; font-weight: 800; letter-spacing: -.03em; }
 .nm-ex span { position: relative; padding-bottom: var(--gap-xs); border-bottom: 6px solid var(--acc); }
 .nm-ex span small { position: absolute; left: 50%; top: calc(100% + var(--gap-xs)); transform: translateX(-50%); font-size: var(--t-body); line-height: var(--l-body); font-weight: 700; white-space: nowrap; }
@@ -666,7 +664,7 @@ svg.nn.fade { animation: nnin 200ms var(--ease-out); }
 .k .a[data-step].on > * + * + * { transition-delay: calc(var(--d, 0ms) + var(--d-bubble) + var(--d-para) * 2); }
 .k .a[data-step] > [data-step]:not(.on) { opacity: 0 !important; }
 /* 글 교체는 140ms 꺼졌다가 새 글로 켜진다 */
-.sw { opacity: 0 !important; filter: blur(2px); transition: opacity 80ms var(--ease-out), filter 80ms var(--ease-out) !important; }
+
 .cwi, .pd, .vgs .en, .doc, .k .k-in .ph, .st .kin span, .pj .pin span { transition: opacity var(--t-in) var(--ease-out), filter var(--t-in) var(--ease-out); }
 .cands { transition: opacity var(--t-in) var(--ease-out); }
 /* 링과 초점 */
@@ -887,8 +885,8 @@ svg.nn.fade { animation: nnin 200ms var(--ease-out); }
 .train .nnbox { align-self: center; }
 .train .out { grid-template-columns: 240px 1fr; }
 .train .out b { font-size: var(--t-body); line-height: var(--l-body); }
-#s10 .cols { align-items: center; }
-#s10 .nnbox { align-self: center; }
+#s10 .cols, #s10b .cols { align-items: center; }
+#s10 .nnbox, #s10b .nnbox { align-self: center; }
 .pd .pn { font-size: var(--t-decl-lg); line-height: var(--l-decl-lg); }
 .bridge { justify-content: center; }
 #s13 .head .bullets li:last-child { max-width: 1480px; }
@@ -954,8 +952,8 @@ svg.nn.fade { animation: nnin 200ms var(--ease-out); }
 .tokx .tx2 span { font-size: var(--t-body); line-height: var(--l-body); font-weight: 700; }
 #s2 .main { position: relative; justify-content: center; }
 #s2trio { position: absolute; left: 0; right: 0; top: calc(50% + 110px); margin-top: 0; }
-#s10 .main.cols { flex: none; height: 580px; }
-#s10 .nnbox { height: 580px; }
+#s10 .main.cols, #s10b .main.cols { flex: none; height: 580px; }
+#s10 .nnbox, #s10b .nnbox { height: 580px; }
 
 /* 59차 반영 */
 .pcell .f.dup { color: var(--red); } .pcell .f.dup svg { color: var(--red); }
@@ -1000,3 +998,11 @@ svg.nn.fade { animation: nnin 200ms var(--ease-out); }
 .recap .rc-k .k-in { max-width: none; margin: 0; }
 .recap .rc-k { padding: 0; border-radius: 20px; }
 .recap .rc-k .k-in { width: auto; }
+
+/* 60차 · 신경망 모핑, 겹쳐 사라지는 내용 교체, 장 넘김 디졸브 */
+svg.nn.morph circle { transition: cx 480ms var(--ease-smooth), cy 480ms var(--ease-smooth), r 480ms var(--ease-smooth), opacity 320ms var(--ease-smooth); }
+svg.nn.morph path { fill: none; stroke: var(--n5); stroke-width: 1.5; transition: d 480ms var(--ease-smooth), opacity 320ms var(--ease-smooth); }
+.ghost { z-index: 5; }
+.s.active { opacity: 1; visibility: visible; transition: none; z-index: 2; }
+.s.leaving { opacity: 0; visibility: visible; z-index: 3; transition: opacity 300ms var(--ease-smooth), visibility 0s linear 300ms; pointer-events: none; }
+.s:not(.active):not(.leaving) { transition: none; }

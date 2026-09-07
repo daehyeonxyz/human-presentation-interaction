@@ -40,7 +40,44 @@ function apply(s, k) {
   $$('[data-out]', s).forEach(function (el) { el.classList.toggle('off', +el.dataset.out <= k); });
   var h = HOOK[s.id]; if (h && h.step) h.step(s.dataset.hook ? Math.min(k, +s.dataset.hook) : k);
 }
-function swapText(el, fn) { clearTimeout(el._sw); el.classList.add('sw'); el._sw = setTimeout(function () { fn(); void el.offsetWidth; el.classList.remove('sw'); }, 80); }
+/* 내용만 바뀌는 물건은 사라졌다 나타나지 않는다. 옛 모습을 그 자리에 겹쳐 두고 새 모습이 올라오는 동안 옛 모습이 내려간다 */
+var EASE = 'cubic-bezier(.2,.7,.2,1)';
+function swapText(el, fn) {
+  var par = el.parentNode; if (!par) { fn(); return; }
+  if (el._ghost) { el._ghost.remove(); el._ghost = null; }
+  var g = el.cloneNode(true); g.removeAttribute('id'); $$('[id]', g).forEach(function (x) { x.removeAttribute('id'); }); g.classList.add('ghost');
+  if (getComputedStyle(par).position === 'static') par.style.position = 'relative';
+  g.style.cssText += ';position:absolute;left:' + el.offsetLeft + 'px;top:' + el.offsetTop + 'px;width:' + el.offsetWidth + 'px;height:' + el.offsetHeight + 'px;margin:0;pointer-events:none;';
+  par.appendChild(g); el._ghost = g;
+  fn();
+  el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 240, easing: EASE });
+  g.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 240, easing: EASE }).onfinish = function () { g.remove(); if (el._ghost === g) el._ghost = null; };
+}
+/* 신경망 모핑. 노드와 선을 한 벌 만들어 두고 자리와 반지름만 옮긴다. 안 쓰는 노드는 열 가운데로 모여 사라진다 */
+function nnMorph(svg, cols, opt) {
+  var W = 600, H = 600, P = 6, R = 12, r0 = (opt && opt.r) || 10, gapY = (opt && opt.gapY) || 56;
+  if (!svg._pool) {
+    var html = '', cc = [], pp = [];
+    for (var c = 0; c < P - 1; c++) for (var i = 0; i < R; i++) for (var k = 0; k < R; k++) html += '<path data-c="' + c + '" data-i="' + i + '" data-k="' + k + '"/>';
+    for (var c2 = 0; c2 < P; c2++) for (var i2 = 0; i2 < R; i2++) html += '<circle data-c="' + c2 + '" data-i="' + i2 + '"/>';
+    svg.innerHTML = html; svg._pool = { c: $$('circle', svg), p: $$('path', svg) };
+  }
+  var n = cols.length, xs = cols.map(function (_, c) { return n === 1 ? W / 2 : 40 + c * (W - 80) / (n - 1); });
+  function pos(c, i) { var on = c < n && i < cols[c]; return { x: c < n ? xs[c] : xs[n - 1], y: on ? H / 2 + (i - (cols[c] - 1) / 2) * gapY : H / 2, on: on }; }
+  svg._pool.c.forEach(function (el) { var q = pos(+el.dataset.c, +el.dataset.i); el.style.cx = q.x + 'px'; el.style.cy = q.y + 'px'; el.style.r = (q.on ? r0 : 0) + 'px'; el.style.opacity = q.on ? 1 : 0; });
+  svg._pool.p.forEach(function (el) { var a = pos(+el.dataset.c, +el.dataset.i), b = pos(+el.dataset.c + 1, +el.dataset.k); el.style.d = "path('M" + a.x + " " + a.y + " L" + b.x + " " + b.y + "')"; el.style.opacity = a.on && b.on ? 1 : 0; });
+}
+/* 장을 넘길 때 같은 물건(data-morph)은 옛 자리에서 새 자리로 미끄러진다. 지금은 높이와 세로 위치만 */
+function morphAcross(prev, next) {
+  var st = document.getElementById('stage').getBoundingClientRect(), kk = st.width / 1920;
+  $$('[data-morph]', next).forEach(function (el) {
+    var key = el.dataset.morph, from = prev.querySelector('[data-morph="' + key + '"]'); if (!from) return;
+    var a = from.getBoundingClientRect(), b = el.getBoundingClientRect();
+    var dy = (a.top - b.top) / kk, h0 = a.height / kk, h1 = b.height / kk;
+    if (Math.abs(dy) < 1 && Math.abs(h0 - h1) < 1) return;
+    el.animate([{ transform: 'translateY(' + dy + 'px)', height: h0 + 'px' }, { transform: 'none', height: h1 + 'px' }], { duration: 520, easing: EASE });
+  });
+}
 function raf2(fn) { requestAnimationFrame(function () { requestAnimationFrame(fn); }); }
 function show(n) {
   n = Math.max(0, Math.min(slides.length - 1, n));
@@ -52,7 +89,12 @@ function show(n) {
   viewport.classList.toggle('dark', slides[n].classList.contains('dark')); viewport.classList.toggle('blue', slides[n].classList.contains('blue'));
   var h = HOOK[slides[n].id]; if (h && h.reset) h.reset();
   apply(slides[n], 0);
-  if (prev !== slides[n]) { var ph = HOOK[prev.id]; if (ph && ph.reset) ph.reset(); apply(prev, 0); $$('.sw', prev).forEach(function (e) { clearTimeout(e._sw); e.classList.remove('sw'); }); }
+  if (prev !== slides[n]) {
+    slides.forEach(function (s) { if (s !== prev) s.classList.remove('leaving'); });
+    prev.classList.add('leaving'); clearTimeout(prev._lv);
+    morphAcross(prev, slides[n]);
+    prev._lv = setTimeout(function () { prev.classList.remove('leaving'); var ph = HOOK[prev.id]; if (ph && ph.reset) ph.reset(); apply(prev, 0); $$('.ghost', prev).forEach(function (e) { e.remove(); }); }, 320);
+  }
   raf2(function () { slides[n].classList.remove('still'); });
   location.hash = String(n + 1);
 }
@@ -84,13 +126,13 @@ function nn(el, cols, opt) {
 
 /* 모델과 인터페이스. 사람의 머리와 어깨 실루엣 안에 뇌. 모델이면 뇌가, 인터페이스면 몸이 켜진다 (4 · 5 · 16장) */
 function figure(el, labels) {
-  var cols = el.classList.contains('brain-s') ? [3, 4, 3] : el.classList.contains('brain-l') ? [4, 6, 6, 4] : [4, 5, 5, 4];
+  var cols = el.classList.contains('brain-l') ? [3, 4, 3] : [2, 3, 2];
   el.innerHTML = '<svg viewBox="0 0 600 900">' +
     '<path class="body" d="M40,900 V760 C40,600 160,510 300,510 C440,510 560,600 560,760 V900 Z"/>' +
     '<circle class="body head" cx="300" cy="250" r="200"/>' +
     '<svg class="nn fnn" x="120" y="120" width="360" height="260" viewBox="0 0 420 300"></svg>' +
     '</svg>' + (labels === false ? '' : '<div class="fl"><span class="t-model">모델</span><span class="t-if">인터페이스</span></div>');
-  nn(el.querySelector('svg.fnn'), cols, { r: 11, gapY: cols.length > 3 ? 40 : 52 });
+  nn(el.querySelector('svg.fnn'), cols, { r: 14, gapY: 64, w: 420, h: 300 });
 }
 $$('.fig').forEach(function (el) { figure(el, el.classList.contains('ink') ? false : undefined); });
 HOOK.s16 = { step: function (k) { $('s16fig').classList.toggle('lit-model', k < 1); $('s16fig').classList.toggle('lit-if', k >= 1); } };
@@ -116,15 +158,15 @@ HOOK.s2 = { step: function (k) { $('s2q').classList.toggle('is-dim', k >= 2); } 
 
 /* S6 · 한 Space 한 박자. 후보 넷이 60ms 계단으로 서고 막대가 자란 뒤, 뽑힌 행이 짙어지고, 300ms 뒤 낱말이 말풍선에 내려앉는다 */
 (function () {
-  var GIVEN = ['벤처캐피탈은'];
+  var GIVEN = ['삼성벤처투자는'];
   var STEPS = [
-    { c: [['초기', 41], ['유망한', 33], ['성장', 18], ['기술', 8]], pick: 0 },
-    { c: [['스타트업에', 63], ['기업에', 21], ['단계의', 11], ['회사에', 5]], pick: 1 },
-    { c: [['투자하고', 58], ['투자해', 24], ['자금을', 12], ['돈을', 6]], pick: 0 },
-    { c: [['성장을', 46], ['경영을', 27], ['상장까지', 15], ['회수를', 12]], pick: 2 },
-    { c: [['도와', 52], ['지원해', 31], ['함께', 12], ['이끌어', 5]], pick: 0 }
+    { c: [['삼성그룹의', 38], ['삼성의', 35], ['국내', 16], ['글로벌', 11]], pick: 1 },
+    { c: [['미래', 52], ['신사업', 24], ['핵심', 14], ['차세대', 10]], pick: 0 },
+    { c: [['먹거리를', 33], ['사업을', 29], ['성장동력을', 26], ['기술을', 12]], pick: 2 },
+    { c: [['발굴하고,', 57], ['찾아내고,', 23], ['키우고,', 13], ['확보하고,', 7]], pick: 0 },
+    { c: [['기술', 46], ['혁신적인', 28], ['유망', 16], ['신기술', 10]], pick: 0 }
   ];
-  var REST = ['수익을', '얻는', '회사입니다'];
+  var REST = ['혁신을', '기반으로', '새로운', '가치를', '창출하기', '위한', '기업형', '벤처캐피탈입니다.'];
   var ans = $('s6a'), list = $('s6list');
   function words(n, full) { var w = GIVEN.concat(STEPS.slice(0, n).map(function (st) { return st.c[st.pick][0]; })); return full ? w.concat(REST) : w; }
   function drawSent(n, full, land) {
@@ -155,7 +197,7 @@ HOOK.s2 = { step: function (k) { $('s2q').classList.toggle('is-dim', k >= 2); } 
 
 /* S7 · 같은 채팅. 어절 하나가 토큰 하나. Space 1 상자, Space 2 토큰 수 꼬리표 */
 (function () {
-  function chips(el) { var t = el.textContent.trim().split(/\s+/); el.innerHTML = t.map(function (w, i) { return '<span class="tk" style="--i:' + (i + (el.dataset.off | 0)) + '">' + w + '</span>'; }).join(' '); return t.length; }
+  function chips(el) { var raw = el.textContent.trim(); var t = raw.indexOf('|') >= 0 ? raw.split('|') : raw.split(/\s+/); el.innerHTML = t.map(function (w, i) { return '<span class="tk" style="--i:' + (i + (el.dataset.off | 0)) + '">' + w + '</span>'; }).join(' '); return t.length; }
   var nu = chips($('s7u')); $('s7a').dataset.off = nu; var na = chips($('s7a'));
   $('s7u').insertAdjacentHTML('beforeend', ' <span class="tt in" data-step="2">' + nu + '토큰</span>');
   $('s7a').insertAdjacentHTML('beforeend', ' <span class="tt out" data-step="2">' + na + '토큰</span>');
@@ -175,17 +217,20 @@ HOOK.s9 = { step: function (k) { $('s9k').classList.toggle('prev', k >= 4); $('s
     { n: 'Opus <b>5</b>', t: '복잡한 작업과 업무용', d: ['조금 더 복잡한 문제를 해결하기 위한 모델', '비싼 요금제를 쓰는 사람들은 거의 기본 모델처럼 사용'], c: [5, 8, 9, 8, 5], g: 56, r: 10 },
     { n: 'Fable <b>5</b>', t: '가장 높은 등급', d: ['Mythos 모델을 일반 사용자가 쓸 수 있도록 안전장치를 씌운 모델', '현존하는 모든 AI 모델 중 가장 성능이 좋다고 알려짐'], c: [6, 10, 12, 12, 10, 6], g: 44, r: 8 }
   ];
-  var sel = -1, box = $('s10nn');
+  var sel = 1, box = $('s10nn');
   nn($('s10nn0'), M[1].c, { w: 600, h: 600, gapY: M[1].g, r: M[1].r });
   nn($('s10ann'), M[2].c, { w: 600, h: 600, gapY: M[2].g, r: M[2].r });
+  nnMorph(box, M[1].c, { gapY: M[1].g, r: M[1].r });
+  var lastSel = -2;
   function render() {
     $$('#s10pick button').forEach(function (b, i) { b.classList.toggle('sel', i === sel); });
-    var m = sel >= 0 ? M[sel] : null;
-    if (m) { nn(box, m.c, { w: 600, h: 600, gapY: m.g, r: m.r }); box.classList.remove('fade'); void box.offsetWidth; box.classList.add('fade'); } else box.innerHTML = '';
-    swapText($('s10pd'), function () { $('s10pd').innerHTML = m ? '<div class="pn">' + m.n + '</div><div class="pt">' + m.t + '</div><ul class="bullets">' + m.d.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ul>' : ''; });
+    var m = M[sel];
+    nnMorph(box, m.c, { gapY: m.g, r: m.r });
+    if (sel === lastSel) return; lastSel = sel;
+    swapText($('s10pd'), function () { $('s10pd').innerHTML = '<div class="pn">' + m.n + '</div><div class="pt">' + m.t + '</div><ul class="bullets">' + m.d.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ul>'; });
   }
   $$('#s10pick button').forEach(function (b) { b.addEventListener('click', function (e) { e.stopPropagation(); sel = +b.dataset.i; render(); b.blur(); }); });
-  HOOK.s10 = { reset: function () { sel = -1; render(); }, step: function (k) { sel = k >= 1 ? Math.min(3, k - 1) : -1; render(); } };
+  HOOK.s10b = { reset: function () { sel = 1; lastSel = -2; render(); }, step: function (k) { sel = k >= 1 ? Math.min(3, k - 1) : 1; render(); } };
 })();
 
 /* S12 · 메뉴 항목 짚기. 1단계 모델 줄, 2단계 Effort 줄 */
@@ -229,7 +274,7 @@ HOOK.s14 = { step: function (k) { $$('#s14ax .unk').forEach(function (u, i) { u.
   ];
   window.CW_LAYERS = IT;
   var CE = { n: '컨텍스트 엔지니어링', w: '컨텍스트 윈도우에 필요한 정보, 도구, 메모리, 외부 데이터 등을 체계적으로 넣고 최적화하는 기술', c: 'var(--ink)' };
-  var MAX = 9000, bar = $('s17bar'), lg = $('s17lg'), insp = $('s17i'), n = 0, hover = -1, ce = false;
+  var MAX = 24000, bar = $('s17bar'), lg = $('s17lg'), insp = $('s17i'), n = 0, hover = -1, ce = false;
   bar.innerHTML = IT.map(function (it, i) { return '<i data-i="' + i + '" style="background:' + it.c + '"></i>'; }).join('');
   lg.innerHTML = IT.map(function (it, i) { return '<span data-i="' + i + '"><i style="background:' + it.c + '"></i>' + it.n + '</span>'; }).join('');
   var lastInsp = null;
@@ -338,7 +383,7 @@ var h0 = parseInt((location.hash || '#1').slice(1), 10); show(isNaN(h0) ? 0 : h0
 
 /* S29 · 레이어 정리. 18장의 막대를 네 줄로. 메시지마다 앞의 것이 전부 다시 들어가고 프롬프트와 답이 붙는다 */
 (function () {
-  var L = window.CW_LAYERS, MAX = 9000;
+  var L = window.CW_LAYERS, MAX = 16000;
   var auto = [0, 1, 2, 3, 4, 5].map(function (i) { return L[i]; }).concat([{ n: '프로젝트 지식', t: 1500, c: 'var(--c4)' }]);
   var P = { n: '프롬프트', t: 60, c: 'var(--c5)' }, A = { n: '답변', t: 400, c: '#7F8493', hatch: true };
   function seg(it) { return '<i class="on' + (it.hatch ? ' hatch' : '') + '" style="background:' + it.c + ';--w:' + (it.t / MAX * 100) + '%"></i>'; }
@@ -353,7 +398,7 @@ var h0 = parseInt((location.hash || '#1').slice(1), 10); show(isNaN(h0) ? 0 : h0
 
 /* S39 · 인터페이스 정리. 18장의 막대에 오늘 나온 것을 전부 얹는다 */
 (function () {
-  var L = window.CW_LAYERS, MAX = 9000;
+  var L = window.CW_LAYERS, MAX = 24000;
   var list = [L[0], L[1], L[2], L[3], L[4], L[5], { n: '프로젝트 지식', t: 1500, c: 'var(--c4)' }, L[6], L[7], { n: '커넥터로 가져온 자료', t: 900, c: '#7F8493', hatch: true }];
   $('s39bar').innerHTML = list.map(function (it) { return '<i class="on' + (it.hatch ? ' hatch' : '') + '" style="background:' + it.c + ';--w:' + (it.t / MAX * 100) + '%"></i>'; }).join('');
   $('s39lg').innerHTML = list.map(function (it) { return '<span class="on"><i' + (it.hatch ? ' class="hatch"' : '') + ' style="background:' + it.c + '"></i>' + it.n + '</span>'; }).join('');
