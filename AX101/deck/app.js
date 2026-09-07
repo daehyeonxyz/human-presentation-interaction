@@ -84,14 +84,15 @@ function nn(el, cols, opt) {
 
 /* 모델과 인터페이스. 사람의 머리와 어깨 실루엣 안에 뇌. 모델이면 뇌가, 인터페이스면 몸이 켜진다 (4 · 5 · 16장) */
 function figure(el, labels) {
+  var cols = el.classList.contains('brain-s') ? [3, 4, 3] : el.classList.contains('brain-l') ? [4, 6, 6, 4] : [4, 5, 5, 4];
   el.innerHTML = '<svg viewBox="0 0 600 900">' +
-    '<path class="body" d="M40,900 V720 C40,620 120,560 210,530 C238,520 250,500 250,470 V400 H350 V470 C350,500 362,520 390,530 C480,560 560,620 560,720 V900 Z"/>' +
-    '<circle class="body head" cx="300" cy="230" r="172"/>' +
-    '<g class="brain"><path d="M300,120 C250,110 205,140 200,190 C170,200 165,250 195,270 C190,310 230,335 270,325 C285,340 315,340 330,325 C370,335 410,310 405,270 C435,250 430,200 400,190 C395,140 350,110 300,120 Z"/>' +
-    '<path class="gy" d="M300,124 V326 M215,200 C240,190 255,210 250,240 M385,200 C360,190 345,210 350,240 M235,290 C255,270 275,285 268,305 M365,290 C345,270 325,285 332,305 M262,150 C275,170 262,190 245,190 M338,150 C325,170 338,190 355,190"/></g>' +
+    '<path class="body" d="M40,900 V760 C40,600 160,510 300,510 C440,510 560,600 560,760 V900 Z"/>' +
+    '<circle class="body head" cx="300" cy="250" r="200"/>' +
+    '<svg class="nn fnn" x="120" y="120" width="360" height="260" viewBox="0 0 420 300"></svg>' +
     '</svg>' + (labels === false ? '' : '<div class="fl"><span class="t-model">모델</span><span class="t-if">인터페이스</span></div>');
+  nn(el.querySelector('svg.fnn'), cols, { r: 11, gapY: cols.length > 3 ? 40 : 52 });
 }
-['s4fig', 's5fig', 's16fig'].forEach(function (id) { figure($(id)); });
+$$('.fig').forEach(function (el) { figure(el, el.classList.contains('ink') ? false : undefined); });
 HOOK.s16 = { step: function (k) { $('s16fig').classList.toggle('lit-model', k < 1); $('s16fig').classList.toggle('lit-if', k >= 1); } };
 
 /* S2 */
@@ -103,11 +104,11 @@ HOOK.s2 = { step: function (k) { $('s2q').classList.toggle('is-dim', k >= 2); } 
   var cards = $('s3cards'), link = $('s3link');
   function pos(el) { var x = 0, y = 0; while (el && el !== cards) { x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; } return { x: x, y: y }; }
   function draw() {
-    var a = $('s3a'), sv = $('s3nn'), cr = cards.getBoundingClientRect(), sr = sv.getBoundingClientRect(), kk = cr.width / cards.offsetWidth;
-    var x1 = (sr.right - cr.left) / kk - 14, y1 = (sr.top + sr.height / 2 - cr.top) / kk;
+    var m = cards.querySelector('.card.model'), a = $('s3a');
+    var x1 = m.offsetLeft + m.offsetWidth, y1 = m.offsetTop + m.offsetHeight / 2;
     var p = pos(a), x2 = p.x + 14, y2 = p.y + 17;
     link.setAttribute('viewBox', '0 0 ' + cards.offsetWidth + ' ' + cards.offsetHeight);
-    link.innerHTML = '<circle cx="' + x1 + '" cy="' + y1 + '" r="8"/><line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '"/>';
+    link.innerHTML = '<circle cx="' + x1 + '" cy="' + y1 + '" r="10"/><line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '"/>';
   }
   cards.querySelector('.card.model').addEventListener('transitionend', function (e) { if (e.propertyName === 'left' && cards.classList.contains('nest')) draw(); });
   HOOK.s3 = { step: function (k) { cards.classList.toggle('nest', k >= 3); if (k < 3) link.innerHTML = ''; } };
@@ -217,16 +218,18 @@ HOOK.s14 = { step: function (k) { $$('#s14ax .unk').forEach(function (u, i) { u.
 /* S17 · 컨텍스트 윈도우. 대본 순서대로 채운다 */
 (function () {
   var IT = [
-    { n: '시스템 프롬프트를 포함한 설정 파일', w: '확인할 일 없음', t: 4200, c: '#C9CDD6' },
-    { n: '메모리', w: '설정 > 메모리', t: 680, c: 'var(--c2)' },
-    { n: '도구 정보(MCP)', w: '설정 > 커넥터', t: 1200, c: '#B3B8C6' },
-    { n: '스킬 설명', w: '설정 > 스킬', t: 450, c: '#9DA3B4' },
-    { n: 'Claude 지침', w: '설정 > 일반', t: 320, c: 'var(--c1)' },
-    { n: '프로젝트 지침', w: '프로젝트 > 지침', t: 1800, c: 'var(--c3)' },
-    { n: '프롬프트', w: '채팅창에 보낼 때마다 직접 쓰는 입력', t: 45, c: 'var(--c5)' }
+    { n: '시스템 프롬프트를 포함한 설정 파일', w: 'Claude의 기본 동작을 정해 둔 파일. 우리가 볼 일은 없음', t: 2400, c: '#C9CDD6' },
+    { n: '메모리', w: 'Claude가 대화에서 스스로 뽑아 쌓아 두는 입력', t: 600, c: 'var(--c2)' },
+    { n: '도구 정보(MCP)', w: '모델이 쓸 수 있는 도구의 목록과 사용법', t: 1200, c: '#B3B8C6' },
+    { n: '스킬 설명', w: '어떤 스킬이 있고 언제 쓰는지에 대한 요약', t: 400, c: '#9DA3B4' },
+    { n: 'Claude 지침', w: '내 모든 대화에 자동으로 들어가는 지침', t: 150, c: 'var(--c1)' },
+    { n: '프로젝트 지침', w: '프로젝트 안의 대화에만 들어가는 지침', t: 600, c: 'var(--c3)' },
+    { n: '프롬프트', w: '채팅창에 보낼 때마다 직접 쓰는 입력', t: 40, c: 'var(--c5)' },
+    { n: '첨부 파일', w: '첨부한 파일의 내용이 그대로 들어감', t: 2600, c: 'var(--c4)' }
   ];
+  window.CW_LAYERS = IT;
   var CE = { n: '컨텍스트 엔지니어링', w: '컨텍스트 윈도우에 필요한 정보, 도구, 메모리, 외부 데이터 등을 체계적으로 넣고 최적화하는 기술', c: 'var(--ink)' };
-  var MAX = 12000, bar = $('s17bar'), lg = $('s17lg'), insp = $('s17i'), n = 0, hover = -1, ce = false;
+  var MAX = 9000, bar = $('s17bar'), lg = $('s17lg'), insp = $('s17i'), n = 0, hover = -1, ce = false;
   bar.innerHTML = IT.map(function (it, i) { return '<i data-i="' + i + '" style="background:' + it.c + '"></i>'; }).join('');
   lg.innerHTML = IT.map(function (it, i) { return '<span data-i="' + i + '"><i style="background:' + it.c + '"></i>' + it.n + '</span>'; }).join('');
   var lastInsp = null;
@@ -247,7 +250,7 @@ HOOK.s14 = { step: function (k) { $$('#s14ax .unk').forEach(function (u, i) { u.
   }
   function bind(sel) { $$(sel).forEach(function (el) { el.addEventListener('mouseenter', function () { var i = +el.dataset.i; if (i < n) { hover = i; render(); } }); el.addEventListener('mouseleave', function () { hover = -1; render(); }); }); }
   bind('#s17bar i'); bind('#s17lg span');
-  HOOK.s17 = { reset: function () { n = 1; hover = -1; ce = false; render(); }, step: function (k) { n = Math.min(7, k + 1); ce = k === 7; hover = k >= 8 ? 6 : -1; render(); } };
+  HOOK.s17 = { reset: function () { n = 1; hover = -1; ce = false; render(); }, step: function (k) { n = k >= 9 ? 8 : Math.min(7, k + 1); ce = k === 7; hover = k === 8 ? 6 : k >= 9 ? 7 : -1; render(); } };
 })();
 
 /* S18 · 가이드 표를 회색으로 눌러 버린다 */
@@ -299,12 +302,16 @@ HOOK.s26 = { step: function (k) {
   function bento(cols, n, ov) { var t = '<div class="bento" style="grid-template-columns:repeat(' + cols + ',1fr)">'; for (var i = 0; i < n; i++) t += '<i' + (ov && i === 0 ? ' class="ov"' : '') + '></i>'; return t + '</div>'; }
   function delay(html) { var i = 0; return html.replace(/<div class="(t|h|l|tb|bento)"/g, function (m) { return m.replace('"', '" data-i="' + (i++) + '"'); }); }
   function left() {
-    var h = '<div class="t" style="' + pct(rnd(30, 80)) + (Math.random() < .4 ? ';align-self:center' : '') + '"></div>';
-    if (Math.random() < .5) h += table(2 + Math.floor(Math.random() * 3));
-    var secs = 1;
-    for (var s = 0; s < secs; s++) { h += '<div class="h" style="' + pct(rnd(18, 45)) + '"></div>'; var n = 1 + Math.floor(Math.random() * 3); for (var i = 0; i < n; i++) h += line(rnd(35, 100)); }
-    h += bento(2 + Math.floor(Math.random() * 2), 6 + Math.floor(Math.random() * 4), false);
-    return h;
+    var al = Math.random() < .35 ? ';align-self:center' : Math.random() < .5 ? ';align-self:flex-end' : '';
+    var h = '<div class="t" style="' + pct(rnd(24, 90)) + al + '"></div>';
+    var parts = [];
+    if (Math.random() < .6) parts.push(table(2 + Math.floor(Math.random() * 4)));
+    var secs = 1 + Math.floor(Math.random() * 2);
+    for (var s = 0; s < secs; s++) { var p = '<div class="h" style="' + pct(rnd(12, 60)) + '"></div>'; var n = Math.floor(Math.random() * 3); for (var i = 0; i < n; i++) p += line(rnd(20, 100)); parts.push(p); }
+    if (Math.random() < .7) parts.push(bento(1 + Math.floor(Math.random() * 3), 2 + Math.floor(Math.random() * 5), false));
+    if (Math.random() < .4) parts.push('<div class="img" style="' + pct(rnd(30, 100)) + '"></div>');
+    parts.sort(function () { return Math.random() - .5; });
+    return h + parts.join('');
   }
   function right() {
     var h = '<div class="t" style="' + pct(52) + '"></div>' + table(6);
@@ -312,7 +319,7 @@ HOOK.s26 = { step: function (k) {
     h += bento(3, 11, true);
     return h;
   }
-  function paint(el, html) { el.classList.remove('up'); el.innerHTML = html; $$('*', el).forEach(function (n, i) { if (n.parentNode === el) n.style.setProperty('--d', (i * 30) + 'ms'); }); void el.offsetWidth; el.classList.add('up'); }
+  function paint(el, html) { el.classList.add('fade'); clearTimeout(el._pt); el._pt = setTimeout(function () { el.innerHTML = html; el.classList.add('up'); void el.offsetWidth; el.classList.remove('fade'); }, 220); }
   function gen() { paint(L, left()); paint(Rr, right()); }
   $('s35gen').addEventListener('click', function (e) { e.stopPropagation(); gen(); this.blur(); });
   HOOK.s35 = { reset: gen, step: function (k) { if (k >= 4) gen(); } };
@@ -320,8 +327,34 @@ HOOK.s26 = { step: function (k) {
 
 /* S36 · 커넥터. 마지막 Space에 관리자 승인 행만 남긴다 */
 HOOK.s33 = { step: function (k) { var f = $('s33f'); $$('#s33f .fi').forEach(function (r, i) { r.style.setProperty('--d', (i * 40) + 'ms'); }); f.classList.toggle('open', k >= 2); } };
-HOOK.s31 = { step: function (k) { $$('#s31c .k.rep').forEach(function (kk) { kk.classList.toggle('dim1', k >= 1); }); } };
+HOOK.s31 = { step: function (k) {
+  var T = { s31p1: 'B사 투자 검토 보고서를 만들어 줘. 표지에는 회사명과 날짜를 넣고, 1장은 개요를 다섯 줄로, 2장은 …', s31p2: '이 예시들처럼 B사 투자 검토 보고서를 만들어 줘' };
+  Object.keys(T).forEach(function (id) { var ph = $(id), typed = k >= 2; if ((ph.textContent !== 'Claude에게 메시지 보내기') !== typed) swapText(ph, function () { ph.textContent = typed ? T[id] : 'Claude에게 메시지 보내기'; ph.style.color = typed ? 'var(--k-ink)' : ''; }); });
+} };
 HOOK.s36 = { step: function (k) { $('s36st').classList.toggle('focus', k >= 3); } };
 
 /* 시작 */
 var h0 = parseInt((location.hash || '#1').slice(1), 10); show(isNaN(h0) ? 0 : h0 - 1);
+
+/* S29 · 레이어 정리. 18장의 막대를 네 줄로. 메시지마다 앞의 것이 전부 다시 들어가고 프롬프트와 답이 붙는다 */
+(function () {
+  var L = window.CW_LAYERS, MAX = 9000;
+  var auto = [0, 1, 2, 3, 4, 5].map(function (i) { return L[i]; }).concat([{ n: '프로젝트 지식', t: 1500, c: 'var(--c4)' }]);
+  var P = { n: '프롬프트', t: 60, c: 'var(--c5)' }, A = { n: '답변', t: 400, c: '#7F8493', hatch: true };
+  function seg(it) { return '<i class="on' + (it.hatch ? ' hatch' : '') + '" style="background:' + it.c + ';--w:' + (it.t / MAX * 100) + '%"></i>'; }
+  $$('#s29lb .bar').forEach(function (b) {
+    var m = +b.dataset.msg, list = auto.slice();
+    for (var i = 1; i <= m; i++) { list.push(P); if (i < m) list.push(A); }
+    b.innerHTML = list.map(seg).join('');
+  });
+  var lg = auto.concat([P, A]);
+  $('s29lg').innerHTML = lg.map(function (it) { return '<span><i' + (it.hatch ? ' class="hatch"' : '') + ' style="background:' + it.c + '"></i>' + it.n + '</span>'; }).join('');
+})();
+
+/* S39 · 인터페이스 정리. 18장의 막대에 오늘 나온 것을 전부 얹는다 */
+(function () {
+  var L = window.CW_LAYERS, MAX = 9000;
+  var list = [L[0], L[1], L[2], L[3], L[4], L[5], { n: '프로젝트 지식', t: 1500, c: 'var(--c4)' }, L[6], L[7], { n: '커넥터로 가져온 자료', t: 900, c: '#7F8493', hatch: true }];
+  $('s39bar').innerHTML = list.map(function (it) { return '<i class="on' + (it.hatch ? ' hatch' : '') + '" style="background:' + it.c + ';--w:' + (it.t / MAX * 100) + '%"></i>'; }).join('');
+  $('s39lg').innerHTML = list.map(function (it) { return '<span class="on"><i' + (it.hatch ? ' class="hatch"' : '') + ' style="background:' + it.c + '"></i>' + it.n + '</span>'; }).join('');
+})();

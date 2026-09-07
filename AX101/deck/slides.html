@@ -47,7 +47,7 @@
     <div class="card model"><div><div class="cn">모델</div><div class="cd">사람의 뇌를 모방하여 만든 컴퓨터 시스템<br>요즘 AI라고 하면 보통 LLM</div></div>
       <div class="cb" data-step="1"><svg class="nn" id="s3nn" viewBox="0 0 420 300" fill="none"></svg></div></div>
     <div class="card iface"><div><div class="cn">인터페이스</div><div class="cd">AI 모델을 비개발자도 사용할 수 있도록 만든 형태<br>가장 대표적인 형태가 채팅</div></div>
-      <div class="cb" data-step="2"><div class="k" id="s3k" style="width:100%">
+      <div class="cb" data-step="2"><div class="k" id="s3k" style="width:640px">
         <div class="k-msgs"><div class="u">이 회사의 강점을 세 줄로 정리해 줘</div><div class="a" id="s3a">세 가지로 정리하면 첫째 …</div></div>
         <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
         </div></div>
@@ -86,10 +86,9 @@
       <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
     </div>
     <div class="col tokx" id="s7x" data-stagger="40">
-      <div class="tx1"><b>토큰</b><span>모델이 텍스트를 읽고 처리하는 <b>가장 작은 단위</b></span><span>학습할 때도 단어나 문장이 아니라 <b>토큰으로 잘라서</b> 학습</span></div>
-      <div class="tx1" data-step="1"><b>토큰 하나</b><span>단어 하나일 수도, 단어의 조각일 수도, 글자 하나일 수도</span><span>여기서는 <b>어절 하나를 토큰 하나</b>로</span></div>
-      <div class="tx2" data-step="2"><div><b>7</b><span>입력 토큰</span></div><div><b>9</b><span>출력 토큰</span></div></div>
-      <div class="tx1" data-step="2"><span>모델은 <b>토큰을 받아서 토큰을 낸다</b></span></div>
+      <div class="tx1"><b>토큰</b><span>모델이 텍스트를 읽고 처리하는 <b>가장 작은 단위</b></span><span>학습도 입출력도 단어나 문장이 아니라 <b>토큰 단위</b></span></div>
+      <div class="tx1" data-step="1"><b>토큰 하나의 크기</b><span>단어 하나일 수도 단어의 조각일 수도 글자 하나일 수도 있음</span><span>여기서는 <b>어절 하나</b>를 토큰 하나로 봄</span></div>
+      <div class="tx1" data-step="2"><b>토큰이 중요한 이유</b><span>모델의 <b>기본 동작 단위</b></span><span>비용을 낼 때의 <b>기준 단위</b></span></div>
     </div>
   </div>
 </section>
@@ -279,7 +278,7 @@
   </div>
 </section>
 <!-- S17 컨텍스트 윈도우 -->
-<section class="s" id="s17" data-steps="8" data-sec="Interface">
+<section class="s" id="s17" data-steps="9" data-sec="Interface">
   <div class="head"><div class="h"><span class="no">2.</span> 컨텍스트 윈도우</div><div class="lead">모델의 작업 기억 공간 (입력 공간)</div></div>
   <div class="main">
     <div class="cw" id="s17cw">
@@ -289,7 +288,7 @@
     </div>
     <div class="cols side" style="--side:760px;flex:1;min-height:0">
       <div class="k fill">
-      <div class="k-msgs"><div class="u" data-step="7">A사 회사소개 자료 기준으로 시범 도입 고객 수를 정리해 줘</div></div>
+      <div class="k-msgs"><div class="u" data-step="7"><span class="chip" data-step="9"><svg><use href="#i-file"/></svg>A사_회사소개.pdf</span><br class="chipbr" data-step="9">A사 회사소개 자료 기준으로 시범 도입 고객 수를 정리해 줘</div></div>
       <div class="k-in"><div class="ph" id="s17ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
       </div>
       <div class="col"><div class="cwi" id="s17i"><div class="n"><i></i><span></span></div><div class="w"></div></div></div>
@@ -323,9 +322,8 @@
 </section>
 <!-- S20 AI의 상황 · 맥락이 없을 때 -->
 <section class="s" id="s20" data-steps="2" data-sec="Interface">
-  <div class="head"><div class="h">AI의 상황을 이해해보기</div><div class="lead">AI의 입장이 되어 보면 어떻게 프롬프트를 넣어야 할지 알 수 있음</div></div>
+  <div class="head"><div class="h">AI의 상황을 이해해보기</div><div class="lead">이 회사가 어떤 회사인지 내 상사가 누구인지 나는 무슨 업무를 해야 하는지 하나도 모르는 상태</div></div>
   <div class="main">
-    <div class="state">이 회사가 어떤 회사인지, 내 상사가 누구인지, 나는 무슨 업무를 해야 하는지 하나도 모르는 상태</div>
     <div class="k big b2 fill" id="s20k">
       <div class="k-msgs">
         <div class="u" data-step="1">앤트로픽에 대해 조사해줘</div>
@@ -337,9 +335,8 @@
 </section>
 <!-- S21 AI의 상황 · 친절한 상사 -->
 <section class="s" id="s21" data-steps="1" data-sec="Interface">
-  <div class="head"><div class="h">AI의 상황을 이해해보기</div><div class="lead">AI의 입장이 되어 보면 어떻게 프롬프트를 넣어야 할지 알 수 있음</div></div>
+  <div class="head"><div class="h">AI의 상황을 이해해보기</div><div class="lead">그런데 친절한 상사가 와서 이렇게 말을 해 준다면</div></div>
   <div class="main">
-    <div class="state">그런데 친절한 상사가 와서 이렇게 말을 해 준다면</div>
     <div class="k big b2 fill">
       <div class="k-msgs">
         <div class="u">우리 회사는 삼성벤처투자야. 우리 회사는 이런이런 업무를 하고, 나는 어떤 일을 하는 누구고, 너는 무슨 업무를 맡은 어떤 직책을 가지고 있고, 지금은 무슨 프로젝트를 하고 있고, 이 프로젝트의 맥락은 이런 거고, 당장 지금 해야 할 일은 앤트로픽에 대한 조사인데, 이런 부분을 이 수준까지 조사한 뒤에 워드 형태로 정리해 줘. 출력할 때는 보고서 형식의 문어체를 항상 쓰고, 우리는 이런 식으로 워드 보고서를 작성하니까 참고하고, 결론을 먼저 말하고 핵심 위주로 논리를 전개해 줘.</div>
@@ -399,7 +396,7 @@
 <!-- S24 메모리 -->
 <section class="s" id="s24" data-steps="2" data-sec="Interface">
   <div class="head"><div class="h"><span class="no">5.</span> 메모리 <i class="sw c2"></i></div><div class="lead">Claude가 대화에서 스스로 뽑아 쌓아 두는 입력</div></div>
-  <div class="main cols side" style="--side:760px">
+  <div class="main cols side" style="--side:600px">
     <div class="st" id="s24st">
       <div class="nav"><div class="search">검색</div>
         <div class="grp">설정</div><div class="it"><svg><use href="#i-gear"/></svg>일반</div><div class="it"><svg><use href="#i-user"/></svg>계정</div><div class="it"><svg><use href="#i-chart"/></svg>사용량</div><div class="it"><svg><use href="#i-zap"/></svg>기능</div><div class="it"><svg><use href="#i-monitor"/></svg>Cowork</div>
@@ -424,7 +421,6 @@
         <li data-step="1">설정에서 <b>켜고 끌 수 있고</b> 무엇이 쌓였는지 직접 확인하고 지울 수도 있음</li>
         <li data-step="2">대화 중에 <b>“이건 기억해 줘”</b>라고 말해서 바로 추가</li>
       </ul>
-      <div class="note" data-step="1">엔터프라이즈는 기본 꺼짐. 관리자가 켜야 개인이 켤 수 있음</div>
     </div>
   </div>
 </section>
@@ -455,7 +451,7 @@
   <div class="main cols split">
     <div class="col wide">
       <div class="h2">산출물 기준</div>
-      <div class="pcells"><div class="pcell"><div class="pn">보고서 만들기</div><div class="f"><svg><use href="#i-file"/></svg>A사_회사소개.md</div><div class="f"><svg><use href="#i-file"/></svg>A사_IR자료.pdf</div><div class="f"><svg><use href="#i-file"/></svg>경쟁사_비교.csv</div></div><div class="pcell"><div class="pn">PPT 만들기</div><div class="f"><svg><use href="#i-file"/></svg>A사_회사소개.md</div><div class="f"><svg><use href="#i-file"/></svg>A사_IR자료.pdf</div><div class="f"><svg><use href="#i-file"/></svg>경쟁사_비교.csv</div></div></div>
+      <div class="pcells"><div class="pcell"><div class="pn">보고서 만들기</div><div class="f dup"><svg><use href="#i-file"/></svg>A사_회사소개.md</div><div class="f dup"><svg><use href="#i-file"/></svg>A사_IR자료.pdf</div><div class="f dup"><svg><use href="#i-file"/></svg>경쟁사_비교.csv</div></div><div class="pcell"><div class="pn">PPT 만들기</div><div class="f dup"><svg><use href="#i-file"/></svg>A사_회사소개.md</div><div class="f dup"><svg><use href="#i-file"/></svg>A사_IR자료.pdf</div><div class="f dup"><svg><use href="#i-file"/></svg>경쟁사_비교.csv</div></div></div>
     </div>
     <div class="col wide" id="s27r" data-stagger="40">
       <div class="h2" data-step="1">입력 기준</div>
@@ -465,27 +461,25 @@
 </section>
 <!-- S29 레이어 정리 · 다섯 층. 자동 층은 시작에 서고 메시지마다 띠로 이어진다 -->
 <section class="s" id="s29" data-steps="4">
-  <div class="head"><div class="h">레이어 정리</div><div class="lead">각 레이어가 컨텍스트 윈도우에 들어가는 시점</div></div>
-  <div class="main lay five" id="s29lay" data-stagger="40">
-    <div></div><div class="hd" data-step="1"><span>대화 시작</span></div><div class="hd" data-step="2"><span>메시지 1</span></div><div class="hd" data-step="3"><span>메시지 2</span></div><div class="hd" data-step="4"><span>메시지 3</span></div>
-    <div class="rl"><i class="nb c1">1</i>Claude 지침</div><div class="cell c-ins" data-step="1"></div><div class="cell bd c-ins"><i data-step="2"></i></div><div class="cell bd c-ins"><i data-step="3"></i></div><div class="cell bd c-ins"><i data-step="4"></i></div>
-    <div class="rl"><i class="nb c2">2</i>메모리</div><div class="cell c-mem" data-step="1"></div><div class="cell bd c-mem"><i data-step="2"></i></div><div class="cell bd c-mem"><i data-step="3"></i></div><div class="cell bd c-mem"><i data-step="4"></i></div>
-    <div class="rl"><i class="nb c3">3</i>프로젝트 지침</div><div class="cell c-pi" data-step="1"></div><div class="cell bd c-pi"><i data-step="2"></i></div><div class="cell bd c-pi"><i data-step="3"></i></div><div class="cell bd c-pi"><i data-step="4"></i></div>
-    <div class="rl"><i class="nb c4">4</i>프로젝트 지식</div><div class="cell c-kn" data-step="1"><small>커지면 필요한 부분만 검색</small></div><div class="cell bd c-kn"><i data-step="2"></i></div><div class="cell bd c-kn"><i data-step="3"></i></div><div class="cell bd c-kn"><i data-step="4"></i></div>
-    <div class="rl"><i class="nb c5">5</i>프롬프트</div><div></div><div class="cell c-pr" data-step="2"></div><div class="cell c-pr" data-step="3"></div><div class="cell c-pr" data-step="4"></div>
+  <div class="head"><div class="h">레이어 정리</div><div class="lead">메시지를 보낼 때마다 컨텍스트 윈도우에 들어가는 것</div></div>
+  <div class="main laybars" id="s29lb" data-stagger="40">
+    <div class="lrow" data-step="1"><div class="rn">대화 시작</div><div class="cw"><div class="bar" data-msg="0"></div></div></div>
+    <div class="lrow" data-step="2"><div class="rn">메시지 1</div><div class="cw"><div class="bar" data-msg="1"></div></div></div>
+    <div class="lrow" data-step="3"><div class="rn">메시지 2</div><div class="cw"><div class="bar" data-msg="2"></div></div></div>
+    <div class="lrow" data-step="4"><div class="rn">메시지 3</div><div class="cw"><div class="bar" data-msg="3"></div></div></div>
+    <div class="legend" id="s29lg"></div>
   </div>
 </section>
 <!-- S25 자료 들여오기 · 사람이 넣는 길과 도구가 가져오는 길이 컨텍스트 윈도우로 모인다 -->
-<section class="s" id="s25" data-steps="3">
+<section class="s" id="s25" data-steps="2">
   <div class="head"><div class="h"><span class="no">7.</span> 자료 들여오기</div><div class="lead">모델이 모르는 정보를 컨텍스트 윈도우에 넣는 두 길</div></div>
   <div class="main">
     <div class="intake" id="s25in" data-stagger="40">
       <div class="src"><div class="h2">사람이 넣는다</div><div class="it">프롬프트에 직접 씀</div><div class="it">파일을 첨부함</div></div>
       <div class="conn" data-step="1"></div>
-      <div class="cwb"><div class="cwt">컨텍스트 윈도우</div>
-        <div class="slot"><span class="p h" data-step="1">프롬프트</span><span class="p h" data-step="1">첨부한 파일</span></div>
-        <div class="slot"><span class="p t" data-step="2">웹 검색 결과</span><span class="p t kn" data-step="2">프로젝트 지식에서 찾은 부분</span><span class="p t" data-step="2">커넥터로 가져온 자료</span></div>
-        <div class="rag" data-step="3"><i></i><span class="pill dark">RAG</span></div>
+      <div class="cwb2"><div class="cwt">컨텍스트 윈도우</div>
+        <div class="cw"><div class="bar" id="s25bar"><i class="on" style="background:var(--c5);--w:8%" data-step="1"></i><i class="on" style="background:var(--c4);--w:30%" data-step="1"></i><i class="on hatch" style="background:#7F8493;--w:18%" data-step="2"></i><i class="on hatch" style="background:var(--c4);--w:14%" data-step="2"></i><i class="on hatch" style="background:#7F8493;--w:22%" data-step="2"></i></div></div>
+        <div class="legend"><span data-step="1"><i style="background:var(--c5)"></i>프롬프트</span><span data-step="1"><i style="background:var(--c4)"></i>첨부한 파일</span><span data-step="2"><i class="hatch" style="background:#7F8493"></i>웹 검색 결과</span><span data-step="2"><i class="hatch" style="background:var(--c4)"></i>프로젝트 지식에서 찾은 부분</span><span data-step="2"><i class="hatch" style="background:#7F8493"></i>커넥터로 가져온 자료</span></div>
       </div>
       <div class="conn r" data-step="2"></div>
       <div class="src"><div class="h2">모델이 도구로 가져온다</div><div class="it">웹 검색</div><div class="it">프로젝트 지식 검색</div><div class="it">커넥터</div></div>
@@ -546,16 +540,16 @@
   </div>
 </section>
 <!-- S31 결과물의 형식을 알려 주는 방법 · 새 채팅마다 같은 설명과 같은 첨부를 반복한다 -->
-<section class="s" id="s31" data-steps="1">
+<section class="s" id="s31" data-steps="2">
   <div class="head"><div class="h">결과물의 형식을 알려 주는 방법</div><div class="lead">자세한 프롬프트와 예시</div></div>
   <div class="main cols" id="s31c">
     <div class="col wide">
       <div class="h2"><span class="no">1.</span> 자세한 프롬프트</div>
-      <div class="k rep fill"><div class="k-msgs"><div class="u">A사 투자 검토 보고서를 만들어 줘. 표지에는 회사명과 날짜를 넣고, 1장은 개요를 다섯 줄로, 2장은 시장 규모를 표로, 3장은 경쟁사 세 곳을 비교해 줘. 수치마다 출처와 기준 연도를 같이 적고, 말투는 개조식으로, 분량은 A4 두 장 안에서, 표 제목은 굵게, 그리고 …</div><div class="nc" data-step="1"><span>새 채팅</span></div><div class="u" data-step="1">A사 투자 검토 보고서를 만들어 줘. 표지에는 회사명과 날짜를 넣고, 1장은 개요를 다섯 줄로, 2장은 시장 규모를 표로, 3장은 경쟁사 세 곳을 비교해 줘. 수치마다 출처와 기준 연도를 같이 적고, 말투는 개조식으로, 분량은 A4 두 장 안에서, 표 제목은 굵게, 그리고 …</div></div><div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div></div>
+      <div class="k fill"><div class="k-msgs"><div class="u">A사 투자 검토 보고서를 만들어 줘. 표지에는 회사명과 날짜를 넣고, 1장은 개요를 다섯 줄로, 2장은 시장 규모를 표로, 3장은 경쟁사 세 곳을 비교해 줘. 수치마다 출처와 기준 연도를 같이 적고, 말투는 개조식으로, 분량은 A4 두 장 안에서, 표 제목은 굵게, 그리고 …</div><div class="a" data-step="1"><span class="tx">말씀하신 구성대로 보고서를 만들었습니다.</span><div class="tool"><svg><use href="#i-file"/></svg><div><b>A사_투자검토보고서.docx</b><small>표지 · 개요 · 시장 규모 · 경쟁사 비교</small></div></div></div></div><div class="k-in"><div class="ph" id="s31p1">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div></div>
     </div>
     <div class="col wide">
       <div class="h2"><span class="no">2.</span> 예시 보여주기</div>
-      <div class="k rep fill"><div class="k-msgs"><div class="u"><span class="chip"><svg><use href="#i-file"/></svg>보고서_예시_1.docx</span> <span class="chip"><svg><use href="#i-file"/></svg>보고서_예시_2.docx</span> <span class="chip"><svg><use href="#i-file"/></svg>보고서_예시_3.docx</span><br>이 예시들처럼 A사 투자 검토 보고서를 만들어 줘</div><div class="nc" data-step="1"><span>새 채팅</span></div><div class="u" data-step="1"><span class="chip"><svg><use href="#i-file"/></svg>보고서_예시_1.docx</span> <span class="chip"><svg><use href="#i-file"/></svg>보고서_예시_2.docx</span> <span class="chip"><svg><use href="#i-file"/></svg>보고서_예시_3.docx</span><br>이 예시들처럼 A사 투자 검토 보고서를 만들어 줘</div></div><div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div></div>
+      <div class="k fill"><div class="k-msgs"><div class="u"><span class="chip"><svg><use href="#i-file"/></svg>보고서_예시_1.docx</span> <span class="chip"><svg><use href="#i-file"/></svg>보고서_예시_2.docx</span> <span class="chip"><svg><use href="#i-file"/></svg>보고서_예시_3.docx</span><br>이 예시들처럼 A사 투자 검토 보고서를 만들어 줘</div><div class="a" data-step="1"><span class="tx">예시 세 개의 구성과 말투에 맞춰 보고서를 만들었습니다.</span><div class="tool"><svg><use href="#i-file"/></svg><div><b>A사_투자검토보고서.docx</b><small>예시와 같은 표지 · 장 구성 · 표 형식</small></div></div></div></div><div class="k-in"><div class="ph" id="s31p2">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div></div>
     </div>
   </div>
 </section>
@@ -662,6 +656,28 @@
       <div class="ob" data-step="1"><small>서브에이전트</small><div class="mini"><span>리서치 에이전트</span><i></i></div></div>
     </div>
     <div class="col wide"><ul class="bullets"><li>플러그인 하나를 설치하면 그 안에 든 구성이 <b>한 번에</b> 들어옴</li><li>팀 단위로 같은 작업 환경을 맞춰야 할 때 <b>관리자</b>가 배포</li></ul></div>
+  </div>
+</section>
+<!-- S39 인터페이스 정리 · 앞의 열 가지가 채팅창과 컨텍스트 윈도우의 어디에 놓이는가 -->
+<section class="s" id="s39" data-steps="2" data-sec="Interface">
+  <div class="head"><div class="h">인터페이스 정리</div><div class="lead">채팅창에서 정하는 것과 컨텍스트 윈도우에 들어가는 것</div></div>
+  <div class="main recap">
+    <div class="rc-top" data-step="1">
+      <div class="cw"><div class="bar" id="s39bar"></div><div class="legend" id="s39lg"></div></div>
+      <div class="k rc-k"><div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="model">Effort High <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div></div>
+    </div>
+    <div class="rc-list" id="s39list" data-stagger="40">
+      <div class="ri" data-step="2"><span class="no">1.</span><b>모델과 Effort</b><span>모델에 대해 우리가 정할 수 있는 두 가지</span></div>
+      <div class="ri" data-step="2"><span class="no">2.</span><b>컨텍스트 윈도우</b><span>모델의 작업 기억 공간 (입력 공간)</span></div>
+      <div class="ri" data-step="2"><span class="no">3.</span><b>프롬프트</b><span>보낼 때마다 직접 쓰는 입력</span></div>
+      <div class="ri" data-step="2"><span class="no">4.</span><b>지침</b><span>모든 대화에 자동으로 들어가는 입력</span></div>
+      <div class="ri" data-step="2"><span class="no">5.</span><b>메모리</b><span>Claude가 대화에서 스스로 뽑아 쌓아 두는 입력</span></div>
+      <div class="ri" data-step="2"><span class="no">6.</span><b>프로젝트</b><span>지식과 지침을 묶어 둔 작업 공간</span></div>
+      <div class="ri" data-step="2"><span class="no">7.</span><b>자료 들여오기</b><span>모델이 모르는 정보를 컨텍스트 윈도우에 넣는 두 길</span></div>
+      <div class="ri" data-step="2"><span class="no">8.</span><b>커넥터</b><span>외부 서비스와 Claude를 잇는 통로</span></div>
+      <div class="ri" data-step="2"><span class="no">9.</span><b>스킬</b><span>지침과 스크립트와 자료를 묶어 둔 폴더</span></div>
+      <div class="ri" data-step="2"><span class="no">10.</span><b>플러그인</b><span>스킬과 커넥터를 하나로 묶어 둔 패키지</span></div>
+    </div>
   </div>
 </section>
 <!-- S38 마무리 -->
