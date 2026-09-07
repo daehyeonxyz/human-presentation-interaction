@@ -280,17 +280,17 @@ HOOK.s14 = { step: function (k) {
 /* S17 · 컨텍스트 윈도우. 대본 순서대로 채운다 */
 (function () {
   var IT = [
-    { n: '시스템 프롬프트를 포함한 설정 파일', w: 'Claude의 기본 동작을 정해 둔 파일. 우리가 볼 일은 없음', t: 2400, c: '#C9CDD6' },
+    { n: '시스템 프롬프트를 포함한 설정 파일', w: 'Claude의 기본 동작을 정해 둔 파일. 우리가 볼 일은 없음', t: 2400, c: 'var(--g1)' },
     { n: '메모리', w: 'Claude가 대화에서 스스로 뽑아 쌓아 두는 입력', t: 600, c: 'var(--c2)' },
-    { n: '도구 정보(MCP)', w: '모델이 쓸 수 있는 도구의 목록과 사용법', t: 1200, c: '#B3B8C6' },
-    { n: '스킬 설명', w: '어떤 스킬이 있고 언제 쓰는지에 대한 요약', t: 400, c: '#9DA3B4' },
+    { n: '도구 정보(MCP)', w: '모델이 쓸 수 있는 도구의 목록과 사용법', t: 1200, c: 'var(--g2)' },
+    { n: '스킬 설명', w: '어떤 스킬이 있고 언제 쓰는지에 대한 요약', t: 400, c: 'var(--g3)' },
     { n: 'Claude 지침', w: '내 모든 대화에 자동으로 들어가는 지침', t: 150, c: 'var(--c1)' },
     { n: '프로젝트 지침', w: '프로젝트 안의 대화에만 들어가는 지침', t: 600, c: 'var(--c3)' },
     { n: '프롬프트', w: '채팅창에 보낼 때마다 직접 쓰는 입력', t: 40, c: 'var(--c5)' },
     { n: '첨부 파일', w: '첨부한 파일의 내용이 그대로 들어감', t: 2600, c: 'var(--c4)' }
   ];
   window.CW_LAYERS = IT;
-  var CE = { n: '컨텍스트 엔지니어링', w: '컨텍스트 윈도우에 필요한 정보, 도구, 메모리, 외부 데이터 등을 체계적으로 넣고 최적화하는 기술', c: 'var(--ink)' };
+  var CE = { n: '컨텍스트 엔지니어링', w: '컨텍스트 윈도우에 필요한 정보와 도구와 메모리와 외부 데이터를 체계적으로 넣고 최적화하는 기술', c: 'var(--ink)' };
   var MAX = 24000, bar = $('s17bar'), lg = $('s17lg'), insp = $('s17i'), n = 0, hover = -1, ce = false;
   bar.innerHTML = IT.map(function (it, i) { return '<i data-i="' + i + '" style="background:' + it.c + '"></i>'; }).join('');
   lg.innerHTML = IT.map(function (it, i) { return '<span data-i="' + i + '"><i style="background:' + it.c + '"></i>' + it.n + '</span>'; }).join('');
@@ -402,7 +402,7 @@ var h0 = parseInt((location.hash || '#1').slice(1), 10); show(isNaN(h0) ? 0 : h0
 (function () {
   var L = window.CW_LAYERS, MAX = 16000;
   var auto = [0, 1, 2, 3, 4, 5].map(function (i) { return L[i]; }).concat([{ n: '프로젝트 지식', t: 1500, c: 'var(--c4)' }]);
-  var P = { n: '프롬프트', t: 60, c: 'var(--c5)' }, A = { n: '답변', t: 400, c: '#7F8493', hatch: true };
+  var P = { n: '프롬프트', t: 60, c: 'var(--c5)' }, A = { n: '답변', t: 400, c: 'var(--g4)', hatch: true };
   function seg(it) { return '<i class="on' + (it.hatch ? ' hatch' : '') + '" style="background:' + it.c + ';--w:' + (it.t / MAX * 100) + '%"></i>'; }
   $$('#s29lb .bar').forEach(function (b) {
     var m = +b.dataset.msg, list = auto.slice();
@@ -433,3 +433,5 @@ var h0 = parseInt((location.hash || '#1').slice(1), 10); show(isNaN(h0) ? 0 : h0
     if ((ph.textContent !== 'Claude에게 메시지 보내기') !== typed) swapText(ph, function () { ph.textContent = typed ? 'A사 시장 규모 확인해 줘' : 'Claude에게 메시지 보내기'; ph.style.color = typed ? 'var(--k-ink)' : ''; });
   } };
 })();
+
+HOOK.s27 = { step: function (k) { $('s27r').classList.toggle('lit', k >= 1); } };
