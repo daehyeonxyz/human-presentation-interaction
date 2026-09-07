@@ -1041,7 +1041,7 @@ svg.nn.morph path { fill: none; stroke: var(--n5); stroke-width: 1.5; transition
 .pj .box .f.hot { color: var(--k-ink); box-shadow: 0 0 0 3px var(--c4); border-radius: 8px; }
 .k .u .skc { color: var(--k-blue); font-weight: 600; }
 .skl { display: flex; flex-direction: column; gap: var(--gap); }
-.skl .three { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--gap); height: 460px; }
+.skl .three { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--gap); height: 460px; overflow: hidden; }
 .skl .three .col { min-height: 0; }
 .skl .three .k { flex: 1; min-height: 0; }
 .skl .three .k .k-msgs { padding: 24px; }
