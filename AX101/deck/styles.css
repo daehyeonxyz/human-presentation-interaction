@@ -977,25 +977,8 @@ svg.nn.fade { animation: nnin 200ms var(--ease-out); }
 #s31c .k .a .tool { margin-top: 12px; }
 #s31c .k .k-in .ph { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .doc > * { opacity: 1; filter: none; transition: none; }
-.recap { display: flex; flex-direction: column; gap: var(--gap-lg); }
-.recap .rc-top { display: flex; flex-direction: column; gap: var(--gap-sm); }
-.recap .rc-top .cw .bar i { width: var(--w); min-width: 28px; }
-.recap .rc-top .cw .legend span { opacity: 1; }
-.recap .rc-k { align-self: stretch; }
-.recap .rc-k .k-msgs { display: none; }
-.recap .rc-list { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-xs) var(--gap-xl); }
-.recap .ri { display: grid; grid-template-columns: 56px 260px 1fr; align-items: baseline; gap: var(--gap-xs); font-size: var(--t-body); line-height: var(--l-body); padding: var(--gap-2xs) 0; border-bottom: 1px solid var(--line); }
-.recap .ri .no { color: var(--acc); font-weight: 800; }
-.recap .ri b { font-weight: 800; }
 #s31c { grid-template-columns: 1fr 1fr; }
 #s31c .col { min-width: 0; }
-.recap { gap: var(--gap); }
-.recap .rc-k .k-in { padding: 12px 20px; }
-.recap .rc-list { gap: 0 var(--gap-xl); }
-.recap .ri { grid-template-columns: 48px 210px 1fr; font-size: var(--t-cap); line-height: var(--l-cap); padding: 10px 0; }
-.recap .rc-k .k-in { max-width: none; margin: 0; }
-.recap .rc-k { padding: 0; border-radius: 20px; }
-.recap .rc-k .k-in { width: auto; }
 
 /* 60차 · 신경망 모핑, 겹쳐 사라지는 내용 교체, 장 넘김 디졸브 */
 svg.nn.morph circle { transition: cx 480ms var(--ease-smooth), cy 480ms var(--ease-smooth), r 480ms var(--ease-smooth), opacity 320ms var(--ease-smooth); }
@@ -1018,3 +1001,12 @@ svg.nn.morph path { fill: none; stroke: var(--n5); stroke-width: 1.5; transition
 .k.prev .tt.cw.p1 { background: transparent; color: var(--n5); }
 #s9 .main.cols.side { --side: 840px; }
 #s9bill .lrow, #s9bill .lsum { grid-template-columns: 1fr 120px 110px 170px; }
+
+/* 38장 · 인터페이스 정리 다시. 막대 한 줄 아래 설정과 프로젝트의 실물 조각 넷과 채팅창. 조각은 제품 상자를 그대로 잘라 온 것이라 안쪽 수치는 제품 값이다 */
+.recap { gap: var(--gap-xs); }
+.recap .cw .bar i { width: var(--w); min-width: 28px; }
+.st.crop, .pj.crop { display: block; flex: none; padding: 16px; transition: opacity var(--t-state) var(--ease-std), box-shadow var(--t-state) var(--ease-std); }
+.st.crop .sec, .st.crop .blk { margin-top: 0; }
+.recap .k { overflow: visible; }
+.recap .cols.focus .crop:not(.hot) { opacity: var(--dim); }
+#s39m.hot { box-shadow: 0 0 0 3px var(--c2); } #s39g.hot { box-shadow: 0 0 0 3px var(--c1); } #s39pi.hot { box-shadow: 0 0 0 3px var(--c3); } #s39pk.hot { box-shadow: 0 0 0 3px var(--c4); }

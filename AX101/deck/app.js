@@ -413,10 +413,23 @@ var h0 = parseInt((location.hash || '#1').slice(1), 10); show(isNaN(h0) ? 0 : h0
   $('s29lg').innerHTML = lg.map(function (it) { return '<span><i' + (it.hatch ? ' class="hatch"' : '') + ' style="background:' + it.c + '"></i>' + it.n + '</span>'; }).join('');
 })();
 
-/* S39 · 인터페이스 정리. 18장의 막대에 오늘 나온 것을 전부 얹는다 */
+/* S39 · 인터페이스 정리. 19장의 막대에 프로젝트 지식 칸을 더한 아홉 칸. Space 1 모델 메뉴(막대 밖), 2~5 색 칸과 같은 색 테두리의 조각이 짝으로, 6 검정 칸과 프롬프트 */
 (function () {
   var L = window.CW_LAYERS, MAX = 24000;
-  var list = [L[0], L[1], L[2], L[3], L[4], L[5], { n: '프로젝트 지식', t: 1500, c: 'var(--c4)' }, L[6], L[7], { n: '커넥터로 가져온 자료', t: 900, c: '#7F8493', hatch: true }];
-  $('s39bar').innerHTML = list.map(function (it) { return '<i class="on' + (it.hatch ? ' hatch' : '') + '" style="background:' + it.c + ';--w:' + (it.t / MAX * 100) + '%"></i>'; }).join('');
-  $('s39lg').innerHTML = list.map(function (it) { return '<span class="on"><i' + (it.hatch ? ' class="hatch"' : '') + ' style="background:' + it.c + '"></i>' + it.n + '</span>'; }).join('');
+  var list = [L[0], L[1], L[2], L[3], L[4], L[5], { n: '프로젝트 지식', t: 1500, c: 'var(--c4)' }, L[6], L[7]];
+  $('s39bar').innerHTML = list.map(function (it) { return '<i class="on" style="background:' + it.c + ';--w:' + (it.t / MAX * 100) + '%"></i>'; }).join('');
+  $('s39lg').innerHTML = list.map(function (it) { return '<span class="on"><i style="background:' + it.c + '"></i>' + it.n + '</span>'; }).join('');
+  var HOT = { 2: 1, 3: 4, 4: 5, 5: 6, 6: 7 }, RING = { s39m: 2, s39g: 3, s39pi: 4, s39pk: 5 };
+  HOOK.s39 = { step: function (k) {
+    var hot = k in HOT ? HOT[k] : -1;
+    $('s39bar').classList.toggle('focus', k >= 1); $('s39cw').classList.toggle('dimlg', k >= 1);
+    $$('#s39bar i').forEach(function (s, i) { s.classList.toggle('hot', i === hot); });
+    $$('#s39lg span').forEach(function (s, i) { s.classList.toggle('hot', i === hot); });
+    $('s39k').classList.toggle('focus', k === 1); $('s39model').classList.toggle('hot', k === 1);
+    $$('#s39menu .mi, #s39sub .mi').forEach(function (m) { m.classList.toggle('hot', k === 1); });
+    $('s39pan').classList.toggle('focus', k >= 1);
+    Object.keys(RING).forEach(function (id) { $(id).classList.toggle('hot', RING[id] === k); });
+    var ph = $('s39ph'), typed = k >= 6;
+    if ((ph.textContent !== 'Claude에게 메시지 보내기') !== typed) swapText(ph, function () { ph.textContent = typed ? 'A사 시장 규모 확인해 줘' : 'Claude에게 메시지 보내기'; ph.style.color = typed ? 'var(--k-ink)' : ''; });
+  } };
 })();
