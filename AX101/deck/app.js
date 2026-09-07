@@ -47,7 +47,7 @@ function show(n) {
   clearTimers();
   cur = n; step = 0;
   slides.forEach(function (s, i) { s.classList.toggle('active', i === n); s.classList.remove('leaving'); });
-  if (prev !== slides[n]) { prev.classList.add('leaving'); setTimeout(function () { prev.classList.remove('leaving'); }, 400); }
+  if (prev !== slides[n]) { prev.classList.add('leaving'); setTimeout(function () { prev.classList.remove('leaving'); }, 250); }
   viewport.classList.toggle('dark', slides[n].classList.contains('dark')); viewport.classList.toggle('blue', slides[n].classList.contains('blue'));
   var h = HOOK[slides[n].id]; if (h && h.reset) h.reset();
   apply(slides[n], 0);
@@ -136,9 +136,9 @@ HOOK.s2 = { step: function (k) { $('s2q').classList.toggle('is-dim', k >= 2); } 
     list.classList.remove('up');
     if (i < 0) { list.innerHTML = header(); return; }
     var st = STEPS[i];
-    list.innerHTML = header() + st.c.map(function (c, j) { return '<div class="cand" style="--d:' + (j * 60) + 'ms"><span>' + c[0] + '</span><div class="b"><i style="--w:' + c[1] + '%"></i></div><span class="p">' + c[1] + '%</span></div>'; }).join('');
+    list.innerHTML = header() + st.c.map(function (c, j) { return '<div class="cand" style="--d:' + (j * 50) + 'ms"><span>' + c[0] + '</span><div class="b"><i style="--w:' + c[1] + '%"></i></div><span class="p">' + c[1] + '%</span></div>'; }).join('');
     later(function () { list.classList.add('up'); }, 30);
-    later(function () { var r = $$('#s6list .cand')[st.pick]; if (r) r.classList.add('pick'); }, 60 * 3 + 500 + 250);
+    later(function () { var r = $$('#s6list .cand')[st.pick]; if (r) r.classList.add('pick'); }, 50 * 3 + 380 + 160);
   }
   HOOK.s6 = {
     reset: function () { clearTimers(); drawSent(0, false, false); drawCands(-1); },
@@ -146,7 +146,7 @@ HOOK.s2 = { step: function (k) { $('s2q').classList.toggle('is-dim', k >= 2); } 
       clearTimers();
       if (k >= 6) { swapText(list, function () { drawCands(-1); }); drawSent(5, true, true); return; }
       swapText(list, function () { drawCands(k - 1); });
-      later(function () { drawSent(k, false, true); }, 60 * 3 + 500 + 250 + 300);
+      later(function () { drawSent(k, false, true); }, 50 * 3 + 380 + 160 + 200);
     }
   };
 })();
