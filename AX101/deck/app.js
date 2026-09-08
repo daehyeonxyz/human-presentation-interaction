@@ -382,6 +382,7 @@ HOOK.s26 = { step: function (k) {
 })();
 
 /* S36 · 커넥터. 마지막 Space에 관리자 승인 행만 남긴다 */
+HOOK.s34b = (function () { var rows = $$('#s34bst div'); return { reset: function () { rows.forEach(function (r) { r.classList.remove('ok'); }); }, step: function (k) { if (k >= 3) rows.forEach(function (r, i) { later(function () { r.classList.add('ok'); }, 180 * i); }); else rows.forEach(function (r) { r.classList.remove('ok'); }); $$('#s34bf .fi').forEach(function (r, i) { r.style.setProperty('--d', (300 + i * 60) + 'ms'); }); } }; })();
 HOOK.s33 = { step: function (k) { var f = $('s33f'); $$('#s33f .fi').forEach(function (r, i) { r.style.setProperty('--d', (i * 40) + 'ms'); }); f.classList.toggle('open', k >= 2); } };
 HOOK.s31 = { step: function (k) {
   var T = { s31p1: 'B사 투자 검토 보고서를 만들어 줘. 표지에는 회사명과 날짜를 넣고, 1장은 개요를 다섯 줄로, 2장은 …', s31p2: '이 예시들처럼 B사 투자 검토 보고서를 만들어 줘' };
@@ -413,7 +414,7 @@ var h0 = parseInt((location.hash || '#1').slice(1), 10); show(isNaN(h0) ? 0 : h0
   var list = [L[0], L[1], L[2], L[3], L[4], L[5], { n: '프로젝트 지식', t: 1500, c: 'var(--c4)' }, L[6], L[7]];
   $('s39bar').innerHTML = list.map(function (it) { return '<i class="on" style="background:' + it.c + ';--w:' + (it.t / MAX * 100) + '%"></i>'; }).join('');
   $('s39lg').innerHTML = list.map(function (it) { return '<span class="on"><i style="background:' + it.c + '"></i>' + it.n + '</span>'; }).join('');
-  var HOT = { 2: 1, 3: 4, 4: 5, 5: 6, 6: 7 }, RING = { s39m: 2, s39g: 3, s39pi: 4, s39pk: 5 };
+  var HOT = { 2: 1, 3: 4, 4: 5, 5: 6, 6: 7, 7: 3 }, RING = { s39m: 2, s39g: 3, s39pi: 4, s39pk: 5 };
   HOOK.s39 = { step: function (k) {
     var hot = k in HOT ? HOT[k] : -1;
     $('s39bar').classList.toggle('focus', k >= 1); $('s39cw').classList.toggle('dimlg', k >= 1);
@@ -423,8 +424,9 @@ var h0 = parseInt((location.hash || '#1').slice(1), 10); show(isNaN(h0) ? 0 : h0
     $$('#s39menu .mi, #s39sub .mi').forEach(function (m) { m.classList.toggle('hot', k === 1); });
     $('s39pan').classList.toggle('focus', k >= 1);
     Object.keys(RING).forEach(function (id) { $(id).classList.toggle('hot', RING[id] === k); });
-    var ph = $('s39ph'), typed = k >= 6;
-    if ((ph.textContent !== 'Claude에게 메시지 보내기') !== typed) swapText(ph, function () { ph.textContent = typed ? 'A사 시장 규모 확인해 줘' : 'Claude에게 메시지 보내기'; ph.style.color = typed ? 'var(--k-ink)' : ''; });
+    var ph = $('s39ph'), want = k >= 7 ? '<span class="skc">/deal-sourcing</span> A사 시장 규모 확인하고 브리프 만들어 줘' : k >= 6 ? 'A사 시장 규모 확인해 줘' : 'Claude에게 메시지 보내기';
+    ph.style.color = k >= 6 ? 'var(--k-ink)' : '';
+    if (ph.innerHTML !== want) swapText(ph, function () { ph.innerHTML = want; });
   } };
 })();
 

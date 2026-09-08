@@ -507,8 +507,8 @@
   <div class="main cols side" style="--side:640px">
     <div class="k big fill">
       <div class="k-msgs">
-        <div class="u">Drive에서 A사 IR 자료 찾아서 요약해 줘</div>
-        <div class="a" data-step="1"><div class="trow"><i class="ic"><svg><use href="#i-drive"/></svg></i><b>Google Drive</b> 검색함<span>"A사 IR"</span><em>1건</em><svg class="chev"><use href="#i-chev"/></svg></div><div class="tool"><svg><use href="#i-file"/></svg><div><b>A사_IR_2026H1.pdf</b><small>공유 드라이브 / 딜 검토 / A사</small></div></div><div class="ans" data-step="2"><span class="tx">A사 IR 자료 기준으로 요약하면, 반도체 검사 장비를 만드는 시리즈 B 단계 회사입니다.</span><span class="tx">상반기 매출은 전년 대비 늘었고, 이번 라운드 목표는 …</span></div></div>
+        <div class="u">Salesforce에서 A사 딜 기록 찾아서 요약해 줘</div>
+        <div class="a" data-step="1"><div class="trow"><i class="ic"><svg><use href="#i-cloud"/></svg></i><b>Salesforce</b> 검색함<span>"A사"</span><em>1건</em><svg class="chev"><use href="#i-chev"/></svg></div><div class="tool"><svg><use href="#i-file"/></svg><div><b>A사 · Opportunity</b><small>파이프라인 / 검토 중 / 미팅 기록 3건</small></div></div><div class="ans" data-step="2"><span class="tx">Salesforce 기록 기준으로 요약하면, 반도체 검사 장비를 만드는 시리즈 B 단계 회사입니다.</span><span class="tx">지난 미팅에서 상반기 매출이 전년 대비 늘었다고 했고, 이번 라운드 목표는 …</span></div></div>
       </div>
       <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
     </div>
@@ -516,11 +516,12 @@
       <div class="pane">
         <h4>커넥터</h4>
         <div class="d">MCP라는 공개 표준 위에서 동작합니다. 연결한 서비스의 자료를 읽어 오고, 그 안에 실제로 쓸 수도 있습니다. 연결한 사람이 볼 수 있는 것만 Claude도 봅니다.</div>
+        <div class="crow"><i class="ic"><svg><use href="#i-cloud"/></svg></i><b>Salesforce</b><span>연결됨</span><em>⋯</em></div>
         <div class="crow"><i class="ic"><svg><use href="#i-drive"/></svg></i><b>Google Drive</b><span>연결됨</span><em>⋯</em></div>
         <div class="crow"><i class="ic"><svg><use href="#i-mail"/></svg></i><b>Gmail</b><span>연결됨</span><em>⋯</em></div>
-        <div class="crow"><i class="ic"><svg><use href="#i-cal"/></svg></i><b>Google Calendar</b><span></span><u class="btn-k">연결</u></div>
-        <div class="crow"><i class="ic"><svg><use href="#i-slack"/></svg></i><b>Slack</b><span></span><u class="btn-k">연결</u></div>
-        <div class="crow"><i class="ic"><svg><use href="#i-git"/></svg></i><b>GitHub</b><span></span><u class="btn-k">연결</u></div>
+        <div class="crow"><i class="ic"><svg><use href="#i-shield"/></svg></i><b>Knox Platform</b><span></span><u class="btn-k">연결</u></div>
+        <div class="crow"><i class="ic"><svg><use href="#i-user"/></svg></i><b>Knox Teams</b><span></span><u class="btn-k">연결</u></div>
+        <div class="crow"><i class="ic"><svg><use href="#i-folder"/></svg></i><b>Filesystem</b><span></span><u class="btn-k">연결</u></div>
         <div class="crow adm hot" data-step="3"><i class="ic"><svg><use href="#i-m365"/></svg></i><b>Microsoft 365</b><span>관리자 승인 필요</span><em class="lock"></em></div>
         <div class="foot-d hot" data-step="3">조직 설정에서 관리자가 허용한 커넥터만 보입니다</div>
       </div>
@@ -529,17 +530,15 @@
 </section>
 <!-- S28 팀이 같이 쓰는 자료 · 공유 프로젝트 상자와 커넥터 채팅. 32장의 부품이 다시 나온다 -->
 <section class="s" id="s28" data-steps="1" data-sec="Extend">
-  <div class="head"><div class="h">팀이 같이 쓰는 자료</div><div class="lead">프로젝트를 공유하거나 드라이브를 잇거나</div></div>
+  <div class="head"><div class="h"><span class="no">1.</span> 커넥터</div><div class="lead">팀이 같이 쓰는 자료 · 프로젝트를 공유하거나 드라이브를 잇거나</div></div>
   <div class="main cols split">
     <div class="col wide">
       <div class="h2">프로젝트 공유</div>
-      <div class="kbox">
-        <h5>프로젝트 지식 <span class="avs"><i>김</i><i>이</i><i>박</i></span></h5>
-        <div class="f"><svg><use href="#i-file"/></svg> A사_조사요약.md</div>
-        <div class="f"><svg><use href="#i-file"/></svg> B사_조사요약.md</div>
-        <div class="f"><svg><use href="#i-file"/></svg> C사_조사요약.md</div>
-        <div class="f"><svg><use href="#i-file"/></svg> 경쟁사_핵심지표.csv</div>
-        <div class="f"><svg><use href="#i-file"/></svg> 보고서_양식.md</div>
+      <div class="pj one">
+        <div class="pl">
+          <div class="crumb">프로젝트 ›</div><div class="pn">반도체 <span class="avs"><i>김</i><i>이</i><i>박</i></span></div><div class="pdesc">반도체 섹터 딜 검토 · 팀 3명과 공유</div>
+          <div class="box"><h5>프로젝트 지식 <span>+</span></h5><div class="f"><svg><use href="#i-file"/></svg>A사_조사요약.md</div><div class="f"><svg><use href="#i-file"/></svg>B사_조사요약.md</div><div class="f"><svg><use href="#i-file"/></svg>C사_조사요약.md</div><div class="f"><svg><use href="#i-file"/></svg>경쟁사_핵심지표.csv</div><div class="f"><svg><use href="#i-file"/></svg>보고서_양식.md</div><div class="cap"><i></i></div><div class="sub">용량의 18% 사용</div></div>
+        </div>
       </div>
     </div>
     <div class="col wide" id="s28r" data-stagger="40">
@@ -556,7 +555,7 @@
 </section>
 <!-- S31 결과물의 형식을 알려 주는 방법 · 새 채팅마다 같은 설명과 같은 첨부를 반복한다 -->
 <section class="s" id="s31" data-steps="2" data-sec="Extend">
-  <div class="head"><div class="h">결과물의 형식을 알려 주는 방법</div><div class="lead">자세한 프롬프트와 예시</div></div>
+  <div class="head"><div class="h"><span class="no">2.</span> 스킬</div><div class="lead">들여온 자료로 우리 형식의 결과물을 만드는 두 가지 방법 · 자세한 프롬프트와 예시</div></div>
   <div class="main cols" id="s31c">
     <div class="col wide">
       <div class="h2"><span class="no">1.</span> 자세한 프롬프트</div>
@@ -661,6 +660,37 @@
   </div>
 </section>
 <!-- S35 스킬을 사용해야 하는 이유 · 보고서 두 장을 다시 만들어 본다 -->
+<!-- S34b 스킬 만드는 법 · /skill-creator 한 번으로 폴더가 생긴다. 오른쪽 카드는 36장의 deal-sourcing 카드 -->
+<section class="s" id="s34b" data-steps="3" data-sec="Extend">
+  <div class="head"><div class="h"><span class="no">2.</span> 스킬</div><div class="lead">만드는 법 · /skill-creator</div></div>
+  <div class="main cols" style="--cols:1fr 640px">
+    <div class="k fill">
+      <div class="k-msgs">
+        <div class="u"><span class="chip"><svg><use href="#i-file"/></svg>기술실사_예시.html</span><br><span class="skc">/skill-creator</span> 이 예시처럼 기술 실사 브리프 만드는 스킬 만들어 줘</div>
+        <div class="a" data-step="1"><div class="trow"><i class="ic sk"><svg><use href="#i-spark"/></svg></i><b>skill-creator</b> 스킬 사용<svg class="chev"><use href="#i-chev"/></svg></div><span class="tx" style="--d:600ms">입력은 IR 덱 PDF, 출력은 첨부한 예시와 같은 11페이지 HTML 브리프가 맞을까요?</span></div>
+        <div class="u" data-step="2">맞아</div>
+        <div class="a" data-step="3"><span class="tx">deal-sourcing 스킬 폴더를 만들었습니다</span>
+          <div class="steps" id="s34bst">
+            <div>SKILL.md 지침 작성</div>
+            <div>규칙 · 매뉴얼 · 예시 · 템플릿 정리</div>
+            <div>조립 스크립트 작성과 시험 실행 QA: PASS</div>
+          </div>
+        </div>
+      </div>
+      <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
+    </div>
+    <div class="folder fcard open col" id="s34bf" data-step="3">
+      <div class="fn"><svg><use href="#i-folder"/></svg>deal-sourcing</div>
+      <div class="fi"><svg><use href="#i-file"/></svg><code>SKILL.md</code><span>지침</span></div>
+      <div class="fi"><svg><use href="#i-file"/></svg><code>references/writing-rule.md</code><span>규칙</span></div>
+      <div class="fi"><svg><use href="#i-file"/></svg><code>references/DESIGN.md</code><span>매뉴얼</span></div>
+      <div class="fi"><svg><use href="#i-file"/></svg><code>references/content-example.json</code><span>예시</span></div>
+      <div class="fi"><svg><use href="#i-file"/></svg><code>assets/brief-template.html</code><span>템플릿</span></div>
+      <div class="fi"><svg><use href="#i-code"/></svg><code>scripts/build_brief.py</code><span>조립과 검사</span></div>
+    </div>
+  </div>
+</section>
+
 <section class="s" id="s35" data-steps="6" data-sec="Extend">
   <div class="head"><div class="h"><span class="no">2.</span> 스킬</div><div class="lead">스킬을 쓰는 이유 · 일관성과 재현성</div></div>
   <div class="main">
@@ -708,9 +738,9 @@
   </div>
 </section>
 <!-- S39 인터페이스 정리 · 막대 한 줄 아래 설정과 프로젝트의 실물 조각 넷과 채팅창. 조각마다 막대의 색 칸이 짝이다 -->
-<section class="s" id="s39" data-steps="6" data-sec="Interface">
-  <div class="head"><div class="h">정리</div><div class="lead">채팅창에서 정하는 것과 컨텍스트 윈도우에 자동으로 들어가는 것과 매번 직접 쓰는 것</div></div>
-  <div class="main recap">
+<section class="s" id="s39" data-steps="8">
+  <div class="head"><div class="h">Claude 총 정리</div><div class="lead">채팅창에서 정하는 것과 컨텍스트 윈도우에 자동으로 들어가는 것과 매번 직접 쓰는 것 그리고 스킬로 결과물까지</div></div>
+  <div class="main recap" style="position:relative">
     <div class="cw" id="s39cw"><div class="bar" id="s39bar"></div><div class="legend" id="s39lg"></div></div>
     <div class="cols" id="s39pan" style="--cols:660px 480px 540px;gap:var(--gap)">
       <div class="col">
@@ -747,6 +777,28 @@
             <div class="mi">Low</div><div class="mi">Medium</div><div class="mi sel">High ✓</div><div class="mi">xhigh</div><div class="mi">Max</div>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="brief rt" id="s39b" data-step="8"><div class="wbar"><span>A사_기술실사_20260908.html</span><i>×</i></div>
+      <div><div class="co">A사</div><div class="url">deal-sourcing · 2026.09.08</div>
+        <div class="stats">
+          <div class="stat"><span class="sl">정체성</span><span class="sv">검사 장비</span><span class="sd">반도체 검사 장비를 만든다</span></div>
+          <div class="stat"><span class="sl">단계</span><span class="sv">시리즈 B</span><span class="sd">9월 투자심의 안건</span></div>
+          <div class="stat"><span class="sl">시장</span><span class="sv">2026</span><span class="sd">반도체_시장_2026.md 기준</span></div>
+          <div class="stat"><span class="sl">출처</span><span class="sv">3건</span><span class="sd">IR 자료와 회사소개와 경쟁사 비교</span></div>
+        </div></div>
+      <div class="bento">
+        <div class="cell ov"><div><div class="cno">01</div><div class="ct">개요</div></div></div>
+        <div class="cell"><div><div class="cno">02</div><div class="ct">용어 설명</div></div></div>
+        <div class="cell"><div><div class="cno">03</div><div class="ct">기술 설명</div></div></div>
+        <div class="cell"><div><div class="cno">04</div><div class="ct">경쟁사</div></div></div>
+        <div class="cell"><div><div class="cno">05</div><div class="ct">경쟁력 및 차별점</div></div></div>
+        <div class="cell"><div><div class="cno">06</div><div class="ct">수익화</div></div></div>
+        <div class="cell"><div><div class="cno">07</div><div class="ct">경영진</div></div></div>
+        <div class="cell"><div><div class="cno">08</div><div class="ct">투자자</div></div></div>
+        <div class="cell"><div><div class="cno">09</div><div class="ct">종착점</div></div></div>
+        <div class="cell"><div><div class="cno">10</div><div class="ct">리스크</div></div></div>
+        <div class="cell"><div><div class="cno">11</div><div class="ct">향후 주목할 점</div></div></div>
       </div>
     </div>
   </div>
