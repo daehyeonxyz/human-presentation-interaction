@@ -58,7 +58,7 @@ b { font-weight: 800; }
 .stack { flex: 1; min-height: 0; display: grid; }
 .stack > * { grid-area: 1 / 1; min-height: 0; }
 .layer { display: flex; flex-direction: column; gap: var(--gap-lg); }
-.foot { position: absolute; right: var(--pad); top: var(--pad); font-size: var(--t-cap); line-height: var(--l-h); color: var(--mute); font-weight: 600; font-variant-numeric: tabular-nums; }
+.foot { position: absolute; right: var(--pad); bottom: 36px; font-size: 20px; line-height: 28px; text-align: right; color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
 .s.dark .foot { color: rgba(255,255,255,.7); }
 
 /* 단계 등장. 자리는 처음부터 차지하고 보이기만 바뀐다. 위치 이동은 없다 */

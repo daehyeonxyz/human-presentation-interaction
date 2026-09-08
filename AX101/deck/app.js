@@ -23,7 +23,7 @@ $$('.k .a[data-step]').forEach(function (a) {
 slides.forEach(function (s, i) {
   if (s.hasAttribute('data-nofoot')) return;
   var f = document.createElement('div'); f.className = 'foot';
-  f.textContent = String(i + 1).padStart(2, '0') + ' / ' + slides.length;
+  f.textContent = String(i + 1);
   s.appendChild(f);
 });
 function apply(s, k) {
