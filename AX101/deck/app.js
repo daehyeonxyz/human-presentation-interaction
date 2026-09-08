@@ -283,13 +283,12 @@ HOOK.s14 = { step: function (k) {
     { n: '첨부 파일', w: '첨부한 파일의 내용이 그대로 들어감', t: 2600, c: 'var(--c4)' }
   ];
   window.CW_LAYERS = IT;
-  var CE = { n: '컨텍스트 엔지니어링', w: '컨텍스트 윈도우에 필요한 정보와 도구와 메모리와 외부 데이터를 체계적으로 넣고 최적화하는 기술', c: 'var(--ink)' };
   var MAX = 24000, bar = $('s17bar'), lg = $('s17lg'), insp = $('s17i'), n = 0, hover = -1, ce = false;
   bar.innerHTML = IT.map(function (it, i) { return '<i data-i="' + i + '" style="background:' + it.c + '"></i>'; }).join('');
   lg.innerHTML = IT.map(function (it, i) { return '<span data-i="' + i + '"><i style="background:' + it.c + '"></i>' + it.n + '</span>'; }).join('');
   var lastInsp = null;
   function showInsp(i) {
-    var it = i === 'ce' ? CE : i >= 0 ? IT[i] : null;
+    var it = i >= 0 ? IT[i] : null;
     if (it === lastInsp) return; lastInsp = it;
     swapText(insp, function () {
       insp.querySelector('.n i').style.background = it ? it.c : 'transparent';
@@ -301,7 +300,7 @@ HOOK.s14 = { step: function (k) {
     $$('#s17bar i').forEach(function (s, i) { var on = i < n; s.style.width = on ? (IT[i].t / MAX * 100) + '%' : '0'; s.classList.toggle('on', on); s.classList.toggle('hot', i === hover); });
     $$('#s17lg span').forEach(function (s, i) { s.classList.toggle('on', i < n); });
     bar.classList.toggle('focus', hover >= 0); $('s17cw').classList.toggle('dimlg', hover >= 0); $$('#s17lg span').forEach(function (sp, i) { sp.classList.toggle('hot', i === hover); });
-    showInsp(hover >= 0 ? hover : ce ? 'ce' : n - 1);
+    showInsp(hover >= 0 ? hover : n - 1); $('s17').classList.toggle('ce', ce);
   }
   function bind(sel) { $$(sel).forEach(function (el) { el.addEventListener('mouseenter', function () { var i = +el.dataset.i; if (i < n) { hover = i; render(); } }); el.addEventListener('mouseleave', function () { hover = -1; render(); }); }); }
   bind('#s17bar i'); bind('#s17lg span');

@@ -70,8 +70,8 @@
 </section>
 <!-- S6 LLM · 채팅 안에서 답이 한 토큰씩 자란다. 오른쪽은 다음 토큰 후보 -->
 <section class="s" id="s6" data-steps="6">
-  <div class="head"><div class="h"><span class="no">1.</span> LLM</div><div class="lead">텍스트를 입력받아 텍스트를 출력하는 모델</div></div>
-  <div class="main cols side" style="--side:760px">
+  <div class="head"><div class="h"><span class="no">1.</span> LLM</div><div class="lead">방대한 텍스트 데이터를 학습해 인간의 언어를 이해하고 생성하는 인공지능 모델</div></div>
+  <div class="main cols side" style="--side:820px">
     <div class="k big short" id="s6k" data-morph="chat">
       <div class="k-msgs"><div class="u">삼성벤처투자에 대해서 알려줘</div><div class="a" id="s6a"></div></div>
       <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
@@ -82,15 +82,15 @@
 <!-- S7 토큰 · 같은 채팅. Space 1 토큰 상자, Space 2 토큰 수 꼬리표 -->
 <section class="s" id="s7" data-steps="2">
   <div class="head"><div class="h"><span class="no">2.</span> 토큰</div><div class="lead">모델 입력과 출력의 단위</div></div>
-  <div class="main cols side" style="--side:760px">
+  <div class="main cols side" style="--side:820px">
     <div class="k big short" id="s7k" data-morph="chat">
       <div class="k-msgs"><div class="u" id="s7u">삼성벤처투자에|대해서|알려줘</div><div class="a" id="s7a">삼성벤처투자는|삼성의 미래|성장동력을|발굴하고,|기술 혁신을|기반으로|새로운 가치를|창출하기 위한|기업형|벤처캐피탈입니다.</div></div>
       <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
     </div>
     <div class="col tokx" id="s7x" data-stagger="40">
-      <div class="tx1"><b>토큰</b><span>모델이 텍스트를 읽고 처리하는 <b>가장 작은 단위</b></span><span>학습도 입출력도 단어나 문장이 아니라 <b>토큰 단위</b></span></div>
-      <div class="tx1" data-step="1"><b>토큰의 크기</b><span>자주 쓰는 말은 <b>한두 단어</b>가 토큰 하나</span><span>드문 말은 <b>글자 단위</b>로 잘게 나뉨</span></div>
-      <div class="tx1" data-step="2"><b>토큰의 중요성</b><span>모델의 <b>기본 동작 단위</b></span><span>비용을 낼 때의 <b>기준 단위</b></span></div>
+      <div class="tx1"><b>토큰</b><span>모델이 텍스트를 읽고 처리하는 <b>가장 작은 정보의 단위</b></span><span>모델 사용량을 측정하는 <b>과금 기준</b></span></div>
+      <div class="tx1" data-step="1"><b>토큰의 크기</b><span>형태소 · 단어 · 문장 등 토큰의 단위는 <b>여러 가지</b>가 될 수 있으며</span><span>토큰이 더 작은 단위일수록 더 <b>세밀한 학습</b>이 가능하다</span></div>
+      <div class="tx1" data-step="2"><b>토큰의 중요성</b><span>AI 모델은 <b>토큰 단위</b>로 텍스트를 처리하여</span><span>토큰 간의 <b>관계</b>를 학습하고 토큰을 출력한다</span></div>
     </div>
   </div>
 </section>
@@ -279,12 +279,13 @@
 </section>
 <!-- S17 컨텍스트 윈도우 -->
 <section class="s" id="s17" data-steps="9" data-sec="Interface">
-  <div class="head"><div class="h"><span class="no">2.</span> 컨텍스트 윈도우</div><div class="lead">모델의 작업 기억 공간 (입력 공간)</div></div>
+  <div class="head"><div class="h"><span class="no">2.</span> 컨텍스트 윈도우</div><div class="lead">언어 모델이 응답을 생성할 때 참조할 수 있는 토큰의 최대 범위</div></div>
   <div class="main">
     <div class="cw" id="s17cw">
       <div class="lbl">하나의 대화가 시작되면 프롬프트와 <b>함께</b> 컨텍스트 윈도우에 들어가는 것. 지금 모델은 <b>100만 토큰</b>까지</div>
       <div class="bar" id="s17bar"></div>
       <div class="legend" id="s17lg"></div>
+      <div class="ce" data-step="9"><div class="n">컨텍스트 엔지니어링</div><div class="w">컨텍스트 윈도우에 필요한 정보와 도구와 메모리와 외부 데이터를 체계적으로 넣고 최적화하는 기술</div></div>
     </div>
     <div class="cols side" style="--side:760px;flex:1;min-height:0">
       <div class="k fill">

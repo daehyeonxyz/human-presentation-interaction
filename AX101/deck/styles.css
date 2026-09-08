@@ -335,6 +335,16 @@ svg.nn circle { fill: var(--white); stroke: var(--ink); stroke-width: 2.5; }
 .cw .legend span { display: inline-flex; align-items: center; gap: var(--gap-2xs); opacity: 0; transition: opacity var(--dur); cursor: pointer; font-weight: 600; }
 .cw .legend span.on { opacity: 1; }
 .cw .legend span i { width: 14px; height: 14px; border-radius: var(--r-dot); }
+/* 19장 마지막 Space. 컨텍스트 윈도우 블록이 흰 층으로 떠오르고 아래 채팅과 설명은 흐려진다 */
+.cw { position: relative; z-index: 0; }
+.cw::before { content: ''; position: absolute; inset: -24px -40px -180px; background: var(--white); border-radius: 24px; box-shadow: 0 24px 80px rgba(18,18,18,.14); opacity: 0; z-index: -1; transition: opacity var(--t-in-lg) var(--ease-out); }
+.s.ce .cw { z-index: 2; }
+.s.ce .cw::before { opacity: 1; }
+.cw .ce { position: absolute; left: 0; right: 0; top: 100%; margin-top: var(--gap-sm); }
+.cw .ce .n { font-size: var(--t-h2); line-height: var(--l-h2); font-weight: 800; }
+.cw .ce .w { font-size: var(--t-body); line-height: var(--l-body); margin-top: var(--gap-3xs); }
+.s .main > .cols.side { transition: opacity var(--t-in-lg) var(--ease-out), filter var(--t-in-lg) var(--ease-out); }
+.s.ce .main > .cols.side { opacity: var(--dim); filter: blur(8px); pointer-events: none; }
 .cwi { min-height: 160px; }
 .cwi .n { font-size: var(--t-h2); line-height: var(--l-h2); font-weight: 800; display: flex; align-items: center; gap: var(--gap-xs); }
 .cwi .n i { width: 18px; height: 18px; border-radius: var(--r-dot); }
