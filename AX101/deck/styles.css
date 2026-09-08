@@ -975,3 +975,13 @@ svg.nn.morph path { fill: none; stroke: var(--n5); stroke-width: 1.5; transition
 #s8bill .lsum, #s9bill .lsum { grid-template-columns: 1fr 120px 120px 150px; }
 #s32bt { overflow: hidden; }
 .skl { justify-content: center; }
+
+/* 41장 Appendix. 용어 카드 3열 6행. 이름은 잉크색, 주소는 같은 줄 오른쪽, 누르면 새 창 */
+.gloss { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px var(--gap); align-content: start; }
+.gloss .gt { display: flex; flex-direction: column; padding: 12px var(--gap-sm); background: var(--white); border-radius: var(--r-card); box-shadow: var(--shadow); color: var(--ink); text-decoration: none; transition: box-shadow var(--t-state) var(--ease-std), transform var(--t-state) var(--ease-std); }
+.gloss .gt:hover { box-shadow: 0 8px 28px rgba(18,18,18,.12); transform: translateY(-2px); }
+.gloss .gn { display: flex; align-items: center; gap: var(--gap-2xs); font-size: 28px; line-height: 40px; font-weight: 800; letter-spacing: -.01em; }
+.gloss .gn svg { width: 20px; height: 20px; color: var(--mute); }
+.gloss .gn em { margin-left: auto; font-style: normal; font-size: 15px; line-height: 20px; font-weight: 500; color: var(--mute); }
+.gloss .gt:hover .gn, .gloss .gt:hover .gn svg { color: var(--acc); }
+.gloss .gd { font-size: 22px; line-height: 30px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
