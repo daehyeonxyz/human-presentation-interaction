@@ -381,8 +381,6 @@ HOOK.s26 = { step: function (k) {
   HOOK.s35 = { reset: gen, step: function (k) { if (k >= 4) gen(); } };
 })();
 
-/* S37 · 플러그인. 커넥터 둘이 "연결" 단추에서 "연결됨"으로 바뀐다 */
-HOOK.s37 = { step: function (k) { ['s37c1', 's37c2'].forEach(function (id) { var u = $(id), on = k >= 2; if ((u.textContent === '연결됨') !== on) swapText(u, function () { u.textContent = on ? '연결됨' : '연결'; u.classList.toggle('btn', !on); }); else u.classList.toggle('btn', !on); }); } };
 /* S36 · 커넥터. 마지막 Space에 관리자 승인 행만 남긴다 */
 HOOK.s33 = { step: function (k) { var f = $('s33f'); $$('#s33f .fi').forEach(function (r, i) { r.style.setProperty('--d', (i * 40) + 'ms'); }); f.classList.toggle('open', k >= 2); } };
 HOOK.s31 = { step: function (k) {
