@@ -131,9 +131,10 @@ function figure(el, labels) {
     '<path class="body" d="M0,900 V740 C0,570 140,470 300,470 C460,470 600,570 600,740 V900 Z"/>' +
     '<circle class="body head" cx="300" cy="240" r="200"/>' +
     '<path class="model" d="M144,230 A156,156 0 0 1 456,230 Q456,248 438,248 H162 Q144,248 144,230 Z"/>' +
-    '</svg>' + (labels === false ? '' : '<div class="fl"><span class="t-model">모델</span><span class="t-if">인터페이스</span></div>');
+    '</svg>' + (labels === false ? '' : '<div class="fl"><span class="t-model">모델</span><span class="t-if">인터페이스</span>' + (el.hasAttribute('data-ext') ? '<span class="t-ext">확장</span>' : '') + '</div>');
 }
-$$('.fig').forEach(function (el) { figure(el, el.classList.contains('ink') ? false : undefined); });
+$$('.fig').forEach(function (el) { var keep = el.querySelector('.ext'); figure(el, el.classList.contains('ink') ? false : undefined); if (keep) el.appendChild(keep); });
+HOOK.s16b = { step: function (k) { $('s16bfig').classList.toggle('lit-if', k < 1); $('s16bfig').classList.toggle('lit-ext', k >= 1); } };
 HOOK.s16 = { step: function (k) { $('s16fig').classList.toggle('lit-model', k < 1); $('s16fig').classList.toggle('lit-if', k >= 1); } };
 
 /* S2 */

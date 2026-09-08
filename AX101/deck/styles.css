@@ -128,7 +128,12 @@ b { font-weight: 800; }
 .fig.lit-if .body { fill: var(--white); }
 .fig .fl { display: flex; flex-direction: column; gap: var(--gap-lg); }
 .fig .fl span { font-size: var(--t-decl-lg); line-height: var(--l-decl-lg); font-weight: 800; letter-spacing: -.03em; color: rgba(255,255,255,.45); transition: color var(--dur); white-space: nowrap; }
-.fig.lit-model .t-model, .fig.lit-if .t-if { color: var(--white); }
+.fig.lit-model .t-model, .fig.lit-if .t-if, .fig.lit-ext .t-ext { color: var(--white); }
+/* 확장 표지. 어깨선 위에 흰 배지 셋(커넥터 · 스킬 · 플러그인) */
+.fig { position: relative; }
+.fig .ext { position: absolute; left: 360px; width: 507px; top: 349px; display: flex; justify-content: center; gap: 28px; }
+.fig .ext i { width: 96px; height: 96px; border-radius: 50%; background: var(--white); color: var(--acc); display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 12px 32px rgba(0,0,0,.25); }
+.fig .ext i svg { width: 44px; height: 44px; }
 /* 종이 위의 작은 흉상. 뇌 크기가 곧 등급이다 */
 .fig.ink { height: 440px; padding-left: 0; align-self: auto; }
 .fig.ink .body { fill: var(--paper-3); }
