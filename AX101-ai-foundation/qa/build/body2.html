@@ -1,0 +1,330 @@
+
+<!-- ===== 13. 지침과 메모리 ===== -->
+<section class="slide">
+  <div class="frame" data-frame>
+    <div class="head"><span class="kicker">INPUT</span><span class="pageno">13 / 24</span></div>
+    <h2 class="ptitle">지침과 메모리</h2><p class="psub">Instructions · Memory</p>
+    <div class="stg">
+      <div class="panel col2 abs" style="left:0;top:0;height:540px;display:flex;flex-direction:column;gap:var(--sp-12)">
+        <div class="row" style="justify-content:space-between"><span class="t-claim">지침</span><span class="pill ink">내가 적는다</span></div>
+        <span class="spath">설정 &gt; 일반 &gt; 프로필 지침</span>
+        <div class="spane"><div class="sarea" id="p13area"><span class="line">나는 이런 일을 하는 사람이고</span><br><span class="line">너는 이 역할을 맡았고</span><i></i></div></div>
+        <div class="stack" style="gap:0">
+          <span class="t-note dark ln">한 번 적어 두면 모든 대화 시작에 자동으로 들어감</span>
+          <span class="t-note dark ln">프로젝트 &gt; 지침에 적으면 그 프로젝트 대화에만</span>
+          <span class="t-note ln">보통 넣는 것 &nbsp;역할 &nbsp;말투 &nbsp;응답 톤 &nbsp;출력 형식</span>
+        </div>
+        <div class="ctl" style="margin-top:auto"><div class="dots" id="p13dotsL"><i></i></div><div class="btns"><button class="btn" id="p13write">적기</button></div></div>
+      </div>
+      <div class="panel col2 abs" style="left:calc(var(--col-2) + var(--gap));top:0;height:540px;display:flex;flex-direction:column;gap:var(--sp-12)">
+        <div class="row" style="justify-content:space-between"><span class="t-claim">메모리</span><span class="pill ink">Claude가 적는다</span></div>
+        <span class="spath">설정 &gt; 메모리</span>
+        <div class="spane" id="p13mem">
+          <div class="srow"><span>우리 회사는 삼성벤처투자</span><span class="who">대화에서</span></div>
+          <div class="srow"><span>초기 단계 스타트업 딜을 주로 검토</span><span class="who">대화에서</span></div>
+          <div class="srow"><span>보고서는 워드로 정리</span><span class="who">대화에서</span></div>
+        </div>
+        <div class="stack" style="gap:0">
+          <span class="t-note dark ln">여러 대화에 반복해 나온 내용을 스스로 정리해 둠</span>
+          <span class="t-note dark ln">쌓인 것은 여기서 확인하고 지우고 통째로 끌 수 있음</span>
+          <span class="t-note ln">지금 당장 기억시키려면 대화에서 "이건 기억해 줘"</span>
+        </div>
+        <div class="ctl" style="margin-top:auto"><div class="dots" id="p13dotsR"><i></i><i></i><i></i></div><div class="btns"><button class="btn" id="p13talk">대화 한 번</button></div></div>
+      </div>
+    </div>
+    <div class="close" id="c13">지침은 내가 <b>한 번</b> 적고 메모리는 쓰다 보면 <b>쌓인다</b></div>
+  </div>
+</section>
+
+<!-- ===== 14. 파일과 RAG ===== -->
+<section class="slide">
+  <div class="frame" data-frame>
+    <div class="head"><span class="kicker">INPUT</span><span class="pageno">14 / 24</span></div>
+    <h2 class="ptitle">파일과 RAG</h2><p class="psub">Retrieval-Augmented Generation</p>
+    <div class="stg">
+      <div class="panel colw abs" style="left:0;top:0;height:540px;padding:var(--sp-24) var(--sp-32);display:flex;flex-direction:column;gap:var(--sp-12)">
+        <div class="row" style="justify-content:flex-end;gap:var(--sp-16)"><span class="t-note">예시 · 가상 회사</span><div class="bub me" style="padding:var(--sp-12) var(--sp-24)">미리내로보틱스의 도입 고객이 몇 곳인지 알려 줘</div></div>
+        <div class="attrow" style="padding:0;justify-content:flex-end;height:72px"><div class="doc fit hide" id="p14chip"><span class="tile"><svg class="ico"><use href="#i-file"/></svg></span><span class="dtxt"><span class="dn">미리내로보틱스_회사소개.md</span></span></div></div>
+        <div class="tray h" style="flex:1">
+          <div class="card h" style="flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:var(--sp-8);padding:var(--sp-20) var(--sp-24)">
+            <span class="t-head">자료 없이</span>
+            <div class="stack lit-later" id="p14a1" style="gap:0"><span class="t-body ln">공개된 정보로는 확인되지 않습니다</span><span class="t-body ln">업계 평균으로 보면 대략 …</span></div>
+            <span class="judge bad" id="p14j1" style="margin-top:auto"><svg class="ico"><use href="#i-cross"/></svg>자료 밖에서 지어냄</span>
+          </div>
+          <div class="card h" style="flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:var(--sp-8);padding:var(--sp-20) var(--sp-24)">
+            <span class="t-head">자료를 넣고</span>
+            <div class="stack lit-later" id="p14a2" style="gap:0"><span class="t-body ln">회사 소개문 기준 시범 도입 고객은 세 곳입니다</span><span class="t-body ln">물류 두 곳과 병원 한 곳</span></div>
+            <span class="judge ok" id="p14j2" style="margin-top:auto"><svg class="ico"><use href="#i-check"/></svg>자료 안에서 답함</span>
+          </div>
+        </div>
+        <div class="ctl"><div class="dots" id="p14dots"><i></i><i></i><i></i></div><div class="btns"><button class="btn" id="p14btn">전송</button></div></div>
+      </div>
+      <div class="abs col3 stack" style="left:calc(var(--col-wide) + var(--gap));top:0;height:540px;justify-content:center;gap:var(--gap-block)">
+        <div class="stack" style="gap:var(--gap-layer)"><span class="t-head ln">RAG는 검색 증강 생성</span><span class="t-body ln">답을 만들기 전에 외부 자료를 먼저 찾아보고</span><span class="t-body ln">그 자료를 근거로 답을 만드는 방식</span></div>
+        <div class="stack lit-later" id="p14wide" style="gap:var(--gap-layer)"><span class="t-head ln">넓은 의미로 다 RAG</span><span class="t-body ln">파일 첨부</span><span class="t-body ln">웹 검색</span><span class="t-body ln">프로젝트 지식</span></div>
+      </div>
+    </div>
+    <div class="close" id="c14">자료를 주면 그 안에서 답하고 안 주면 <b>아는 것만으로</b> 답한다</div>
+  </div>
+</section>
+
+<!-- ===== 15. 프로젝트 ===== -->
+<section class="slide">
+  <div class="frame" data-frame>
+    <div class="head"><span class="kicker">INPUT</span><span class="pageno">15 / 24</span></div>
+    <h2 class="ptitle">프로젝트</h2><p class="psub">Projects</p>
+    <div class="stg">
+      <div class="tog abs" id="p15tog" style="left:0;top:0"><span class="cell sel" data-v="0">산출물 기준</span><span class="cell" data-v="1">입력 기준</span></div>
+      <div class="abs colw" style="left:0;top:96px;height:444px;display:flex;gap:var(--sp-24)" id="p15projs">
+        <div class="proj"><div class="pn"><span class="a">보고서 만들기</span><span class="b">반도체</span></div><div class="doc" data-i="0"><span class="tile"><svg class="ico"><use href="#i-file"/></svg></span><span class="dtxt"><span class="dn">A사 자료</span></span></div></div>
+        <div class="proj"><div class="pn"><span class="a">PPT 만들기</span><span class="b">바이오</span></div><div class="doc" data-i="1"><span class="tile"><svg class="ico"><use href="#i-file"/></svg></span><span class="dtxt"><span class="dn">A사 자료</span></span></div></div>
+        <div class="proj"><div class="pn"><span class="a">1페이저 만들기</span><span class="b">A사 딜</span></div><div class="doc" data-i="2"><span class="tile"><svg class="ico"><use href="#i-file"/></svg></span><span class="dtxt"><span class="dn">A사 자료</span></span></div></div>
+      </div>
+      <div class="well col3 abs" style="left:calc(var(--col-wide) + var(--gap));top:96px;height:444px;display:flex;flex-direction:column;gap:var(--sp-16)">
+        <div class="stack" style="gap:2px"><span class="t-note">같은 자료</span><span class="bignum" id="p15n1">3벌</span></div>
+        <div class="stack" style="gap:2px"><span class="t-note">고칠 곳</span><span class="bignum" id="p15n2">3군데</span></div>
+        <div class="stack" style="margin-top:auto;gap:var(--gap-layer)"><span class="t-head ln">프로젝트는 지식과 지침을 묶어 둔 작업 공간</span><span class="t-body ln">자료를 한 번 올려 두면</span><span class="t-body ln">그 안의 모든 대화가 그 자료를 쓴다</span></div>
+      </div>
+    </div>
+    <div class="close" id="c15">산출물의 형식은 뒤에 나올 <b>스킬</b>이 맡는다</div>
+  </div>
+</section>
+
+<!-- ===== 16. 팀의 입력 ===== -->
+<section class="slide">
+  <div class="frame" data-frame>
+    <div class="head"><span class="kicker">INPUT</span><span class="pageno">16 / 24</span></div>
+    <h2 class="ptitle">팀의 입력</h2><p class="psub ko">공유 프로젝트</p>
+    <div class="stg">
+      <div class="tog abs" id="p16tog" style="left:0;top:0"><span class="cell sel" data-v="0">각자 만들기</span><span class="cell" data-v="1">한 번 만들어 나누기</span></div>
+      <div class="abs t-note" style="left:calc(var(--btn-min-w) * 2 + 200px);top:22px;white-space:nowrap">사람 10 × 회사 10</div>
+      <div class="panel colw abs" style="left:0;top:96px;height:444px;padding:var(--sp-24) var(--sp-32)"><div class="grid10" id="p16grid"></div></div>
+      <div class="well col3 abs" style="left:calc(var(--col-wide) + var(--gap));top:96px;height:444px;display:flex;flex-direction:column;gap:var(--sp-12)">
+        <div class="stack" style="gap:2px"><span class="t-note">같은 조사</span><span class="bignum" id="p16n">100번</span></div>
+        <div class="stack lit-later" id="p16after" style="gap:0"><span class="t-body ln">쓸수록 좋아지는 요약본 한 벌</span><span class="t-body ln">공유 프로젝트에 올려 두면 팀이 같은 지식을 쓴다</span></div>
+        <div class="stack" style="margin-top:auto;gap:0">
+          <span class="t-head ln">파일 형식</span>
+          <span class="t-note dark ln">마크다운을 권함</span><span class="t-note ln">서식 정보가 거의 없어 모델이 읽기에 군더더기가 적음</span><span class="t-note ln">표는 서식이 필요 없다면 CSV</span>
+          <span class="t-note dark ln" style="margin-top:var(--sp-8)">워드와 PDF도 되지만</span><span class="t-note ln">서식 정보를 함께 읽어 토큰을 더 쓰고</span><span class="t-note ln">구조를 잘못 읽을 여지가 생김</span>
+        </div>
+      </div>
+    </div>
+    <div class="close" id="c16">입력은 개인 자산이 아니라 <b>팀 자산</b></div>
+  </div>
+</section>
+
+<!-- ===== 17. 입력 네 층 ===== -->
+<section class="slide">
+  <div class="frame" data-frame>
+    <div class="head"><span class="kicker">INPUT</span><span class="pageno">17 / 24</span></div>
+    <h2 class="ptitle">입력 네 층</h2>
+    <div class="headright" style="text-align:right"><span class="t-note ln">Prompt · Instructions · Memory · Project knowledge</span></div>
+    <div class="stg nosub">
+      <div class="abs colw stack" style="left:0;top:0;height:584px;gap:var(--sp-8)" id="p17rows">
+        <div class="thead"><span>층</span><span>언제 들어가나</span><span>누가 채우나</span><span>적용 범위</span></div>
+        <div class="trow" data-k="pr"><span class="tn"><span class="sw c-pr"></span>프롬프트</span><span class="tc">메시지를 보낼 때마다</span><span class="tc">사람</span><span class="tc">그 메시지</span></div>
+        <div class="trow" data-k="ins"><span class="tn"><span class="sw c-ins"></span>지침</span><span class="tc">모든 대화 시작에</span><span class="tc">사람</span><span class="tc">프로필 전체 또는 한 프로젝트</span></div>
+        <div class="trow" data-k="mem"><span class="tn"><span class="sw c-mem"></span>메모리</span><span class="tc">모든 대화 시작에</span><span class="tc">Claude</span><span class="tc">모든 대화</span></div>
+        <div class="trow" data-k="kn"><span class="tn"><span class="sw c-kn"></span>프로젝트 지식</span><span class="tc">필요할 때 검색되어</span><span class="tc">사람</span><span class="tc">그 프로젝트</span></div>
+      </div>
+      <div class="well col3 abs" style="left:calc(var(--col-wide) + var(--gap));top:0;height:584px;display:flex;flex-direction:column;gap:var(--sp-16)">
+        <span class="t-head">10장의 컨텍스트 윈도우</span>
+        <div class="bar" id="p17bar"><i class="c-sys" data-k="sys" style="width:25%;background:var(--ink-muted)"></i><i class="c-mem" data-k="mem" style="width:5%"></i><i class="c-cap" data-k="cap" style="width:22%;background:var(--ink-muted)"></i><i class="c-ins" data-k="ins" style="width:6%"></i><i class="c-pr" data-k="pr" style="width:3%"></i><i class="c-kn" data-k="kn" style="width:36%"></i></div>
+        <div class="legend" id="p17legend" style="grid-template-columns:1fr">
+          <span class="lg" data-k="pr"><span class="sw c-pr"></span>내가 친 프롬프트</span>
+          <span class="lg" data-k="ins"><span class="sw c-ins"></span>지침</span>
+          <span class="lg" data-k="mem"><span class="sw c-mem"></span>메모리</span>
+          <span class="lg" data-k="kn"><span class="sw c-kn"></span>프로젝트 지식</span>
+        </div>
+        <span class="t-note" style="margin-top:auto">회색 조각은 시스템과 능력 &nbsp;이 장의 관심 밖</span>
+      </div>
+    </div>
+    <div class="close" id="c17">위 세 층은 저절로 들어가고 매번 치는 건 <b>프롬프트 하나</b></div>
+  </div>
+</section>
+
+<!-- ===== 18. 스킬 ===== -->
+<section class="slide">
+  <div class="frame" data-frame>
+    <div class="head"><span class="kicker">OUTPUT</span><span class="pageno">18 / 24</span></div>
+    <h2 class="ptitle">스킬</h2>
+    <div class="headright"><span class="ln">입력을 잘 넣어도 나오는 <b>모양</b>이 매번 다르면 쓰기 어렵다</span></div>
+    <div class="stg nosub">
+      <div class="talk colw abs" style="left:0;top:0;height:584px;padding:var(--sp-24) var(--sp-32);gap:var(--sp-12)">
+        <div class="row" style="justify-content:flex-end;gap:var(--sp-16)"><span class="pill blue lit-later" id="p18skillpill">투자검토보고서 스킬</span><span class="t-note">× 3회</span><div class="bub me" style="padding:var(--sp-12) var(--sp-24)">투자검토보고서 초안을 써 줘</div></div>
+        <div class="attrow" style="padding:0;justify-content:flex-end;height:72px"><div class="doc fit hide" id="p18chip"><span class="tile"><svg class="ico"><use href="#i-file"/></svg></span><span class="dtxt"><span class="dn">예시 보고서 3건</span></span></div></div>
+        <div class="tray h" id="p18tray" style="padding:var(--sp-16)">
+          <div class="card h" style="justify-content:center;padding:var(--sp-12)"><div class="docshape" id="p18d1"></div></div>
+          <div class="card h" style="justify-content:center;padding:var(--sp-12)"><div class="docshape" id="p18d2"></div></div>
+          <div class="card h" style="justify-content:center;padding:var(--sp-12)"><div class="docshape" id="p18d3"></div></div>
+        </div>
+        <div class="stack" style="gap:0;height:72px">
+          <span class="t-head ln" id="p18lab">&nbsp;</span>
+          <span class="t-body ln" id="p18jud">&nbsp;</span>
+        </div>
+        <div class="ctl" style="margin-top:auto"><div class="dots" id="p18dots"><i></i><i></i><i></i></div><div class="btns"><button class="btn" id="p18btn">보내기</button></div></div>
+      </div>
+      <div class="well col3 abs" style="left:calc(var(--col-wide) + var(--gap));top:0;height:584px;display:flex;flex-direction:column;gap:var(--sp-16)">
+        <div class="row" style="justify-content:space-between"><span class="t-head">컨텍스트</span><span class="t-note">예시 수치</span></div>
+        <span class="bignum" id="p18meter" style="font-size:var(--fs-claim)">2천</span>
+        <div class="gauge" style="grid-template-columns:1fr;height:14px"><div class="gt"><div class="gf" id="p18gf" style="width:5%"></div></div></div>
+        <span class="t-head" style="margin-top:var(--sp-16)">스킬 폴더 안</span>
+        <div class="stack" id="p18folder" style="gap:var(--sp-8)">
+          <div class="row" style="gap:var(--sp-12)"><svg class="ico" style="color:var(--ink-support)"><use href="#i-file"/></svg><span class="t-body" style="width:110px;font-weight:var(--fw-bold)">지시문</span><span class="t-note dark">언제 어떻게 쓰는지</span></div>
+          <div class="row" style="gap:var(--sp-12)"><svg class="ico" style="color:var(--ink-support)"><use href="#i-file"/></svg><span class="t-body" style="width:110px;font-weight:var(--fw-bold)">템플릿</span><span class="t-note dark">결과물의 모양</span></div>
+          <div class="row" style="gap:var(--sp-12)"><svg class="ico" style="color:var(--ink-support)"><use href="#i-folder"/></svg><span class="t-body" style="width:110px;font-weight:var(--fw-bold)">참고 자료</span><span class="t-note dark">판단 기준과 예시</span></div>
+        </div>
+        <span class="t-note" style="margin-top:auto">관련된 작업이 나오면 Claude가 알아서 불러 씀</span>
+      </div>
+    </div>
+    <div class="close" id="c18">말로 설명하는 대신 <b>템플릿</b>을 준다</div>
+  </div>
+</section>
+
+<!-- ===== 19. 개선 루프 ===== -->
+<section class="slide">
+  <div class="frame" data-frame>
+    <div class="head"><span class="kicker">OUTPUT</span><span class="pageno">19 / 24</span></div>
+    <h2 class="ptitle">개선 루프</h2><p class="psub ko">스킬을 고친다</p>
+    <div class="stg" style="height:540px">
+      <div class="well col2 abs" style="left:0;top:0;height:540px;display:flex;flex-direction:column;gap:var(--sp-16)">
+        <span class="t-claim">결과가 매번 다를 때</span>
+        <div class="bub me" style="align-self:flex-start;padding:var(--sp-12) var(--sp-24)">다시 만들어 줘</div>
+        <div class="row" style="gap:var(--sp-40);align-items:flex-end;flex:1">
+          <div class="stack" style="gap:var(--sp-8)"><span class="t-note">품질</span><div class="meter" id="p19mL"><i class="on"></i><i></i><i></i><i></i><i></i></div></div>
+          <div class="docshape" id="p19dL" style="margin-bottom:var(--sp-40)"></div>
+          <div class="stack" style="gap:0;margin-bottom:var(--sp-40)"><span class="t-note dark ln">운이 좋으면 잘 나오고 아니면 또 다시</span><span class="t-note dark ln">할 수 있는 말이 하나뿐</span></div>
+        </div>
+        <div class="ctl"><div class="dots" id="p19dotsL"><i></i><i></i><i></i></div><div class="btns"><button class="btn sec" id="p19again">다시</button></div></div>
+      </div>
+      <div class="panel col2 abs" style="left:calc(var(--col-2) + var(--gap));top:0;height:540px;display:flex;flex-direction:column;gap:var(--sp-16)">
+        <span class="t-claim">스킬로 고정했을 때</span>
+        <div class="bub me" style="align-self:flex-start;padding:var(--sp-12) var(--sp-24)">3번 항목을 이렇게 바꾸자</div>
+        <div class="row" style="gap:var(--sp-40);align-items:flex-end;flex:1">
+          <div class="stack" style="gap:var(--sp-8)"><span class="t-note">품질</span><div class="meter" id="p19mR"><i class="on"></i><i></i><i></i><i></i><i></i></div></div>
+          <div class="docshape" id="p19dR" style="margin-bottom:var(--sp-40)"></div>
+          <div class="stack" style="gap:0;margin-bottom:var(--sp-40)"><span class="t-note dark ln">한 번 고치면 그 다음부터</span><span class="t-note dark ln">계속 그렇게 나옴</span></div>
+        </div>
+        <div class="ctl"><div class="dots" id="p19dotsR"><i></i><i></i><i></i></div><div class="btns"><button class="btn" id="p19fix">고치기</button></div></div>
+      </div>
+    </div>
+    <div class="underline-row" id="p19under"><span class="ln">마음에 드는 결과가 나오면 &nbsp;그 자리에서 <b class="acc">스킬로 만들어 줘</b>라고 하면 된다</span></div>
+    <div class="close" id="c19">잭팟을 기다리지 않고 <b>한 칸씩</b> 올린다</div>
+  </div>
+</section>
+
+<!-- ===== 20. 스킬 공유 ===== -->
+<section class="slide">
+  <div class="frame" data-frame>
+    <div class="head"><span class="kicker">OUTPUT</span><span class="pageno">20 / 24</span></div>
+    <h2 class="ptitle">스킬 공유</h2>
+    <div class="headright"><span class="ln">입력을 함께 썼듯 <b>출력 방식</b>도 함께 쓴다</span><br><span class="t-note ln">한 사람의 요령에서 팀의 기본값으로</span></div>
+    <div class="stg nosub">
+      <div class="talk colw abs" style="left:0;top:0;height:584px;padding:var(--sp-24) var(--sp-32);gap:0">
+        <div class="share" id="p20share" style="flex:1"></div>
+        <div class="ctl"><div class="dots" id="p20dots"><i></i><i></i></div><div class="btns"><button class="btn" id="p20give">나눠 주기</button><button class="btn sec" id="p20fix">스킬 고치기</button></div></div>
+      </div>
+      <div class="well col3 abs" style="left:calc(var(--col-wide) + var(--gap));top:0;height:584px;display:flex;flex-direction:column;gap:var(--sp-12)">
+        <span class="t-head">공유하기 전</span>
+        <span class="t-note dark ln">양식이 바뀌면 여섯 명이 각자 고침</span>
+        <span class="bignum">고칠 곳 6군데</span>
+        <span class="t-head lit-later" id="p20af1" style="margin-top:var(--sp-12)">공유한 뒤</span>
+        <span class="t-note dark ln lit-later" id="p20af2">스킬 하나만 고침</span>
+        <span class="bignum lit-later" id="p20af3">고칠 곳 1군데</span>
+        <span class="t-note dark ln lit-later" id="p20af4">새로 온 사람도 첫날부터 같은 품질</span>
+        <div class="stack" style="margin-top:auto;gap:0"><span class="t-head ln">받는 법</span><span class="t-note dark ln">폴더를 압축해 설정 &gt; 기능 &gt; 스킬에 올린다</span><span class="t-note ln">사내 배포 방식은 확인해서 안내</span></div>
+      </div>
+    </div>
+    <div class="close" id="c20">한 사람이 개선하면 <b>팀 전체</b>가 함께 올라간다</div>
+  </div>
+</section>
+
+<!-- ===== 21. 커넥터 ===== -->
+<section class="slide">
+  <div class="frame" data-frame>
+    <div class="head"><span class="kicker">OUTPUT</span><span class="pageno">21 / 24</span></div>
+    <h2 class="ptitle">커넥터</h2>
+    <div class="headright"><span class="ln">Claude와 외부 서비스를 잇는 <b>통로</b></span><br><span class="t-note ln">Connectors · MCP &nbsp;공개 표준 위에서 동작</span></div>
+    <div class="stg nosub">
+      <div class="talk colw abs" style="left:0;top:0;height:584px">
+        <div class="talkhead"><span>새 대화</span></div>
+        <div class="stream" id="p21stream"></div>
+        <div class="inbar"><div class="fld on" id="p21fld"><span id="p21q">지난주 미팅 노트 요약해 줘</span><i></i></div><button class="send" id="p21send" aria-label="전송"><svg class="ico"><use href="#i-up"/></svg></button></div>
+      </div>
+      <div class="well col3 abs" style="left:calc(var(--col-wide) + var(--gap));top:0;height:584px;display:flex;flex-direction:column;gap:var(--sp-12)">
+        <div class="row" style="justify-content:space-between"><span class="t-head">연결된 서비스 (예시)</span><span class="row" style="gap:var(--sp-8)"><span class="judge ok" id="p21read" style="gap:4px"><svg class="ico"><use href="#i-left"/></svg>읽기</span><span class="judge ok" id="p21write" style="gap:4px"><svg class="ico"><use href="#i-right"/></svg>쓰기</span></span></div>
+        <div class="stack" style="gap:var(--sp-8)" id="p21docs">
+          <div class="doc sm"><span class="tile"><svg class="ico"><use href="#i-file"/></svg></span><span class="dtxt"><span class="dn">미팅노트_0825.docx</span></span></div>
+          <div class="doc sm"><span class="tile"><svg class="ico"><use href="#i-file"/></svg></span><span class="dtxt"><span class="dn">미팅노트_0827.docx</span></span></div>
+          <div class="doc sm"><span class="tile"><svg class="ico"><use href="#i-file"/></svg></span><span class="dtxt"><span class="dn">미팅노트_0829.docx</span></span></div>
+          <div class="doc sm new hide" id="p21new"><span class="tile"><svg class="ico"><use href="#i-file"/></svg></span><span class="dtxt"><span class="dn">미팅노트_요약.docx</span></span><span class="t-note" style="margin-left:auto">Claude 작성</span></div>
+        </div>
+        <span class="pill blue" style="align-self:flex-start">내 계정 권한 그대로</span>
+        <div class="stack" style="margin-top:auto;gap:0">
+          <span class="t-note dark ln lit-later" id="p21s1">첨부와 검색은 가져오기만</span>
+          <span class="t-note dark ln lit-later" id="p21s2">커넥터는 가져오고 쓰기</span>
+          <span class="t-note dark ln lit-later" id="p21s3" style="margin-top:var(--sp-8)">권한은 내 계정을 그대로 따름</span>
+          <span class="t-note ln lit-later" id="p21s4">내가 볼 수 있는 것만 Claude도 봄</span>
+          <span class="t-note ln lit-later" id="p21s5">내가 못 보는 건 연결해도 못 봄</span>
+        </div>
+      </div>
+    </div>
+    <div class="underline-row" id="p21under" style="top:756px"><span class="t-note ln">사내에서 어떤 커넥터가 열려 있는지는 확인해서 안내</span></div>
+    <div class="close" id="c21">읽는 데서 <b>쓰는 데</b>로</div>
+  </div>
+</section>
+
+<!-- ===== 22. 플러그인 (정지) ===== -->
+<section class="slide">
+  <div class="frame" data-frame>
+    <div class="head"><span class="kicker">OUTPUT</span><span class="pageno">22 / 24</span></div>
+    <h2 class="ptitle">플러그인</h2><p class="psub">Plugins</p>
+    <div class="stg">
+      <div class="abs col3 stack" style="left:0;top:0;gap:0">
+        <span class="t-head ln">필요한 걸 하나씩 설정하는 대신</span>
+        <span class="t-body ln">상자 하나를 설치하면</span>
+        <span class="t-body ln">안에 든 게 한 번에 들어온다</span>
+      </div>
+      <div class="well abs" style="left:calc(var(--col-3) + var(--gap));top:0;width:var(--col-wide);height:540px;display:flex;flex-direction:column;gap:var(--sp-16)">
+        <div class="row" style="gap:var(--sp-12)"><svg class="ico" style="color:var(--ink-support)"><use href="#i-folder"/></svg><span class="t-claim">딜 검토 플러그인</span><span class="t-note">예시</span></div>
+        <div class="boxitem"><svg class="ico acc"><use href="#i-file"/></svg><div class="bi-t"><span class="bi-n">스킬</span><span class="bi-d">초기 분석 &nbsp;1페이저 &nbsp;발표자료</span></div></div>
+        <div class="boxitem"><svg class="ico acc"><use href="#i-link"/></svg><div class="bi-t"><span class="bi-n">커넥터</span><span class="bi-d">자료를 읽어 올 곳</span></div></div>
+        <div class="boxitem"><svg class="ico acc"><use href="#i-slash"/></svg><div class="bi-t"><span class="bi-n">명령어</span><span class="bi-d">자주 쓰는 지시를 한 단어로</span></div></div>
+      </div>
+    </div>
+    <div class="close static">팀 단위로 <b>같은 작업 환경</b>을 맞출 때 쓴다</div>
+  </div>
+</section>
+
+<!-- ===== 23. 오늘 정리 ===== -->
+<section class="slide">
+  <div class="frame" data-frame>
+    <div class="head"><span class="kicker">CLOSING</span><span class="pageno">23 / 24</span></div>
+    <span class="t-claim abs" style="left:0;top:50px">오늘 확인한 것</span>
+    <div class="recap" id="p23recap">
+      <div class="ri">인공지능이 아니라 인공지능 서비스</div><div class="ri">치기 전에 이미 차 있는 컨텍스트 윈도우</div>
+      <div class="ri">조각으로 세어 청구되는 입력과 출력</div><div class="ri">프롬프트에서 떼어 낸 지침과 메모리와 프로젝트</div>
+      <div class="ri">대화가 이어질수록 누적되는 입력 토큰</div><div class="ri">결과를 고정하고 고쳐 나가는 스킬</div>
+      <div class="ri">우리가 정하는 두 가지 등급과 노력 수준</div><div></div>
+    </div>
+    <div class="decl" id="p23decl">모델은 <b>고르고</b> 입력은 <b>쌓고</b> 출력은 <b>고정한다</b></div>
+    <div class="band" id="p23band"><div><div>매번 다시 치던 말은 지침으로</div><div>자료는 프로젝트로</div><div>좋은 결과는 스킬로</div></div><div style="text-align:right;align-self:flex-end">일회성 대화로 끝나면 다음번에 또 처음부터</div></div>
+  </div>
+</section>
+
+<!-- ===== 24. 마무리 (정지) ===== -->
+<section class="slide" data-canvas="dark">
+  <div class="cover chapter"></div>
+  <div class="frame" data-frame style="z-index:1">
+    <div class="wordmark" style="left:0;top:0;height:36px"><img src="../assets/lettermark/White/Samsung_Orig_Wordmark_WHITE_RGB.png" alt=""></div>
+    <div class="fin-decl" style="left:0;top:220px">해상도가 올라가면<br>쓸 자리가 보인다</div>
+    <div class="fin-items" style="left:0;top:520px">
+      <div class="fi"><div class="fn">Claude만의 사용법이 아님</div><div class="fd">모델과 인터페이스라는 구조도 입력을 쌓고 출력을 고정한다는 원칙도 다른 AI 서비스에 그대로 적용</div></div>
+      <div class="fi"><div class="fn">AI Native가 되어 가는 과정</div><div class="fd">보이면 자주 쓰게 되고 자주 쓰면 익숙해진다</div></div>
+      <div class="fi"><div class="fn">내 업무에 붙여 보고 싶다면</div><div class="fd">팀 단위로든 개인으로든 요청 · 미팅은 언제든 열려 있음</div></div>
+    </div>
+    <div class="cov-br" style="right:0;bottom:0"><div>AX TF · 김대현</div></div>
+  </div>
+</section>
+
+</div></div>
