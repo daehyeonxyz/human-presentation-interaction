@@ -214,6 +214,8 @@ HOOK.s8 = { step: function (k) {
 HOOK.s9 = { step: function (k) {
   $('s9k').classList.toggle('now', k >= 1); $('s9bill').classList.toggle('now', k >= 1);
   $('s9k').classList.toggle('now2', k >= 5); $('s9bill').classList.toggle('now2', k >= 6);
+  $('s9k').classList.toggle('rd1', k >= 3); $('s9k').classList.toggle('rd2', k >= 6);
+  $('s9r1').classList.toggle('rd', k >= 3); $('s9r2').classList.toggle('rd', k >= 6); $('s9r3').classList.toggle('rd', k >= 6);
   var sum = $('s9sum'); if (k <= 2) sum.textContent = '800원'; if (k === 3) countUp(sum, 710, 400); if (k === 4) countUp(sum, 760, 400); if (k === 6) countUp(sum, 780, 400);
   $('s9r1').classList.toggle('hot', k === 3); $('s9r2').classList.toggle('hot', k === 4 || k === 6);
   $('s9r3').classList.toggle('hot', k === 4 || k === 6); $('s9r4').classList.toggle('hot', k === 6); $('s9r5').classList.toggle('hot', k === 6);
@@ -440,7 +442,9 @@ HOOK.s27 = { step: function (k) { $('s27r').classList.toggle('lit', k >= 1); } }
 /* S32b · 스킬로 묶기. 세 장이 폴더의 세 줄 자리로 날아가 작아지며 사라지고, 그 자리에 줄이 선다 */
 (function () {
   var busy = [];
+  var flown = false;
   function fly() {
+    if (flown) return; flown = true;
     busy.forEach(function (a) { a.cancel(); }); busy = [];
     var st = document.getElementById('stage').getBoundingClientRect(), kk = st.width / 1920;
     var cols = $$('#s32bt > .col'), rows = $$('#s32bf .fi');
@@ -448,12 +452,12 @@ HOOK.s27 = { step: function (k) { $('s27r').classList.toggle('lit', k >= 1); } }
       var box = col.querySelector('.k, .man'), a = box.getBoundingClientRect(), b = rows[i].getBoundingClientRect();
       var dx = (b.left + b.width * .2 - (a.left + a.width / 2)) / kk, dy = (b.top + b.height / 2 - (a.top + a.height / 2)) / kk;
       var sx = Math.max(.12, b.width * .4 / a.width), sy = Math.max(.08, b.height / a.height);
-      busy.push(box.animate([{ transform: 'none', opacity: 1 }, { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(' + sx + ',' + sy + ')', opacity: 0 }], { duration: 640, delay: i * 80, easing: EASE, fill: 'forwards' }));
+      busy.push(box.animate([{ transform: 'none', opacity: 1, offset: 0 }, { opacity: 1, offset: .6 }, { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(' + sx + ',' + sy + ')', opacity: 0, offset: 1 }], { duration: 720, delay: i * 80, easing: EASE, fill: 'forwards' }));
       col.querySelector('.h2').animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, delay: i * 80, easing: EASE, fill: 'forwards' });
     });
     rows.forEach(function (r, i) { r.style.setProperty('--d', (620 + i * 80) + 'ms'); });
     var t = $('s32bt'), gap = getComputedStyle(t.parentNode).rowGap; busy.push(t.animate([{ height: t.offsetHeight + 'px', marginBottom: '0px' }, { height: '0px', marginBottom: '-' + gap }], { duration: 480, delay: 520, easing: EASE, fill: 'forwards' }));
   }
-  function back() { busy.forEach(function (a) { a.cancel(); }); busy = []; $$('#s32bt, #s32bt .k, #s32bt .man, #s32bt .h2').forEach(function (el) { el.getAnimations().forEach(function (a) { a.cancel(); }); }); }
+  function back() { flown = false; busy.forEach(function (a) { a.cancel(); }); busy = []; $$('#s32bt, #s32bt .k, #s32bt .man, #s32bt .h2').forEach(function (el) { el.getAnimations().forEach(function (a) { a.cancel(); }); }); }
   HOOK.s32b = { reset: back, step: function (k) { if (k >= 4) fly(); else back(); } };
 })();
