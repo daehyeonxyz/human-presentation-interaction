@@ -19,6 +19,7 @@
 | `layout-taxonomy.md` | 원본 택소노미의 프레젠테이션 스테이지 어댑터. 스테이지 계약(배율·프레임·채움·면) |
 | `interaction-grammar.md` | 조작 문법 `g-*`, 논리 구조 `m-*`, 복잡도 등급 대응, 안정성 가드레일, 검증된 판 기록 |
 | `references/taxonomy.md` | 레이아웃 판단의 원본 분류 체계 (6부 23분류 139개 키워드) |
+| `references/feedback-taxonomy.md` | 실전 피드백 유형 분류와 분포. 다음 발표에서 어느 단계에 시간을 미리 쓸지 정한다 |
 | `research/` | 지향점(north-star), 발표 철학 실측, 인터랙션 방법론 조사 |
 | `templates/stage.html` | 무대 계약 뼈대. 8단계 구현의 출발점 |
 | `templates/plan.md`, `templates/manuscript.md` | 기획서와 슬라이드 원고의 산출물 뼈대 |
