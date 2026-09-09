@@ -98,7 +98,7 @@
 <!-- S8 비용 · 첫 번째 메시지. 입력은 다음 차례를 위해 저장된다 -->
 <section class="s" id="s8" data-steps="6" data-sec="Model">
   <div class="head"><div class="h"><span class="no">3.</span> 비용</div><div class="lead">첫 번째 메시지</div></div>
-  <div class="main cols side" style="--side:840px">
+  <div class="main cols side" style="--side:820px">
     <div class="k fit big" id="s8k">
       <div class="k-msgs">
         <div class="u" data-step="1">이 영어 글을 한국어로 번역해 줘<span class="tt in">100토큰</span></div>
@@ -115,24 +115,28 @@
   </div>
 </section>
 <!-- S9 비용 · 두 번째 메시지. 저장해 둔 이전 입력은 읽고, 이전 출력과 새 입력은 이번에 저장한다 -->
-<section class="s" id="s9" data-steps="4" data-sec="Model">
+<section class="s" id="s9" data-steps="6" data-sec="Model">
   <div class="head"><div class="h"><span class="no">3.</span> 비용</div><div class="lead">두 번째 메시지</div></div>
-  <div class="main cols side" style="--side:840px">
+  <div class="main cols side" style="--side:820px">
     <div class="k fit big" id="s9k">
       <div class="k-msgs">
         <div class="u">이 영어 글을 한국어로 번역해 줘<span class="tt in p1">100토큰</span></div>
         <div class="a"><span class="tx">다음은 한국어 번역입니다. …</span><span class="tt out p1">100토큰</span></div>
-        <div class="u">이 글도 한국어로 번역해 줘<span class="tt in">100토큰</span></div>
-        <div class="a"><span class="tx">이어서 번역했습니다. …</span><span class="tt out">100토큰</span></div>
+        <div class="u">이 글도 한국어로 번역해 줘<span class="tt in p2">100토큰</span></div>
+        <div class="a"><span class="tx">이어서 번역했습니다. …</span><span class="tt out p2">100토큰</span></div>
+        <div class="u" data-step="5">또 이것도 번역해 줘<span class="tt in">100토큰</span></div>
+        <div class="a" data-step="5"><span class="tx">번역했습니다. …</span><span class="tt out">100토큰</span></div>
       </div>
       <div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
     </div>
     <div class="bill" id="s9bill" data-stagger="40">
       <div class="lrow i" id="s9r1"><span class="bl swap"><span data-out="3">이전 입력</span><span data-step="3">이전 입력 · 캐시 읽기</span></span><div class="bar"><i class="in p1" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx swap" data-step="2"><span data-out="3">× 1원</span><span data-step="3">× 0.1원</span></span><span class="bp swap" data-step="2"><span data-out="3">100원</span><span data-step="3">10원</span></span></div>
-      <div class="lrow i" id="s9r2"><span class="bl swap"><span data-out="4">이전 출력</span><span data-step="4">이전 출력 · 캐시 쓰기</span></span><div class="bar"><i class="out p1" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx swap" data-step="2"><span data-out="4">× 1원</span><span data-step="4">× 1.25원</span></span><span class="bp swap" data-step="2"><span data-out="4">100원</span><span data-step="4">125원</span></span></div>
-      <div class="lrow i" id="s9r3"><span class="bl swap"><span data-out="4">새 입력</span><span data-step="4">새 입력 · 캐시 쓰기</span></span><div class="bar"><i class="in" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx swap" data-step="2"><span data-out="4">× 1원</span><span data-step="4">× 1.25원</span></span><span class="bp swap" data-step="2"><span data-out="4">100원</span><span data-step="4">125원</span></span></div>
-      <div class="lrow o"><span class="bl">출력</span><div class="bar"><i class="out" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx" data-step="2">× 5원</span><span class="bp" data-step="2">500원</span></div>
-      <div class="lsum"><span class="bl">합계</span><span class="bt">400토큰</span><span class="bp" id="s9sum" data-step="2">800원</span></div>
+      <div class="lrow i" id="s9r2"><span class="bl swap"><span data-out="4">이전 출력</span><span data-step="4" data-out="6">이전 출력 · 캐시 쓰기</span><span data-step="6">이전 출력 · 캐시 읽기</span></span><div class="bar"><i class="out p1" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx swap" data-step="2"><span data-out="4">× 1원</span><span data-step="4" data-out="6">× 1.25원</span><span data-step="6">× 0.1원</span></span><span class="bp swap" data-step="2"><span data-out="4">100원</span><span data-step="4" data-out="6">125원</span><span data-step="6">10원</span></span></div>
+      <div class="lrow i" id="s9r3"><span class="bl swap"><span data-out="4">새 입력</span><span data-step="4" data-out="6">새 입력 · 캐시 쓰기</span><span data-step="6">이전 입력 · 캐시 읽기</span></span><div class="bar"><i class="in" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx swap" data-step="2"><span data-out="4">× 1원</span><span data-step="4" data-out="6">× 1.25원</span><span data-step="6">× 0.1원</span></span><span class="bp swap" data-step="2"><span data-out="4">100원</span><span data-step="4" data-out="6">125원</span><span data-step="6">10원</span></span></div>
+      <div class="lrow i" id="s9r4"><span class="bl swap"><span data-out="6">출력</span><span data-step="6">이전 출력 · 캐시 쓰기</span></span><div class="bar"><i class="out p2" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx swap" data-step="2"><span data-out="6">× 5원</span><span data-step="6">× 1.25원</span></span><span class="bp swap" data-step="2"><span data-out="6">500원</span><span data-step="6">125원</span></span></div>
+      <div class="lrow i" id="s9r5" data-step="6"><span class="bl">새 입력 · 캐시 쓰기</span><div class="bar"><i class="in" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx">× 1.25원</span><span class="bp">125원</span></div>
+      <div class="lrow o" id="s9r6" data-step="6"><span class="bl">출력</span><div class="bar"><i class="out" style="--w:25%"></i></div><span class="bt">100토큰</span><span class="bx">× 5원</span><span class="bp">500원</span></div>
+      <div class="lsum"><span class="bl">합계</span><span class="bt swap"><span data-out="5">400토큰</span><span data-step="5">600토큰</span></span><span class="bp" id="s9sum" data-step="2">800원</span></div>
     </div>
   </div>
 </section>
@@ -162,12 +166,12 @@
   </div>
 </section>
 <!-- S10b 라인업 · 9장의 신경망이 그 자리에서 커지고 작아진다 -->
-<section class="s" id="s10b" data-steps="4" data-sec="Model">
+<section class="s" id="s10b" data-steps="3" data-sec="Model">
   <div class="head"><div class="h"><span class="no">6.</span> 모델의 등급</div><div class="lead">Claude 모델 라인업에 따른 지능과 속도와 비용</div></div>
   <div class="main cols" style="--cols:600px 1fr">
     <div class="nnbox"><svg class="nn morph" id="s10nn" viewBox="0 0 600 600" fill="none" data-morph="nn"></svg></div>
     <div class="col wide">
-      <div class="pills" id="s10pick"><button class="pill" data-i="0">Haiku 4.5</button><button class="pill" data-i="1">Sonnet 5</button><button class="pill" data-i="2">Opus 5</button><button class="pill" data-i="3">Fable 5</button></div>
+      <div class="pills" id="s10pick"><button class="pill" data-i="0">Haiku</button><button class="pill" data-i="1">Sonnet</button><button class="pill" data-i="2">Opus</button><button class="pill" data-i="3">Fable</button></div>
       <div class="pd" id="s10pd"></div>
     </div>
   </div>
@@ -364,7 +368,7 @@
 </section>
 <!-- S23 지침 -->
 <section class="s" id="s23" data-steps="3" data-sec="Interface">
-  <div class="head"><div class="h"><span class="no">4.</span> 지침 <i class="sw c1"></i><i class="sw c3"></i></div><div class="lead">모든 대화에 자동으로 들어가는 입력</div></div>
+  <div class="head"><div class="h"><span class="no">4.</span> 지침 <i class="sw c1"></i><i class="sw c3"></i></div><div class="lead">Claude가 모든 대화의 응답에서 우선해서 고려해야 할 지침</div></div>
   <div class="main cols side" style="--side:600px">
     <div class="st" id="s23st">
       <div class="nav"><div class="search">검색</div>
@@ -397,7 +401,7 @@
 </section>
 <!-- S24 메모리 -->
 <section class="s" id="s24" data-steps="2" data-sec="Interface">
-  <div class="head"><div class="h"><span class="no">5.</span> 메모리 <i class="sw c2"></i></div><div class="lead">Claude가 대화에서 스스로 뽑아 쌓아 두는 입력</div></div>
+  <div class="head"><div class="h"><span class="no">5.</span> 메모리 <i class="sw c2"></i></div><div class="lead">Claude가 대화를 거듭하며 반복적인 맥락을 자동으로 기억해 다음 대화에 반영하는 기능</div></div>
   <div class="main cols side" style="--side:600px">
     <div class="st" id="s24st">
       <div class="nav"><div class="search">검색</div>
@@ -419,6 +423,7 @@
     </div>
     <div class="col wide mid">
       <ul class="bullets">
+        <li>사용자의 <b>직업 · 작업 스타일 · 선호도</b> 같은 개인적 맥락을 기록</li>
         <li>여러 대화에 걸쳐 반복해서 나온 내용을 <b>항목으로 정리</b>해 두고 대화 중에 읽고 갱신</li>
         <li data-step="1">설정에서 <b>켜고 끔</b> · 무엇이 쌓였는지 직접 확인하고 지움</li>
         <li data-step="2">대화 중에 <b>“이건 기억해 줘”</b>라고 말해서 바로 추가</li>
@@ -428,7 +433,7 @@
 </section>
 <!-- S26 프로젝트 -->
 <section class="s" id="s26" data-steps="4" data-sec="Interface">
-  <div class="head"><div class="h"><span class="no">6.</span> 프로젝트 <i class="sw c3"></i><i class="sw c4"></i></div><div class="lead">지식과 지침을 묶어 둔 작업 공간</div></div>
+  <div class="head"><div class="h"><span class="no">6.</span> 프로젝트 <i class="sw c3"></i><i class="sw c4"></i></div><div class="lead">반복적인 설명 없이 특정 목적에 맞는 작업 공간을 만들고 자료와 지침을 유지하는 기능</div></div>
   <div class="main">
     <div class="pj" id="s26pj">
       <div class="pl">
@@ -491,8 +496,8 @@
     </div>
     <div class="col cwb2" id="s25cw" data-stagger="40">
       <div class="cwt">컨텍스트 윈도우</div>
-      <div class="cw"><div class="bar"><i class="on" style="background:var(--c5);--w:3%" data-step="1"></i><i class="on" style="background:var(--c4);--w:16%" data-step="1"></i><i class="on hatch" style="background:var(--g4);--w:9%" data-step="2"></i><i class="on hatch" style="background:var(--c4);--w:8%" data-step="2"></i><i class="on hatch" style="background:var(--g4);--w:11%" data-step="2"></i></div></div>
-      <div class="legend"><span data-step="1"><i style="background:var(--c5)"></i>프롬프트</span><span data-step="1"><i style="background:var(--c4)"></i>첨부한 파일</span><span data-step="2"><i class="hatch" style="background:var(--g4)"></i>웹 검색 결과</span><span data-step="2"><i class="hatch" style="background:var(--c4)"></i>프로젝트 지식에서 찾은 부분</span><span data-step="2"><i class="hatch" style="background:var(--g4)"></i>커넥터로 가져온 자료</span></div>
+      <div class="cw"><div class="bar"><i class="on" style="background:var(--c5);--w:3%" data-step="1"></i><i class="on" style="background:var(--c4);--w:16%" data-step="1"></i><i class="on hatch" style="background:var(--g4);--w:9%" data-step="2"></i><i class="on hatch" style="background:var(--c4);--w:8%" data-step="2"></i><i class="on hatch" style="background:var(--g4);--w:11%" data-step="2"></i><i class="on hatch" style="background:var(--k-send);--w:10%" data-step="3"></i></div></div>
+      <div class="legend"><span data-step="1"><i style="background:var(--c5)"></i>프롬프트</span><span data-step="1"><i style="background:var(--c4)"></i>첨부한 파일</span><span data-step="2"><i class="hatch" style="background:var(--g4)"></i>웹 검색 결과</span><span data-step="2"><i class="hatch" style="background:var(--c4)"></i>프로젝트 지식에서 찾은 부분</span><span data-step="2"><i class="hatch" style="background:var(--g4)"></i>커넥터로 가져온 자료</span><span data-step="3"><i class="hatch" style="background:var(--k-send)"></i>모델의 출력</span></div>
     </div>
   </div>
 </section>
@@ -503,7 +508,7 @@
 </section>
 
 <section class="s" id="s36" data-steps="3" data-sec="Extend">
-  <div class="head"><div class="h"><span class="no">1.</span> 커넥터</div><div class="lead">외부 서비스와 Claude를 잇는 통로</div></div>
+  <div class="head"><div class="h"><span class="no">1.</span> 커넥터</div><div class="lead">Claude를 외부 도구에 직접 연결하여 실시간으로 데이터를 읽고 작업할 수 있게 확장해 주는 기능</div></div>
   <div class="main cols side" style="--side:640px">
     <div class="k big fill">
       <div class="k-msgs">
@@ -517,8 +522,6 @@
         <h4>커넥터</h4>
         <div class="d">MCP라는 공개 표준 위에서 동작합니다. 연결한 서비스의 자료를 읽어 오고, 그 안에 실제로 쓸 수도 있습니다. 연결한 사람이 볼 수 있는 것만 Claude도 봅니다.</div>
         <div class="crow"><i class="ic"><svg><use href="#i-cloud"/></svg></i><b>Salesforce</b><span>연결됨</span><em>⋯</em></div>
-        <div class="crow"><i class="ic"><svg><use href="#i-drive"/></svg></i><b>Google Drive</b><span>연결됨</span><em>⋯</em></div>
-        <div class="crow"><i class="ic"><svg><use href="#i-mail"/></svg></i><b>Gmail</b><span>연결됨</span><em>⋯</em></div>
         <div class="crow"><i class="ic"><svg><use href="#i-shield"/></svg></i><b>Knox Platform</b><span></span><u class="btn-k">연결</u></div>
         <div class="crow"><i class="ic"><svg><use href="#i-user"/></svg></i><b>Knox Teams</b><span></span><u class="btn-k">연결</u></div>
         <div class="crow"><i class="ic"><svg><use href="#i-folder"/></svg></i><b>Filesystem</b><span></span><u class="btn-k">연결</u></div>
@@ -530,8 +533,8 @@
 </section>
 <!-- S28 팀이 같이 쓰는 자료 · 공유 프로젝트 상자와 커넥터 채팅. 32장의 부품이 다시 나온다 -->
 <section class="s" id="s28" data-steps="1" data-sec="Extend">
-  <div class="head"><div class="h"><span class="no">1.</span> 커넥터</div><div class="lead">팀이 같이 쓰는 자료 · 프로젝트를 공유하거나 드라이브를 잇거나</div></div>
-  <div class="main cols split">
+  <div class="head"><div class="h"><span class="no">1.</span> 커넥터</div></div>
+  <div class="main cols split" id="s28c">
     <div class="col wide">
       <div class="h2">프로젝트 공유</div>
       <div class="pj one">
@@ -543,7 +546,7 @@
     </div>
     <div class="col wide" id="s28r" data-stagger="40">
       <div class="h2" data-step="1">드라이브 커넥터</div>
-      <div class="k" data-step="1">
+      <div class="k fill" data-step="1">
         <div class="k-msgs">
           <div class="u">딜 검토 폴더에서 A사 자료 찾아 줘</div>
           <div class="a"><div class="trow"><i class="ic"><svg><use href="#i-drive"/></svg></i><b>Google Drive</b> 검색함<span>"딜 검토 A사"</span><em>2건</em><svg class="chev"><use href="#i-chev"/></svg></div><div class="tool"><svg><use href="#i-file"/></svg><div><b>A사_조사요약.md</b><small>공유 드라이브 / 딜 검토 / A사</small></div></div><div class="tool"><svg><use href="#i-file"/></svg><div><b>A사_IR자료.pdf</b><small>공유 드라이브 / 딜 검토 / A사</small></div></div></div>
@@ -555,7 +558,7 @@
 </section>
 <!-- S31 결과물의 형식을 알려 주는 방법 · 새 채팅마다 같은 설명과 같은 첨부를 반복한다 -->
 <section class="s" id="s31" data-steps="2" data-sec="Extend">
-  <div class="head"><div class="h"><span class="no">2.</span> 스킬</div><div class="lead">들여온 자료로 우리 형식의 결과물을 만드는 두 가지 방법 · 자세한 프롬프트와 예시</div></div>
+  <div class="head"><div class="h"><span class="no">2.</span> 스킬</div><div class="lead">같은 일을 하는데 매번 자세하게 프롬프트를 넣어야 할까</div></div>
   <div class="main cols" id="s31c">
     <div class="col wide">
       <div class="h2"><span class="no">1.</span> 자세한 프롬프트</div>
@@ -568,8 +571,8 @@
   </div>
 </section>
 <!-- S32b 스킬 · 33장의 두 채팅과 매뉴얼이 34장의 폴더 하나로 묶인다 -->
-<section class="s" id="s32b" data-steps="4" data-sec="Extend">
-  <div class="head"><div class="h"><span class="no">2.</span> 스킬</div><div class="lead">자세한 설명과 템플릿과 매뉴얼을 하나로 묶은 것</div></div>
+<section class="s" id="s32b" data-steps="5" data-sec="Extend">
+  <div class="head"><div class="h"><span class="no">2.</span> 스킬</div><div class="lead">AI가 특정 작업 방식을 숙련되게 수행하도록 지시 사항과 매뉴얼을 담은 모듈</div></div>
   <div class="main skl">
     <div class="three" id="s32bt" data-stagger="40">
       <div class="col" data-step="1"><div class="h2">자세한 설명</div><div class="k fill"><div class="k-msgs"><div class="u">A사 투자 검토 보고서를 만들어 줘. 표지에는 회사명과 날짜를 넣고, 1장은 개요를 다섯 줄로, 2장은 시장 규모를 표로, 3장은 경쟁사 세 곳을 비교해 줘. 수치마다 출처와 기준 연도를 같이 적고, 말투는 개조식으로 …</div></div></div></div>
@@ -586,11 +589,16 @@
       <div class="fi"><svg><use href="#i-file"/></svg><code>references/content-example.json</code><span>예시</span></div>
       <div class="fi"><svg><use href="#i-file"/></svg><code>assets/brief-template.html</code><span>템플릿</span></div>
     </div>
+    <ul class="bullets lg skwhy" id="s32bw" data-stagger="80">
+      <li data-step="5">매번 긴 프롬프트를 반복해서 입력하는 <b>번거로움이 사라짐</b></li>
+      <li data-step="5">AI에게 <b>전문성과 일관된 업무 방식</b>을 영구적으로 부여</li>
+      <li data-step="5">특정 작업 방식의 <b>표준</b>이 정해져 퀄리티 컨트롤이 쉬워짐</li>
+    </ul>
   </div>
 </section>
 <!-- S33 스킬 -->
 <section class="s" id="s33" data-steps="2" data-sec="Extend">
-  <div class="head"><div class="h"><span class="no">2.</span> 스킬</div><div class="lead">지침과 스크립트와 자료를 묶어 둔 폴더</div></div>
+  <div class="head"><div class="h"><span class="no">2.</span> 스킬</div><div class="lead">AI가 특정 작업 방식을 숙련되게 수행하도록 지시 사항과 매뉴얼을 담은 모듈</div></div>
   <div class="main cols" style="--cols:640px 1fr">
     <div class="folder fcard col" id="s33f" data-morph="folder">
       <div class="fn"><svg><use href="#i-folder"/></svg>deal-sourcing</div>
@@ -612,7 +620,7 @@
 </section>
 <!-- S34 스킬 시연 -->
 <section class="s" id="s34" data-steps="3" data-sec="Extend">
-  <div class="head"><div class="h"><span class="no">2.</span> 스킬</div><div class="lead">시연 · deal-sourcing</div></div>
+  <div class="head"><div class="h"><span class="no">2.</span> 스킬</div><div class="lead">스킬을 사용하는 법</div></div>
   <div class="main cols" style="--cols:640px 1fr;position:relative">
     <div class="items mid">
       <div class="it"><div class="t"><span class="no">1.</span>자동 호출</div><div class="d">관련된 내용이 나오면 스킬이 알아서 호출됨</div></div>
@@ -662,7 +670,7 @@
 <!-- S35 스킬을 사용해야 하는 이유 · 보고서 두 장을 다시 만들어 본다 -->
 <!-- S34b 스킬 만드는 법 · /skill-creator 한 번으로 폴더가 생긴다. 오른쪽 카드는 36장의 deal-sourcing 카드 -->
 <section class="s" id="s34b" data-steps="3" data-sec="Extend">
-  <div class="head"><div class="h"><span class="no">2.</span> 스킬</div><div class="lead">만드는 법 · /skill-creator</div></div>
+  <div class="head"><div class="h"><span class="no">2.</span> 스킬</div><div class="lead">스킬을 만드는 법</div></div>
   <div class="main cols" style="--cols:1fr 640px">
     <div class="k fill">
       <div class="k-msgs">
@@ -692,7 +700,7 @@
 </section>
 
 <section class="s" id="s35" data-steps="6" data-sec="Extend">
-  <div class="head"><div class="h"><span class="no">2.</span> 스킬</div><div class="lead">스킬을 쓰는 이유 · 일관성과 재현성</div></div>
+  <div class="head"><div class="h"><span class="no">2.</span> 스킬</div><div class="lead">스킬을 사용하는 이유</div></div>
   <div class="main">
     <div class="cols">
       <div class="col">
@@ -820,6 +828,7 @@
       <div class="gcol"><div class="h2">모델</div>
         <a class="gt" href="https://platform.claude.com/docs/en/about-claude/glossary" target="_blank" rel="noopener">LLM<svg><use href="#i-ext"/></svg></a>
         <a class="gt" href="https://platform.claude.com/docs/en/build-with-claude/token-counting" target="_blank" rel="noopener">토큰<svg><use href="#i-ext"/></svg></a>
+        <a class="gt" href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">토큰 가격 정책<svg><use href="#i-ext"/></svg></a>
         <a class="gt" href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank" rel="noopener">Claude 모델 종류<svg><use href="#i-ext"/></svg></a>
         <a class="gt" href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank" rel="noopener">Knowledge cutoff<svg><use href="#i-ext"/></svg></a>
         <i class="gap"></i>

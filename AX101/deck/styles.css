@@ -129,6 +129,8 @@ b { font-weight: 800; }
 .fig .fl { display: flex; flex-direction: column; gap: var(--gap-lg); }
 .fig .fl span { font-size: var(--t-decl-lg); line-height: var(--l-decl-lg); font-weight: 800; letter-spacing: -.03em; color: rgba(255,255,255,.45); transition: color var(--dur); white-space: nowrap; }
 .fig.lit-model .t-model, .fig.lit-if .t-if, .fig.lit-ext .t-ext { color: var(--white); }
+.fig .t-ext { opacity: 0; filter: blur(var(--blur)); transition: opacity var(--t-in-lg) var(--ease-out), filter var(--t-in-lg) var(--ease-out), color var(--dur); }
+.fig.lit-ext .t-ext { opacity: 1; filter: none; }
 /* 확장 표지. 어깨선 위에 흰 배지 셋(커넥터 · 스킬 · 플러그인) */
 .fig { position: relative; }
 .fig .ext { position: absolute; left: 360px; width: 507px; top: 349px; display: flex; justify-content: center; gap: 28px; }
@@ -186,6 +188,8 @@ svg.nn circle { fill: var(--white); stroke: var(--ink); stroke-width: 2.5; }
 .k .tt.in { background: var(--acc); } .k .tt.out { background: var(--k-send); }
 .k .tt.p1 { background: var(--g2); color: var(--ink); }
 .k.now .tt.p1 { background: var(--acc); color: var(--white); }
+.k.now2 .tt.p2 { background: var(--acc); color: var(--white); }
+.bill.now2 .bar i.p2 { background: var(--acc); }
 .main > .k.fill { flex: 1; }
 .k .k-in { margin: 0 24px 24px; background: var(--k-el); border: 1px solid var(--k-bd); border-radius: 20px; padding: 18px 20px 14px; flex: none; }
 .k .k-in .ph { color: var(--k-sub); min-height: 36px; line-height: 36px; }
@@ -473,7 +477,10 @@ svg.nn circle { fill: var(--white); stroke: var(--ink); stroke-width: 2.5; }
 .cards .card.iface > div:first-child { transition: padding 520ms var(--ease-smooth); }
 .cards .link { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; opacity: 0; transition: opacity var(--dur); }
 .cards.nest .link { opacity: 1; }
-.cards .link line { stroke: var(--k-send); stroke-width: 4; stroke-dasharray: 12 10; stroke-linecap: round; }
+.cards .link path { fill: none; stroke: var(--k-send); stroke-width: 4; stroke-linecap: round; stroke-dasharray: var(--len); stroke-dashoffset: var(--len); transition: stroke-dashoffset 640ms var(--ease-smooth) 120ms; }
+.cards.nest .link path.go { stroke-dashoffset: 0; }
+.cards .link circle.end { transform-box: fill-box; transform-origin: center; transform: scale(0); transition: transform 260ms var(--ease-out) 700ms; }
+.cards.nest .link circle.end.go { transform: scale(1); }
 .cards .link circle { fill: var(--k-send); }
 
 /* 25장 · 흐름도 */
@@ -713,7 +720,7 @@ svg.nn circle { fill: var(--white); stroke: var(--ink); stroke-width: 2.5; }
 .folder .fi:first-of-type, .folder .fi.lit, .folder.open .fi { opacity: 1; }
 /* 36장 브리프 창 */
 .k .steps div.ok { color: var(--k-ink); }
-.brief .wbar { grid-column: 1 / -1; height: 40px; margin: -44px -52px 8px; padding: 0 20px; background: var(--paper-2); display: flex; align-items: center; justify-content: space-between; font-size: 16px; line-height: 40px; color: var(--mute); }
+.brief .wbar { grid-column: 1 / -1; height: 40px; margin: -44px -52px 8px; padding: 0 20px; background: var(--ink); display: flex; align-items: center; justify-content: space-between; font-size: 16px; line-height: 40px; color: var(--white); }
 .brief .wbar i { font-style: normal; font-size: 22px; }
 /* 37장 문서는 브리프의 블록 */
 .doc .h { background: var(--paper-3); }
@@ -835,7 +842,8 @@ svg.nn circle { fill: var(--white); stroke: var(--ink); stroke-width: 2.5; }
 
 .tokx .tx2 span { font-size: var(--t-body); line-height: var(--l-body); font-weight: 700; }
 #s2 .main { position: relative; justify-content: center; }
-#s2trio { position: absolute; left: 0; right: 0; top: calc(50% + 110px); margin-top: 0; }
+#s2 .main { padding-bottom: 140px; }
+#s2trio { position: absolute; left: 0; right: 0; top: calc(50% + 40px); margin-top: 0; }
 #s10 .main.cols, #s10b .main.cols { flex: none; height: 580px; }
 #s10 .nnbox, #s10b .nnbox { height: 580px; }
 
@@ -868,15 +876,15 @@ svg.nn.morph circle { transition: cx 480ms var(--ease-smooth), cy 480ms var(--ea
 svg.nn.morph path { fill: none; stroke: var(--n5); stroke-width: 1.5; transition: d 480ms var(--ease-smooth), opacity 320ms var(--ease-smooth); }
 .ghost { z-index: 5; }
 .s.active { opacity: 1; visibility: visible; transition: none; z-index: 2; }
-.s.leaving { opacity: 0; visibility: visible; z-index: 3; transition: opacity 300ms var(--ease-smooth), visibility 0s linear 300ms; pointer-events: none; }
+.s.leaving { opacity: 0; visibility: visible; z-index: 3; filter: blur(3px); transition: opacity 460ms var(--ease-smooth), filter 460ms var(--ease-smooth), visibility 0s linear 460ms; pointer-events: none; }
 .s:not(.active):not(.leaving) { transition: none; }
 
 /* 61차 */
 #s7k .u .tt, #s7k .a .tt { position: absolute; top: 50%; transform: translateY(-50%); margin: 0; }
 #s7k .u .tt { right: calc(100% + 14px); }
 #s7k .a .tt { left: calc(100% + 14px); }
-.axis .pt, .axis .rl, .axis .dt, .axis .unk { transition: left 520ms var(--ease-smooth); }
-.axis .unk { transition: left 520ms var(--ease-smooth), opacity var(--t-in) var(--ease-out); }
+.axis .pt, .axis .rl, .axis .dt, .axis .unk { transition: left var(--t-in-lg) var(--ease-smooth); }
+.axis .unk { transition: left var(--t-in-lg) var(--ease-smooth), opacity var(--t-in) var(--ease-out); }
 .k .tt.cw { background: transparent; box-shadow: inset 0 0 0 2px var(--k-sub); color: var(--k-ink); margin-left: 6px; }
 .bill .bx.swap, .bill .bp.swap { display: grid; }
 .bill .bx.swap > *, .bill .bp.swap > * { grid-area: 1 / 1; text-align: right; }
@@ -886,6 +894,7 @@ svg.nn.morph path { fill: none; stroke: var(--n5); stroke-width: 1.5; transition
 /* 38장 · 인터페이스 정리 다시. 막대 한 줄 아래 설정과 프로젝트의 실물 조각 넷과 채팅창. 조각은 제품 상자를 그대로 잘라 온 것이라 안쪽 수치는 제품 값이다 */
 .recap { gap: var(--gap-xs); }
 .recap .cw .bar i { width: var(--w); min-width: 28px; }
+.recap .cw .bar i[data-step]:not(.on) { width: 0; min-width: 0; }
 .st.crop, .pj.crop { display: block; flex: none; padding: 16px; transition: opacity var(--t-state) var(--ease-std), box-shadow var(--t-state) var(--ease-std); }
 .st.crop .sec, .st.crop .blk { margin-top: 0; }
 .recap .k { overflow: visible; }
@@ -926,7 +935,7 @@ svg.nn.morph path { fill: none; stroke: var(--n5); stroke-width: 1.5; transition
 .plug .pcards.row .crow { flex: 1; }
 .plug .fcard.sk { width: auto; align-self: stretch; }
 .plug .fcard.sk .fn { padding: var(--gap-2xs) var(--gap-sm); }
-.plug .fcard.sk .fn > span { margin-left: auto; font-weight: 500; color: var(--mute); font-size: var(--t-cap); line-height: var(--l-cap); }
+.plug .fcard.sk .fn > span { margin-left: auto; font-weight: 500; color: rgba(255,255,255,.65); font-size: var(--t-cap); line-height: var(--l-cap); }
 .plug .fcard.sk .fi:last-child { margin-bottom: var(--gap-xs); }
 .plug .crow { display: flex; align-items: center; gap: var(--gap-xs); background: var(--white); border-radius: var(--r-card); box-shadow: var(--shadow); padding: var(--gap-2xs) var(--gap-sm); font-size: var(--t-body); line-height: var(--l-body); }
 .plug .crow .ic { width: 40px; height: 40px; border-radius: 10px; background: var(--paper-2); border: 0; color: var(--ink); }
@@ -965,7 +974,8 @@ svg.nn.morph path { fill: none; stroke: var(--n5); stroke-width: 1.5; transition
 .skl .folder { align-self: start; width: 640px; }
 /* 스킬 카드. 폴더 이름이 머리띠, 파일은 폴더 아이콘 아래로 내려온 안내선에 매달려 폴더 안에 있음을 보인다 (34 · 35장) */
 .folder.fcard { gap: 0; background: var(--white); border-radius: var(--r-card); box-shadow: var(--shadow); overflow: hidden; }
-.folder.fcard .fn { margin: 0; padding: var(--gap-xs) var(--gap-sm); background: var(--paper-3); }
+.folder.fcard .fn { margin: 0; padding: var(--gap-xs) var(--gap-sm); background: var(--ink); color: var(--white); }
+.folder.fcard .fn svg { color: var(--white); }
 .folder.fcard .fi { margin: 0 var(--gap-sm) 0 40px; padding: var(--gap-2xs) 0 var(--gap-2xs) var(--gap-sm); border-left: 2px solid var(--paper-3); font-size: var(--t-cap); line-height: var(--l-cap); }
 .folder.fcard .fi:nth-of-type(2) { margin-top: var(--gap-xs); }
 .folder.fcard .fi:last-child { margin-bottom: var(--gap-sm); }
@@ -979,19 +989,23 @@ svg.nn.morph path { fill: none; stroke: var(--n5); stroke-width: 1.5; transition
 #s8bill .lrow, #s9bill .lrow { grid-template-columns: 1fr 120px 120px 150px; }
 #s8bill .lsum, #s9bill .lsum { grid-template-columns: 1fr 120px 120px 150px; }
 #s32bt { overflow: hidden; }
+.skl { position: relative; }
+.skl .skwhy { position: absolute; left: 720px; right: 0; top: 50%; transform: translateY(-50%); margin: 0; }
 .skl { justify-content: center; }
 
-/* 41장 Appendix. 목차 흐름대로 세 묶음(모델 · 인터페이스 · 기능). 용어는 작은 흰 단추, 올리면 글자만 남색 */
+/* 43장 Appendix. 목차 흐름대로 세 묶음(모델 · 인터페이스 · 확장). 카드 없이 글줄만, 올리면 글자만 남색 */
 .gloss { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap-lg); align-content: start; }
-.gloss .gcol { display: flex; flex-direction: column; align-items: flex-start; gap: var(--gap-2xs); }
+.gloss .gcol { display: flex; flex-direction: column; align-items: flex-start; gap: var(--gap-xs); }
 .gloss .gcol .h2 { margin-bottom: var(--gap-xs); }
 .gloss .gap { height: var(--gap-sm); }
-.gloss .gt { display: inline-flex; align-items: center; gap: var(--gap-2xs); padding: 6px 16px 6px 20px; background: var(--white); border-radius: 12px; box-shadow: var(--shadow); color: var(--ink); text-decoration: none; font-size: var(--t-cap); line-height: var(--l-cap); font-weight: 700; transition: color var(--t-state) var(--ease-std); }
-.gloss .gt svg { width: 18px; height: 18px; color: var(--mute); transition: color var(--t-state) var(--ease-std); }
+.gloss .gt { display: inline-flex; align-items: center; gap: var(--gap-2xs); color: var(--ink); text-decoration: none; font-size: var(--t-body); line-height: var(--l-body); font-weight: 600; transition: color var(--t-state) var(--ease-std); }
+.gloss .gt svg { width: 20px; height: 20px; color: var(--g3); transition: color var(--t-state) var(--ease-std); }
 .gloss .gt:hover, .gloss .gt:hover svg { color: var(--acc); }
 
 /* 33장 프로젝트 공유. 프로젝트 화면 한 열짜리. 이름 옆에 팀원 아바타 */
-.pj.one { grid-template-columns: 1fr; align-self: stretch; width: 100%; flex: none; }
+.pj.one { grid-template-columns: 1fr; align-self: stretch; width: 100%; flex: 1; }
+#s28c { align-items: stretch; }
+#s28c .col.wide { min-height: 0; }
 .pj.one .pn { display: flex; align-items: center; gap: var(--gap-xs); }
 .pj .pn .avs { display: inline-flex; }
 .pj .pn .avs i { width: 34px; height: 34px; border-radius: 50%; background: #3A3936; border: 2px solid var(--k-bg); color: var(--k-ink); font-style: normal; font-size: 15px; line-height: 30px; text-align: center; margin-left: -8px; font-weight: 600; }

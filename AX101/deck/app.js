@@ -94,7 +94,7 @@ function show(n) {
     slides.forEach(function (s) { if (s !== prev) s.classList.remove('leaving'); });
     prev.classList.add('leaving'); clearTimeout(prev._lv);
     morphAcross(prev, slides[n]);
-    prev._lv = setTimeout(function () { prev.classList.remove('leaving'); var ph = HOOK[prev.id]; if (ph && ph.reset) ph.reset(); apply(prev, 0); $$('.ghost', prev).forEach(function (e) { e.remove(); }); }, 320);
+    prev._lv = setTimeout(function () { prev.classList.remove('leaving'); var ph = HOOK[prev.id]; if (ph && ph.reset) ph.reset(); apply(prev, 0); $$('.ghost', prev).forEach(function (e) { e.remove(); }); }, 480);
   }
   raf2(function () { slides[n].classList.remove('still'); });
   location.hash = String(n + 1);
@@ -150,7 +150,10 @@ HOOK.s2 = { step: function (k) { $('s2q').classList.toggle('is-dim', k >= 2); } 
     var x1 = m.offsetLeft + m.offsetWidth, y1 = m.offsetTop + m.offsetHeight / 2;
     var p = pos(a), x2 = p.x + 14, y2 = p.y + 17;
     link.setAttribute('viewBox', '0 0 ' + cards.offsetWidth + ' ' + cards.offsetHeight);
-    link.innerHTML = '<circle cx="' + x1 + '" cy="' + y1 + '" r="10"/><line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '"/>';
+    var cx = (x2 - x1) * .55;
+    link.innerHTML = '<circle cx="' + x1 + '" cy="' + y1 + '" r="10"/><path d="M' + x1 + ',' + y1 + ' C' + (x1 + cx) + ',' + y1 + ' ' + (x2 - cx) + ',' + y2 + ' ' + x2 + ',' + y2 + '"/><circle class="end" cx="' + x2 + '" cy="' + y2 + '" r="10"/>';
+    var pth = link.querySelector('path'), len = pth.getTotalLength(); pth.style.setProperty('--len', len);
+    raf2(function () { pth.classList.add('go'); link.querySelector('circle.end').classList.add('go'); });
   }
   cards.querySelector('.card.model').addEventListener('transitionend', function (e) { if (e.propertyName === 'left' && cards.classList.contains('nest')) draw(); });
   HOOK.s3 = { step: function (k) { cards.classList.toggle('nest', k >= 3); if (k < 3) link.innerHTML = ''; } };
@@ -210,22 +213,24 @@ HOOK.s8 = { step: function (k) {
 } };
 HOOK.s9 = { step: function (k) {
   $('s9k').classList.toggle('now', k >= 1); $('s9bill').classList.toggle('now', k >= 1);
-  var sum = $('s9sum'); if (k <= 2) sum.textContent = '800원'; if (k === 3) countUp(sum, 710, 400); if (k === 4) countUp(sum, 760, 400);
-  $('s9r1').classList.toggle('hot', k === 3); $('s9r2').classList.toggle('hot', k === 4); $('s9r3').classList.toggle('hot', k === 4);
+  $('s9k').classList.toggle('now2', k >= 5); $('s9bill').classList.toggle('now2', k >= 6);
+  var sum = $('s9sum'); if (k <= 2) sum.textContent = '800원'; if (k === 3) countUp(sum, 710, 400); if (k === 4) countUp(sum, 760, 400); if (k === 6) countUp(sum, 780, 400);
+  $('s9r1').classList.toggle('hot', k === 3); $('s9r2').classList.toggle('hot', k === 4 || k === 6);
+  $('s9r3').classList.toggle('hot', k === 4 || k === 6); $('s9r4').classList.toggle('hot', k === 6); $('s9r5').classList.toggle('hot', k === 6);
 } };
 
 /* S10 · 라인업. 등급이 오를수록 노드가 많아진다 */
 (function () {
   var M = [
-    { n: 'Haiku <b>4.5</b>', t: '가장 빠른 모델', d: ['가장 저렴하고 빠른 모델이며 일상적인 Q&A나 검색은 Haiku로도 충분', '지금은 잘 쓰이지 않고 버전 업데이트도 1년 가까이 정체'], c: [3, 4, 3], g: 96, r: 14 },
-    { n: 'Sonnet <b>5</b>', t: '속도와 지능의 균형', d: ['기본 모델', '속도와 성능의 균형이 가장 잘 잡힌 모델'], c: [4, 6, 6, 4], g: 72, r: 12 },
-    { n: 'Opus <b>5</b>', t: '복잡한 작업과 업무용', d: ['조금 더 복잡한 문제를 해결하기 위한 모델', '비싼 요금제를 쓰는 사람들은 거의 기본 모델처럼 사용'], c: [5, 8, 9, 8, 5], g: 56, r: 10 },
-    { n: 'Fable <b>5</b>', t: '가장 높은 등급', d: ['Mythos 모델을 일반 사용자가 쓸 수 있도록 안전장치를 씌운 모델', '현존하는 모든 AI 모델 중 가장 성능이 좋다고 알려짐'], c: [6, 10, 12, 12, 10, 6], g: 44, r: 8 }
+    { n: 'Haiku', t: '가장 빠른 모델', d: ['가장 저렴하고 빠른 모델이며 일상적인 Q&A나 검색은 Haiku로도 충분', '지금은 잘 쓰이지 않고 버전 업데이트도 1년 가까이 정체'], c: [3, 4, 3], g: 96, r: 14 },
+    { n: 'Sonnet', t: '속도와 지능의 균형', d: ['기본 모델', '속도와 성능의 균형이 가장 잘 잡힌 모델'], c: [4, 6, 6, 4], g: 72, r: 12 },
+    { n: 'Opus', t: '복잡한 작업과 업무용', d: ['조금 더 복잡한 문제를 해결하기 위한 모델', '비싼 요금제를 쓰는 사람들은 거의 기본 모델처럼 사용'], c: [5, 8, 9, 8, 5], g: 56, r: 10 },
+    { n: 'Fable', t: '가장 높은 등급', d: ['Mythos 모델을 일반 사용자가 쓸 수 있도록 안전장치를 씌운 모델', '현존하는 모든 AI 모델 중 가장 성능이 좋다고 알려짐'], c: [6, 10, 12, 12, 10, 6], g: 44, r: 8 }
   ];
-  var sel = 1, box = $('s10nn');
+  var sel = 0, box = $('s10nn');
   nn($('s10nn0'), M[1].c, { w: 600, h: 600, gapY: M[1].g, r: M[1].r });
   nn($('s10ann'), M[2].c, { w: 600, h: 600, gapY: M[2].g, r: M[2].r });
-  nnMorph(box, M[1].c, { gapY: M[1].g, r: M[1].r });
+  nnMorph(box, M[0].c, { gapY: M[0].g, r: M[0].r });
   var lastSel = -2;
   function render() {
     $$('#s10pick button').forEach(function (b, i) { b.classList.toggle('sel', i === sel); });
@@ -235,7 +240,7 @@ HOOK.s9 = { step: function (k) {
     swapText($('s10pd'), function () { $('s10pd').innerHTML = '<div class="pn">' + m.n + '</div><div class="pt">' + m.t + '</div><ul class="bullets">' + m.d.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ul>'; });
   }
   $$('#s10pick button').forEach(function (b) { b.addEventListener('click', function (e) { e.stopPropagation(); sel = +b.dataset.i; render(); b.blur(); }); });
-  HOOK.s10b = { reset: function () { sel = 1; lastSel = -2; render(); }, step: function (k) { sel = k >= 1 ? Math.min(3, k - 1) : 1; render(); } };
+  HOOK.s10b = { reset: function () { sel = 0; lastSel = -2; render(); }, step: function (k) { sel = Math.min(3, k); render(); } };
 })();
 
 /* S12 · 메뉴 항목 짚기. 1단계 모델 줄, 2단계 Effort 줄 */
@@ -396,25 +401,25 @@ var h0 = parseInt((location.hash || '#1').slice(1), 10); show(isNaN(h0) ? 0 : h0
 /* S29 · 레이어 정리. 18장의 막대를 네 줄로. 메시지마다 앞의 것이 전부 다시 들어가고 프롬프트와 답이 붙는다 */
 (function () {
   var L = window.CW_LAYERS, MAX = 16000;
-  var auto = [0, 1, 2, 3, 4, 5].map(function (i) { return L[i]; }).concat([{ n: '프로젝트 지식', t: 1500, c: 'var(--c4)' }]);
-  var P = { n: '프롬프트', t: 60, c: 'var(--c5)' }, A = { n: '답변', t: 400, c: 'var(--g4)', hatch: true };
+  var auto = [0, 1, 2, 3, 4, 5].map(function (i) { return L[i]; });
+  var P = { n: '프롬프트', t: 60, c: 'var(--c5)' }, K = { n: '프로젝트 지식에서 찾은 부분', t: 700, c: 'var(--c4)', hatch: true }, A = { n: '답변', t: 400, c: 'var(--g4)', hatch: true };
   function seg(it) { return '<i class="on' + (it.hatch ? ' hatch' : '') + '" style="background:' + it.c + ';--w:' + (it.t / MAX * 100) + '%"></i>'; }
   $$('#s29lb .bar').forEach(function (b) {
     var m = +b.dataset.msg, list = auto.slice();
-    for (var i = 1; i <= m; i++) { list.push(P); if (i < m) list.push(A); }
+    for (var i = 1; i <= m; i++) { list.push(P); list.push(K); if (i < m) list.push(A); }
     b.innerHTML = list.map(seg).join('');
   });
-  var lg = auto.concat([P, A]);
+  var lg = auto.concat([P, K, A]);
   $('s29lg').innerHTML = lg.map(function (it) { return '<span><i' + (it.hatch ? ' class="hatch"' : '') + ' style="background:' + it.c + '"></i>' + it.n + '</span>'; }).join('');
 })();
 
 /* S39 · 인터페이스 정리. 19장의 막대에 프로젝트 지식 칸을 더한 아홉 칸. Space 1 모델 메뉴(막대 밖), 2~5 색 칸과 같은 색 테두리의 조각이 짝으로, 6 검정 칸과 프롬프트 */
 (function () {
   var L = window.CW_LAYERS, MAX = 24000;
-  var list = [L[0], L[1], L[2], L[3], L[4], L[5], { n: '프로젝트 지식', t: 1500, c: 'var(--c4)' }, L[6], L[7]];
-  $('s39bar').innerHTML = list.map(function (it) { return '<i class="on" style="background:' + it.c + ';--w:' + (it.t / MAX * 100) + '%"></i>'; }).join('');
-  $('s39lg').innerHTML = list.map(function (it) { return '<span class="on"><i style="background:' + it.c + '"></i>' + it.n + '</span>'; }).join('');
-  var HOT = { 2: 1, 3: 4, 4: 5, 5: 6, 6: 7, 7: 3 }, RING = { s39m: 2, s39g: 3, s39pi: 4, s39pk: 5 };
+  var list = [{ n: '설정 파일', t: L[0].t, c: L[0].c }, L[1], L[2], L[3], L[4], L[5], { n: '프로젝트 지식', t: 1500, c: 'var(--c4)' }, L[6], L[7], { n: '스킬 본문', t: 2000, c: 'var(--g3)', hatch: true, step: 7 }];
+  $('s39bar').innerHTML = list.map(function (it) { return '<i class="on' + (it.hatch ? ' hatch' : '') + '"' + (it.step ? ' data-step="' + it.step + '"' : '') + ' style="background:' + it.c + ';--w:' + (it.t / MAX * 100) + '%"></i>'; }).join('');
+  $('s39lg').innerHTML = list.map(function (it) { return '<span class="on"' + (it.step ? ' data-step="' + it.step + '"' : '') + '><i' + (it.hatch ? ' class="hatch"' : '') + ' style="background:' + it.c + '"></i>' + it.n + '</span>'; }).join('');
+  var HOT = { 2: 1, 3: 4, 4: 5, 5: 6, 6: 7, 7: 9 }, RING = { s39m: 2, s39g: 3, s39pi: 4, s39pk: 5 };
   HOOK.s39 = { step: function (k) {
     var hot = k in HOT ? HOT[k] : -1;
     $('s39bar').classList.toggle('focus', k >= 1); $('s39cw').classList.toggle('dimlg', k >= 1);
