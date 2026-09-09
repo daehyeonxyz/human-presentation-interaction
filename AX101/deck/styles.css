@@ -1029,3 +1029,5 @@ svg.nn.morph path { fill: none; stroke: var(--n5); stroke-width: 1.5; transition
 .k.rd1 .tt.p1, .k.rd2 .tt.p2 { background: var(--n5); color: var(--ink); }
 .bill .lrow.rd .bar i, .bill.now .lrow.rd .bar i.p1, .bill.now2 .lrow.rd .bar i.p2 { background: var(--n5); }
 .bill .lrow.rd.hot > :not(.bar) { color: var(--n3); }
+/* 표지 제목이 한 줄에 들어가도록 */
+#s1 .title { font-size: 184px; line-height: 200px; }
