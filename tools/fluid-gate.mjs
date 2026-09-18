@@ -5,13 +5,20 @@
      node tools/fluid-gate.mjs <경로>     지정한 덱 하나
 
    검사는 다섯 가지다.
-   1. 스테이지 폭이 규격(하한 1920, 상한 2560, 세로 1080 기준 배율)대로 계산된다.
+   1. 스테이지 설계 크기가 규격대로 계산된다.
    2. 렌더된 스테이지가 뷰포트 안에 맞고 가운데에 있고 배율이 규격과 일치한다.
    3. 전체 쪽의 정지 상태에서 왼쪽 여백 80 과 오른쪽 여백 80 이 유지된다.
-   4. 정지 상태와 End 완료 상태 양쪽에서 스테이지 네 변 밖으로 넘치는 요소가 없다.
+   4. 정지 상태와 완료 상태 양쪽에서 스테이지 네 변 밖으로 넘치는 요소가 없다.
    5. 2560 폭에서 pointer 요소 전수가 호버 반응을 낸다.
 
-   덱의 공용 API 전제: .slide 쪽 목록, window.go(0 기반), window.still(), End 키 완료 상태.
+   덱은 두 세대가 있고 게이트가 열 때 판별한다.
+     세대 2 (현행. templates/stage.html 과 design-system.md)
+       쪽은 .s, window.STAGE.version >= 2, window.go 는 1 기반, 완료는 window.finish(),
+       설계 크기는 1920x1080 고정이다.
+     세대 1 (구판. tokens-v1.css 로 만든 덱)
+       쪽은 .slide, window.go 는 0 기반, 완료는 End 키,
+       설계 폭은 clamp(1920, vw/s, 2560) 가변이다.
+   두 세대 공통 전제는 window.still() 과 id="stage" 다.
    캡처는 qa/matrix/<덱 이름>-<폭>-pNN.png 다.
 */
 
@@ -73,9 +80,9 @@ async function playwright() {
   throw new Error('playwright 를 못 찾았다. npm i playwright 로 설치하거나 PLAYWRIGHT_DIR 로 위치를 지정한다');
 }
 
-/* 뷰포트와 기대 스테이지 설계 크기. 배율 s = min(vw/1920, vh/1080) 이고
-   설계 폭 = clamp(1920, vw/s, 2560), 설계 높이 = clamp(1080, vh/s, 1600) 다.
-   상한 안에서는 어느 화면비에서도 레터박스가 없다 */
+/* 뷰포트와 기대 스테이지 설계 크기. 배율은 두 세대 모두 s = min(vw/1920, vh/1080) 이다.
+   아래 expect 는 세대 1 의 가변 설계 크기이고, 세대 2 는 언제나 1920x1080 이라
+   이 표를 쓰지 않는다 (아래 expectW · expectH 에서 갈린다) */
 const VIEWPORTS = [
   { w: 1280, h: 960,  expectW: 1920, expectH: 1440 },
   { w: 1440, h: 900,  expectW: 1920, expectH: 1200 },
@@ -97,6 +104,50 @@ const browser = await pw.chromium.launch(process.env.CHROMIUM_PATH ? { executabl
 const DECKS = decks();
 check('덱 발견', DECKS.length > 0, `${DECKS.length}개`);
 
+/* 값 사본 계약. 덱의 :root 는 루트 tokens.css 사본에 그 프로젝트의 강조색을 이어 붙인 것이다.
+   구판 덱(window.STAGE 가 없는 덱)은 그 폴더의 tokens-v1.css 와 짝이라 이 검사에서 뺀다.
+   그쪽은 프로젝트별 qa/gates.mjs 가 같은 검사를 한다 */
+/* @media 블록 안의 :root 는 조건부 값이라 사본 대조에서 뺀다.
+   prefers-reduced-motion 블록이 같은 토큰을 0 으로 다시 선언하기 때문이다 */
+function stripAtMedia(css) {
+  let out = '', i = 0;
+  for (;;) {
+    const at = css.indexOf('@media', i);
+    if (at < 0) { out += css.slice(i); return out; }
+    out += css.slice(i, at);
+    let j = css.indexOf('{', at);
+    if (j < 0) return out;
+    let depth = 1; j++;
+    while (j < css.length && depth > 0) { if (css[j] === '{') depth++; else if (css[j] === '}') depth--; j++; }
+    i = j;
+  }
+}
+function decls(css, firstOnly) {
+  const body = stripAtMedia(css.replace(/\/\*[\s\S]*?\*\//g, ''));
+  const map = new Map();
+  for (const root of body.matchAll(/:root\s*\{([\s\S]*?)\n\}/g)) {
+    for (const m of root[1].matchAll(/(--[a-z0-9-]+)\s*:\s*([^;]+);/gi)) map.set(m[1], m[2].trim().replace(/\s+/g, ' '));
+    if (firstOnly) break;
+  }
+  return map;
+}
+for (const DECK of DECKS) {
+  const html = fs.readFileSync(DECK, 'utf8');
+  const name = path.basename(DECK, '.html');
+  if (!/window\.STAGE\s*=/.test(html)) continue;
+  const proj = path.dirname(path.dirname(DECK));
+  /* 루트 tokens.css 의 첫 :root 가 체계 본체다. 뒤따르는 제품 재현 팔레트는 쓰는 덱만 싣는다 */
+  const want = decls(fs.readFileSync(path.join(ROOT, 'tokens.css'), 'utf8'), true);
+  const projTokens = path.join(proj, 'tokens.css');
+  if (fs.existsSync(projTokens)) for (const [k, v] of decls(fs.readFileSync(projTokens, 'utf8'))) want.set(k, v);
+  const got = decls(html);
+  const missing = [...want.keys()].filter((k) => !got.has(k));
+  const differ = [...want.keys()].filter((k) => got.has(k) && got.get(k) !== want.get(k));
+  check(`${name} 값 사본 · 빠진 선언`, missing.length === 0, missing.join(', '));
+  check(`${name} 값 사본 · 값이 다른 선언`, differ.length === 0,
+    differ.map((k) => `${k} (${want.get(k)} / ${got.get(k)})`).join(', '));
+}
+
 for (const DECK of DECKS) {
   /* 다른 프로젝트에 같은 파일명이 있어도 캡처가 덮이지 않게 프로젝트 이름을 앞에 붙인다 */
   const deckName = path.basename(path.dirname(path.dirname(DECK))) + '-' + path.basename(DECK, '.html');
@@ -107,11 +158,31 @@ for (const DECK of DECKS) {
     const page = await browser.newPage({ viewport: { width: vp.w, height: vp.h } });
     await page.goto(url, { waitUntil: 'load' });
     await page.evaluate('window.still && window.still()');
-    const pageCount = await page.evaluate('document.querySelectorAll(".slide").length');
-    const tag = `${deckName} ${vp.w}x${vp.h}`;
+    /* 세대 어댑터. 아래 검사는 전부 __g 를 거쳐 쪽을 찾고 넘긴다 */
+    await page.evaluate(`(() => {
+      const v2 = !!(window.STAGE && window.STAGE.version >= 2);
+      const SEL = v2 ? '.s' : '.slide';
+      window.__g = {
+        era: v2 ? 2 : 1,
+        sel: SEL,
+        all: () => [].slice.call(document.querySelectorAll(SEL)),
+        active: () => document.querySelector(SEL + '.active'),
+        count: () => document.querySelectorAll(SEL).length,
+        go: (i0) => window.go(v2 ? i0 + 1 : i0),
+        finish: () => { if (window.finish) window.finish(); }
+      };
+    })()`);
+    const era = await page.evaluate('__g.era');
+    const pageCount = await page.evaluate('__g.count()');
+    const tag = `${deckName} ${vp.w}x${vp.h} (세대 ${era})`;
     check(`${tag} 쪽 수 감지`, pageCount > 0, `${pageCount}쪽`);
     const api = await page.evaluate('[typeof window.go, typeof window.still]');
     check(`${tag} 공용 API (go·still)`, api[0] === 'function' && api[1] === 'function', api.join('·'));
+    if (era === 2) check(`${tag} 공용 API (finish)`, await page.evaluate('typeof window.finish') === 'function');
+    /* 완료 상태를 부르는 법이 세대마다 다르다. 세대 1 은 End 키, 세대 2 는 함수다 */
+    const finish = async () => (era === 2 ? page.evaluate('__g.finish()') : page.keyboard.press('End'));
+    const expectW = era === 2 ? 1920 : vp.expectW;
+    const expectH = era === 2 ? 1080 : vp.expectH;
 
     const fitm = await page.evaluate(`(() => {
       const stage = document.getElementById('stage');
@@ -119,9 +190,10 @@ for (const DECK of DECKS) {
       return { offW: stage.offsetWidth, offH: stage.offsetHeight, w: sr.width, h: sr.height,
                left: sr.left, top: sr.top, vw: innerWidth, vh: innerHeight };
     })()`);
-    check(`${tag} 스테이지 폭 ${vp.expectW}`, Math.abs(fitm.offW - vp.expectW) <= 2, `실측 ${fitm.offW}`);
-    /* 높이는 1080 고정(레터박스 허용)과 가변(뷰포트 채움) 둘 다 계약 안이다. 범위만 지킨다 */
-    check(`${tag} 스테이지 높이 범위`, fitm.offH >= 1080 - 2 && fitm.offH <= 1600 + 2, `실측 ${fitm.offH}`);
+    check(`${tag} 스테이지 폭 ${expectW}`, Math.abs(fitm.offW - expectW) <= 2, `실측 ${fitm.offW}`);
+    /* 세대 2 는 1080 고정이다. 세대 1 은 1080 고정(레터박스 허용)과 가변(뷰포트 채움) 둘 다 계약 안이라 범위만 지킨다 */
+    if (era === 2) check(`${tag} 스테이지 높이 ${expectH}`, Math.abs(fitm.offH - expectH) <= 2, `실측 ${fitm.offH}`);
+    else check(`${tag} 스테이지 높이 범위`, fitm.offH >= 1080 - 2 && fitm.offH <= 1600 + 2, `실측 ${fitm.offH}`);
     const sExpect = Math.min(fitm.vw / 1920, fitm.vh / 1080);
     check(`${tag} 렌더 배율`, Math.abs(fitm.w / fitm.offW - sExpect) <= 0.01, `실측 ${(fitm.w / fitm.offW).toFixed(3)} / 기대 ${sExpect.toFixed(3)}`);
     check(`${tag} 배율 균일`, Math.abs(fitm.w / fitm.offW - fitm.h / fitm.offH) <= 0.01, `가로 ${(fitm.w / fitm.offW).toFixed(3)} / 세로 ${(fitm.h / fitm.offH).toFixed(3)}`);
@@ -133,11 +205,11 @@ for (const DECK of DECKS) {
       const stage = document.getElementById('stage');
       const sr = stage.getBoundingClientRect();
       const s = sr.width / stage.offsetWidth;
-      const all = [].slice.call(document.querySelectorAll('.slide'));
-      const sec = document.querySelector('.slide.active');
+      const all = __g.all();
+      const sec = __g.active();
       const activeIdx = all.indexOf(sec);
       const kicker = sec ? sec.querySelector('[class*="kick"]') : null;
-      const pageno = sec ? sec.querySelector('[class*="pageno"], [class*="pgno"]') : null;
+      const pageno = sec ? sec.querySelector('[class*="pageno"], [class*="pgno"], .foot') : null;
       let bad = '', margin = '';
       let maxB = 0;
       /* 여백 전수는 slide 의 자손만 잰다. slide 자신과 전역 레이어 컨테이너는 전면 요소라
@@ -145,9 +217,10 @@ for (const DECK of DECKS) {
       const marginSet = new Set(sec ? sec.querySelectorAll('*') : []);
       const scanSet = [];
       if (sec) { scanSet.push(sec); scanSet.push.apply(scanSet, sec.querySelectorAll('*')); }
-      /* 슬라이드 밖의 스테이지 전역 요소(팝업, 덮개)도 넘침 검사에 넣는다 */
+      /* 쪽 밖의 스테이지 전역 요소(팝업, 덮개)도 넘침 검사에 넣는다 */
+      const pages = all;
       for (const child of stage.children) {
-        if (!child.classList.contains('slide')) { scanSet.push(child); scanSet.push.apply(scanSet, child.querySelectorAll('*')); }
+        if (pages.indexOf(child) < 0) { scanSet.push(child); scanSet.push.apply(scanSet, child.querySelectorAll('*')); }
       }
       for (const el of scanSet) {
         const st = getComputedStyle(el);
@@ -195,7 +268,7 @@ for (const DECK of DECKS) {
 
     let marginChecked = 0;
     for (let p = 1; p <= pageCount; p++) {
-      await page.evaluate(`go(${p - 1})`);
+      await page.evaluate(`__g.go(${p - 1})`);
       await page.waitForTimeout(350);
       const m = await page.evaluate(probe);
       if (p > 1 && (m.kickerLeft !== null || m.pagenoRight !== null)) marginChecked++;
@@ -209,12 +282,20 @@ for (const DECK of DECKS) {
       /* 아래 여백선 닿음은 내용물 픽셀 실측이 아니라 CSS 구조로 강제된다.
          본문 쪽의 레이아웃 루트(data-frame)가 여백 상자와 일치하는지 구조만 검사한다.
          프레임 안의 세로 밀도는 수치가 아니라 렌더 비교 판정의 몫이다 */
-      if (p > 1 && m.fill) {
+      if (p > 1 && era === 2) {
+        /* 세대 2 의 프레임은 쪽 자신의 padding 이다. 값이 --pad 하나인지만 본다 */
+        const pad = await page.evaluate(`(() => {
+          const c = getComputedStyle(__g.active());
+          return [c.paddingLeft, c.paddingTop, c.paddingRight, c.paddingBottom];
+        })()`);
+        check(`${tag} p${p} 네 변 여백 80`, pad.every((v) => v === '80px'), pad.join(' '));
+      }
+      if (p > 1 && m.fill && era === 1) {
         const fr = await page.evaluate(`(() => {
           const stage = document.getElementById('stage');
           const sr = stage.getBoundingClientRect();
           const s = sr.width / stage.offsetWidth;
-          const f = document.querySelector('.slide.active [data-frame]');
+          const f = __g.active().querySelector('[data-frame]');
           if (!f) return null;
           const r = f.getBoundingClientRect();
           return { L: (r.left - sr.left) / s, T: (r.top - sr.top) / s,
@@ -227,11 +308,11 @@ for (const DECK of DECKS) {
           fr ? `실측 L${Math.round(fr.L)} T${Math.round(fr.T)} R${Math.round(fr.R)} B${Math.round(fr.B)}` : 'data-frame 없음');
       }
       /* 완료 상태에서도 넘치지 않아야 한다. overflow-containment 는 정지 상태만 재고 통과시키지 않는다 */
-      await page.keyboard.press('End');
+      await finish();
       await page.waitForTimeout(350);
       const me = await page.evaluate(probe);
-      check(`${tag} p${p} End 넘침 없음`, !me.bad, me.bad);
-      if (p > 1) check(`${tag} p${p} End 좌우 여백 전수`, !me.margin, me.margin);
+      check(`${tag} p${p} 완료 넘침 없음`, !me.bad, me.bad);
+      if (p > 1) check(`${tag} p${p} 완료 좌우 여백 전수`, !me.margin, me.margin);
 
     }
     /* 여백 검사가 한 쪽도 안 걸렸으면 통과가 아니라 검사 무효다 */
@@ -241,26 +322,40 @@ for (const DECK of DECKS) {
     if (vp.w === 1920) {
       /* prefers-reduced-motion 에서 전환 시간 토큰이 0 이 된다 */
       await page.emulateMedia({ reducedMotion: 'reduce' });
-      const durs = await page.evaluate(`['--dur-fast','--dur-base','--dur-step','--dur-page','--dur-enter']
+      const MOTION = era === 2
+        ? ['--t-in', '--t-in-lg', '--t-out', '--t-state', '--t-fill']
+        : ['--dur-fast', '--dur-base', '--dur-step', '--dur-page', '--dur-enter'];
+      const durs = await page.evaluate(`${JSON.stringify(MOTION)}
         .map((k) => getComputedStyle(document.documentElement).getPropertyValue(k).trim()).filter((v) => v !== '')`);
       check(`${tag} reduced-motion 시간 0`, durs.length > 0 && durs.every((v) => v === '0ms' || v === '0s'), durs.join(' '));
       await page.emulateMedia({ reducedMotion: null });
+      /* 세대 2 의 넘김 계약. 빈 곳을 누르면 Space 와 같이 한 단계 나아간다 */
+      if (era === 2) {
+        await page.evaluate('__g.go(0)');
+        await page.waitForTimeout(350);
+        const b0 = await page.evaluate('window.state ? window.state() : null');
+        await page.mouse.click(vp.w - 40, vp.h - 40);
+        await page.waitForTimeout(400);
+        const a0 = await page.evaluate('window.state ? window.state() : null');
+        check(`${tag} 화면 클릭 넘김`, !!b0 && !!a0 && (a0.page > b0.page || a0.step > b0.step),
+          b0 && a0 ? `${b0.page}.${b0.step} -> ${a0.page}.${a0.step}` : 'window.state 없음');
+      }
       /* 서명은 class 만이 아니라 inline style 도 담는다. 핸들 위치는 left 로만 움직인다 */
-      const sig = `(() => { const sec = document.querySelector('.slide.active');
+      const sig = `(() => { const sec = __g.active();
         return [].map.call(sec.querySelectorAll('*'), (e) => e.className + '~' + (e.getAttribute('style') || '')).join(';'); })()`;
       const spaceRestart = await page.evaluate('!!window.SPACE_RESTART');
       for (let p = 2; p <= pageCount; p++) {
-        await page.evaluate(`go(${p - 1})`);
+        await page.evaluate(`__g.go(${p - 1})`);
         await page.waitForTimeout(450);
         const rest = await page.evaluate(sig);
-        /* static-fallback 멱등: End 를 두 번 불러도 같은 화면이다 */
-        await page.keyboard.press('End');
+        /* static-fallback 멱등: 완료를 두 번 불러도 같은 화면이다 */
+        await finish();
         await page.waitForTimeout(400);
         const end1 = await page.evaluate(sig);
-        await page.keyboard.press('End');
+        await finish();
         await page.waitForTimeout(400);
         const end2 = await page.evaluate(sig);
-        check(`${tag} p${p} End 멱등`, end1 === end2);
+        check(`${tag} p${p} 완료 멱등`, end1 === end2);
         /* Space 재시작: 완료된 쪽에서 Space 는 처음 상태로 되돌린다 */
         if (spaceRestart) {
           await page.keyboard.press(' ');
@@ -270,16 +365,14 @@ for (const DECK of DECKS) {
         }
         /* keyboard-recovery: 조작 직후 방향키가 즉시 쪽을 넘긴다 */
         const hasClick = await page.evaluate(`(() => {
-          const el = document.querySelector('.slide.active [data-click]');
+          const el = __g.active().querySelector('[data-click], button, [data-i]');
           if (!el) return false;
           el.focus(); el.click(); return true; })()`);
         if (hasClick && p < pageCount) {
           await page.waitForTimeout(150);
           await page.keyboard.press('ArrowRight');
           await page.waitForTimeout(450);
-          const idx = await page.evaluate(`(() => {
-            const all = [].slice.call(document.querySelectorAll('.slide'));
-            return all.indexOf(document.querySelector('.slide.active')); })()`);
+          const idx = await page.evaluate('__g.all().indexOf(__g.active())');
           check(`${tag} p${p} 조작 후 키보드 복구`, idx === p, `이동 결과 색인 ${idx}`);
         }
       }
@@ -287,26 +380,26 @@ for (const DECK of DECKS) {
 
     /* stage-reset 계약. End 로 완료시킨 쪽을 떠났다 돌아오면 처음 상태여야 한다 */
     if (pageCount >= 3) {
-      const sig = `(() => { const sec = document.querySelector('.slide.active');
+      const sig = `(() => { const sec = __g.active();
         return [].map.call(sec.querySelectorAll('*'), (e) => e.className).join(';'); })()`;
-      await page.evaluate('go(1)');
+      await page.evaluate('__g.go(1)');
       await page.waitForTimeout(500);
       const restSig = await page.evaluate(sig);
-      await page.keyboard.press('End');
+      await finish();
       await page.waitForTimeout(350);
-      await page.evaluate('go(2)');
+      await page.evaluate('__g.go(2)');
       await page.waitForTimeout(600);
-      await page.evaluate('go(1)');
+      await page.evaluate('__g.go(1)');
       await page.waitForTimeout(600);
       const backSig = await page.evaluate(sig);
-      check(`${tag} stage-reset 계약 (p2)`, restSig === backSig, restSig === backSig ? '' : 'End 잔상이 남았다');
+      check(`${tag} stage-reset 계약 (p2)`, restSig === backSig, restSig === backSig ? '' : '완료 잔상이 남았다');
     }
 
     if (vp.hover) {
       const mark = () => page.evaluate(() => {
         const list = [];
         document.querySelectorAll('[data-hx]').forEach((el) => { delete el.dataset.hx; });
-        document.querySelectorAll('.slide.active *').forEach((el) => {
+        window.__g.active().querySelectorAll('*').forEach((el) => {
           if (getComputedStyle(el).cursor !== 'pointer') return;
           const p = el.parentElement;
           if (p && getComputedStyle(p).cursor === 'pointer') return;
@@ -334,7 +427,7 @@ for (const DECK of DECKS) {
       const hoverDead = [];
       let clickCount = 0;
       for (let p = 1; p <= pageCount; p++) {
-        await page.evaluate(`go(${p - 1})`);
+        await page.evaluate(`__g.go(${p - 1})`);
         await page.waitForTimeout(300);
         const names = await mark();
         clickCount += names.length;
@@ -354,7 +447,7 @@ for (const DECK of DECKS) {
 
     for (const p of vp.shots || []) {
       if (p > pageCount) continue;
-      await page.evaluate(`go(${p - 1})`);
+      await page.evaluate(`__g.go(${p - 1})`);
       await page.waitForTimeout(500);
       await page.screenshot({ path: path.join(OUT, `${deckName}-${vp.w}-p${String(p).padStart(2, '0')}.png`) });
     }

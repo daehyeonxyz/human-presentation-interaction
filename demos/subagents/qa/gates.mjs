@@ -3,7 +3,7 @@
 
      node qa/gates.mjs
 
-   1. 토큰 일치      tokens.css 의 선언이 HTML 의 :root 에 같은 값으로 들어 있다
+   1. 토큰 일치      tokens-v1.css 의 선언이 HTML 의 :root 에 같은 값으로 들어 있다
    2. 가변 폭 스테이지 폭이 1920~2560 규격대로 계산되고 뷰포트에 맞고 가운데에 선다
    3. 여백과 넘침    전 쪽에서 왼쪽 여백 80 과 오른쪽 여백 80 이 유지되고
                     스테이지 네 변 밖으로 넘치는 요소가 없다. 정지 상태와 End 상태를 다 잰다
@@ -21,7 +21,7 @@ import { playwright, PAGES } from './_pw.mjs';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..');
 const DECK = path.join(ROOT, 'deliverables', '서브에이전트와-병렬-작업.html');
-const TOKENS = path.join(ROOT, 'tokens.css');
+const TOKENS = path.join(ROOT, 'tokens-v1.css');   /* 이 덱은 구판 값으로 만들었다. 현행 체계는 레포 루트 tokens.css 다 */
 
 const results = [];
 function check(name, ok, detail) {
@@ -45,12 +45,12 @@ function decls(css) {
   const b = decls(fs.readFileSync(DECK, 'utf8'));
   const missing = [...a.keys()].filter((k) => !b.has(k));
   const differ = [...a.keys()].filter((k) => b.has(k) && b.get(k) !== a.get(k));
-  check('토큰 일치 · tokens.css 선언 수', a.size > 60, `${a.size}개`);
+  check('토큰 일치 · tokens-v1.css 선언 수', a.size > 60, `${a.size}개`);
   check('토큰 일치 · HTML 에 빠진 선언', missing.length === 0, missing.join(', '));
   check('토큰 일치 · 값이 다른 선언', differ.length === 0,
     differ.map((k) => `${k} (${a.get(k)} / ${b.get(k)})`).join(', '));
   check('토큰 일치 · HTML 에만 있는 선언', b.size === a.size,
-    `tokens.css ${a.size} / HTML ${b.size}`);
+    `tokens-v1.css ${a.size} / HTML ${b.size}`);
 }
 
 /* ===== 브라우저 ===== */
