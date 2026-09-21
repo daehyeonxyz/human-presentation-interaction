@@ -1005,6 +1005,11 @@ svg.nn.morph path { fill: none; stroke: var(--n5); stroke-width: 1.5; transition
 .gloss .gt { display: inline-flex; align-items: center; gap: var(--gap-2xs); color: var(--ink); text-decoration: none; font-size: var(--t-body); line-height: var(--l-body); font-weight: 600; transition: color var(--t-state) var(--ease-std); }
 .gloss .gt svg { width: 20px; height: 20px; color: var(--g3); transition: color var(--t-state) var(--ease-std); }
 .gloss .gt:hover, .gloss .gt:hover svg { color: var(--acc); }
+/* 용어 정리 아래 문서 바로가기 둘. 알약 부품을 링크로 쓴다 */
+.gloss .gdocs { grid-column: 1 / -1; display: flex; gap: var(--gap-sm); margin-top: var(--gap); }
+.gloss .gdocs .pill { text-decoration: none; gap: var(--gap-2xs); }
+.gloss .gdocs .pill svg { width: 20px; height: 20px; color: var(--g3); transition: color var(--t-state) var(--ease-std); }
+.gloss .gdocs .pill:hover svg { color: var(--acc); }
 
 /* 33장 프로젝트 공유. 프로젝트 화면 한 열짜리. 이름 옆에 팀원 아바타 */
 .pj.one { grid-template-columns: 1fr; align-self: stretch; width: 100%; flex: 1; }
@@ -1368,10 +1373,10 @@ svg.nn.morph path { fill: none; stroke: var(--n5); stroke-width: 1.5; transition
   <div class="main">
     <div class="k fill" id="s20k" data-morph="chat">
       <div class="k-msgs">
-        <div class="u" data-step="1">앤트로픽에 대해 조사해줘</div>
+        <div class="u" data-step="1">앤트로픽에 대해 조사해 줘</div>
         <div class="a" data-step="2"><span class="tx">앤트로픽(Anthropic)은 2021년에 설립된 AI 안전 연구 기업으로, Claude 모델을 개발합니다.</span><span class="tx">다만 어떤 목적의 조사인지에 따라 정리 방향이 달라집니다. 투자 검토용인지, 경쟁사 분석용인지, 기술 비교용인지와 원하시는 분량과 형식을 알려 주시면 그에 맞춰 조사하겠습니다.</span></div>
       </div>
-      <div class="k-in"><div class="ph" id="s20ph">앤트로픽에 대해 조사해줘</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
+      <div class="k-in"><div class="ph" id="s20ph">앤트로픽에 대해 조사해 줘</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div>
     </div>
   </div>
 </section>
@@ -1602,7 +1607,7 @@ svg.nn.morph path { fill: none; stroke: var(--n5); stroke-width: 1.5; transition
     <ul class="bullets lg skwhy" id="s32bw" data-stagger="80">
       <li data-step="5">매번 긴 프롬프트를 반복해서 입력하는 <b>번거로움이 사라짐</b></li>
       <li data-step="5">AI에게 <b>전문성과 일관된 업무 방식</b>을 영구적으로 부여</li>
-      <li data-step="5">특정 작업 방식의 <b>표준</b>이 정해져 퀄리티 컨트롤이 쉬워짐</li>
+      <li data-step="5">특정 작업 방식의 <b>표준</b>이 정해져 품질 관리가 쉬워짐</li>
     </ul>
   </div>
 </section>
@@ -1639,7 +1644,7 @@ svg.nn.morph path { fill: none; stroke: var(--n5); stroke-width: 1.5; transition
       </div>
       <div class="col">
         <div class="h2">스킬을 사용할 때</div>
-        <ul class="bullets"><li data-step="1">빠뜨리지 않을 수 있음</li><li data-step="2">품질을 일관되게 유지할 수 있음</li><li data-step="3">재현성이 생기고 공유에 용이해짐</li></ul>
+        <ul class="bullets"><li data-step="1">빠뜨리지 않을 수 있음</li><li data-step="2">품질을 일관되게 유지할 수 있음</li><li data-step="3">재현성이 생기고 공유가 쉬워짐</li></ul>
       </div>
     </div>
     <div class="docs">
@@ -1858,6 +1863,10 @@ svg.nn.morph path { fill: none; stroke: var(--n5); stroke-width: 1.5; transition
         <a class="gt" href="https://code.claude.com/docs/en/mcp" target="_blank" rel="noopener">커넥터<svg><use href="#i-ext"/></svg></a>
         <a class="gt" href="https://platform.claude.com/docs/en/build-with-claude/skills-guide" target="_blank" rel="noopener">스킬<svg><use href="#i-ext"/></svg></a>
         <a class="gt" href="https://code.claude.com/docs/en/plugins" target="_blank" rel="noopener">플러그인<svg><use href="#i-ext"/></svg></a>
+      </div>
+      <div class="gdocs">
+        <a class="pill" href="https://code.claude.com/docs" target="_blank" rel="noopener">Claude Code Docs<svg><use href="#i-ext"/></svg></a>
+        <a class="pill" href="https://platform.claude.com/docs" target="_blank" rel="noopener">Claude Platform Docs<svg><use href="#i-ext"/></svg></a>
       </div>
     </div>
   </div>
@@ -2204,7 +2213,7 @@ HOOK.s14 = { step: function (k) {
 })();
 
 /* S18 · 가이드 표를 회색으로 눌러 버린다 */
-HOOK.s20 = { step: function (k) { var ph = $('s20ph'); var typed = k < 1; ph.style.color = typed ? 'var(--k-ink)' : ''; if ((ph.textContent === '앤트로픽에 대해 조사해줘') !== typed) swapText(ph, function () { ph.textContent = typed ? '앤트로픽에 대해 조사해줘' : 'Claude에게 메시지 보내기'; }); } };
+HOOK.s20 = { step: function (k) { var ph = $('s20ph'); var typed = k < 1; ph.style.color = typed ? 'var(--k-ink)' : ''; if ((ph.textContent === '앤트로픽에 대해 조사해 줘') !== typed) swapText(ph, function () { ph.textContent = typed ? '앤트로픽에 대해 조사해 줘' : 'Claude에게 메시지 보내기'; }); } };
 HOOK.s18 = { step: function (k) { $('s18g').classList.toggle('dim', k >= 1); } };
 
 /* S22 · 문단에서 나타나는 순서대로 번호를 붙인다. 홀수 단계에 밑줄, 다음 짝수 단계에 번호 설명 */
