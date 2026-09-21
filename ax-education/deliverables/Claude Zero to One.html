@@ -1339,7 +1339,7 @@ svg.nn.morph path { fill: none; stroke: var(--n5); stroke-width: 1.5; transition
 </section>
 <!-- S18 프롬프트 · 한 장 전체가 가이드 -->
 <section class="s" id="s18" data-steps="1" data-sec="Interface">
-  <div class="head"><div class="h"><span class="no">3.</span> 프롬프트 <i class="sw c5"></i></div><div class="lead">보낼 때마다 직접 쓰는 입력</div></div>
+  <div class="head"><div class="h"><span class="no">3.</span> 프롬프트 <i class="sw c5"></i></div><div class="lead">인공지능에게 특정한 작업을 수행하도록 요청하는 지시문</div></div>
   <div class="main guidebox">
     <div class="guide" id="s18g">
       <div class="gt"><span>프롬프트 엔지니어링 가이드</span><span>항목</span><span>무엇을 적는가</span><span>이렇게</span></div>
@@ -1389,7 +1389,7 @@ svg.nn.morph path { fill: none; stroke: var(--n5); stroke-width: 1.5; transition
   </div>
 </section>
 <!-- S22 프롬프트에서 입력 인터페이스로 · 말풍선을 다섯 가지 색으로 가른다 -->
-<section class="s" id="s22" data-steps="5" data-sec="Interface">
+<section class="s" id="s22" data-steps="10" data-sec="Interface">
   <div class="head"><div class="h">프롬프트에서 인터페이스로</div><div class="lead">업무가 달라져도 변하지 않는 부분</div></div>
   <div class="main">
     <div class="k" id="s22k" data-morph="chat"><div class="k-msgs"><div class="u" id="s22p"><span class="g c2">우리 회사는 삼성벤처투자야. 우리 회사는 이런이런 업무를 하고, 나는 어떤 일을 하는 누구고,</span> <span class="g c1">너는 무슨 업무를 맡은 어떤 직책을 가지고 있고,</span> <span class="g c3">지금은 무슨 프로젝트를 하고 있고, 이 프로젝트의 맥락은 이런 거고,</span> <span class="g c5">당장 지금 해야 할 일은 앤트로픽에 대한 조사인데, 이런 부분을 이 수준까지 조사한 뒤에 워드 형태로 정리해 줘.</span> <span class="g c1">출력할 때는 보고서 형식의 문어체를 항상 쓰고,</span> <span class="g c4">우리는 이런 식으로 워드 보고서를 작성하니까 참고하고,</span> <span class="g c1">결론을 먼저 말하고 핵심 위주로 논리를 전개해 줘.</span></div></div><div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div></div></div>
@@ -1403,8 +1403,8 @@ svg.nn.morph path { fill: none; stroke: var(--n5); stroke-width: 1.5; transition
   </div>
 </section>
 <!-- S23 지침 -->
-<section class="s" id="s23" data-steps="3" data-sec="Interface">
-  <div class="head"><div class="h"><span class="no">4.</span> 지침 <i class="sw c1"></i><i class="sw c3"></i></div><div class="lead">Claude가 모든 대화의 응답에서 우선해서 고려해야 할 지침</div></div>
+<section class="s" id="s23" data-steps="2" data-sec="Interface">
+  <div class="head"><div class="h"><span class="no">4.</span> 지침 <i class="sw c1"></i></div><div class="lead">Claude가 모든 대화의 응답에서 우선해서 고려해야 할 지침</div></div>
   <div class="main cols side" style="--side:600px">
     <div class="st" id="s23st">
       <div class="nav"><div class="search">검색</div>
@@ -1429,9 +1429,8 @@ svg.nn.morph path { fill: none; stroke: var(--n5); stroke-width: 1.5; transition
     <div class="col wide mid">
       <div class="items" id="s23items" data-stagger="40">
         <div class="it" data-step="1"><div class="t"><span class="no c1">1.</span>Claude 지침</div><div class="d">설정 &gt; 일반, <b>내 모든 대화</b>에 적용</div></div>
-        <div class="it" data-step="2"><div class="t"><span class="no c3">2.</span>프로젝트 지침</div><div class="d">프로젝트 &gt; 지침, <b>프로젝트 내부 대화</b>에만 적용</div></div>
       </div>
-      <div class="col" data-step="3"><div class="h2">Claude 지침에 보통 넣는 것</div><ul class="bullets"><li>AI의 역할과 말투와 응답 톤과 출력 형식</li><li>처음부터 다 넣을 필요 없이 차츰차츰 내게 맞는 지침을 찾아 나가기</li></ul><div class="note">조직 지침은 관리자가 정하고 개인 지침보다 우선</div></div>
+      <div class="col" data-step="2"><div class="h2">Claude 지침에 보통 넣는 것</div><ul class="bullets"><li>AI의 역할과 말투와 응답 톤과 출력 형식</li><li>처음부터 다 넣을 필요 없이 차츰차츰 내게 맞는 지침을 찾아 나가기</li></ul><div class="note">Claude Code에서의 지침이 바로 CLAUDE.md</div></div>
     </div>
   </div>
 </section>
@@ -2233,18 +2232,19 @@ HOOK.s14 = { step: function (k) {
 HOOK.s20 = { step: function (k) { var ph = $('s20ph'); var typed = k < 1; ph.style.color = typed ? 'var(--k-ink)' : ''; if ((ph.textContent === '앤트로픽에 대해 조사해줘') !== typed) swapText(ph, function () { ph.textContent = typed ? '앤트로픽에 대해 조사해줘' : 'Claude에게 메시지 보내기'; }); } };
 HOOK.s18 = { step: function (k) { $('s18g').classList.toggle('dim', k >= 1); } };
 
-/* S22 · 문단에서 나타나는 순서대로 번호를 붙인다 */
+/* S22 · 문단에서 나타나는 순서대로 번호를 붙인다. 홀수 단계에 밑줄, 다음 짝수 단계에 번호 설명 */
 HOOK.s22 = { step: function (k) {
-  $('s22k').classList.toggle('only5', k >= 5);
+  var u = Math.ceil(k / 2), l = Math.floor(k / 2);
+  $('s22k').classList.toggle('only5', u >= 5);
   for (var i = 1; i <= 5; i++) {
     var gs = $$('#s22p .g.c' + i);
-    gs.forEach(function (g, j) { g.style.transitionDelay = (i === k ? j * 40 : 0) + 'ms'; g.classList.toggle('on', i <= k); });
-    $$('#s22 .labels .lb.c' + i).forEach(function (l) { l.style.transitionDelay = (i === k ? gs.length * 40 + 60 : 0) + 'ms'; l.classList.toggle('on', i <= k); });
+    gs.forEach(function (g, j) { g.style.transitionDelay = (i === u && k % 2 === 1 ? j * 40 : 0) + 'ms'; g.classList.toggle('on', i <= u); });
+    $$('#s22 .labels .lb.c' + i).forEach(function (lb) { lb.style.transitionDelay = '0ms'; lb.classList.toggle('on', i <= l); });
   }
 } };
 
 /* S23 · S24 · 설정 화면에서 짚기 */
-HOOK.s23 = { step: function (k) { $('s23st').classList.toggle('focus', k >= 1 && k < 3); } };
+HOOK.s23 = { step: function (k) { $('s23st').classList.toggle('focus', k >= 1 && k < 2); } };
 HOOK.s24 = { step: function (k) {
   $('s24st').classList.toggle('focus', k >= 1); $('s24row').classList.toggle('hot', k === 0); $('s24sw').classList.toggle('hot', k === 1); $('s24sw2').classList.toggle('hot', k === 1); $('s24new').classList.toggle('hot', k === 2);
   $$('#s24sw .tg, #s24sw2 .tg').forEach(function (t) { t.classList.toggle('off', k < 1); });
