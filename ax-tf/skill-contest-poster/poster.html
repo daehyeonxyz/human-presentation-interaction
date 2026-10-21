@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>출장 보고서 SKILL 공모전</title>
+<link rel="stylesheet" href="fonts/hahmlet-var/wght.css">
+<style>
+@font-face{font-family:Pretendard;font-weight:500;src:url(fonts/Pretendard-Medium.woff2) format('woff2')}
+@font-face{font-family:Pretendard;font-weight:600;src:url(fonts/Pretendard-SemiBold.woff2) format('woff2')}
+@font-face{font-family:Pretendard;font-weight:700;src:url(fonts/Pretendard-Bold.woff2) format('woff2')}
+@font-face{font-family:Pretendard;font-weight:800;src:url(fonts/Pretendard-ExtraBold.woff2) format('woff2')}
+
+/* 토큰은 AX 101 (Claude Zero to One) 덱의 :root 에서 그대로 가져왔다.
+   1920×1080 장표 세 장을 세로로 이은 포스터. 장마다 머리 → 본문 한 덩이 */
+:root {
+  --paper: #F1F1F7; --paper-2: #E4E5EE; --paper-3: #D6D8E4;
+  --ink: #121212; --mute: #565B6E;
+  --acc: #1428A0; --acc-soft: #E8EAF6; --white: #FFFFFF;
+  --n1: #1428A0; --n2: #3341AD; --n3: #5563BC; --n4: #7A86CC; --n5: #A0A9DB; --n6: #C4CAE9;
+  --shadow: 0 1px 2px rgba(18,18,18,.04);
+  --r-card: 16px; --r-ctl: 12px;
+  --pad: 80px; --gap-3xs: 4px; --gap-2xs: 8px; --gap-xs: 12px; --gap-sm: 24px; --gap: 40px; --gap-lg: 64px; --gap-xl: 96px;
+  --t-cap: 26px; --l-cap: 36px;
+  --t-body: 32px; --l-body: 48px;
+  --t-h2: 40px; --l-h2: 56px;
+  --t-h: 64px; --l-h: 76px;
+  --t-decl: 96px; --l-decl: 112px;
+  /* Claude 다크 재현 */
+  --k-bg: #262624; --k-el: #30302C; --k-bd: #3D3C38; --k-ink: #ECEAE3; --k-sub: #9C988E; --k-user: #3A3936; --k-send: #C96442; --k-blue: #2F7CF6;
+  --font: Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #CFD1DB; font-family: var(--font); color: var(--ink); -webkit-font-smoothing: antialiased; font-weight: 500;
+  font-size: var(--t-body); line-height: var(--l-body); word-break: keep-all; }
+b { font-weight: 800; }
+svg { display: block; }
+#poster { width: 1920px; margin: 0 auto; background: var(--paper); }
+.s { min-height: 1080px; padding: var(--pad); display: flex; flex-direction: column; gap: var(--gap-lg); position: relative; }
+.head { display: flex; flex-direction: column; gap: var(--gap-xs); flex: none; }
+.h { font-family: 'Hahmlet Variable', var(--font); font-size: var(--t-h); line-height: var(--l-h); font-weight: 800; letter-spacing: -.04em; }
+.h .no { color: var(--acc); }
+.decl { font-family: 'Hahmlet Variable', var(--font); font-size: 94px; line-height: var(--l-decl); font-weight: 800; letter-spacing: -.045em; white-space: nowrap; }
+.decl em { font-style: normal; color: var(--acc); }
+.h2 { font-size: var(--t-h2); line-height: var(--l-h2); font-weight: 800; letter-spacing: -.015em; }
+.lead { font-size: var(--t-body); line-height: var(--l-body); }
+.cap { font-size: var(--t-cap); line-height: var(--l-cap); }
+.mute { color: var(--mute); }
+.main { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-xl); }
+.col { display: flex; flex-direction: column; gap: var(--gap-sm); min-height: 0; }
+
+/* ---------- 1장. 공모 안내 ---------- */
+/* 히어로: 제목 아래 시상대 렌더 하나가 장 전체 폭을 쓴다.
+   시상대는 podium/scene.html 에서 three.js 로 렌더한 정지 이미지이고, 금액은 각 블록 윗면 뒤 모서리의 투영 좌표에 앉힌다 */
+.p1 { gap: var(--gap-lg); }
+.p1 .head { align-items: center; text-align: center; }
+.org { font-family: 'Hahmlet Variable', var(--font); font-size: var(--t-h2); line-height: var(--l-h2); font-weight: 600; letter-spacing: -.03em; }
+.hero-lead { font-family: 'Hahmlet Variable', var(--font); font-size: 52px; line-height: 72px; font-weight: 600; letter-spacing: -.035em; text-align: center; }
+.podium { position: relative; width: 1760px; height: 790px; overflow: hidden; }
+.podium img { position: absolute; left: 0; top: 80px; width: 1760px; height: 820px; -webkit-mask-image: linear-gradient(#000 78%, transparent 86%); mask-image: linear-gradient(#000 78%, transparent 86%); }
+.podium .amt { position: absolute; transform: translate(-50%, -100%); font-size: var(--t-decl); line-height: var(--l-decl); font-weight: 800;
+  letter-spacing: -.04em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.podium .amt small { font-size: var(--t-h); font-weight: 800; margin-left: 4px; letter-spacing: -.02em; }
+.podium .amt.g1 { font-size: 160px; line-height: 168px; color: var(--acc); }
+.podium .amt.g1 small { font-size: var(--t-decl); }
+
+/* 개요: 네 칸 한 줄과 평가 기준 네 칸 한 줄 */
+.p1b { min-height: 0; gap: var(--gap-lg); }
+.facts { display: grid; grid-template-columns: 120px 1fr; row-gap: var(--gap-sm); align-items: center; }
+.facts dt { font-weight: 800; }
+.facts dd { font-weight: 500; }
+.due { display: inline-block; background: var(--acc); color: var(--white); font-weight: 800; border-radius: var(--r-ctl); padding: 0 16px; }
+.info { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-sm); }
+.info > div, .crit > div { background: var(--white); border-radius: var(--r-card); box-shadow: var(--shadow); padding: var(--gap-sm) 28px; }
+.info > div { display: flex; align-items: center; gap: var(--gap); }
+.info .l { width: 72px; flex: none; font-weight: 800; }
+.info .v { font-weight: 500; }
+.info .v .due { padding: 0 14px; }
+.crit { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gap-sm); margin-top: var(--gap-sm); }
+.crit .t { font-size: var(--t-body); line-height: var(--l-body); font-weight: 800; }
+.crit .t span { color: var(--acc); margin-right: var(--gap-2xs); font-variant-numeric: tabular-nums; }
+.crit .d { font-size: var(--t-cap); line-height: var(--l-cap); color: var(--ink); margin-top: var(--gap-3xs); }
+.p2 .k { flex: none; height: 620px; }
+
+/* ---------- Claude 채팅창 재현 (AX 101 .k 를 포스터 배율로) ---------- */
+.k { background: var(--k-bg); border: 1px solid var(--k-bd); border-radius: 24px; color: var(--k-ink); display: flex; flex-direction: column;
+  font-size: 28px; line-height: 42px; flex: 1; min-height: 0; overflow: hidden; }
+.k-msgs { flex: 1; min-height: 0; padding: 36px 36px 24px; display: flex; flex-direction: column; gap: 24px; justify-content: flex-end; }
+.k .u { align-self: flex-end; max-width: 86%; background: var(--k-user); border-radius: 24px; padding: 18px 26px; }
+.k .a { align-self: flex-start; max-width: 92%; padding-left: 52px; position: relative; }
+.k .a::before { content: ''; position: absolute; left: 0; top: 6px; width: 32px; height: 32px; border-radius: 50%; background: var(--k-send); }
+.k .skc { color: var(--k-blue); font-weight: 600; }
+.k .trow { display: flex; align-items: center; gap: 10px; font-size: 24px; line-height: 32px; color: var(--k-sub); margin-bottom: 8px; }
+.k .trow b { color: var(--k-ink); font-weight: 600; }
+.k .trow svg { width: 18px; height: 18px; }
+.k .chip { display: inline-flex; align-items: center; gap: 10px; background: var(--k-el); border: 1px solid var(--k-bd); border-radius: 12px; padding: 6px 16px; font-size: 24px; line-height: 32px; margin-bottom: 12px; }
+.k .chip svg { width: 22px; height: 22px; color: var(--k-sub); }
+.k .file { margin-top: 14px; padding: 14px 20px; border-radius: 14px; background: var(--k-el); border: 1px solid var(--k-bd); display: flex; align-items: center; gap: 14px; }
+.k .file svg { width: 32px; height: 32px; color: var(--k-sub); flex: none; }
+.k .file b { display: block; font-size: 24px; line-height: 32px; font-weight: 600; }
+.k .file small { display: block; color: var(--k-sub); font-size: 20px; line-height: 28px; }
+.k .done { opacity: .5; }
+.k-in { margin: 0 28px 28px; background: var(--k-el); border: 1px solid var(--k-bd); border-radius: 22px; padding: 20px 22px 16px; flex: none; }
+.k-in .ph { color: var(--k-sub); }
+.k-in .typed { color: var(--k-ink); }
+.k-in .typed i { display: inline-block; width: 3px; height: 32px; background: var(--k-ink); vertical-align: -6px; margin-left: 4px; }
+.k-in .row { display: flex; align-items: center; gap: 14px; margin-top: 14px; color: var(--k-sub); font-size: 22px; line-height: 28px; }
+.k-in .plus { width: 38px; height: 38px; border-radius: 9px; border: 1px solid var(--k-bd); display: flex; align-items: center; justify-content: center; }
+.k-in .plus svg { width: 20px; height: 20px; }
+.k-in .model { margin-left: auto; display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--k-ink); }
+.k-in .model svg { width: 18px; height: 18px; }
+.k-in .send { width: 46px; height: 46px; border-radius: 50%; background: var(--k-send); color: var(--white); display: flex; align-items: center; justify-content: center; }
+.k-in .send svg { width: 22px; height: 22px; }
+/* 지금 입력할 곳. 덱의 .hot 처럼 링으로 가리킨다 */
+.k-in.hot { box-shadow: 0 0 0 4px var(--k-send); }
+.k .empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; color: var(--k-sub); }
+.k .empty .hi { font-size: 40px; line-height: 56px; color: var(--k-ink); font-weight: 600; }
+
+/* ---------- 2장. 스킬 만들기 ---------- */
+.way .h2 { display: flex; align-items: baseline; gap: var(--gap-xs); }
+.way .h2 span { font-size: var(--t-body); font-weight: 600; color: var(--mute); }
+
+/* ---------- 3장. 써 보기와 제출 ---------- */
+.p3 .main { grid-template-columns: 1fr 1fr; }
+.send-to .ask { padding-top: var(--gap-sm); }
+.fcard { background: var(--white); border-radius: var(--r-card); box-shadow: var(--shadow); overflow: hidden; }
+.fcard .fn { display: flex; align-items: center; gap: var(--gap-xs); padding: var(--gap-xs) var(--gap-sm); background: var(--ink); color: var(--white); font-weight: 800; }
+.fcard .fn svg { width: 32px; height: 32px; }
+.fcard .fi { display: grid; grid-template-columns: 24px 1fr auto; align-items: center; gap: var(--gap-xs); margin: 0 var(--gap-sm) 0 40px;
+  padding: var(--gap-2xs) 0 var(--gap-2xs) var(--gap-sm); border-left: 2px solid var(--paper-3); font-size: var(--t-cap); line-height: var(--l-cap); }
+.fcard .fi:nth-of-type(2) { margin-top: var(--gap-xs); }
+.fcard .fi:last-child { margin-bottom: var(--gap-sm); }
+.fcard .fi svg { width: 22px; height: 22px; }
+.fcard .fi code { font: inherit; font-weight: 700; }
+.send-to { background: var(--white); border-radius: var(--r-card); box-shadow: var(--shadow); padding: var(--gap) var(--gap); display: flex; flex-direction: column; gap: var(--gap-sm); }
+.send-to .facts { grid-template-columns: 96px 1fr; align-items: start; }
+.send-to .em { color: var(--mute); }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="i-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></symbol>
+</svg>
+
+<div id="poster">
+
+  <!-- 1장. 공모 안내 -->
+  <section class="s p1">
+    <div class="head">
+      <div class="org">삼성벤처투자 AI 공모전</div>
+      <div class="decl">출장 보고서를 만들어 주는 <em>SKILL</em>을 찾습니다</div>
+    </div>
+    <div class="podium">
+      <img src="podium.png" alt="">
+      <div class="amt g2" style="left:442px;top:342px">30<small>만원</small></div>
+      <div class="amt g1" style="left:880px;top:191px">50<small>만원</small></div>
+      <div class="amt g3" style="left:1313px;top:430px">10<small>만원</small></div>
+    </div>
+    <div class="lead hero-lead">평소 출장 보고서를 쓰던 방식을 Claude 스킬로 만들어 제출해 주세요.<br>수상작은 AX TF가 보완해 전사에 배포합니다.</div>
+  </section>
+
+  <section class="s p1b">
+    <div class="info">
+      <div><div class="l">대상</div><div class="v">서초사옥에 근무하는 임직원 누구나</div></div>
+      <div><div class="l">주제</div><div class="v">컨퍼런스·출장 보고서를 만들어 주는 SKILL</div></div>
+      <div><div class="l">기한</div><div class="v"><span class="due">2026년 10월 30일 (금)</span></div></div>
+      <div><div class="l">심사</div><div class="v">AX TF 심사 후 선정</div></div>
+    </div>
+    <div>
+      <div class="h2">평가 기준</div>
+      <div class="crit">
+        <div><div class="t"><span>1</span>시사점</div><div class="d">회사·그룹과의 연계성, 영향도, 글로벌 트렌드 등을 적절하게 도출하는가</div></div>
+        <div><div class="t"><span>2</span>가독성</div><div class="d">내용에 대한 Summary 등을 적절하게 제시하여 논리적으로 보기 편한가</div></div>
+        <div><div class="t"><span>3</span>정확성</div><div class="d">회의록과 자료의 내용을 빠짐없이 사실대로 반영하는가</div></div>
+        <div><div class="t"><span>4</span>범용성</div><div class="d">다른 출장과 행사 자료에도 같은 품질로 적용되는가</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2장. 스킬 만들기 -->
+  <section class="s p2">
+    <div class="head">
+      <div class="h"><span class="no">1.</span> 스킬 만들기</div>
+      <div class="lead">두 방법 중 편한 쪽을 골라 아래 문장을 Claude에게 그대로 보냅니다.</div>
+    </div>
+    <div class="main">
+      <div class="col way">
+        <div class="h2">보고서를 쓰던 채팅이 있다면</div>
+        <div class="k">
+          <div class="k-msgs">
+            <div class="u done"><span class="chip"><svg><use href="#i-file"/></svg>컨퍼런스_회의록.docx</span><br>회의록 정리해서 출장 보고서 만들어 줘</div>
+            <div class="a done">출장 보고서를 작성했습니다.
+              <div class="file"><svg><use href="#i-file"/></svg><div><b>컨퍼런스_출장보고서.docx</b></div></div>
+            </div>
+          </div>
+          <div class="k-in hot">
+            <div class="typed">지금까지 이 채팅에서 보고서를 작성한 방식을 앞으로도 쓸 수 있도록 스킬로 만들어 줘<i></i></div>
+            <div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div>
+          </div>
+        </div>
+      </div>
+      <div class="col way">
+        <div class="h2">새 채팅에 지난 보고서를 첨부한다면</div>
+        <div class="k">
+          <div class="empty"></div>
+          <div class="k-in hot">
+            <span class="chip"><svg><use href="#i-file"/></svg>지난_출장보고서.docx</span>
+            <div class="typed">출장 중 작성한 회의록이나 메모를 넣으면 첨부한 보고서와 같은 형식의 출장 보고서가 완성되도록 스킬로 만들어 줘<i></i></div>
+            <div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3장. 써 보기와 제출 -->
+  <section class="s p3">
+    <div class="main">
+      <div class="col">
+        <div class="head">
+          <div class="h"><span class="no">2.</span> 써 보기</div>
+          <div class="lead">실제 회의록을 넣어 보고 고칠 내용은 같은 채팅에서 요청합니다.</div>
+        </div>
+        <div class="k">
+          <div class="k-msgs">
+            <div class="u"><span class="chip"><svg><use href="#i-file"/></svg>10월_컨퍼런스_회의록.docx</span><br><span class="skc">/trip-report</span> 이 회의록으로 출장 보고서 만들어 줘</div>
+            <div class="a"><div class="trow"><b>trip-report</b> 스킬 사용<svg><use href="#i-chev"/></svg></div>출장 보고서를 작성했습니다.
+              <div class="file"><svg><use href="#i-file"/></svg><div><b>10월_컨퍼런스_출장보고서.docx</b></div></div>
+            </div>
+            <div class="u">요약을 맨 앞에 두도록 스킬을 고쳐 줘</div>
+            <div class="a">요약을 첫 장에 두도록 스킬을 수정했습니다.</div>
+          </div>
+          <div class="k-in">
+            <div class="ph">Claude에게 메시지 보내기</div>
+            <div class="row"><span class="plus"><svg><use href="#i-plus"/></svg></span><span class="model">Sonnet 5 <svg><use href="#i-chev"/></svg></span><span class="send"><svg><use href="#i-up"/></svg></span></div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="head">
+          <div class="h"><span class="no">3.</span> 제출하기</div>
+          <div class="lead">완성된 스킬을 압축 파일로 내려받아 이메일로 보냅니다.</div>
+        </div>
+        <div class="fcard">
+          <div class="fn"><svg><use href="#i-folder"/></svg>trip-report</div>
+          <div class="fi"><svg><use href="#i-file"/></svg><code>SKILL.md</code><span>지침</span></div>
+          <div class="fi"><svg><use href="#i-file"/></svg><code>references/report-format.md</code><span>양식</span></div>
+          <div class="fi"><svg><use href="#i-file"/></svg><code>references/example.md</code><span>예시</span></div>
+        </div>
+        <div class="send-to">
+          <dl class="facts">
+            <dt>제출</dt><dd>김대현 인턴</dd>
+            <dt>기한</dt><dd><span class="due">2026년 10월 30일 (금)</span></dd>
+            <dt>문의</dt><dd>양찬우, 방영오, 권용민, 홍의정, 신동헌</dd>
+          </dl>
+          <p class="ask">제출 방법에 질문이 있다면<br>김대현 인턴에게 메신저 부탁드립니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

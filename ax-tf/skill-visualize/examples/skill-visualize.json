@@ -1,0 +1,73 @@
+{
+  "name": "skill-visualize",
+  "title": "스킬 설명 시각화",
+  "when": [
+    "새 스킬을 사내에 공지하거나 배포할 때",
+    "교육 자료에 스킬 사용법을 넣을 때",
+    "SKILL.md나 스킬 zip을 받고 내용을 파악할 때"
+  ],
+  "does": [
+    {
+      "t": "본질 요약",
+      "d": "절차 전체를 읽고 기본 경로와 대안을 가려 정리"
+    },
+    {
+      "t": "채팅 예시",
+      "d": "실제로 쓰는 요청과 받는 결과를 채팅 화면으로"
+    },
+    {
+      "t": "설명서 한 장",
+      "d": "1920×1080 HTML, 메일·공지에 그대로 첨부"
+    }
+  ],
+  "files": [
+    {
+      "path": "SKILL.md",
+      "role": "작성 절차"
+    },
+    {
+      "path": "assets/template.html",
+      "role": "화면 양식"
+    },
+    {
+      "path": "references/content-guide.md",
+      "role": "칸별 기준"
+    },
+    {
+      "path": "scripts/build.py",
+      "role": "조립과 검사"
+    }
+  ],
+  "chat": [
+    {
+      "role": "user",
+      "attach": [
+        "svic-formal-format.zip"
+      ],
+      "text": "/skill-visualize 이 스킬 사람들한테 소개할 설명서 한 장 만들어 줘"
+    },
+    {
+      "role": "assistant",
+      "skill": "skill-visualize",
+      "text": "만들기 전에 이렇게 담으려고 하는데 괜찮을까요?",
+      "list": [
+        "제목은 '삼성 양식 보고서 작성'",
+        "예시는 보고서 요청 → 구성 확인 → Word 파일 받기",
+        "참고로 SKILL.md에 나오는 format-rules.md가 zip에 없어요"
+      ]
+    },
+    {
+      "role": "user",
+      "text": "좋아, 그렇게 만들어 줘"
+    },
+    {
+      "role": "assistant",
+      "text": "설명서 한 장 만들었어요. 브라우저에서 열어 보시면 돼요.",
+      "file": "svic-formal-format-설명서.html",
+      "preview": {
+        "image": "svic-formal-format.png"
+      }
+    }
+  ],
+  "does_lead": "스킬을 읽고 공지용 설명서 한 장을 만듭니다"
+}

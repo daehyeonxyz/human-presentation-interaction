@@ -1,0 +1,69 @@
+{
+  "name": "deal-sourcing",
+  "title": "딜소싱 초기 분석",
+  "when": [
+    "IR 덱·미팅노트로 초기 분석이 필요할 때",
+    "사업부에 회사를 소개할 자료가 필요할 때",
+    "소분과에 올릴 발표자료를 만들 때"
+  ],
+  "does": [
+    {
+      "t": "기술 실사 브리프 · HTML",
+      "d": "투자 검토용 초기 분석, 카드 11장 상세 페이지"
+    },
+    {
+      "t": "1페이저 · Word",
+      "d": "브리프를 압축한 유관부서 공유용 회사 소개"
+    },
+    {
+      "t": "소분과 덱 · PPT",
+      "d": "파트너십 소분과 등 내부 위원회 발표자료"
+    }
+  ],
+  "files": [
+    {
+      "path": "SKILL.md",
+      "role": "기능 안내"
+    },
+    {
+      "path": "references/",
+      "role": "절차 문서"
+    },
+    {
+      "path": "scripts/",
+      "role": "조립과 검증"
+    },
+    {
+      "path": "assets/",
+      "role": "템플릿"
+    }
+  ],
+  "chat": [
+    {
+      "role": "user",
+      "attach": [
+        "CoreAutomation_Deck.pdf"
+      ],
+      "text": "이 회사 초기 분석해 줘"
+    },
+    {
+      "role": "assistant",
+      "skill": "deal-sourcing",
+      "text": "기술 실사 브리프를 만들었어요. 확인 안 된 4건은 다음 미팅 질문으로 정리했어요.",
+      "preview": {
+        "image": "deal-sourcing-brief.png"
+      },
+      "file": "Core Automation_기술실사_20260826.html"
+    },
+    {
+      "role": "user",
+      "text": "이걸로 1페이저도 만들어 줘"
+    },
+    {
+      "role": "assistant",
+      "text": "브리프 내용으로 1페이저를 만들었어요.",
+      "file": "Core Automation_1Pager_20260826.docx"
+    }
+  ],
+  "does_lead": "회사 자료로 초기 분석을 하고 쓰임에 맞는 산출물을 만듭니다"
+}

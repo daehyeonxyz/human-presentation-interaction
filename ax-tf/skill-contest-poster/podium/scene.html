@@ -1,0 +1,90 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>html,body{margin:0;background:transparent}canvas{display:block}</style>
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
+</head><body>
+<script type="module">
+import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const W = 1760, H = 820;
+const font = new FontFace('PE', 'url(../fonts/Pretendard-ExtraBold.woff2)');
+await font.load(); document.fonts.add(font);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(2); renderer.setSize(W, H);
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.VSMShadowMap;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environmentIntensity = 0.6;
+
+const camera = new THREE.PerspectiveCamera(22, W / H, 0.1, 100);
+camera.position.set(0, 3.4, 9.6);
+camera.lookAt(0, 1.0, 0);
+camera.updateMatrixWorld();
+
+const key = new THREE.DirectionalLight(0xffffff, 1.35);
+key.position.set(-2.5, 8, 6);
+key.castShadow = true;
+key.shadow.mapSize.set(2048, 2048);
+key.shadow.camera.left = -6; key.shadow.camera.right = 6; key.shadow.camera.top = 6; key.shadow.camera.bottom = -6;
+key.shadow.radius = 10; key.shadow.blurSamples = 25; key.shadow.bias = -0.002; key.shadow.normalBias = 0.03;
+scene.add(key);
+const fill = new THREE.DirectionalLight(0xdfe3ff, 0.3); fill.position.set(4, 3, 6); scene.add(fill);
+const top = new THREE.DirectionalLight(0xffffff, 0.5); top.position.set(0, 10, 0.4); top.castShadow = false; top.shadow.mapSize.set(2048,2048);
+top.shadow.camera.left=-6; top.shadow.camera.right=6; top.shadow.camera.top=6; top.shadow.camera.bottom=-6; top.shadow.radius = 22; top.shadow.blurSamples = 25; scene.add(top);
+
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(40, 40), new THREE.ShadowMaterial({ opacity: 0.22, color: 0x101a55 }));
+ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
+{ const c = document.createElement('canvas'); c.width = 1024; c.height = 512; const g = c.getContext('2d');
+  g.filter = 'blur(40px)'; g.fillStyle = 'rgba(22,26,52,0.28)'; g.fillRect(160, 165, 704, 190); g.filter = 'blur(7px)'; g.fillStyle = 'rgba(22,26,52,0.55)'; g.fillRect(178, 176, 668, 160);
+  const t = new THREE.CanvasTexture(c);
+  const cs = new THREE.Mesh(new THREE.PlaneGeometry(9.2, 4.6), new THREE.MeshBasicMaterial({ map: t, transparent: true, depthWrite: false, toneMapped: false }));
+  cs.rotation.x = -Math.PI / 2; cs.position.y = 0.002; scene.add(cs); }
+
+const BLUE = new THREE.Color('#1428A0');
+function numeral(txt, color, size) {
+  const c = document.createElement('canvas'); c.width = 1024; c.height = 1024;
+  const g = c.getContext('2d');
+  g.fillStyle = color; g.textAlign = 'center'; g.textBaseline = 'alphabetic';
+  g.font = `800 ${size}px PE`;
+  const m = g.measureText(txt);
+  const asc = m.actualBoundingBoxAscent;
+  g.fillText(txt, 512, 512 + asc / 2);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8;
+  return t;
+}
+
+const D = 1.5, GAP = 0.06;
+const blocks = [
+  { rank: '2', w: 1.95, h: 1.45, x: -2.03, mat: { color: '#F4F5FA', roughness: 0.55, clearcoat: 0.25 }, num: '#1428A0' },
+  { rank: '1', w: 2.05, h: 2.2,  x: 0,     mat: { color: '#0E1D86', roughness: 0.42, clearcoat: 0.5, clearcoatRoughness: 0.3 }, num: '#FFFFFF' },
+  { rank: '3', w: 1.95, h: 1.0,  x: 2.03,  mat: { color: '#F4F5FA', roughness: 0.55, clearcoat: 0.25 }, num: '#1428A0' },
+];
+const tops = {};
+for (const b of blocks) {
+  const geo = new RoundedBoxGeometry(b.w, b.h, D, 10, 0.09);
+  const mesh = new THREE.Mesh(geo, new THREE.MeshPhysicalMaterial(b.mat));
+  mesh.position.set(b.x, b.h / 2, 0); mesh.castShadow = true; mesh.receiveShadow = true; scene.add(mesh);
+  const size = b.rank === '1' ? 1.15 : 0.9;
+  const plane = new THREE.Mesh(new THREE.PlaneGeometry(size, size),
+    new THREE.MeshBasicMaterial({ map: numeral(b.rank, b.num, 760), transparent: true, toneMapped: false }));
+  const ny = Math.min(b.h - size * 0.62, b.h * 0.62);
+  plane.position.set(b.x, ny, D / 2 + 0.002); scene.add(plane);
+  const v = new THREE.Vector3(b.x, b.h, 0).project(camera);
+  tops[b.rank] = { x: (v.x + 1) / 2 * W, y: (1 - v.y) / 2 * H };
+  const vf = new THREE.Vector3(b.x, b.h, D / 2).project(camera);
+  tops[b.rank].yFront = (1 - vf.y) / 2 * H;
+  const vb = new THREE.Vector3(b.x, b.h, -D / 2).project(camera);
+  tops[b.rank].yBack = (1 - vb.y) / 2 * H;
+}
+renderer.render(scene, camera);
+window.TOPS = tops; window.READY = true;
+</script>
+</body></html>

@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>스킬 설명서</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@500;600;800&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+/* 값은 AX 101 (Claude Zero to One) 덱의 토큰을 따른다. 1920×1080 한 장 */
+:root {
+  --paper: #F1F1F7; --paper-3: #D6D8E4;
+  --ink: #121212; --mute: #565B6E;
+  --acc: #1428A0; --acc-soft: #E8EAF6; --white: #FFFFFF;
+  --shadow: 0 1px 2px rgba(18,18,18,.04);
+  --r-card: 16px;
+  --k-bg: #262624; --k-el: #30302C; --k-bd: #3D3C38; --k-ink: #ECEAE3; --k-sub: #9C988E; --k-user: #3A3936; --k-send: #C96442; --k-blue: #2F7CF6;
+  --font: Pretendard, "Pretendard Variable", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --display: Hahmlet, "Hahmlet Variable", var(--font);
+  --doc: "BatangChe", "Batang", "바탕체", "Noto Serif KR", Hahmlet, serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #CFD1DB; font-family: var(--font); color: var(--ink); -webkit-font-smoothing: antialiased; word-break: keep-all; }
+svg { display: block; }
+#page { width: 1920px; height: 1080px; margin: 0 auto; background: var(--paper); padding: 64px 72px; display: grid; grid-template-columns: 1fr 1000px; gap: 40px; overflow: hidden; }
+
+/* 머리: 이름과 한 줄 요약, 오른쪽에 호출어 */
+/* 왼쪽 열: 스킬 이름과 호출어, 그 아래 상자 셋. 오른쪽 열은 채팅창이 위아래 끝까지 */
+.left { display: flex; flex-direction: column; gap: 24px; min-height: 0; }
+.top { flex: none; display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
+.top h1 { font-family: var(--display); font-size: 60px; line-height: 72px; font-weight: 800; letter-spacing: -.04em; white-space: nowrap; }
+.top code { font-family: var(--font); font-size: 28px; line-height: 38px; font-weight: 700; color: var(--white); background: var(--acc); border-radius: 12px; padding: 4px 18px; }
+
+
+/* Claude 채팅창 재현 */
+.k { background: var(--k-bg); border: 1px solid var(--k-bd); border-radius: 24px; color: var(--k-ink); display: flex; flex-direction: column;
+  font-size: 22px; line-height: 33px; min-height: 0; overflow: hidden; }
+.k-msgs { flex: 1; min-height: 0; padding: 24px 28px 16px; display: flex; flex-direction: column; gap: 16px; justify-content: flex-end; overflow: hidden; }
+.k .u { align-self: flex-end; max-width: 84%; background: var(--k-user); border-radius: 20px; padding: 12px 22px; }
+.k .a { align-self: flex-start; max-width: 94%; padding-left: 48px; position: relative; }
+.k .a .av { position: absolute; left: -4px; top: -1px; width: 38px; height: 38px; }
+.k .skc { color: var(--k-blue); font-weight: 600; }
+.k .trow { display: flex; align-items: center; gap: 8px; font-size: 20px; line-height: 28px; color: var(--k-sub); margin-bottom: 6px; }
+.k .trow b { color: var(--k-ink); font-weight: 600; }
+.k .trow svg { width: 16px; height: 16px; }
+.k .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.k .chip { display: inline-flex; align-items: center; gap: 8px; background: var(--k-el); border: 1px solid var(--k-bd); border-radius: 10px; padding: 4px 14px; font-size: 20px; line-height: 28px; }
+.k .chip svg { width: 18px; height: 18px; color: var(--k-sub); }
+.k ul { list-style: none; margin-top: 6px; display: flex; flex-direction: column; gap: 2px; }
+.k li { position: relative; padding-left: 22px; }
+.k li::before { content: ''; position: absolute; left: 4px; top: 13px; width: 7px; height: 7px; border-radius: 50%; background: var(--k-ink); }
+.k .file { margin-top: 10px; padding: 10px 18px; border-radius: 14px; background: var(--k-el); border: 1px solid var(--k-bd); display: inline-flex; align-items: center; gap: 12px; }
+.k .file svg { width: 28px; height: 28px; color: var(--k-sub); flex: none; }
+.k .file b { font-size: 22px; line-height: 30px; font-weight: 600; }
+/* 결과물 미리보기: 채팅 안에 놓인 종이 한 장 */
+.k .paper { margin-top: 10px; background: var(--white); color: var(--ink); border-radius: 12px; padding: 14px 22px; font-family: var(--doc); font-size: 18px; line-height: 28px; white-space: pre; overflow: hidden; }
+.k .paper .pt { text-align: center; font-weight: 700; text-decoration: underline; font-size: 21px; line-height: 32px; margin-bottom: 4px; }
+/* 채팅 답 안의 마크다운: Claude 앱 답변처럼 굵은 소제목과 점 목록 */
+.k .kmd h1, .k .kmd h2, .k .kmd h3 { font-size: 22px; line-height: 33px; font-weight: 700; margin-top: 10px; }
+.k .kmd h1:first-child, .k .kmd h2:first-child, .k .kmd h3:first-child { margin-top: 4px; }
+.k .kmd ul { margin-top: 2px; }
+.k .kmd p { margin: 2px 0; }
+.k .kmd b { font-weight: 700; }
+.k .kmd code { font-family: "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace; font-size: .86em; background: var(--k-el); border: 1px solid var(--k-bd); border-radius: 5px; padding: 0 5px; }
+/* md 결과는 노션·옵시디언처럼 렌더링한다: 페이지 제목, 속성 표, 제목, 목록, 인라인 코드 */
+.k .paper.md { font-family: var(--font); white-space: normal; padding: 24px 32px; font-size: 18px; line-height: 28px; color: #37352F; }
+.k .paper.md .pt { text-decoration: none; text-align: left; font-size: 28px; line-height: 36px; font-weight: 700; color: #37352F; margin-bottom: 12px; }
+.k .paper.md .props { display: grid; grid-template-columns: 120px 1fr; row-gap: 2px; padding-bottom: 12px; margin-bottom: 8px; border-bottom: 1px solid #EDEDEC; font-size: 16px; line-height: 26px; }
+.k .paper.md .props dt { color: #787774; display: flex; align-items: center; gap: 6px; }
+.k .paper.md .props dt::before { content: '≡'; color: #A5A29A; font-size: 14px; }
+.k .paper.md .props dd { color: #37352F; }
+.k .paper.md .props .tag { display: inline-block; background: #F1F1EF; border-radius: 4px; padding: 0 7px; font-size: 15px; line-height: 22px; }
+.k .paper.md h1, .k .paper.md h2, .k .paper.md h3 { color: #37352F; font-weight: 700; }
+.k .paper.md h1 { font-size: 24px; line-height: 32px; margin: 14px 0 4px; }
+.k .paper.md h2 { font-size: 21px; line-height: 30px; margin: 12px 0 2px; }
+.k .paper.md h3 { font-size: 19px; line-height: 28px; margin: 10px 0 2px; }
+.k .paper.md ul { margin: 2px 0 0; gap: 0; }
+.k .paper.md li { padding-left: 22px; }
+.k .paper.md li::before { left: 6px; top: 12px; width: 6px; height: 6px; background: #37352F; }
+.k .paper.md p { margin: 2px 0; }
+.k .paper.md code { font-family: "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace; font-size: .86em; color: #EB5757; background: rgba(135,131,120,.15); border-radius: 4px; padding: 1px 5px; }
+.k .paper.md b { font-weight: 700; }
+/* md·json·목록처럼 서식 없는 결과는 본문 서체로 */
+.k .paper.plain { font-family: var(--font); font-size: 19px; line-height: 30px; }
+.k .paper.plain .pt { text-decoration: none; text-align: left; font-size: 20px; }
+.k .shot { margin-top: 10px; border-radius: 12px; overflow: hidden; display: flex; align-items: flex-start; }
+.k .shot img { display: block; max-width: 100%; max-height: 100%; border-radius: 12px; object-fit: contain; object-position: left top; }
+/* 미리보기가 든 답은 채팅창에 남는 높이를 모두 받는다. 종이는 아래로 길어지고 그림은 그 높이 안에서 커진다 */
+.k .a.grow { flex: 1; min-height: 0; display: flex; flex-direction: column; align-self: stretch; }
+.k .a.grow > .paper, .k .a.grow > .shot { flex: 1; min-height: 120px; }
+.k .a.grow > .file { align-self: flex-start; }
+.k-in { margin: 0 24px 24px; background: var(--k-el); border: 1px solid var(--k-bd); border-radius: 20px; padding: 12px 14px 12px 20px; flex: none; display: flex; align-items: center; gap: 12px; }
+.k-in .ph { color: var(--k-sub); flex: 1; }
+.k-in .row { display: flex; align-items: center; gap: 12px; color: var(--k-sub); font-size: 20px; line-height: 26px; }
+.k-in .plus { width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--k-bd); display: flex; align-items: center; justify-content: center; }
+.k-in .plus svg { width: 18px; height: 18px; }
+.k-in .model { margin-left: auto; display: flex; align-items: center; gap: 6px; font-weight: 600; color: var(--k-ink); }
+.k-in .model svg { width: 16px; height: 16px; }
+.k-in .send { width: 40px; height: 40px; border-radius: 50%; background: var(--k-send); color: var(--white); display: flex; align-items: center; justify-content: center; }
+.k-in .send svg { width: 20px; height: 20px; }
+
+/* 오른쪽 상자 */
+/* 상자 사이 간격은 머리와 같은 24px 로 고정한다. 남는 높이는 가운데 상자가 받아 아래 끝을 채팅창과 맞춘다 */
+.side { flex: 1; display: flex; flex-direction: column; gap: 24px; min-height: 0; }
+.side > .box:nth-child(2) { flex: 1; }
+.box { background: var(--white); border-radius: var(--r-card); box-shadow: var(--shadow); padding: 18px 28px 20px; }
+.box h2 { font-family: var(--display); font-size: 28px; line-height: 36px; font-weight: 800; letter-spacing: -.03em; margin-bottom: 6px; }
+.when { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.when li { font-size: 22px; line-height: 30px; font-weight: 500; padding-left: 22px; position: relative; }
+.when li::before { content: ''; position: absolute; left: 2px; top: 12px; width: 8px; height: 8px; border-radius: 50%; background: var(--acc); }
+/* 산출물이 여럿이면 한 줄로 전체를 말하고 그 아래 산출물별 항목 */
+.box .lead { font-size: 22px; line-height: 32px; font-weight: 600; margin-bottom: 6px; }
+.does { display: flex; flex-direction: column; gap: 8px; }
+
+.does .it { display: grid; grid-template-columns: 34px 1fr; column-gap: 8px; }
+.does .no { font-size: 22px; line-height: 30px; font-weight: 800; color: var(--acc); font-variant-numeric: tabular-nums; }
+.does .t { font-size: 22px; line-height: 30px; font-weight: 800; }
+.does .d { grid-column: 2; font-size: 20px; line-height: 28px; font-weight: 500; color: var(--ink); }
+.fcard { background: var(--white); border-radius: var(--r-card); box-shadow: var(--shadow); overflow: hidden; flex: none; }
+.fcard .fn { display: flex; align-items: center; gap: 12px; padding: 12px 24px; background: var(--ink); color: var(--white); font-size: 24px; line-height: 32px; font-weight: 800; }
+.fcard .fn svg { width: 26px; height: 26px; }
+.fcard .list { padding: 10px 24px 14px 36px; }
+.fcard .fi { display: grid; grid-template-columns: 22px 1fr auto; align-items: center; gap: 12px; padding: 4px 0 4px 20px; border-left: 2px solid var(--paper-3); font-size: 21px; line-height: 30px; }
+.fcard .fi svg { width: 20px; height: 20px; }
+.fcard .fi code { font-family: var(--font); font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fcard .fi span { font-weight: 500; }
+
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="i-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-claude" viewBox="0 0 100 100"><path fill="#D97757" stroke="#D97757" stroke-width="2.4" stroke-linejoin="round" d="M50.02 42.85 L31.06 9.11 L28.45 9.47 L26.69 11.43 L44.06 46.02Z M54.22 44.23 L58.21 9.35 L55.88 8.18 L53.31 8.66 L47.53 43.29Z M56.54 47.11 L78.27 17.84 L76.85 15.64 L74.37 14.79 L51.22 42.96Z M57.03 51.26 L88.43 40.12 L88.42 37.52 L86.90 35.41 L54.95 44.84Z M55.91 54.02 L93.60 57.07 L94.74 54.70 L94.12 52.15 L56.62 47.30Z M53.55 56.20 L79.22 71.18 L81.14 69.46 L81.84 66.98 L57.13 50.48Z M50.48 57.13 L69.36 85.66 L71.89 85.03 L73.56 83.03 L56.20 53.55Z M45.78 55.77 L41.47 92.88 L43.80 94.09 L46.38 93.57 L52.47 56.71Z M43.68 53.34 L26.31 80.70 L27.93 82.73 L30.41 83.47 L49.28 57.11Z M42.86 49.73 L11.30 66.12 L11.63 68.71 L13.47 70.57 L45.82 55.80Z M43.82 46.41 L6.01 45.99 L5.05 48.43 L5.84 50.93 L43.59 53.15Z M46.45 43.80 L18.87 27.63 L16.91 29.33 L16.25 31.83 L42.87 49.52Z"/><circle cx="50" cy="50" r="10" fill="#D97757"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></symbol>
+</svg>
+
+<div id="page"></div>
+
+<script id="data" type="application/json">{"name": "svic-formal-format", "title": "삼성 양식 보고서 작성", "when": ["결재·품의용 보고서 초안이 필요할 때", "인사·보상·조직 등 제도 개선안을 올릴 때", "써 둔 초안을 회사 양식으로 바꿀 때"], "does": [{"t": "구성 먼저 확인", "d": "제목·목차·표 계획을 보여 주고 확인받은 뒤 작성"}, {"t": "개조식 본문", "d": "□ / - / · 계층과 명사형 종결, 주장마다 수치 근거"}, {"t": "Word 파일", "d": "회사 서식(바탕체, 줄 길이, 들여쓰기)대로 .docx"}, {"t": "초안 검토", "d": "이미 쓴 초안을 같은 기준으로 고침"}], "files": [{"path": "SKILL.md", "role": "작성 지침"}, {"path": "scripts/check_line_length.py", "role": "줄 길이 검사"}], "chat": [{"role": "user", "attach": ["성과급_현황_2026.xlsx"], "text": "이 자료로 성과급 제도 개선 보고서 좀 써 줘"}, {"role": "assistant", "skill": "svic-formal-format", "text": "쓰기 전에 이렇게 구성해 보려고 하는데 괜찮을까요?", "list": ["제목은 '성과급 제도 개선(案)'", "배경 → 개선방안 → 세부내용 → 기대효과 순서", "관계사 인상률 비교표 하나 추가"]}, {"role": "user", "text": "응, 그렇게 해 줘"}, {"role": "assistant", "text": "회사 보고서 양식대로 작성했어요. 줄 길이와 들여쓰기도 검사해 뒀어요.", "preview": {"title": "성과급 제도 개선(案)", "lines": ["1. 배경 및 현황", "□ 보상 경쟁력 확보를 위해 금융 관계사 수준의 인상률 적용 필요", "   - 3개년 평균 대비 외부 VC 및 금융 관계사比 총보상 열위", "     ·카드 4.8%, 증권 4.9%, 생명 6.2% 적용", "   - CL4는 고임금 특성 고려, 타 직급 대비 인상률 낮게 책정", "    *CL4 기본인상률은 물가상승분만 반영, 성과인상률 별도 적용", "", "2. 개선방안"]}, "file": "성과급_제도_개선(案).docx"}], "does_lead": "자료를 주면 회사 양식의 보고서를 Word로 만듭니다"}</script>
+<script>
+(function () {
+  var D = JSON.parse(document.getElementById('data').textContent);
+  function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  function icon(id) { return '<svg><use href="#' + id + '"/></svg>'; }
+  /* 채팅 문장 안의 /스킬이름 은 파란 글자로 */
+  function rich(s) { return esc(s).replace(/(^|\s)(\/[A-Za-z0-9_-]+)/g, '$1<span class="skc">$2</span>'); }
+  /* 미리보기용 마크다운: frontmatter, 제목, 목록, **굵게**, `코드` 만 다룬다 */
+  function inl(t) { return esc(t).replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>'); }
+  function md(lines) {
+    var out = '', i = 0, inList = false;
+    if (lines[0] === '---') {
+      var j = 1, props = '';
+      while (j < lines.length && lines[j] !== '---') {
+        var kv = lines[j].split(/:\s*/); var k = kv.shift(); var v = kv.join(': ');
+        var val = /^(미반영|처리|보통|높음|낮음|있음|일부|없음|형식|사실오류|누락|용어|트리거|문서선택|범위|환경|제안)$/.test(v) ? '<span class="tag">' + esc(v) + '</span>' : inl(v);
+        props += '<dt>' + esc(k) + '</dt><dd>' + val + '</dd>'; j++;
+      }
+      out += '<dl class="props">' + props + '</dl>'; i = j + 1;
+    }
+    for (; i < lines.length; i++) {
+      var l = lines[i], m;
+      if ((m = l.match(/^\s*[-*] (.*)$/))) { if (!inList) { out += '<ul>'; inList = true; } out += '<li>' + inl(m[1]) + '</li>'; continue; }
+      if (inList) { out += '</ul>'; inList = false; }
+      if ((m = l.match(/^(#{1,3}) (.*)$/))) out += '<h' + m[1].length + '>' + inl(m[2]) + '</h' + m[1].length + '>';
+      else if (l.trim()) out += '<p>' + inl(l) + '</p>';
+    }
+    if (inList) out += '</ul>';
+    return out;
+  }
+  function fileIcon(p) { return /\/$/.test(p) ? 'i-folder' : /\.(py|js|ts|sh)$/i.test(p) ? 'i-code' : 'i-file'; }
+
+  var msgs = (D.chat || []).map(function (m) {
+    var h = '';
+    if (m.attach && m.attach.length) h += '<div class="chips">' + m.attach.map(function (a) { return '<span class="chip">' + icon('i-file') + esc(a) + '</span>'; }).join('') + '</div>';
+    if (m.role === 'assistant' && m.skill) h += '<div class="trow"><b>' + esc(m.skill) + '</b> 스킬 사용' + icon('i-chev') + '</div>';
+    if (m.text) h += '<div>' + rich(m.text) + '</div>';
+    if (m.md && m.md.length) h += '<div class="kmd">' + md(m.md) + '</div>';
+    if (m.list && m.list.length) h += '<ul>' + m.list.map(function (l) { return '<li>' + esc(l) + '</li>'; }).join('') + '</ul>';
+    if (m.preview && m.preview.image) h += '<div class="shot"><img src="' + esc(m.preview.image) + '" alt=""></div>';
+    else if (m.preview && m.preview.style === 'md') h += '<div class="paper md">' + (m.preview.title ? '<div class="pt">' + esc(m.preview.title) + '</div>' : '') + md(m.preview.lines || []) + '</div>';
+    else if (m.preview) h += '<div class="paper' + (m.preview.style === 'plain' ? ' plain' : '') + '">' + (m.preview.title ? '<div class="pt">' + esc(m.preview.title) + '</div>' : '') + esc((m.preview.lines || []).join('\n')) + '</div>';
+    if (m.file) h += '<div class="file">' + icon('i-file') + '<b>' + esc(m.file) + '</b></div>';
+    return m.role === 'user' ? '<div class="u">' + h + '</div>' : '<div class="a' + (m.preview ? ' grow' : '') + '"><svg class="av"><use href="#i-claude"/></svg>' + h + '</div>';
+  }).join('');
+
+  var when = (D.when || []).map(function (w) { return '<li>' + esc(w) + '</li>'; }).join('');
+  var does = (D.does || []).map(function (d, i) {
+    return '<div class="it"><span class="no">' + (i + 1) + '</span><span class="t">' + esc(d.t) + '</span><span class="d">' + esc(d.d) + '</span></div>';
+  }).join('');
+  var files = (D.files || []).map(function (f) {
+    return '<div class="fi">' + icon(fileIcon(f.path)) + '<code>' + esc(f.path) + '</code><span>' + esc(f.role) + '</span></div>';
+  }).join('');
+
+  document.title = D.title || D.name;
+  document.getElementById('page').innerHTML =
+    '<div class="left">' +
+      '<div class="top"><h1>' + esc(D.title) + '</h1><code>/' + esc(D.name) + '</code></div>' +
+      '<div class="side">' +
+        '<div class="box"><h2>이럴 때 씁니다</h2><ul class="when">' + when + '</ul></div>' +
+        '<div class="box"><h2>이렇게 해 줍니다</h2>' + (D.does_lead ? '<p class="lead">' + esc(D.does_lead) + '</p>' : '') + '<div class="does">' + does + '</div></div>' +
+        '<div class="fcard"><div class="fn">' + icon('i-folder') + esc(D.name) + '</div><div class="list">' + files + '</div></div>' +
+      '</div>' +
+    '</div>' +
+      '<div class="k"><div class="k-msgs">' + msgs + '</div>' +
+        '<div class="k-in"><div class="ph">Claude에게 메시지 보내기</div><div class="row"><span class="model">' + esc(D.model || 'Sonnet 5') + icon('i-chev') + '</span><span class="send">' + icon('i-up') + '</span></div></div></div>';
+})();
+</script>
+</body>
+</html>
