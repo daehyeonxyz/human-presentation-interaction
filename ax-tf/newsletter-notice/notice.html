@@ -91,11 +91,6 @@ svg { display: block; }
 .c-minor { color: var(--minor); } .bg-minor { background: var(--minor-soft); }
 .c-info { color: var(--info); } .bg-info { background: var(--info-soft); }
 
-/* ---------- 소식지 제호: 포스터 맨 위를 채우는 띠 ---------- */
-.mast { background: var(--acc); color: var(--white); padding: 44px var(--pad); display: flex; justify-content: space-between; align-items: baseline; }
-.mast .mt { font-family: var(--display); font-size: 52px; line-height: 64px; font-weight: 800; letter-spacing: -.04em; }
-.mast .ms { font-size: var(--t-cap); line-height: var(--l-cap); font-weight: 600; color: #C4CAE9; }
-
 /* ---------- 1. 뉴스레터 구성 ---------- */
 /* 카드 안의 타일은 메일 차례와 같은 모양이다. 읽는 사람이 메일에서 본 것을 그대로 알아보게 한다 */
 .kinds { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-sm); }
@@ -132,17 +127,17 @@ svg { display: block; }
 .fp .sheet + .sc { margin-top: 10px; }
 /* 작은 표: 칸 사이 틈으로 바탕색이 보여 칸이 나뉜다 */
 .sheet { display: grid; grid-template-columns: 1fr 1.5fr; gap: 3px; background: var(--paper-2); border-radius: 10px; overflow: hidden; }
-.sheet span { background: var(--white); padding: 6px 14px; font-size: 21px; line-height: 30px; font-weight: 600; white-space: nowrap; }
+.sheet span { background: var(--white); padding: 5px 14px; font-size: 21px; line-height: 30px; font-weight: 600; white-space: nowrap; }
 .sheet span.hd { background: var(--paper); font-weight: 800; }
-.kw { display: flex; flex-wrap: wrap; gap: 8px; }
-.kw span { background: var(--acc-soft); color: var(--acc); border-radius: 10px; padding: 8px 16px; font-size: 21px; line-height: 30px; font-weight: 700; white-space: nowrap; }
+.fp .fv.fill { flex: 1; }
+.fill .st2, .fill .mm { flex: 1; }
 .st2 { display: flex; flex-direction: column; gap: 12px; }
-.st2 span { display: flex; align-items: center; gap: 14px; background: var(--paper); border-radius: 10px; padding: 22px 20px; font-size: 24px; line-height: 34px; font-weight: 700; }
+.st2 span { flex: 1; display: flex; align-items: center; gap: 14px; background: var(--paper); border-radius: 10px; padding: 16px 20px; font-size: 24px; line-height: 34px; font-weight: 700; }
 .st2 span i { font-style: normal; color: var(--acc); font-weight: 800; }
 .mm { display: flex; flex-direction: column; gap: 10px; }
-.mm > span { display: grid; grid-template-columns: 24px 1fr; column-gap: 12px; background: var(--paper); border-radius: 10px; padding: 20px 20px; font-size: 22px; line-height: 32px; font-weight: 700; }
-.mm svg { width: 22px; height: 22px; color: var(--mute); margin-top: 5px; }
-.mm .ct { grid-column: 2; font-size: 20px; line-height: 30px; }
+.mm > span { flex: 1; display: grid; grid-template-columns: 24px 1fr; column-gap: 12px; align-content: center; background: var(--paper); border-radius: 10px; padding: 16px 22px; font-size: 24px; line-height: 36px; font-weight: 700; }
+.mm svg { width: 24px; height: 24px; color: var(--mute); margin-top: 6px; }
+.mm .ct { grid-column: 2; margin-top: 4px; font-size: 22px; line-height: 32px; }
 .h2 { font-family: var(--display); font-size: var(--t-h2); line-height: var(--l-h2); font-weight: 800; letter-spacing: -.03em; margin-bottom: -40px; }
 /* 관심사 안내는 섹션 여백을 넘어 포스터 폭 전체를 채우는 띠다 */
 .better { margin: 0 calc(-1 * var(--pad)); background: var(--acc); color: var(--white); padding: 72px var(--pad); text-align: center; display: flex; flex-direction: column; gap: var(--gap-sm); }
@@ -165,12 +160,11 @@ svg { display: block; }
 </svg>
 <div id="poster">
 
-  <!-- 소식지 제호 -->
-  <header class="mast"><div class="mt">삼성벤처투자 AX 소식</div><div class="ms">AX TF</div></header>
 
   <!-- 히어로 -->
   <section class="s hero">
     <div class="head">
+      <div class="org">삼성벤처투자 AX 소식</div>
       <div class="decl">투자팀별 <em>데일리 뉴스레터</em>를 보냅니다</div>
     </div>
     <div class="mails">
@@ -333,20 +327,20 @@ svg { display: block; }
           <div class="sc">포트폴리오 명단</div>
           <div class="sheet"><span class="hd">업체</span><span class="hd">담당 심사역</span><span>A사</span><span>홍길동</span><span>B사</span><span>김철수</span></div>
           <div class="sc">관심 키워드</div>
-          <div class="kw"><span>로봇 파운데이션 모델</span><span>AI 가속기</span></div>
+          <div class="sheet"><span class="hd">분야</span><span class="hd">키워드</span><span>로봇</span><span>로봇 파운데이션 모델</span><span>반도체</span><span>AI 가속기</span></div>
         </div>
       </div>
       <div class="arr"><span><svg><use href="#i-arrow"/></svg></span></div>
       <div class="fp">
         <div class="fh"><span class="no">2</span>자동 수집과 선별</div>
         <p>기사를 모아 실을 기사만 고릅니다.</p>
-        <div class="fv st2"><span><i>1</i>뉴스와 공시 수집</span><span><i>2</i>중복 기사와 무관한 기사 제외</span><span><i>3</i>중요도 분류와 요약</span></div>
+        <div class="fv fill"><div class="sc">처리 순서</div><div class="st2"><span><i>1</i>뉴스와 공시 수집</span><span><i>2</i>중복 기사와 무관한 기사 제외</span><span><i>3</i>중요도 분류와 요약</span></div></div>
       </div>
       <div class="arr"><span><svg><use href="#i-arrow"/></svg></span></div>
       <div class="fp">
         <div class="fh"><span class="no">3</span>팀별 메일 발송</div>
         <p>평일 하루 1회 메일로 보냅니다.</p>
-        <div class="fv">
+        <div class="fv fill">
           <div class="sc">보내는 메일</div>
           <div class="mm">
             <span><svg><use href="#i-mail"/></svg>[투자3팀] 포트폴리오 뉴스<span class="ct"><span class="em">🚨</span>2 · <span class="em">⚡</span>1 · <span class="em">📰</span>3 · <span class="em">👀</span>3</span></span>
