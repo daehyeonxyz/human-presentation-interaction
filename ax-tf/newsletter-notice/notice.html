@@ -91,6 +91,11 @@ svg { display: block; }
 .c-minor { color: var(--minor); } .bg-minor { background: var(--minor-soft); }
 .c-info { color: var(--info); } .bg-info { background: var(--info-soft); }
 
+/* ---------- 소식지 제호: 포스터 맨 위를 채우는 띠 ---------- */
+.mast { background: var(--acc); color: var(--white); padding: 44px var(--pad); display: flex; justify-content: space-between; align-items: baseline; }
+.mast .mt { font-family: var(--display); font-size: 52px; line-height: 64px; font-weight: 800; letter-spacing: -.04em; }
+.mast .ms { font-size: var(--t-cap); line-height: var(--l-cap); font-weight: 600; color: #C4CAE9; }
+
 /* ---------- 1. 뉴스레터 구성 ---------- */
 /* 카드 안의 타일은 메일 차례와 같은 모양이다. 읽는 사람이 메일에서 본 것을 그대로 알아보게 한다 */
 .kinds { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-sm); }
@@ -112,6 +117,28 @@ svg { display: block; }
 .teams .num { order: 2; font-size: 34px; line-height: 44px; font-weight: 800; color: var(--acc); font-variant-numeric: tabular-nums; letter-spacing: -.02em; white-space: nowrap; }
 .teams .num small { font-size: 22px; color: var(--ink); font-weight: 700; margin-left: 2px; letter-spacing: 0; }
 .teams .lb { order: 1; font-size: 24px; line-height: 34px; font-weight: 700; }
+/* 반영 흐름: 입력 → 자동 수집과 선별 → 발송 */
+.flow { display: grid; grid-template-columns: 1fr 48px 1fr 48px 1fr; align-items: stretch; }
+.flow .arr { display: flex; align-items: center; justify-content: center; color: var(--acc); }
+.flow .arr svg { width: 36px; height: 36px; }
+.fp { background: var(--white); border-radius: var(--r-card); box-shadow: var(--shadow); padding: 36px 36px 40px; display: flex; flex-direction: column; gap: 18px; }
+.fp .fh { display: flex; align-items: baseline; gap: 14px; font-family: var(--display); font-size: 36px; line-height: 48px; font-weight: 800; letter-spacing: -.03em; white-space: nowrap; }
+.fp .fh .no { color: var(--acc); }
+.fp p { font-size: var(--t-cap); line-height: var(--l-cap); }
+.fp .fv { margin-top: auto; display: flex; flex-direction: column; gap: 14px; }
+.fp .sc { margin-top: 6px; font-size: 22px; line-height: 30px; font-weight: 800; }
+/* 작은 표: 칸 사이 틈으로 바탕색이 보여 칸이 나뉜다 */
+.sheet { display: grid; grid-template-columns: 1fr 1.5fr; gap: 3px; background: var(--paper-2); border-radius: 10px; overflow: hidden; margin-top: -8px; }
+.sheet span { background: var(--white); padding: 6px 14px; font-size: 21px; line-height: 30px; font-weight: 600; white-space: nowrap; }
+.sheet span.hd { background: var(--paper); font-weight: 800; }
+.st2 { display: flex; flex-direction: column; gap: 10px; }
+.st2 span { display: flex; align-items: center; gap: 14px; background: var(--paper); border-radius: 10px; padding: 12px 18px; font-size: 24px; line-height: 34px; font-weight: 700; }
+.st2 span i { font-style: normal; color: var(--acc); font-weight: 800; }
+.mm { display: flex; flex-direction: column; gap: 10px; }
+.mm > span { display: grid; grid-template-columns: 24px 1fr; column-gap: 12px; background: var(--paper); border-radius: 10px; padding: 12px 18px; font-size: 22px; line-height: 32px; font-weight: 700; }
+.mm svg { width: 22px; height: 22px; color: var(--mute); margin-top: 5px; }
+.mm .ct { grid-column: 2; font-size: 20px; line-height: 30px; }
+.h2 { font-family: var(--display); font-size: var(--t-h2); line-height: var(--l-h2); font-weight: 800; letter-spacing: -.03em; margin-bottom: -40px; }
 /* 관심사 안내는 섹션 여백을 넘어 포스터 폭 전체를 채우는 띠다 */
 .better { margin: 0 calc(-1 * var(--pad)); background: var(--acc); color: var(--white); padding: 72px var(--pad); text-align: center; display: flex; flex-direction: column; gap: var(--gap-sm); }
 .better .bt { font-family: var(--display); font-size: 56px; line-height: 76px; font-weight: 800; letter-spacing: -.04em; }
@@ -122,21 +149,34 @@ svg { display: block; }
 .fb > div { background: var(--white); border-radius: var(--r-card); box-shadow: var(--shadow); padding: 44px 44px 48px; display: flex; flex-direction: column; gap: var(--gap-xs); }
 .fb .ft { font-family: var(--display); font-size: 44px; line-height: 58px; font-weight: 800; letter-spacing: -.035em; }
 .fb .ex { margin-top: var(--gap-sm); color: var(--acc); font-weight: 700; }
+/* ---------- 4. 운영 이관: 세 단계를 색 단계로 잇는 막대 ---------- */
+.plan { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.plan .bar { height: 20px; border-radius: 10px; margin-bottom: 28px; }
+.plan .p1 .bar { background: var(--acc); }
+.plan .p2 .bar { background: #7A86CC; }
+.plan .p3 .bar { background: #C4CAE9; }
+.plan .pn { font-family: var(--display); font-size: 44px; line-height: 56px; font-weight: 800; letter-spacing: -.035em; }
+.plan .pw { margin-top: 6px; font-size: var(--t-body); line-height: var(--l-body); font-weight: 800; color: var(--acc); }
+.plan .pd { margin-top: 8px; font-size: var(--t-cap); line-height: var(--l-cap); }
+/* 아직 정하지 않은 값. 채우기 전까지 눈에 띄게 둔다 */
+.tbd { background: #FFF1B8; border-radius: 6px; padding: 0 8px; }
 /* 맺음: 띠 없이 종이 위에 둔다. 문의처는 본문보다 낮춘다 */
-.ask { display: flex; justify-content: space-between; align-items: baseline; gap: var(--gap); padding: 0 4px; }
-.ask .who { flex: none; font-size: var(--t-cap); line-height: var(--l-cap); font-weight: 500; color: var(--mute); }
+.foot { display: flex; justify-content: flex-end; font-size: var(--t-cap); line-height: var(--l-cap); color: var(--mute); }
 </style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute">
+  <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></symbol>
   <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
 </svg>
 <div id="poster">
 
+  <!-- 소식지 제호 -->
+  <header class="mast"><div class="mt">삼성벤처투자 AX 소식</div><div class="ms">AX TF</div></header>
+
   <!-- 히어로 -->
   <section class="s hero">
     <div class="head">
-      <div class="org">삼성벤처투자 AX 소식</div>
       <div class="decl">투자팀별 <em>데일리 뉴스레터</em>를 보냅니다</div>
     </div>
     <div class="mails">
@@ -247,7 +287,7 @@ svg { display: block; }
         </div>
       </div>
     </div>
-    <div class="hero-lead">2026년 10월부터 포트폴리오 소식과 관심 분야의 업계 동향을<br>정리해 투자팀에 메일로 보내 드리고 있습니다.</div>
+    <div class="hero-lead">AX TF는 2026년 10월부터 투자팀별 포트폴리오 뉴스와<br>업계 동향 뉴스를 메일로 발송하고 있습니다.</div>
     <div class="facts">
       <div><div class="l">운영</div><div>AX TF</div></div>
       <div><div class="l">대상</div><div>투자1~4팀, Life Science팀</div></div>
@@ -289,8 +329,36 @@ svg { display: block; }
   <section class="s">
     <div class="head">
       <div class="h"><span class="no">2.</span> 팀별 포트폴리오와 관심사</div>
-      <div class="lead">팀마다 등록된 포트폴리오 명단과 관심 키워드로 기사를 찾아 뉴스레터를 만듭니다.</div>
+      <div class="lead">포트폴리오 명단과 관심 키워드를 입력하면 뉴스레터에 자동으로 반영됩니다.</div>
     </div>
+    <div class="flow">
+      <div class="fp">
+        <div class="fh"><span class="no">1</span>명단과 키워드 입력</div>
+        <p>팀별 포트폴리오 명단과<br>관심 키워드를 표로 관리합니다.</p>
+        <div class="fv">
+          <div class="sc">포트폴리오 명단</div>
+          <div class="sheet"><span class="hd">업체</span><span class="hd">담당 심사역</span><span>A사</span><span>홍길동</span><span>B사</span><span>김철수</span></div>
+          <div class="sc">관심 키워드</div>
+          <div class="sheet"><span class="hd">분야</span><span class="hd">키워드</span><span>로봇</span><span>로봇 파운데이션 모델</span><span>반도체</span><span>AI 가속기</span></div>
+        </div>
+      </div>
+      <div class="arr"><svg><use href="#i-arrow"/></svg></div>
+      <div class="fp">
+        <div class="fh"><span class="no">2</span>자동 수집과 선별</div>
+        <p>팀당 하루 수십에서 수백 건의 기사를<br>모아 실을 기사만 고릅니다.</p>
+        <div class="fv st2"><span><i>1</i>뉴스와 공시 수집</span><span><i>2</i>중복 기사와 무관한 기사 제외</span><span><i>3</i>중요도 분류와 요약</span></div>
+      </div>
+      <div class="arr"><svg><use href="#i-arrow"/></svg></div>
+      <div class="fp">
+        <div class="fh"><span class="no">3</span>팀별 메일 발송</div>
+        <p>평일 하루 1회 팀원과 팀장,<br>본부장에게 메일로 보냅니다.</p>
+        <div class="fv mm">
+          <span><svg><use href="#i-mail"/></svg>[투자3팀] 포트폴리오 뉴스<span class="ct"><span class="em">🚨</span>2 · <span class="em">⚡</span>1 · <span class="em">📰</span>3 · <span class="em">👀</span>3</span></span>
+          <span><svg><use href="#i-mail"/></svg>[투자3팀] 업계 동향 뉴스<span class="ct"><span class="em">🏢</span>4 · <span class="em">🔬</span>3 · <span class="em">📈</span>2</span></span>
+        </div>
+      </div>
+    </div>
+    <div class="h2">팀별 등록 현황</div>
     <div class="teams">
       <div><div class="tn">투자1팀</div><div class="st"><div><div class="num">66<small>개사</small></div><div class="lb">포트폴리오</div></div><div><div class="num">36<small>개</small></div><div class="lb">관심 키워드</div></div></div></div>
       <div><div class="tn">투자2팀</div><div class="st"><div><div class="num">31<small>개사</small></div><div class="lb">포트폴리오</div></div><div><div class="num">13<small>개</small></div><div class="lb">관심 키워드</div></div></div></div>
@@ -308,17 +376,27 @@ svg { display: block; }
   <section class="s">
     <div class="head">
       <div class="h"><span class="no">3.</span> 뉴스레터 피드백</div>
-      <div class="lead">필요한 내용이 있으면 언제든 AX TF에 말씀해 주세요.</div>
+      <div class="lead">뉴스레터는 임직원분들의 관심과 관리로 계속 발전하고 있습니다.<br>수신자 추가나 기능 개선이 필요하면 AX TF에 말씀 부탁드립니다.</div>
     </div>
     <div class="fb">
       <div><div class="ft">수신자 추가</div><p>뉴스레터를 받아야 할 분이<br>빠져 있다면</p><p class="ex">“새로 합류한 심사역님도<br>받게 해 주세요”</p></div>
       <div><div class="ft">명단과 관심사 수정</div><p>새로 투자한 회사가 있거나<br>관심 분야가 바뀌었다면</p><p class="ex">“이번에 투자한 회사도<br>넣어 주세요”</p></div>
       <div><div class="ft">개선 제안</div><p>구성이나 분량을<br>바꾸고 싶다면</p><p class="ex">“기사 요약을<br>한 줄로 줄여 주세요”</p></div>
     </div>
-    <div class="ask">
-      <div>지속적인 관리를 위해 팀별 담당자를 지정해 뉴스레터 운영을 이관할 예정입니다.</div>
-      <div class="who">문의 김대현 인턴</div>
+  </section>
+
+  <!-- 4. 운영 이관 -->
+  <section class="s">
+    <div class="head">
+      <div class="h"><span class="no">4.</span> 운영 이관</div>
+      <div class="lead">지속적인 관리를 위해 안정화 기간을 거친 뒤 각 팀 담당자분들께 운영을 이관할 예정입니다.</div>
     </div>
+    <div class="plan">
+      <div class="p1"><div class="bar"></div><div class="pn">운영 시작</div><div class="pw">2026년 10월</div><div class="pd">AX TF가 다섯 팀의 뉴스레터를 운영합니다.</div></div>
+      <div class="p2"><div class="bar"></div><div class="pn">안정화</div><div class="pw"><span class="tbd">○주간</span></div><div class="pd">오류를 고치고 기사 선별 품질을 다듬습니다.</div></div>
+      <div class="p3"><div class="bar"></div><div class="pn">팀별 이관</div><div class="pw"><span class="tbd">○월 ○주차</span>부터</div><div class="pd">팀별 담당자분들이 운영을 맡습니다.</div></div>
+    </div>
+    <div class="foot">문의 김대현 인턴</div>
   </section>
 
 </div>
