@@ -97,13 +97,11 @@ svg { display: block; }
 .kind { background: var(--white); border-radius: var(--r-card); box-shadow: var(--shadow); padding: 48px 48px 44px; display: flex; flex-direction: column; }
 .kind .kt { font-family: var(--display); font-size: 56px; line-height: 68px; font-weight: 800; letter-spacing: -.04em; }
 .kind .kd { margin-top: var(--gap-sm); font-size: var(--t-body); line-height: var(--l-body); }
-.kind .tiles { display: grid; gap: var(--gap-xs); margin: var(--gap) 0; align-items: start; }
+.kind .tiles { display: grid; gap: var(--gap-xs); margin-top: var(--gap); align-items: start; }
 .kind .tiles.g4 { grid-template-columns: repeat(4, 1fr); }
 .kind .tiles.g3 { grid-template-columns: repeat(3, 1fr); }
 .kind .tiles .tl { font-size: var(--t-cap); line-height: var(--l-cap); font-weight: 800; margin-bottom: var(--gap-xs); display: flex; align-items: center; gap: 8px; white-space: nowrap; }
 .kind .tiles .ti { font-size: 24px; line-height: 34px; font-weight: 700; border-radius: 10px; padding: 10px 16px; margin-bottom: 8px; background: var(--minor-soft); }
-.kind .chk { margin-top: auto; display: flex; align-items: baseline; gap: var(--gap-sm); border-radius: var(--r-ctl); background: var(--paper); padding: 20px 28px; font-size: var(--t-cap); line-height: var(--l-cap); }
-.kind .chk b { flex: none; }
 
 /* ---------- 2. 팀별 포트폴리오와 관심사 ---------- */
 .teams { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--gap-sm); }
@@ -274,7 +272,6 @@ svg { display: block; }
           <div><div class="tl c-minor"><span class="em">📰</span>MINOR</div><div class="ti">제품, 제휴</div><div class="ti">매출, 임상</div></div>
           <div><div class="tl c-info"><span class="em">👀</span>INFO</div><div class="ti bg-info">보도, 수상</div><div class="ti bg-info">인터뷰</div></div>
         </div>
-        <div class="chk"><b>확인할 것</b><span>회사에 물어볼 내용까지 함께 적습니다.</span></div>
       </div>
       <div class="kind">
         <div class="kt">업계 동향 뉴스</div>
@@ -284,7 +281,6 @@ svg { display: block; }
           <div><div class="tl c-minor"><span class="em">🔬</span>최신 기술</div><div class="ti">세부 기술</div><div class="ti">개발 현황</div></div>
           <div><div class="tl c-info"><span class="em">📈</span>업계 동향</div><div class="ti bg-info">규제와 정책</div><div class="ti bg-info">시장</div><div class="ti bg-info">대기업 동향</div></div>
         </div>
-        <div class="chk"><b>확인할 것</b><span>투자한 회사와 어떤 관계인지도 함께 적습니다.</span></div>
       </div>
     </div>
   </section>
