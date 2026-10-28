@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>AX TF 데일리 뉴스레터 안내</title>
+<link rel="stylesheet" href="../skill-contest-poster/fonts/hahmlet-var/wght.css">
+<style>
+@font-face{font-family:Pretendard;font-weight:500;src:url(../skill-contest-poster/fonts/Pretendard-Medium.woff2) format('woff2')}
+@font-face{font-family:Pretendard;font-weight:600;src:url(../skill-contest-poster/fonts/Pretendard-SemiBold.woff2) format('woff2')}
+@font-face{font-family:Pretendard;font-weight:700;src:url(../skill-contest-poster/fonts/Pretendard-Bold.woff2) format('woff2')}
+@font-face{font-family:Pretendard;font-weight:800;src:url(../skill-contest-poster/fonts/Pretendard-ExtraBold.woff2) format('woff2')}
+
+/* 공모전 포스터와 같은 토큰. 1920 폭 세로 공지 한 장 */
+:root {
+  --paper: #F1F1F7; --paper-2: #E4E5EE; --paper-3: #D6D8E4;
+  --ink: #121212; --mute: #565B6E;
+  --acc: #1428A0; --acc-soft: #E8EAF6; --white: #FFFFFF;
+  --shadow: 0 1px 2px rgba(18,18,18,.04);
+  --r-card: 16px; --r-ctl: 12px;
+  --pad: 80px; --gap-2xs: 8px; --gap-xs: 12px; --gap-sm: 24px; --gap: 40px; --gap-lg: 64px; --gap-xl: 96px;
+  --t-cap: 26px; --l-cap: 36px;
+  --t-body: 32px; --l-body: 48px;
+  --t-h2: 40px; --l-h2: 56px;
+  --t-h: 64px; --l-h: 76px;
+  /* 메일 등급 색. 실제 뉴스레터의 밴드 색을 옮겼다 */
+  --crit: #D93A3A; --crit-soft: #FDECEC;
+  --major: #1428A0; --major-soft: #E8EAF6;
+  --minor: #3A3F4F; --minor-soft: #EDEEF3;
+  --info: #7A7F8E; --info-soft: #F3F4F7;
+  --font: Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --display: 'Hahmlet Variable', var(--font);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #CFD1DB; font-family: var(--font); color: var(--ink); -webkit-font-smoothing: antialiased; font-weight: 500;
+  font-size: var(--t-body); line-height: var(--l-body); word-break: keep-all; }
+b { font-weight: 800; }
+#poster { width: 1920px; margin: 0 auto; background: var(--paper); }
+.s { padding: var(--pad); display: flex; flex-direction: column; gap: var(--gap-lg); }
+.head { display: flex; flex-direction: column; gap: var(--gap-xs); }
+.h { font-family: var(--display); font-size: var(--t-h); line-height: var(--l-h); font-weight: 800; letter-spacing: -.04em; }
+.h .no { color: var(--acc); }
+.h2 { font-family: var(--display); font-size: var(--t-h2); line-height: var(--l-h2); font-weight: 800; letter-spacing: -.03em; }
+
+/* ---------- 히어로: 선언, 메일 두 통, 한 줄 설명 ---------- */
+.hero { gap: var(--gap); padding-bottom: var(--gap-xl); }
+.hero .head { align-items: center; text-align: center; gap: var(--gap-sm); }
+.org { font-family: var(--display); font-size: var(--t-h2); line-height: var(--l-h2); font-weight: 600; letter-spacing: -.03em; }
+.decl { font-family: var(--display); font-size: 96px; line-height: 112px; font-weight: 800; letter-spacing: -.045em; white-space: nowrap; }
+.decl em { font-style: normal; color: var(--acc); }
+.hero-lead { font-family: var(--display); font-size: 48px; line-height: 68px; font-weight: 600; letter-spacing: -.035em; text-align: center; }
+/* 메일 두 통을 조금 엇갈려 놓고 아래를 흐린다 */
+.mails { position: relative; height: 1120px; overflow: hidden; margin: 0 calc(-1 * var(--pad));
+  -webkit-mask-image: linear-gradient(#000 80%, transparent 98%); mask-image: linear-gradient(#000 80%, transparent 98%); }
+.mails .mail { position: absolute; width: 820px; }
+.mails .m1 { left: 140px; top: 40px; }
+.mails .m2 { left: 960px; top: 140px; }
+
+/* ---------- 메일 화면 재현 ---------- */
+.mail { background: var(--white); border-radius: 20px; box-shadow: 0 30px 60px -20px rgba(20,40,160,.25), 0 2px 6px rgba(18,18,18,.06); padding: 24px 24px 32px; font-size: 19px; line-height: 28px; }
+.mail .mh { display: block; width: 100%; border-radius: 6px; }
+.mail .toc { display: grid; gap: 14px; margin: 22px 0 26px; }
+.mail .toc.g4 { grid-template-columns: repeat(4, 1fr); }
+.mail .toc.g3 { grid-template-columns: repeat(3, 1fr); }
+.mail .toc .tl { font-size: 15px; line-height: 22px; font-weight: 800; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.mail .toc .tl i { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.mail .toc .ti { font-size: 15px; line-height: 22px; font-weight: 700; border-radius: 6px; padding: 6px 10px; margin-bottom: 6px; background: var(--minor-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mail .band { border-radius: 14px; padding: 12px 18px; font-size: 17px; line-height: 24px; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+.mail .band i { width: 9px; height: 9px; border-radius: 50%; background: currentColor; }
+.mail .item { display: grid; grid-template-columns: 170px 1fr; column-gap: 20px; margin: 0 8px 26px; }
+.mail .item .who b { display: block; font-size: 16px; line-height: 24px; }
+.mail .item .who span { display: block; font-size: 14px; line-height: 20px; color: var(--mute); }
+.mail .item .who span.bu { color: var(--acc); }
+.mail .item .hl { font-size: 19px; line-height: 28px; font-weight: 800; margin-bottom: 4px; }
+.mail .item .sub { font-size: 14px; line-height: 20px; color: var(--mute); margin-bottom: 4px; }
+.mail .item ul { list-style: none; font-size: 15px; line-height: 24px; }
+.mail .item li::before { content: '· '; }
+.mail .item .chk { margin-top: 10px; border-radius: 8px; padding: 12px 16px; font-size: 15px; line-height: 24px; }
+.mail .item .chk b { margin-right: 6px; }
+.mail .item .tags { display: flex; gap: 6px; margin-top: 10px; }
+.mail .item .tags span { font-size: 12px; line-height: 18px; color: var(--acc); border: 1px solid #C9CFEA; border-radius: 4px; padding: 1px 8px; }
+.c-crit { color: var(--crit); } .bg-crit { background: var(--crit-soft); }
+.c-major { color: var(--major); } .bg-major { background: var(--major-soft); }
+.c-minor { color: var(--minor); } .bg-minor { background: var(--minor-soft); }
+.c-info { color: var(--info); } .bg-info { background: var(--info-soft); }
+
+/* ---------- 1. 두 통의 메일 ---------- */
+.kinds { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-sm); }
+.kind { background: var(--white); border-radius: var(--r-card); box-shadow: var(--shadow); padding: var(--gap) 48px 44px; display: flex; flex-direction: column; gap: var(--gap-sm); }
+.kind .kt { font-family: var(--display); font-size: 52px; line-height: 64px; font-weight: 800; letter-spacing: -.04em; }
+.kind .kd { font-size: var(--t-body); line-height: var(--l-body); }
+.kind .rows { display: flex; flex-direction: column; gap: var(--gap-xs); margin-top: var(--gap-2xs); }
+.kind .r { display: grid; grid-template-columns: 210px 1fr; align-items: center; column-gap: var(--gap-sm); }
+.kind .r .lb { font-size: var(--t-cap); line-height: var(--l-cap); font-weight: 800; border-radius: var(--r-ctl); padding: 8px 18px; display: flex; align-items: center; gap: 10px; }
+.kind .r .lb i { width: 10px; height: 10px; border-radius: 50%; background: currentColor; flex: none; }
+.kind .r .v { font-size: var(--t-cap); line-height: var(--l-cap); }
+.kind .r .lb.sec { background: var(--paper); color: var(--ink); }
+
+/* 확인할 것: 설명과 실제 항목 하나 */
+.chkx { display: grid; grid-template-columns: 1fr 980px; gap: var(--gap-xl); align-items: center; background: var(--acc); color: var(--white); border-radius: var(--r-card); padding: 56px 64px; }
+.chkx .h2 { font-size: 52px; line-height: 68px; margin-bottom: var(--gap-sm); }
+.chkx p { font-size: var(--t-body); line-height: var(--l-body); }
+.chkx .mail { zoom: 1.4; color: var(--ink); box-shadow: none; padding: 30px 16px 6px; }
+.chkx .mail .item { margin-bottom: 24px; }
+.chkx .mail .chk { box-shadow: 0 0 0 3px var(--acc); }
+
+/* ---------- 2. 운영 ---------- */
+.facts { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-sm); }
+.facts > div { background: var(--white); border-radius: var(--r-card); box-shadow: var(--shadow); padding: var(--gap-sm) 36px; display: flex; align-items: center; gap: var(--gap); }
+.facts .l { width: 80px; flex: none; font-weight: 800; }
+.teams { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--gap-sm); }
+.teams > div { background: var(--white); border-radius: var(--r-card); box-shadow: var(--shadow); padding: 28px 32px 30px; }
+.teams .tn { white-space: nowrap; font-family: var(--display); font-size: 36px; line-height: var(--l-h2); font-weight: 800; letter-spacing: -.03em; margin-bottom: var(--gap-xs); }
+.teams .tv { display: flex; justify-content: space-between; align-items: baseline; font-size: var(--t-cap); line-height: 44px; }
+.teams .tv b { font-size: 36px; color: var(--acc); font-variant-numeric: tabular-nums; }
+.teams .tv b small { font-size: var(--t-cap); color: var(--ink); font-weight: 700; margin-left: 2px; }
+
+/* ---------- 3. 앞으로 ---------- */
+.next { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-sm); }
+.next > div { background: var(--white); border-radius: var(--r-card); box-shadow: var(--shadow); padding: var(--gap) 48px; display: flex; flex-direction: column; gap: var(--gap-xs); }
+.ask { display: flex; justify-content: space-between; align-items: center; background: var(--ink); color: var(--white); border-radius: var(--r-card); padding: var(--gap) 56px; }
+.ask .who { font-weight: 800; }
+</style>
+</head>
+<body>
+<div id="poster">
+
+  <!-- 히어로 -->
+  <section class="s hero">
+    <div class="head">
+      <div class="org">삼성벤처투자 AX TF</div>
+      <div class="decl">투자팀별 <em>데일리 뉴스레터</em>를 보냅니다</div>
+    </div>
+    <div class="mails">
+      <div class="mail m1">
+        <img class="mh" src="header-portfolio.jpg" alt="">
+        <div class="toc g4">
+          <div><div class="tl c-crit"><i></i>CRITICAL</div><div class="ti bg-crit">A사</div><div class="ti bg-crit">B사</div></div>
+          <div><div class="tl c-major"><i></i>MAJOR</div><div class="ti bg-major">C사</div></div>
+          <div><div class="tl c-minor"><i></i>MINOR</div><div class="ti">D사</div><div class="ti">E사</div><div class="ti">F사</div></div>
+          <div><div class="tl c-info"><i></i>INFO</div><div class="ti bg-info">G사</div><div class="ti bg-info">H사</div><div class="ti bg-info">I사</div></div>
+        </div>
+        <div class="band bg-crit c-crit"><i></i>CRITICAL</div>
+        <div class="item">
+          <div class="who"><b>A사</b><span>담당 심사역</span></div>
+          <div>
+            <div class="hl">글로벌 반도체 기업에 인수 확정 계약</div>
+            <ul><li>인수 확정 계약을 맺고 연구진과 모델 역량을 흡수</li><li>AI 컴퓨트와 인프라 강화를 위한 거래</li></ul>
+            <div class="chk bg-crit"><b>확인할 것</b>종결되면 우리 지분이 현금이나 인수사 주식으로 바뀌는 회수 사건입니다. 거래 대가의 형태와 지분별 배분, 종결 일정을 회사에 먼저 확인해야 합니다.</div>
+            <div class="tags"><span>TechCrunch</span><span>Bloomberg</span></div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="who"><b>B사</b><span>담당 심사역</span></div>
+          <div>
+            <div class="hl">미국 증시 상장 위해 S-1 제출</div>
+            <ul><li>미국 SEC에 S-1을 제출하며 상장 절차에 들어감</li><li>상반기 매출총이익률을 신고서에서 공개함</li></ul>
+            <div class="chk bg-crit"><b>확인할 것</b>보유 지분의 회수 경로가 공모 시장으로 열리는 사건입니다. 상장 뒤 보호예수 기간과 전환 조건을 확인해야 합니다.</div>
+          </div>
+        </div>
+        <div class="band bg-major c-major"><i></i>MAJOR</div>
+      </div>
+      <div class="mail m2">
+        <img class="mh" src="header-industry.jpg" alt="">
+        <div class="toc g3">
+          <div><div class="tl c-major">주요 기업</div><div class="ti bg-major">Machenta</div><div class="ti bg-major">Tenstorrent</div><div class="ti bg-major">General Compute</div></div>
+          <div><div class="tl c-major">최신 기술</div><div class="ti bg-major">오픈 웨이트 2B급 소형 모델</div><div class="ti bg-major">Gemini 기반 월드 모델</div></div>
+          <div><div class="tl c-major">업계 동향</div><div class="ti bg-major">TSMC</div><div class="ti bg-major">네이버</div></div>
+        </div>
+        <div class="band bg-major c-major">주요 기업</div>
+        <div class="item">
+          <div class="who"><b>Machenta</b><span>시드 4,000만 달러</span><span class="bu">SR, SDS</span></div>
+          <div>
+            <div class="hl">Machenta, 로봇 원샷 학습 모델로 시드 유치</div><div class="sub">한 번의 시연으로 로봇에 새 작업을 가르치는 AI 모델 개발사</div>
+            <ul><li>Imperial College London 분사 기업이 시드 4,000만 달러를 모음</li><li>로봇이 작업을 한 번 보고 따라 하도록 학습하는 모델을 개발</li></ul>
+            <div class="chk bg-major"><b>확인할 것</b>SR의 로봇 파운데이션 모델 항목에서 데이터 수집 비용을 줄이는 방식이라 후보가 됩니다.</div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="who"><b>Tenstorrent</b><span>시리즈E 15억 달러</span><span class="bu">SR, SDS</span></div>
+          <div>
+            <div class="hl">Tenstorrent, 기업가치 62억 달러에 시리즈E</div><div class="sub">캐나다 소재, RISC-V 기반 AI 칩과 서버 개발사</div>
+            <ul><li>Tenstorrent가 시리즈E로 15억 달러를 모음</li><li>Innovation X가 공동 주도했고 기업가치는 62억 달러</li></ul>
+            <div class="chk bg-major"><b>확인할 것</b>Semiconductors 필라의 AI 가속기와 RISC-V 커스텀 실리콘 두 항목에 함께 닿습니다.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-lead">평일마다 팀이 투자한 회사의 소식과 관심 분야의 업계 동향을 정리해<br>팀원들의 메일함으로 보내 드립니다.</div>
+  </section>
+
+  <!-- 1. 두 통의 메일 -->
+  <section class="s">
+    <div class="head">
+      <div class="h"><span class="no">1.</span> 매일 두 통의 메일</div>
+    </div>
+    <div class="kinds">
+      <div class="kind">
+        <div class="kt">포트폴리오 뉴스</div>
+        <div class="kd"><b>리스크를 먼저 알아차리기 위한 메일입니다.</b><br>투자한 회사에 생긴 일을 지분과 회수에<br>닿는 정도에 따라 네 등급으로 나눠 싣습니다.</div>
+        <div class="rows">
+          <div class="r"><span class="lb bg-crit c-crit"><i></i>CRITICAL</span><span class="v">분할, 매각, 인수, 상장, 폐업</span></div>
+          <div class="r"><span class="lb bg-major c-major"><i></i>MAJOR</span><span class="v">투자 유치, 대형 계약, 경영진 교체</span></div>
+          <div class="r"><span class="lb bg-minor c-minor"><i></i>MINOR</span><span class="v">제품, 제휴, 매출, 임상</span></div>
+          <div class="r"><span class="lb bg-info c-info"><i></i>INFO</span><span class="v">보도, 수상, 인터뷰</span></div>
+        </div>
+      </div>
+      <div class="kind">
+        <div class="kt">업계 동향 뉴스</div>
+        <div class="kd"><b>투자 기회를 찾기 위한 메일입니다.</b><br>팀이 관심 있는 기술 분야에서 포트폴리오 밖의<br>회사와 기술이 어떻게 움직였는지 싣습니다.</div>
+        <div class="rows">
+          <div class="r"><span class="lb sec">주요 기업</span><span class="v">자금이 움직인 회사</span></div>
+          <div class="r"><span class="lb sec">최신 기술</span><span class="v">세부 기술이 어디까지 왔는지</span></div>
+          <div class="r"><span class="lb sec">업계 동향</span><span class="v">규제, 시장, 대기업의 움직임</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="chkx">
+      <div>
+        <div class="h2">기사마다 「확인할 것」을 붙입니다</div>
+        <p>기사 요약에서 끝내지 않고<br>이 소식으로 심사역이 무엇을 확인하고<br>회사에 무엇을 물어야 하는지 적습니다.</p>
+      </div>
+      <div class="mail">
+        <div class="item">
+          <div class="who"><b>General Compute</b><span>시리즈A 1억 달러</span><span class="bu">SDS, SR</span></div>
+          <div>
+            <div class="hl">General Compute, 네오클라우드로 시리즈A 유치</div><div class="sub">베어메탈 GPU 인프라를 빌려주는 네오클라우드</div>
+            <ul><li>Blackbird와 Abstract 주도로 시리즈A 1억 달러를 모음</li><li>투자 후 기업가치 8억 달러</li></ul>
+            <div class="chk bg-major"><b>확인할 것</b>Data Centers 필라의 AI 컴퓨트 서버 항목에 닿는 사업 모델입니다. 네오클라우드 비관론 속에서도 시리즈A에 이 가격이 나왔다는 점은 GPU 임대 사업의 밸류 기준으로 쓸 만합니다.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. 운영 -->
+  <section class="s">
+    <div class="head">
+      <div class="h"><span class="no">2.</span> 받는 팀과 범위</div>
+    </div>
+    <div class="facts">
+      <div><div class="l">운영</div><div>AX TF</div></div>
+      <div><div class="l">발송</div><div>2026년 10월부터 평일 매일</div></div>
+      <div><div class="l">대상</div><div>투자1팀부터 4팀, Life Science팀</div></div>
+      <div><div class="l">영문판</div><div>Life Science팀은 영문판을 함께 발송</div></div>
+    </div>
+    <div class="teams">
+      <div><div class="tn">투자1팀</div><div class="tv">포트폴리오<b>66<small>개사</small></b></div><div class="tv">관심 키워드<b>36<small>개</small></b></div></div>
+      <div><div class="tn">투자2팀</div><div class="tv">포트폴리오<b>31<small>개사</small></b></div><div class="tv">관심 키워드<b>13<small>개</small></b></div></div>
+      <div><div class="tn">투자3팀</div><div class="tv">포트폴리오<b>151<small>개사</small></b></div><div class="tv">관심 키워드<b>62<small>개</small></b></div></div>
+      <div><div class="tn">투자4팀</div><div class="tv">포트폴리오<b>35<small>개사</small></b></div><div class="tv">관심 키워드<b>24<small>개</small></b></div></div>
+      <div><div class="tn">Life Science팀</div><div class="tv">포트폴리오<b>15<small>개사</small></b></div><div class="tv">관심 키워드<b>19<small>개</small></b></div></div>
+    </div>
+  </section>
+
+  <!-- 3. 앞으로 -->
+  <section class="s">
+    <div class="head">
+      <div class="h"><span class="no">3.</span> 요청과 이관</div>
+    </div>
+    <div class="next">
+      <div>
+        <div class="h2">명단과 키워드만 바꾸면 됩니다</div>
+        <p>포트폴리오 명단과 관심 키워드를 고치면<br>다음 호부터 그대로 반영됩니다.</p>
+      </div>
+      <div>
+        <div class="h2">팀별 담당자에게 이관합니다</div>
+        <p>꾸준히 관리할 수 있도록<br>팀마다 담당자를 정해 운영을 넘길 예정입니다.</p>
+      </div>
+    </div>
+    <div class="ask">
+      <div>수신처 추가나 필요한 기능이 있으면 AX TF에 말씀해 주세요.</div>
+      <div class="who">문의 김대현 인턴</div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
