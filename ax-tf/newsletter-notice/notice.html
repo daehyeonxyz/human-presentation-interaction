@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<title>AX TF 데일리 뉴스레터 안내</title>
+<title>삼성벤처투자 AX 소식</title>
 <link rel="stylesheet" href="../skill-contest-poster/fonts/hahmlet-var/wght.css">
 <style>
 @font-face{font-family:Pretendard;font-weight:500;src:url(../skill-contest-poster/fonts/Pretendard-Medium.woff2) format('woff2')}
@@ -123,8 +123,9 @@ svg { display: block; }
 .fb > div { background: var(--white); border-radius: var(--r-card); box-shadow: var(--shadow); padding: 44px 44px 48px; display: flex; flex-direction: column; gap: var(--gap-xs); }
 .fb .ft { font-family: var(--display); font-size: 44px; line-height: 58px; font-weight: 800; letter-spacing: -.035em; }
 .fb .ex { margin-top: var(--gap-sm); color: var(--acc); font-weight: 700; }
-.ask { display: flex; justify-content: space-between; align-items: center; gap: var(--gap); background: var(--ink); color: var(--white); border-radius: var(--r-card); padding: 44px 56px; }
-.ask .who { flex: none; font-weight: 800; }
+/* 맺음: 띠 없이 종이 위에 둔다. 문의처는 본문보다 낮춘다 */
+.ask { display: flex; justify-content: space-between; align-items: baseline; gap: var(--gap); padding: 0 4px; }
+.ask .who { flex: none; font-size: var(--t-cap); line-height: var(--l-cap); font-weight: 500; color: var(--mute); }
 </style>
 </head>
 <body>
@@ -136,7 +137,7 @@ svg { display: block; }
   <!-- 히어로 -->
   <section class="s hero">
     <div class="head">
-      <div class="org">삼성벤처투자 AX TF</div>
+      <div class="org">삼성벤처투자 AX 소식</div>
       <div class="decl">투자팀별 <em>데일리 뉴스레터</em>를 보냅니다</div>
     </div>
     <div class="mails">
