@@ -107,16 +107,17 @@ svg { display: block; }
 
 /* ---------- 2. 팀별 포트폴리오와 관심사 ---------- */
 .teams { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--gap-sm); }
-.teams > div { background: var(--white); border-radius: var(--r-card); box-shadow: var(--shadow); padding: 36px 32px 40px; display: flex; flex-direction: column; gap: 28px; }
+.teams > div { background: var(--white); border-radius: var(--r-card); box-shadow: var(--shadow); padding: 36px 32px 36px; display: flex; flex-direction: column; gap: 20px; }
 .teams .tn { font-family: var(--display); font-size: 36px; line-height: 48px; font-weight: 800; letter-spacing: -.03em; white-space: nowrap; }
-.teams .st { display: flex; flex-direction: column; gap: 14px; }
+.teams .st { display: flex; flex-direction: column; gap: 10px; }
 .teams .st > div { display: flex; justify-content: space-between; align-items: baseline; }
-.teams .num { order: 2; font-size: 48px; line-height: 56px; font-weight: 800; color: var(--acc); font-variant-numeric: tabular-nums; letter-spacing: -.02em; white-space: nowrap; }
-.teams .num small { font-size: 24px; color: var(--ink); font-weight: 700; margin-left: 2px; letter-spacing: 0; }
+.teams .num { order: 2; font-size: 34px; line-height: 44px; font-weight: 800; color: var(--acc); font-variant-numeric: tabular-nums; letter-spacing: -.02em; white-space: nowrap; }
+.teams .num small { font-size: 22px; color: var(--ink); font-weight: 700; margin-left: 2px; letter-spacing: 0; }
 .teams .lb { order: 1; font-size: 24px; line-height: 34px; font-weight: 700; }
-.better { background: var(--acc-soft); border-radius: var(--r-card); padding: 64px 80px; text-align: center; display: flex; flex-direction: column; gap: var(--gap-sm); }
+/* 관심사 안내는 섹션 여백을 넘어 포스터 폭 전체를 채우는 띠다 */
+.better { margin: 0 calc(-1 * var(--pad)); background: var(--acc); color: var(--white); padding: 72px var(--pad); text-align: center; display: flex; flex-direction: column; gap: var(--gap-sm); }
 .better .bt { font-family: var(--display); font-size: 56px; line-height: 76px; font-weight: 800; letter-spacing: -.04em; }
-.better .bt em { font-style: normal; color: var(--acc); }
+.better .lead { color: #C4CAE9; }
 
 /* ---------- 3. 뉴스레터 피드백 ---------- */
 .fb { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap-sm); }
@@ -248,11 +249,11 @@ svg { display: block; }
         </div>
       </div>
     </div>
-    <div class="hero-lead">포트폴리오 소식과 관심 분야의 업계 동향을 평일마다 정리해<br>투자팀에 메일로 보내 드립니다.</div>
+    <div class="hero-lead">2026년 10월부터 포트폴리오 소식과 관심 분야의 업계 동향을<br>정리해 투자팀에 메일로 보내 드리고 있습니다.</div>
     <div class="facts">
       <div><div class="l">운영</div><div>AX TF</div></div>
       <div><div class="l">대상</div><div>투자1~4팀, Life Science팀</div></div>
-      <div><div class="l">발송</div><div>2026년 10월부터 평일 매일</div></div>
+      <div><div class="l">주기</div><div>매주 월요일부터 금요일까지</div></div>
       <div><div class="l">구성</div><div>포트폴리오 뉴스, 업계 동향 뉴스</div></div>
     </div>
   </section>
@@ -302,7 +303,7 @@ svg { display: block; }
       <div><div class="tn">Life Science팀</div><div class="st"><div><div class="num">15<small>개사</small></div><div class="lb">포트폴리오</div></div><div><div class="num">19<small>개</small></div><div class="lb">관심 키워드</div></div></div></div>
     </div>
     <div class="better">
-      <div class="bt">관심사를 <em>정교하게</em> 업데이트할수록<br>더 양질의 뉴스레터가 만들어집니다</div>
+      <div class="bt">관심사를 정교하게 업데이트할수록<br>더 양질의 뉴스레터가 만들어집니다</div>
       <div class="lead">포트폴리오 명단과 관심 키워드를 고치면 다음 호부터 바로 반영됩니다.</div>
     </div>
   </section>
