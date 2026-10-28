@@ -129,25 +129,20 @@ svg { display: block; }
 .fp p { margin-top: 12px; font-size: var(--t-cap); line-height: var(--l-cap); }
 .fp .fv { margin-top: 32px; display: flex; flex-direction: column; gap: 12px; }
 .fp .sc { font-size: 22px; line-height: 30px; font-weight: 800; }
-.fp .sheet + .sc, .fp .mm + .sc { margin-top: 10px; }
+.fp .sheet + .sc { margin-top: 10px; }
 /* 작은 표: 칸 사이 틈으로 바탕색이 보여 칸이 나뉜다 */
 .sheet { display: grid; grid-template-columns: 1fr 1.5fr; gap: 3px; background: var(--paper-2); border-radius: 10px; overflow: hidden; }
 .sheet span { background: var(--white); padding: 6px 14px; font-size: 21px; line-height: 30px; font-weight: 600; white-space: nowrap; }
 .sheet span.hd { background: var(--paper); font-weight: 800; }
-/* 선별: 아래로 갈수록 좁아지는 세 막대 */
-.fp .fun { align-items: center; }
-.fun > div { border-radius: 12px; padding: 22px 20px; text-align: center; }
-.fun b { display: block; font-size: 24px; line-height: 34px; font-weight: 800; }
-.fun span { display: block; font-size: 20px; line-height: 28px; font-weight: 600; }
-.fun .f1 { width: 100%; background: var(--acc-soft); }
-.fun .f2 { width: 82%; background: #C4CAE9; }
-.fun .f3 { width: 64%; background: var(--acc); color: var(--white); }
+.kw { display: flex; flex-wrap: wrap; gap: 8px; }
+.kw span { background: var(--acc-soft); color: var(--acc); border-radius: 10px; padding: 8px 16px; font-size: 21px; line-height: 30px; font-weight: 700; white-space: nowrap; }
+.st2 { display: flex; flex-direction: column; gap: 12px; }
+.st2 span { display: flex; align-items: center; gap: 14px; background: var(--paper); border-radius: 10px; padding: 22px 20px; font-size: 24px; line-height: 34px; font-weight: 700; }
+.st2 span i { font-style: normal; color: var(--acc); font-weight: 800; }
 .mm { display: flex; flex-direction: column; gap: 10px; }
-.mm > span { display: grid; grid-template-columns: 24px 1fr; column-gap: 12px; background: var(--paper); border-radius: 10px; padding: 12px 18px; font-size: 22px; line-height: 32px; font-weight: 700; }
+.mm > span { display: grid; grid-template-columns: 24px 1fr; column-gap: 12px; background: var(--paper); border-radius: 10px; padding: 20px 20px; font-size: 22px; line-height: 32px; font-weight: 700; }
 .mm svg { width: 22px; height: 22px; color: var(--mute); margin-top: 5px; }
 .mm .ct { grid-column: 2; font-size: 20px; line-height: 30px; }
-.rcv { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-.rcv span { text-align: center; background: var(--paper); border-radius: 10px; padding: 12px 0; font-size: 22px; line-height: 32px; font-weight: 700; }
 .h2 { font-family: var(--display); font-size: var(--t-h2); line-height: var(--l-h2); font-weight: 800; letter-spacing: -.03em; margin-bottom: -40px; }
 /* 관심사 안내는 섹션 여백을 넘어 포스터 폭 전체를 채우는 띠다 */
 .better { margin: 0 calc(-1 * var(--pad)); background: var(--acc); color: var(--white); padding: 72px var(--pad); text-align: center; display: flex; flex-direction: column; gap: var(--gap-sm); }
@@ -338,18 +333,14 @@ svg { display: block; }
           <div class="sc">포트폴리오 명단</div>
           <div class="sheet"><span class="hd">업체</span><span class="hd">담당 심사역</span><span>A사</span><span>홍길동</span><span>B사</span><span>김철수</span></div>
           <div class="sc">관심 키워드</div>
-          <div class="sheet"><span class="hd">분야</span><span class="hd">키워드</span><span>로봇</span><span>로봇 파운데이션 모델</span><span>반도체</span><span>AI 가속기</span></div>
+          <div class="kw"><span>로봇 파운데이션 모델</span><span>AI 가속기</span></div>
         </div>
       </div>
       <div class="arr"><span><svg><use href="#i-arrow"/></svg></span></div>
       <div class="fp">
         <div class="fh"><span class="no">2</span>자동 수집과 선별</div>
         <p>기사를 모아 실을 기사만 고릅니다.</p>
-        <div class="fv fun">
-          <div class="f1"><b>모은 기사</b><span>팀당 하루 수십에서 수백 건</span></div>
-          <div class="f2"><b>추린 기사</b><span>중복과 무관한 기사 제외</span></div>
-          <div class="f3"><b>실은 기사</b><span>중요도 분류와 요약</span></div>
-        </div>
+        <div class="fv st2"><span><i>1</i>뉴스와 공시 수집</span><span><i>2</i>중복 기사와 무관한 기사 제외</span><span><i>3</i>중요도 분류와 요약</span></div>
       </div>
       <div class="arr"><span><svg><use href="#i-arrow"/></svg></span></div>
       <div class="fp">
@@ -361,8 +352,6 @@ svg { display: block; }
             <span><svg><use href="#i-mail"/></svg>[투자3팀] 포트폴리오 뉴스<span class="ct"><span class="em">🚨</span>2 · <span class="em">⚡</span>1 · <span class="em">📰</span>3 · <span class="em">👀</span>3</span></span>
             <span><svg><use href="#i-mail"/></svg>[투자3팀] 업계 동향 뉴스<span class="ct"><span class="em">🏢</span>4 · <span class="em">🔬</span>3 · <span class="em">📈</span>2</span></span>
           </div>
-          <div class="sc">받는 사람</div>
-          <div class="rcv"><span>팀원</span><span>팀장</span><span>본부장</span></div>
         </div>
       </div>
     </div>
