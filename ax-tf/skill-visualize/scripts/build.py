@@ -53,7 +53,7 @@ def check(d):
         if cap and len(arr) > cap:
             errs.append(f"{where}: 항목 {len(arr)}개 > {cap}개")
 
-    for k in ("name", "title"):
+    for k in ("name", "title", "model"):
         if not d.get(k):
             errs.append(f"{k}: 비어 있음")
     one("title", d.get("title", ""), "title")
