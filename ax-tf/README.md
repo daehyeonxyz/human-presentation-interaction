@@ -9,6 +9,7 @@
 | `skill-contest-poster/` | 사내 첫 SKILL 공모전 안내 포스터. 메일 본문에 붙이는 세로 이미지 한 장 |
 | `skill-visualize/` | 스킬 하나를 사내 공지용 설명서 한 장(1920×1080)으로 만드는 스킬과 예시 |
 | `newsletter-notice/` | AX TF 데일리 뉴스레터 전사 공지. 메일 본문에 붙이는 세로 이미지 한 장 |
+| `poster-visualize/` | 메일에 붙이는 세로 공지 포스터를 블록으로 조립하는 스킬과 예시 세 개(공모전 안내, 서비스 소개, 수상자 발표) |
 
 ## tokens.css 와 다른 점
 
@@ -41,3 +42,10 @@ cd podium && node render.js
 스킬 본체다. 배포할 때는 이 폴더를 그대로 zip 으로 묶어 올린다. 절차는 `skill-visualize/SKILL.md`, 칸별 기준은 `skill-visualize/references/content-guide.md` 에 있다.
 
 `examples/` 에는 사내 스킬 네 개(svic-formal-format, deal-sourcing, knox-email, skill-visualize)의 설명서 예시가 있다. `deal-sourcing-brief.png` 는 deal-sourcing 스킬에 동봉된 예시 입력으로 `build_brief.py` 를 실행한 화면이다.
+
+## poster-visualize
+
+스킬 본체다. 배포할 때는 이 폴더를 그대로 zip 으로 묶어 올린다. 절차는 `poster-visualize/SKILL.md`, 블록 종류와 칸별 기준은 `poster-visualize/references/content-guide.md` 에 있다.
+
+`skill-contest-poster/` 와 `newsletter-notice/` 를 손으로 짜며 쌓은 블록과 반려 기준을 묶었다. 예시의 수상자 이름과 산출물 쪽 그림은 실제 공지의 것을 지운 자리 표시다.
+

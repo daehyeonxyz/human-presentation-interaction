@@ -1,0 +1,200 @@
+{
+  "title": "출장 보고서 SKILL 공모전",
+  "label": "삼성벤처투자 AI 공모전",
+  "headline": "출장 보고서를 만들어 주는 *SKILL*을 찾습니다",
+  "hero": {
+    "type": "podium",
+    "places": [
+      {
+        "rank": 2,
+        "main": "30",
+        "unit": "만원"
+      },
+      {
+        "rank": 1,
+        "main": "50",
+        "unit": "만원"
+      },
+      {
+        "rank": 3,
+        "main": "10",
+        "unit": "만원"
+      }
+    ]
+  },
+  "hero_lead": "평소 출장 보고서를 쓰던 방식을 Claude 스킬로 만들어 제출해 주세요.\n수상작은 AX TF가 보완해 전사에 배포합니다.",
+  "facts": [
+    [
+      "대상",
+      "서초사옥에 근무하는 임직원 누구나"
+    ],
+    [
+      "주제",
+      "컨퍼런스·출장 보고서를 만들어 주는 SKILL"
+    ],
+    [
+      "기한",
+      "{2026년 10월 30일 (금)}"
+    ],
+    [
+      "심사",
+      "AX TF 심사 후 선정"
+    ]
+  ],
+  "hero_blocks": [
+    {
+      "type": "subhead",
+      "text": "평가 기준"
+    },
+    {
+      "type": "cards",
+      "cols": 4,
+      "items": [
+        {
+          "accent": "1",
+          "title": "시사점",
+          "text": "회사·그룹과의 연계성, 영향도, 글로벌 트렌드 등을 적절하게 도출하는가"
+        },
+        {
+          "accent": "2",
+          "title": "가독성",
+          "text": "내용에 대한 Summary 등을 적절하게 제시하여 논리적으로 보기 편한가"
+        },
+        {
+          "accent": "3",
+          "title": "정확성",
+          "text": "회의록과 자료의 내용을 빠짐없이 사실대로 반영하는가"
+        },
+        {
+          "accent": "4",
+          "title": "범용성",
+          "text": "다른 출장과 행사 자료에도 같은 품질로 적용되는가"
+        }
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "title": "스킬 만들기",
+      "lead": "두 방법 중 편한 쪽을 골라 아래 문장을 Claude에게 그대로 보냅니다.",
+      "blocks": [
+        {
+          "type": "chats",
+          "items": [
+            {
+              "title": "보고서를 쓰던 채팅이 있다면",
+              "model": "Sonnet 5",
+              "messages": [
+                {
+                  "role": "user",
+                  "attach": "컨퍼런스_회의록.docx",
+                  "text": "회의록 정리해서 출장 보고서 만들어 줘",
+                  "done": true
+                },
+                {
+                  "role": "assistant",
+                  "text": "출장 보고서를 작성했습니다.",
+                  "file": "컨퍼런스_출장보고서.docx",
+                  "done": true
+                }
+              ],
+              "input": {
+                "hot": true,
+                "text": "지금까지 이 채팅에서 보고서를 작성한 방식을 앞으로도 쓸 수 있도록 스킬로 만들어 줘"
+              }
+            },
+            {
+              "title": "새 채팅에 지난 보고서를 첨부한다면",
+              "model": "Sonnet 5",
+              "messages": [],
+              "input": {
+                "hot": true,
+                "attach": "지난_출장보고서.docx",
+                "text": "출장 중 작성한 회의록이나 메모를 넣으면 첨부한 보고서와 같은 형식의 출장 보고서가 완성되도록 스킬로 만들어 줘"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "split": [
+        {
+          "title": "써 보기",
+          "lead": "실제 회의록을 넣어 보고 고칠 내용은 같은 채팅에서 요청합니다.",
+          "blocks": [
+            {
+              "type": "chat",
+              "model": "Sonnet 5",
+              "height": 760,
+              "messages": [
+                {
+                  "role": "user",
+                  "attach": "10월_컨퍼런스_회의록.docx",
+                  "text": "/trip-report 이 회의록으로 출장 보고서 만들어 줘"
+                },
+                {
+                  "role": "assistant",
+                  "skill": "trip-report",
+                  "text": "출장 보고서를 작성했습니다.",
+                  "file": "10월_컨퍼런스_출장보고서.docx"
+                },
+                {
+                  "role": "user",
+                  "text": "요약을 맨 앞에 두도록 스킬을 고쳐 줘"
+                },
+                {
+                  "role": "assistant",
+                  "text": "요약을 첫 장에 두도록 스킬을 수정했습니다."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "제출하기",
+          "lead": "완성된 스킬을 압축 파일로 내려받아 이메일로 보냅니다.",
+          "blocks": [
+            {
+              "type": "files",
+              "name": "trip-report",
+              "items": [
+                [
+                  "SKILL.md",
+                  "지침"
+                ],
+                [
+                  "references/report-format.md",
+                  "양식"
+                ],
+                [
+                  "references/example.md",
+                  "예시"
+                ]
+              ]
+            },
+            {
+              "type": "facts",
+              "style": "card",
+              "items": [
+                [
+                  "제출",
+                  "AX TF 담당자"
+                ],
+                [
+                  "기한",
+                  "{2026년 10월 30일 (금)}"
+                ],
+                [
+                  "문의",
+                  "AX TF"
+                ]
+              ],
+              "note": "제출 방법에 질문이 있다면\nAX TF에 메신저 부탁드립니다."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
